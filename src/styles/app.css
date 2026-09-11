@@ -1,0 +1,622 @@
+:root {
+  --oysen-purple: #5a1e76;
+  --oysen-dark: #07030b;
+  /* Résolution native du logo : ne jamais l'agrandir au-delà, sinon il floute. */
+  --oysen-logo-native-width: 973px;
+  --intro: 4s;
+  --gloss-loop: 5.5s;
+  /* Durée du balayage lui-même : les 22 premiers % de --gloss-loop.
+     À réajuster si --gloss-loop change. */
+  --gloss-sweep: 1.21s;
+  /* Le rideau part exactement quand l'éclat quitte le lettrage : la bande
+     franchit le bord droit de l'encre pile en fin de balayage. */
+  --rise-delay: calc(var(--intro) + var(--gloss-sweep));
+  --rise: 1.2s;
+
+  /* Le site sous le rideau. */
+  --paper: #f6f3ef;
+  --ink: #1c1420;
+  --muted: #6d6076;
+  --line: #e2dbd4;
+  --nav-h: 72px;
+
+  --pad: clamp(1.5rem, 6vw, 5rem);
+  --logo-w: min(calc(100vw - 2 * var(--pad)), var(--oysen-logo-native-width));
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family:
+    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Plein écran, débordement masqué : les faisceaux balayent au-delà du logo. */
+.stage {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: hidden;
+  /* Purement décoratif : ne doit jamais intercepter un clic destiné au site. */
+  pointer-events: none;
+  background-color: var(--oysen-dark);
+  animation:
+    stage-lift var(--intro) both,
+    curtain-rise var(--rise) cubic-bezier(0.7, 0, 0.3, 1) var(--rise-delay)
+      both;
+}
+
+/* visibility passe à hidden pile à la fin : plus rien n'est composité ensuite. */
+@keyframes curtain-rise {
+  0% {
+    transform: translateY(0);
+    visibility: visible;
+  }
+  100% {
+    transform: translateY(-100%);
+    visibility: hidden;
+  }
+}
+
+/*
+ * La scène fait 3x la largeur du logo, qui reste donc à sa taille native.
+ * Centrage en absolu et non par la grille : un élément qui déborde dans
+ * l'axe en ligne est aligné sur start par le navigateur, pas centré.
+ */
+.scene {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(3 * var(--logo-w));
+  height: auto;
+}
+
+@keyframes stage-lift {
+  0%,
+  80% {
+    background-color: var(--oysen-dark);
+  }
+  92% {
+    background-color: #2d0f3b;
+  }
+  100% {
+    background-color: var(--oysen-purple);
+  }
+}
+
+/* ---- Le site, révélé par le lever de rideau ---- */
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  height: var(--nav-h);
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 4vw, 3rem);
+  padding-inline: var(--pad);
+  background-color: color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+
+.nav__brand {
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 1.15rem;
+  letter-spacing: 0.22em;
+  color: var(--oysen-purple);
+  text-decoration: none;
+}
+
+.nav__links {
+  display: flex;
+  gap: clamp(1rem, 2.5vw, 2rem);
+  margin-inline-start: auto;
+}
+
+.nav__links a {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.18s ease;
+}
+
+.nav__links a:hover,
+.nav__links a:focus-visible {
+  color: var(--oysen-purple);
+}
+
+.nav__cta {
+  padding: 0.6rem 1.15rem;
+  border: 1px solid var(--oysen-purple);
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--oysen-purple);
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease;
+}
+
+.nav__cta:hover,
+.nav__cta:focus-visible {
+  background-color: var(--oysen-purple);
+  color: var(--paper);
+}
+
+@media (max-width: 720px) {
+  .nav__links {
+    display: none;
+  }
+  .nav__cta {
+    margin-inline-start: auto;
+  }
+}
+
+.hero {
+  min-height: calc(100dvh - var(--nav-h));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(3rem, 10vh, 7rem) var(--pad);
+  /* Une lueur violette très basse, écho des projecteurs de l'intro. */
+  background-image: radial-gradient(
+    120% 80% at 12% 0%,
+    color-mix(in srgb, var(--oysen-purple) 9%, transparent),
+    transparent 62%
+  );
+}
+
+.hero__eyebrow {
+  margin: 0 0 1.25rem;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--oysen-purple);
+}
+
+.hero__title {
+  margin: 0;
+  max-width: 18ch;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  font-size: clamp(2.25rem, 6.5vw, 4.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.hero__lede {
+  margin: 1.75rem 0 0;
+  max-width: 52ch;
+  font-size: clamp(1rem, 1.4vw, 1.125rem);
+  line-height: 1.65;
+  color: var(--muted);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.875rem;
+  margin-top: 2.5rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.9rem 1.6rem;
+  border-radius: 999px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease;
+}
+
+.btn--solid {
+  background-color: var(--oysen-purple);
+  color: var(--paper);
+  border: 1px solid var(--oysen-purple);
+}
+
+.btn--solid:hover,
+.btn--solid:focus-visible {
+  background-color: #46165d;
+  border-color: #46165d;
+}
+
+.btn--ghost {
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+
+.btn--ghost:hover,
+.btn--ghost:focus-visible {
+  border-color: var(--oysen-purple);
+  color: var(--oysen-purple);
+}
+
+/* ---- La nouvelle baseline, en vrai texte ---- */
+
+.tagline {
+  font-family: 'Montserrat', ui-sans-serif, system-ui, 'Segoe UI', sans-serif;
+  font-weight: 300;
+  /* « ARCHITECTE » compte deux signes de plus que « CRÉATEUR » : à corps égal
+     la ligne déborderait sous le O. Corps et interlettrage réduits pour finir
+     alignée sur le bord droit du mot (x=813), comme la baseline d'origine. */
+  font-size: 29px;
+  letter-spacing: 1.5px;
+  fill: #ffffff;
+}
+
+/* ---- Le rideau du masque : ouvre la révélation totale en fin de séquence ---- */
+
+.curtain {
+  opacity: 0;
+  animation: curtain-open var(--intro) both;
+}
+
+@keyframes curtain-open {
+  0%,
+  82% {
+    opacity: 0;
+  }
+  89% {
+    opacity: 0.3;
+  }
+  95% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* ---- Les trois projecteurs ---- */
+
+.beams {
+  mix-blend-mode: screen;
+}
+
+.pivot {
+  transform-box: view-box;
+  transform-origin: 0 0;
+  will-change: transform, opacity;
+  animation-duration: var(--intro);
+  animation-fill-mode: both;
+  /* linear : la courbe de vitesse est portée par l'espacement des images-clés,
+     pas par l'easing. Un easing par segment ferait ralentir puis réaccélérer
+     à chaque clé, ce qui donne le mouvement saccadé. */
+  animation-timing-function: linear;
+}
+
+.pivot--l {
+  animation-name: sweep-l;
+}
+.pivot--r {
+  animation-name: sweep-r;
+}
+.pivot--d {
+  animation-name: sweep-d;
+}
+
+/*
+ * Chaque projecteur est monté au sommet visible de sa propre branche du Y
+ * et pivote autour de ce point :
+ *   gauche (1219, 652) -> vise le centre à 156.3deg, longueur 189
+ *   droite (1373, 652) -> vise le centre à 204.3deg, longueur 190
+ *   bas    (1295, 937) -> vise le centre à   0.0deg, longueur 112
+ *
+ * Positions d'ouverture, prises des la premiere image (aucun maintien,
+ * la rotation demarre a 0%) :
+ *   gauche -> bas du O          (197.5deg, portée 245)
+ *   bas    -> centre haut du mot ( 36.5deg, portée 249)
+ *   droite -> C de la baseline  (180.4deg, portée 284) puis balaye
+ *             jusqu'à 124.5deg, ce qui promène le faisceau sur tout le texte.
+ *
+ * Chaque rotation reste monotone : aucun changement de sens, donc aucun
+ * à-coup. La vitesse monte puis retombe par l'espacement des images-clés.
+ */
+@keyframes sweep-l {
+  0% {
+    transform: translate(1219px, 652px) rotate(197.5deg) scale(0.264);
+    opacity: 0.35;
+  }
+  6% {
+    transform: translate(1219px, 652px) rotate(215.7deg) scale(0.3);
+    opacity: 1;
+  }
+  13% {
+    transform: translate(1219px, 652px) rotate(240.2deg) scale(0.38);
+    opacity: 1;
+  }
+  21% {
+    transform: translate(1219px, 652px) rotate(272.1deg) scale(0.52);
+    opacity: 1;
+  }
+  30% {
+    transform: translate(1219px, 652px) rotate(310.8deg) scale(0.7);
+    opacity: 1;
+  }
+  40% {
+    transform: translate(1219px, 652px) rotate(355.5deg) scale(0.88);
+    opacity: 1;
+  }
+  51% {
+    transform: translate(1219px, 652px) rotate(403.9deg) scale(1.05);
+    opacity: 1;
+  }
+  62% {
+    transform: translate(1219px, 652px) rotate(447.7deg) scale(1.15);
+    opacity: 1;
+  }
+  71% {
+    transform: translate(1219px, 652px) rotate(477.8deg) scale(1.08);
+    opacity: 1;
+  }
+  79% {
+    transform: translate(1219px, 652px) rotate(498.2deg) scale(0.9);
+    opacity: 1;
+  }
+  86% {
+    transform: translate(1219px, 652px) rotate(510.5deg) scale(0.64);
+    opacity: 1;
+  }
+  91% {
+    transform: translate(1219px, 652px) rotate(514.8deg) scale(0.36);
+    opacity: 0.9;
+  }
+  96% {
+    transform: translate(1219px, 652px) rotate(516.3deg) scale(0.22);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate(1219px, 652px) rotate(516.3deg) scale(0.203);
+    opacity: 0.12;
+  }
+}
+
+@keyframes sweep-r {
+  0% {
+    transform: translate(1373px, 652px) rotate(180.4deg) scale(0.305);
+    opacity: 0.35;
+  }
+  6% {
+    transform: translate(1373px, 652px) rotate(161.2deg) scale(0.35);
+    opacity: 1;
+  }
+  13% {
+    transform: translate(1373px, 652px) rotate(135.4deg) scale(0.44);
+    opacity: 1;
+  }
+  21% {
+    transform: translate(1373px, 652px) rotate(101.8deg) scale(0.55);
+    opacity: 1;
+  }
+  30% {
+    transform: translate(1373px, 652px) rotate(60.9deg) scale(0.7);
+    opacity: 1;
+  }
+  40% {
+    transform: translate(1373px, 652px) rotate(13.9deg) scale(0.88);
+    opacity: 1;
+  }
+  51% {
+    transform: translate(1373px, 652px) rotate(-37.2deg) scale(1.03);
+    opacity: 1;
+  }
+  62% {
+    transform: translate(1373px, 652px) rotate(-83.4deg) scale(1.15);
+    opacity: 1;
+  }
+  71% {
+    transform: translate(1373px, 652px) rotate(-115.1deg) scale(1.08);
+    opacity: 1;
+  }
+  79% {
+    transform: translate(1373px, 652px) rotate(-136.6deg) scale(0.9);
+    opacity: 1;
+  }
+  86% {
+    transform: translate(1373px, 652px) rotate(-149.6deg) scale(0.64);
+    opacity: 1;
+  }
+  91% {
+    transform: translate(1373px, 652px) rotate(-154.1deg) scale(0.36);
+    opacity: 0.9;
+  }
+  96% {
+    transform: translate(1373px, 652px) rotate(-155.7deg) scale(0.22);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate(1373px, 652px) rotate(-155.7deg) scale(0.204);
+    opacity: 0.12;
+  }
+}
+
+@keyframes sweep-d {
+  0% {
+    transform: translate(1295px, 937px) rotate(36.5deg) scale(0.268);
+    opacity: 0.35;
+  }
+  6% {
+    transform: translate(1295px, 937px) rotate(54.9deg) scale(0.3);
+    opacity: 1;
+  }
+  13% {
+    transform: translate(1295px, 937px) rotate(79.8deg) scale(0.37);
+    opacity: 1;
+  }
+  21% {
+    transform: translate(1295px, 937px) rotate(112.2deg) scale(0.49);
+    opacity: 1;
+  }
+  30% {
+    transform: translate(1295px, 937px) rotate(151.5deg) scale(0.65);
+    opacity: 1;
+  }
+  40% {
+    transform: translate(1295px, 937px) rotate(196.8deg) scale(0.83);
+    opacity: 1;
+  }
+  51% {
+    transform: translate(1295px, 937px) rotate(245.9deg) scale(0.99);
+    opacity: 1;
+  }
+  62% {
+    transform: translate(1295px, 937px) rotate(290.4deg) scale(1.08);
+    opacity: 1;
+  }
+  71% {
+    transform: translate(1295px, 937px) rotate(321deg) scale(1.03);
+    opacity: 1;
+  }
+  79% {
+    transform: translate(1295px, 937px) rotate(341.7deg) scale(0.86);
+    opacity: 1;
+  }
+  86% {
+    transform: translate(1295px, 937px) rotate(354.1deg) scale(0.6);
+    opacity: 1;
+  }
+  91% {
+    transform: translate(1295px, 937px) rotate(358.5deg) scale(0.32);
+    opacity: 0.9;
+  }
+  96% {
+    transform: translate(1295px, 937px) rotate(360deg) scale(0.16);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate(1295px, 937px) rotate(360deg) scale(0.12);
+    opacity: 0.12;
+  }
+}
+
+/* Éclat au point de convergence, au moment où les trois spots se rejoignent. */
+.bloom {
+  opacity: 0;
+  animation: bloom var(--intro) both;
+}
+
+@keyframes bloom {
+  0%,
+  70% {
+    opacity: 0;
+  }
+  82% {
+    opacity: 0.2;
+  }
+  90% {
+    opacity: 0.6;
+  }
+  96% {
+    opacity: 0.15;
+  }
+  100% {
+    opacity: 0.08;
+  }
+}
+
+/*
+ * Brillance permanente. Le masque « ink » la confine à l'encre claire, donc
+ * seul le texte blanc brille, jamais le fond violet. Le délai la maintient
+ * hors cadre pendant toute l'intro (fill-mode backwards).
+ */
+.gloss-layer {
+  mix-blend-mode: screen;
+  /* Garde-fou : la brillance n'existe pas tant que l'intro n'est pas finie.
+     Sans ça, la moindre erreur sur la position de repos de la bande laisse
+     un bout de lettrage allumé pendant le spectacle des projecteurs. */
+  opacity: 0;
+  animation: gloss-arm 1ms linear var(--intro) forwards;
+}
+
+@keyframes gloss-arm {
+  to {
+    opacity: 1;
+  }
+}
+
+.gloss {
+  transform-box: view-box;
+  transform-origin: 0 0;
+  will-change: transform;
+  /* La courbe finit avec de la vitesse (point de contrôle à y=0.95) : sans
+     ça la bande décélère et s'attarde hors du logo, ce qui creusait un
+     temps mort avant le lever de rideau. */
+  animation: gloss var(--gloss-loop) cubic-bezier(0.4, 0, 0.7, 0.95)
+    var(--intro) infinite backwards;
+}
+
+/*
+ * Course calée sur la géométrie réelle du dégradé. Il est en
+ * objectBoundingBox sur un rectangle de rapport 5.4:1, donc la rotation de
+ * 16deg ne donne qu'un axe incliné de 3deg en espace utilisateur, et la
+ * bande couvre x = 1510+tx -> 2186+tx. L'encre, halo compris, va de 1089 à
+ * 1828 :
+ *   repos  tx = -1130  -> bande jusqu'à 1056, franchement à gauche du O
+ *   sortie tx =  +330  -> bande à partir de 1840, elle vient de quitter le N
+ * La sortie tombe donc pile en fin de segment, à 22%.
+ */
+@keyframes gloss {
+  0% {
+    transform: translateX(-1130px);
+  }
+  22% {
+    transform: translateX(330px);
+  }
+  100% {
+    transform: translateX(330px);
+  }
+}
+
+/*
+ * Un balayage rapide avec variations d'intensité est un motif à risque pour
+ * les personnes photosensibles : on sert directement l'état final.
+ */
+@media (prefers-reduced-motion: reduce) {
+  /* Un rideau figé bloquerait la page : on va droit au site. */
+  .stage {
+    display: none;
+  }
+  .beams,
+  .bloom,
+  .gloss-layer {
+    display: none;
+  }
+  .stage,
+  .curtain,
+  .pivot,
+  .bloom,
+  .gloss {
+    animation: none;
+  }
+  .curtain {
+    opacity: 1;
+  }
+}

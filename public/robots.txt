@@ -1,0 +1,3 @@
+# Site en cours de construction — aucune indexation souhaitée pour l'instant.
+User-agent: *
+Disallow: /
