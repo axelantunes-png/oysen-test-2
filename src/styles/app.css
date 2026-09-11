@@ -18,7 +18,6 @@
   --ink: #1c1420;
   --muted: #6d6076;
   --line: #e2dbd4;
-  --nav-h: 72px;
 
   --pad: clamp(1.5rem, 6vw, 5rem);
   --logo-w: min(calc(100vw - 2 * var(--pad)), var(--oysen-logo-native-width));
@@ -99,106 +98,83 @@ body {
   }
 }
 
-/* ---- Le site, révélé par le lever de rideau ---- */
+/* ---- La page « en construction », révélée par le lever de rideau ---- */
 
-.nav {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  height: var(--nav-h);
-  display: flex;
-  align-items: center;
-  gap: clamp(1rem, 4vw, 3rem);
-  padding-inline: var(--pad);
-  background-color: color-mix(in srgb, var(--paper) 88%, transparent);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--line);
-}
-
-.nav__brand {
-  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
-  font-weight: 600;
-  font-size: 1.15rem;
-  letter-spacing: 0.22em;
-  color: var(--oysen-purple);
-  text-decoration: none;
-}
-
-.nav__links {
-  display: flex;
-  gap: clamp(1rem, 2.5vw, 2rem);
-  margin-inline-start: auto;
-}
-
-.nav__links a {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--muted);
-  text-decoration: none;
-  transition: color 0.18s ease;
-}
-
-.nav__links a:hover,
-.nav__links a:focus-visible {
-  color: var(--oysen-purple);
-}
-
-.nav__cta {
-  padding: 0.6rem 1.15rem;
-  border: 1px solid var(--oysen-purple);
-  border-radius: 999px;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: var(--oysen-purple);
-  text-decoration: none;
-  white-space: nowrap;
-  transition:
-    background-color 0.18s ease,
-    color 0.18s ease;
-}
-
-.nav__cta:hover,
-.nav__cta:focus-visible {
-  background-color: var(--oysen-purple);
-  color: var(--paper);
-}
-
-@media (max-width: 720px) {
-  .nav__links {
-    display: none;
-  }
-  .nav__cta {
-    margin-inline-start: auto;
-  }
-}
-
-.hero {
-  min-height: calc(100dvh - var(--nav-h));
+.soon {
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
+  text-align: center;
   padding: clamp(3rem, 10vh, 7rem) var(--pad);
-  /* Une lueur violette très basse, écho des projecteurs de l'intro. */
+  /* Une lueur violette en haut, écho des projecteurs de l'intro. */
   background-image: radial-gradient(
-    120% 80% at 12% 0%,
-    color-mix(in srgb, var(--oysen-purple) 9%, transparent),
-    transparent 62%
+    110% 75% at 50% 0%,
+    color-mix(in srgb, var(--oysen-purple) 10%, transparent),
+    transparent 60%
   );
 }
 
-.hero__eyebrow {
-  margin: 0 0 1.25rem;
+/* Le nom, en écho du lettrage du logo : Montserrat très espacé. */
+.soon__brand {
+  margin: 0 0 0.85rem;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 400;
+  font-size: clamp(1.5rem, 4.5vw, 2.125rem);
+  letter-spacing: 0.3em;
+  /* L'interlettrage ajoute un blanc après le N : sans cette reprise, le mot
+     paraît décalé vers la gauche dans une colonne centrée. */
+  text-indent: 0.3em;
+  color: var(--oysen-purple);
+}
+
+/* Trois points qui respirent : le rappel des trois faisceaux. */
+.soon__dots {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0 0 clamp(1.75rem, 4vh, 2.5rem);
+}
+
+.soon__dots i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--oysen-purple);
+  animation: soon-pulse 1.9s ease-in-out infinite;
+}
+
+.soon__dots i:nth-child(2) {
+  animation-delay: 0.32s;
+}
+.soon__dots i:nth-child(3) {
+  animation-delay: 0.64s;
+}
+
+@keyframes soon-pulse {
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+}
+
+.soon__eyebrow {
+  margin: 0 0 clamp(1.5rem, 3.5vh, 2rem);
   font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
   font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.24em;
-  text-transform: uppercase;
   color: var(--oysen-purple);
 }
 
-.hero__title {
+.soon__title {
   margin: 0;
-  max-width: 18ch;
+  max-width: 16ch;
   font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
   font-weight: 300;
   font-size: clamp(2.25rem, 6.5vw, 4.5rem);
@@ -207,29 +183,48 @@ body {
   text-wrap: balance;
 }
 
-.hero__lede {
-  margin: 1.75rem 0 0;
-  max-width: 52ch;
+.soon__lede {
+  margin: 1.5rem 0 0;
+  max-width: 46ch;
   font-size: clamp(1rem, 1.4vw, 1.125rem);
   line-height: 1.65;
   color: var(--muted);
 }
 
-.hero__actions {
+/* Le bloc de contact, détaché par un filet fin. */
+.soon__contact {
+  width: min(100%, 34rem);
+  margin-top: clamp(2.5rem, 6vh, 4rem);
+  padding-top: clamp(2rem, 5vh, 3rem);
+  border-top: 1px solid var(--line);
+}
+
+.soon__invite {
+  margin: 0 0 1.5rem;
+  font-size: 0.9375rem;
+  color: var(--muted);
+}
+
+.soon__actions {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 0.875rem;
-  margin-top: 2.5rem;
 }
 
 .btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   padding: 0.9rem 1.6rem;
   border-radius: 999px;
+  /* Le numéro est rendu dans un <button> avant le clic, dans un <a> après :
+     sans ces reprises, le bouton natif imposerait sa propre police. */
+  font-family: inherit;
   font-size: 0.9375rem;
   font-weight: 600;
   text-decoration: none;
+  cursor: pointer;
   transition:
     background-color 0.18s ease,
     border-color 0.18s ease,
@@ -249,6 +244,7 @@ body {
 }
 
 .btn--ghost {
+  background-color: transparent;
   border: 1px solid var(--line);
   color: var(--ink);
 }
@@ -257,6 +253,18 @@ body {
 .btn--ghost:focus-visible {
   border-color: var(--oysen-purple);
   color: var(--oysen-purple);
+}
+
+/* Chiffres à chasse fixe : le numéro ne tressaute pas à l'affichage. */
+.btn--phone {
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Le libellé alterne entre l'adresse et la confirmation : une largeur
+   plancher évite que le bouton se rétrécisse au moment de la copie. */
+.btn--email {
+  min-width: 11.5rem;
 }
 
 /* ---- La nouvelle baseline, en vrai texte ---- */
@@ -603,6 +611,10 @@ body {
   /* Un rideau figé bloquerait la page : on va droit au site. */
   .stage {
     display: none;
+  }
+  .soon__dots i {
+    animation: none;
+    opacity: 0.6;
   }
   .beams,
   .bloom,

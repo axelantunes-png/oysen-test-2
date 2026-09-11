@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/')({
@@ -39,14 +40,20 @@ const MASK_HALF = 330
 /** Ancienne baseline du JPEG, mesurée au pixel : x 393-813, y 384-410. */
 const ERASE = { x: sx(360), y: sy(376), w: 470, h: 44 }
 
+/**
+ * La rustine est prélevée dans la bande unie du haut du JPEG (y 20-64),
+ * au-dessus des faisceaux, puis redescendue sur l'ancienne baseline.
+ * 44px de haut, soit exactement la hauteur à couvrir.
+ */
+const PATCH_SRC_Y = 20
+const PATCH_DY = 376 - PATCH_SRC_Y
+
 const BEAMS = ['l', 'r', 'd'] as const
 
-const NAV_LINKS = [
-  { href: '#prestations', label: 'Prestations' },
-  { href: '#realisations', label: 'Réalisations' },
-  { href: '#agence', label: 'L’agence' },
-  { href: '#contact', label: 'Contact' },
-]
+/** Affiché seulement après clic, jamais dans le HTML servi. */
+const PHONE_DISPLAY = '06 60 44 51 30'
+const PHONE_TEL = '+33660445130'
+const EMAIL = 'contact@oysen.fr'
 
 /** Les trois pivots, réutilisés à l'identique pour le masque et pour la lumière. */
 function Pivots({ shape }: { shape: string }) {
@@ -194,6 +201,16 @@ function IntroCurtain() {
             />
           </g>
 
+          {/* Fenêtre de la rustine : exactement l'ancienne baseline. */}
+          <clipPath id="erase-clip">
+            <rect
+              x={ERASE.x}
+              y={ERASE.y}
+              width={ERASE.w}
+              height={ERASE.h}
+            />
+          </clipPath>
+
           <g id="beam-mask">
             <polygon
               points={`0,0 ${-MASK_HALF},${-BEAM_LEN} ${MASK_HALF},${-BEAM_LEN}`}
@@ -202,11 +219,18 @@ function IntroCurtain() {
           </g>
 
           {/*
-            Le logo, son ancienne baseline recouverte d'un aplat violet, et
-            la nouvelle baseline en vrai texte. Le JPEG ne porte aucun profil
-            ICC (marqueur JFIF seul), il est donc rendu en sRGB brut : le
-            #5a1e76 de l'aplat correspond exactement au violet de l'image et
-            le raccord est invisible.
+            Le logo, son ancienne baseline recouverte, et la nouvelle en vrai
+            texte.
+
+            La rustine n'est PAS un aplat de couleur : c'est une bande unie
+            prélevée en haut du JPEG lui-même, redescendue sur l'ancienne
+            baseline. Un aplat #5a1e76 semblait pourtant exact — il l'était
+            sur desktop — mais le JPEG ne porte aucun profil ICC : sur les
+            écrans grand gamut (iPhone), Safari ne lui applique pas la même
+            transformation couleur qu'à un fill SVG, réputé sRGB. Les deux
+            violets divergeaient et le rectangle réapparaissait. En prenant
+            les pixels dans l'image, la rustine subit exactement le même
+            traitement que ce qui l'entoure : l'écart devient impossible.
           */}
           <g id="wordmark">
             <image
@@ -216,13 +240,15 @@ function IntroCurtain() {
               width={IMG_W}
               height={IMG_H}
             />
-            <rect
-              x={ERASE.x}
-              y={ERASE.y}
-              width={ERASE.w}
-              height={ERASE.h}
-              fill="#5a1e76"
-            />
+            <g clipPath="url(#erase-clip)">
+              <image
+                href={LOGO}
+                x={IMG_X}
+                y={IMG_Y + PATCH_DY}
+                width={IMG_W}
+                height={IMG_H}
+              />
+            </g>
             <text className="tagline" x={sx(813)} y={sy(410)} textAnchor="end">
               {TAGLINE}
             </text>
@@ -292,43 +318,123 @@ function IntroCurtain() {
   )
 }
 
+/**
+ * navigator.clipboard n'existe qu'en contexte sécurisé et Safari le refuse
+ * encore dans certains cas. On retombe alors sur un champ hors écran que
+ * l'on sélectionne : la vieille méthode, mais elle passe partout.
+ * Renvoie false si rien n'a pu être copié — l'adresse reste lisible à
+ * l'écran, l'utilisateur peut toujours la sélectionner à la main.
+ */
+async function copyToClipboard(text: string): Promise<boolean> {
+  try {
+    await navigator.clipboard.writeText(text)
+    return true
+  } catch {
+    try {
+      const field = document.createElement('textarea')
+      field.value = text
+      field.setAttribute('readonly', '')
+      field.style.position = 'fixed'
+      field.style.top = '-1000px'
+      field.style.opacity = '0'
+      document.body.appendChild(field)
+      field.select()
+      /* iOS ignore select() sur un textarea : il lui faut la plage explicite. */
+      field.setSelectionRange(0, text.length)
+      const done = document.execCommand('copy')
+      document.body.removeChild(field)
+      return done
+    } catch {
+      return false
+    }
+  }
+}
+
 function Home() {
+  /**
+   * Le numéro n'est pas dans le HTML servi : il n'apparaît qu'au clic.
+   * Les aspirateurs d'adresses qui lisent la page sans exécuter le JS
+   * repartent donc les mains vides.
+   */
+  const [phoneShown, setPhoneShown] = useState(false)
+  const [copied, setCopied] = useState(false)
+  const copyTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  /* La confirmation ne doit pas survivre au démontage du composant. */
+  useEffect(
+    () => () => {
+      if (copyTimer.current) clearTimeout(copyTimer.current)
+    },
+    [],
+  )
+
+  async function handleCopyEmail() {
+    if (!(await copyToClipboard(EMAIL))) return
+    setCopied(true)
+    if (copyTimer.current) clearTimeout(copyTimer.current)
+    copyTimer.current = setTimeout(() => setCopied(false), 2200)
+  }
+
   return (
     <>
-      <header className="nav">
-        <a className="nav__brand" href="/">
-          OYSEN
-        </a>
-        <nav className="nav__links" aria-label="Navigation principale">
-          {NAV_LINKS.map((l) => (
-            <a key={l.href} href={l.href}>
-              {l.label}
-            </a>
-          ))}
-        </nav>
-        <a className="nav__cta" href="#contact">
-          Demander un devis
-        </a>
-      </header>
+      <main className="soon">
+        <p className="soon__brand">OYSEN</p>
+        <p className="soon__eyebrow">{TAGLINE}</p>
 
-      <main className="hero">
-        <p className="hero__eyebrow">Architecte d’événements</p>
-        <h1 className="hero__title">
-          Nous dessinons des événements
+        {/* Trois points : l'écho discret des trois projecteurs de l'intro. */}
+        <span className="soon__dots" aria-hidden="true">
+          <i />
+          <i />
+          <i />
+        </span>
+
+        <h1 className="soon__title">
+          Notre site est
           <br />
-          dont on se souvient.
+          en construction.
         </h1>
-        <p className="hero__lede">
-          De la première intention à la dernière lumière, Oysen conçoit et
-          orchestre vos lancements, conventions et célébrations privées.
-        </p>
-        <div className="hero__actions">
-          <a className="btn btn--solid" href="#contact">
-            Parler de votre projet
-          </a>
-          <a className="btn btn--ghost" href="#realisations">
-            Voir nos réalisations
-          </a>
+        <p className="soon__lede">Retrouvez-nous ici très prochainement.</p>
+
+        <div className="soon__contact">
+          <p className="soon__invite">
+            En attendant, vous pouvez nous joindre&nbsp;:
+          </p>
+
+          <div className="soon__actions">
+            {/* aria-live : le lecteur d'écran annonce le numéro qui se substitue au bouton. */}
+            <span aria-live="polite">
+              {phoneShown ? (
+                <a
+                  className="btn btn--solid btn--phone"
+                  href={`tel:${PHONE_TEL}`}
+                >
+                  {PHONE_DISPLAY}
+                </a>
+              ) : (
+                <button
+                  type="button"
+                  className="btn btn--solid"
+                  onClick={() => setPhoneShown(true)}
+                >
+                  Afficher le numéro
+                </button>
+              )}
+            </span>
+
+            {/*
+              Un bouton, pas un lien mailto : le clic copie l'adresse, il n'y
+              a plus qu'à la coller. aria-live fait annoncer la confirmation
+              par les lecteurs d'écran.
+            */}
+            <button
+              type="button"
+              className="btn btn--ghost btn--email"
+              onClick={handleCopyEmail}
+              aria-live="polite"
+            >
+              {copied ? 'Adresse copiée ✓' : EMAIL}
+            </button>
+          </div>
         </div>
       </main>
 
