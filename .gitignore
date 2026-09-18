@@ -10,3 +10,10 @@ dist
 .env.*
 !.env.example
 .DS_Store
+
+# Document de travail interne : taches, arbitrages, valeurs a fournir.
+A-FAIRE.md
+
+# Photos et videos d'origine, avant recadrage : 25 Mo qui ne servent pas au
+# site. Ce qu'il sert est dans public/images et public/videos.
+image/

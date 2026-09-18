@@ -13,14 +13,45 @@
   --rise-delay: calc(var(--intro) + var(--gloss-sweep));
   --rise: 1.2s;
 
-  /* Le site sous le rideau. */
-  --paper: #f6f3ef;
-  --ink: #1c1420;
-  --muted: #6d6076;
-  --line: #e2dbd4;
+  /*
+   * Le site sous le rideau : une salle avant l'ouverture.
+   *
+   * Le fond n'est ni noir ni violet — c'est un anthracite dans lequel le
+   * violet du logo est dissous (même teinte, saturation au plancher). Le
+   * #5a1e76 ne revient qu'en atmosphère, jamais en aplat : la lueur haute
+   * et le bouton d'appel. Ce qui éclaire la page, c'est le lavande des
+   * projecteurs de l'intro — sur un plateau sombre, la marque se montre en
+   * lumière, pas en encre.
+   */
+  --night: #141118;
+  --night-raised: #1d1a23;
+  /* Les filets sont un voile de lumière, pas un gris : ils restent vivants. */
+  --night-veil: rgba(205, 184, 255, 0.13);
+  --dawn: #f2eff5;
+  --dusk: #9c93a8;
+  /* Le lavande des faisceaux, prélevé sur le dégradé « g-halo » de l'intro. */
+  --beam: #cdb8ff;
+  /* Le violet du logo, remonté d'un cran pour tenir sur fond sombre. */
+  --oysen-purple-lit: #6b2790;
+
+  /*
+   * Les deux couleurs connues de la charte, en attendant la charte complète.
+   * Le gris dessine les tracés et les bordures de S1 à S3 ; le violet colore
+   * la lueur des cartes de S3. Sur le fond sombre, le gris tient 2,5:1 : assez
+   * pour une ligne, jamais pour du texte.
+   */
+  --charte-gris: #505658;
+  --charte-violet: #5a2677;
 
   --pad: clamp(1.5rem, 6vw, 5rem);
-  --logo-w: min(calc(100vw - 2 * var(--pad)), var(--oysen-logo-native-width));
+  /* Le plafond en rem suit l'échelle du site ; celui en px garantit qu'on ne
+     dépasse jamais la résolution native. Sur ordinateur, c'est le rem qui
+     l'emporte. */
+  --logo-w: min(
+    calc(100vw - 2 * var(--pad)),
+    var(--oysen-logo-native-width),
+    60.8125rem
+  );
 }
 
 *,
@@ -29,15 +60,53 @@
   box-sizing: border-box;
 }
 
-html,
-body {
+html {
   height: 100%;
+}
+
+/*
+ * min-height, surtout pas height : un body haut d'un écran exactement
+ * enferme la barre de navigation dans ce premier écran — elle est bien
+ * collante, mais seulement jusqu'en bas de son conteneur, puis elle s'en
+ * va avec lui. Avec min-height, le body fait la hauteur de la page et la
+ * barre reste collée de bout en bout.
+ */
+body {
+  min-height: 100%;
+}
+
+html {
+  /* Barres de défilement, champs et menus natifs suivent la salle. */
+  color-scheme: dark;
+}
+
+/*
+ * Échelle du site sur ordinateur.
+ *
+ * Le site a été calé à l'œil dans un navigateur zoomé à 90 %. Pour qu'un
+ * visiteur à 100 %, le réglage normal, voie exactement la même chose, la
+ * taille de base passe à 90 % : tout ce qui est exprimé en rem, em ou ch
+ * rétrécit d'autant, comme avec le zoom. Ce qui est exprimé en vw ou vh ne
+ * dépend pas du zoom et n'a rien à corriger.
+ *
+ * Conséquence pour la suite : les longueurs de mise en page s'écrivent en
+ * rem, jamais en px (seuls les traits d'un ou deux pixels restent en px).
+ * Une valeur en px échapperait à cette échelle et paraîtrait 11 % trop
+ * grande.
+ *
+ * Réservé aux écrans larges : sur tablette et mobile, le texte courant
+ * garde ses 16px de lecture.
+ */
+@media (min-width: 1024px) {
+  html {
+    font-size: 90%;
+  }
 }
 
 body {
   margin: 0;
-  background-color: var(--paper);
-  color: var(--ink);
+  background-color: var(--night);
+  color: var(--dawn);
   font-family:
     ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica,
     Arial, sans-serif;
@@ -98,173 +167,486 @@ body {
   }
 }
 
-/* ---- La page « en construction », révélée par le lever de rideau ---- */
+/* ---- ACCUEIL · S1 — Hero ---- */
 
-.soon {
-  min-height: 100dvh;
+/*
+ * L'accueil n'est pas une page de vente, c'est un aiguillage : il doit
+ * qualifier et router en moins de trente secondes. D'où une seule colonne,
+ * deux sorties clairement hiérarchisées, et un bandeau de faits qui ferme
+ * le bloc — le dernier argument avant que le visiteur clique ou reparte.
+ */
+.hero {
+  /* La barre occupe le haut de la page : sans cette reprise, l'accueil
+     dépasse d'autant et fait apparaître une barre de défilement. */
+  min-height: calc(100dvh - var(--nav-h, 0px));
+  /* Le discours occupe la hauteur disponible, les preuves closent en bas. */
+  display: grid;
+  grid-template-rows: 1fr auto;
+  position: relative;
+  /* Les faisceaux se posent derrière le texte, jamais devant. */
+  isolation: isolate;
+  background-color: var(--night);
+  /* Bordure du bouton secondaire au gris de la charte. */
+  --btn-ghost-border: var(--charte-gris);
+}
+
+/*
+ * Empilement du hero, du bas vers le haut :
+ *   1. l'anthracite (fond de .hero)
+ *   2. la photo, très atténuée           (.hero__photo, z-index -2)
+ *   3. lueur violette, voile et vignette (.hero::before, z-index -1)
+ *   4. les trois projecteurs             (.hero__lights, z-index -1, après ::before)
+ *   5. le texte
+ *
+ * La lueur et la vignette étaient le fond de .hero lui-même ; elles passent
+ * sur un pseudo-élément, sinon la photo les aurait recouvertes.
+ */
+
+/*
+ * Une photo de plateau, pas une illustration : on n'en garde que la lumière
+ * et la matière. Désaturée, parce que le rouge club aurait installé une
+ * troisième teinte face au violet ; à 20 %, parce qu'elle est une ambiance
+ * et non le sujet. Pour la retrouver en couleur, retirer `filter`.
+ */
+.hero__photo {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Le DJ est légèrement à gauche du centre : sur un écran étroit, c'est
+     lui que le recadrage garde. */
+  object-position: 46% 50%;
+  opacity: 0.2;
+  filter: grayscale(1);
+  pointer-events: none;
+  user-select: none;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    /* La bouffée violette des trois projecteurs, très haut et très diffuse. */
+    radial-gradient(
+      125% 70% at 50% -8%,
+      color-mix(in srgb, var(--oysen-purple) 34%, transparent),
+      transparent 64%
+    ),
+    /*
+     * Le voile : il assombrit la photo derrière le bloc de texte et la
+     * laisse vivre autour. Sans lui, un seul point clair — le t-shirt blanc,
+     * un verre éclairé — ferait tomber le sous-titre sous 4,5:1. Calibré
+     * pixel par pixel sur la photo : ne pas l'alléger sans refaire la mesure.
+     */
+    radial-gradient(
+      70% 58% at 50% 60%,
+      color-mix(in srgb, var(--night) 62%, transparent),
+      color-mix(in srgb, var(--night) 40%, transparent) 45%,
+      transparent 100%
+    ),
+    /* Les bords retombent dans le noir : la salle se referme sur le plateau. */
+    radial-gradient(100% 85% at 50% 30%, transparent 42%, rgba(0, 0, 0, 0.5));
+}
+
+/*
+ * Les trois projecteurs de l'intro, revenus à leur position de repos. Ils
+ * ne balayent plus : ils éclairent. C'est la seule décoration de la page,
+ * et elle vient en droite ligne du rideau.
+ */
+.hero__lights {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hero__lights i {
+  position: absolute;
+  top: -14%;
+  left: 50%;
+  width: 42vmax;
+  height: 125%;
+  transform-origin: 50% 0;
+  /* Étroit à la lampe, ouvert au sol — le cône de la barre de navigation. */
+  clip-path: polygon(48.6% 0, 51.4% 0, 100% 100%, 0 100%);
+  background-image: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--beam) 17%, transparent),
+    color-mix(in srgb, var(--beam) 6%, transparent) 40%,
+    transparent 78%
+  );
+  /* Sans ce dégradé latéral, le clip-path donne un triangle, pas de la lumière. */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 4%,
+    #000 34%,
+    #000 66%,
+    transparent 96%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 4%,
+    #000 34%,
+    #000 66%,
+    transparent 96%
+  );
+  filter: blur(7px);
+}
+
+/* Les trois angles de repos du logo : deux obliques, une verticale. */
+.hero__lights i:nth-child(1) {
+  transform: translateX(-50%) rotate(-27deg);
+}
+.hero__lights i:nth-child(2) {
+  transform: translateX(-50%) rotate(1deg);
+  opacity: 0.75;
+}
+.hero__lights i:nth-child(3) {
+  transform: translateX(-50%) rotate(25deg);
+}
+
+.hero__inner {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: clamp(3rem, 10vh, 7rem) var(--pad);
-  /* Une lueur violette en haut, écho des projecteurs de l'intro. */
-  background-image: radial-gradient(
-    110% 75% at 50% 0%,
-    color-mix(in srgb, var(--oysen-purple) 10%, transparent),
-    transparent 60%
-  );
+  padding: clamp(2.5rem, 8vh, 5.5rem) var(--pad);
 }
 
-/* Le nom, en écho du lettrage du logo : Montserrat très espacé. */
-.soon__brand {
-  margin: 0 0 0.85rem;
-  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
-  font-weight: 400;
-  font-size: clamp(1.5rem, 4.5vw, 2.125rem);
-  letter-spacing: 0.3em;
-  /* L'interlettrage ajoute un blanc après le N : sans cette reprise, le mot
-     paraît décalé vers la gauche dans une colonne centrée. */
-  text-indent: 0.3em;
-  color: var(--oysen-purple);
-}
-
-/* Trois points qui respirent : le rappel des trois faisceaux. */
-.soon__dots {
-  display: flex;
-  gap: 0.5rem;
-  margin: 0 0 clamp(1.75rem, 4vh, 2.5rem);
-}
-
-.soon__dots i {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background-color: var(--oysen-purple);
-  animation: soon-pulse 1.9s ease-in-out infinite;
-}
-
-.soon__dots i:nth-child(2) {
-  animation-delay: 0.32s;
-}
-.soon__dots i:nth-child(3) {
-  animation-delay: 0.64s;
-}
-
-@keyframes soon-pulse {
-  0%,
-  100% {
-    opacity: 0.2;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.3);
-  }
-}
-
-.soon__eyebrow {
-  margin: 0 0 clamp(1.5rem, 3.5vh, 2rem);
+/* Surtitre : la nature de l'activité et la zone, avant toute promesse. */
+.hero__eyebrow {
+  margin: 0 0 clamp(1.5rem, 3.5vh, 2.25rem);
   font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
   font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.24em;
-  color: var(--oysen-purple);
+  text-transform: uppercase;
+  color: var(--beam);
 }
 
-.soon__title {
+/* Le point médian sépare, il ne pèse pas. */
+.hero__eyebrow span {
+  margin: 0 0.55em;
+  opacity: 0.45;
+}
+
+.hero__title {
   margin: 0;
-  max-width: 16ch;
+  /* Deux lignes par membre de phrase : la condition, puis la promesse.
+     Au-delà, le bénéfice se dilue. */
+  max-width: 34ch;
   font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
   font-weight: 300;
-  font-size: clamp(2.25rem, 6.5vw, 4.5rem);
+  font-size: clamp(1.9rem, 4.5vw, 3.5rem);
   line-height: 1.08;
   letter-spacing: -0.02em;
   text-wrap: balance;
+  /* La mise en place est d'un ton en retrait : le projecteur est braqué sur
+     la chute, pas sur la condition. */
+  color: #cfc7d6;
 }
 
-.soon__lede {
-  margin: 1.5rem 0 0;
-  max-width: 46ch;
-  font-size: clamp(1rem, 1.4vw, 1.125rem);
-  line-height: 1.65;
-  color: var(--muted);
+/*
+ * La seconde moitié de la phrase : la promesse, détachée après la suspension
+ * et éclairée. Elle se referme sur « souvenirs », le mot qui donne son nom à
+ * la galerie du site.
+ */
+.hero__title-payoff {
+  display: block;
+  /* Une respiration après la virgule, pas un interligne. */
+  margin-top: 0.12em;
+  color: var(--dawn);
+  text-shadow: 0 0 34px color-mix(in srgb, var(--beam) 32%, transparent);
 }
 
-/* Le bloc de contact, détaché par un filet fin. */
-.soon__contact {
-  width: min(100%, 34rem);
-  margin-top: clamp(2.5rem, 6vh, 4rem);
-  padding-top: clamp(2rem, 5vh, 3rem);
-  border-top: 1px solid var(--line);
+/*
+ * Le mot qui tourne.
+ *
+ * Les quatre mots n'ont pas la même longueur : superposés dans une boîte
+ * calée sur le plus long, la ligne ne se recentre jamais. Un doublon
+ * invisible donne à la boîte sa largeur et sa ligne de base ; les mots
+ * visibles sont posés par-dessus, en absolu.
+ */
+.hero__cycle {
+  position: relative;
+  /* Sur sa propre ligne, centrée sous « Créez des souvenirs ». */
+  display: block;
+  width: fit-content;
+  margin-inline: auto;
 }
 
-.soon__invite {
-  margin: 0 0 1.5rem;
-  font-size: 0.9375rem;
-  color: var(--muted);
+.hero__cycle-sizer {
+  visibility: hidden;
 }
 
-.soon__actions {
+/*
+ * En lavande : c'est la couleur de la lumière sur ce site, et elle signale
+ * que ce mot-là n'est pas fixe. Le halo du titre lui vient par héritage.
+ */
+.hero__cycle-word {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  text-align: center;
+  color: var(--beam);
+  opacity: 0;
+  /* Il arrive par en dessous et repart par le haut, comme un changement de plan. */
+  transform: translateY(0.16em);
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.hero__cycle-word.is-current {
+  opacity: 1;
+  transform: none;
+}
+
+/*
+ * L'entrée du hero. Le texte n'apparaît qu'une fois le rideau parti : il
+ * démarre exactement à la fin de la levée (4 s d'intro, 1,21 s de balayage,
+ * 1,2 s de levée), puis chaque ligne suit à un souffle d'intervalle.
+ *
+ * Le décalage du titre et la durée du fondu sont repris dans `index.tsx`
+ * pour savoir quand lancer le mot qui tourne : à changer des deux côtés.
+ */
+:root {
+  --hero-entree: calc(var(--rise-delay) + var(--rise));
+  --hero-pas: 0.12s;
+  --hero-fondu: 0.7s;
+}
+
+@keyframes hero-monte {
+  from {
+    opacity: 0;
+    transform: translateY(1.15rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.hero__eyebrow,
+.hero__title,
+.hero__lede,
+.hero__actions,
+.hero__proof {
+  animation: hero-monte var(--hero-fondu) cubic-bezier(0.22, 0.61, 0.36, 1)
+    var(--hero-entree) both;
+}
+
+.hero__title {
+  animation-delay: calc(var(--hero-entree) + var(--hero-pas));
+}
+
+.hero__lede {
+  animation-delay: calc(var(--hero-entree) + 2 * var(--hero-pas));
+}
+
+.hero__actions {
+  animation-delay: calc(var(--hero-entree) + 3 * var(--hero-pas));
+}
+
+.hero__proof {
+  animation-delay: calc(var(--hero-entree) + 4 * var(--hero-pas));
+}
+
+/*
+ * Les blocs de la page montent d'un souffle en entrant dans l'écran. L'état
+ * de départ n'existe que si le JavaScript a posé `data-apparition` sur
+ * `<html>` : sans lui, la page s'affiche telle quelle.
+ */
+html[data-apparition] :is(.section, .reassurance, .footer) {
+  opacity: 0;
+  transform: translateY(2rem);
+  transition:
+    opacity 0.95s ease,
+    transform 0.95s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+html[data-apparition] :is(.section, .reassurance, .footer).est-vu {
+  opacity: 1;
+  transform: none;
+}
+
+/* Réservé aux lecteurs d'écran : présent dans l'arbre, absent de l'écran. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.hero__lede {
+  margin: clamp(1.4rem, 3vh, 2rem) 0 0;
+  max-width: 54ch;
+  font-size: clamp(1rem, 1.35vw, 1.125rem);
+  line-height: 1.7;
+  text-wrap: pretty;
+  color: var(--dusk);
+}
+
+/*
+ * La chute du sous-titre : seule sur sa ligne, mais sans blanc ajouté ni
+ * couleur à part — c'est la ligne d'en dessous, simplement plus appuyée.
+ */
+.hero__lede-claim {
+  display: block;
+  font-weight: 600;
+}
+
+.hero__actions {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0.875rem;
+  gap: 0.75rem;
+  margin-top: clamp(2rem, 4.5vh, 3rem);
 }
 
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.9rem 1.6rem;
-  border-radius: 999px;
-  /* Le numéro est rendu dans un <button> avant le clic, dans un <a> après :
+  padding: 1.05rem 1.9rem;
+  /* Angles vifs, jamais de pilule : la marque est architecte, pas agence. */
+  border-radius: 0;
+  /* Le libellé est rendu tantôt dans un <a>, tantôt dans un <button> :
      sans ces reprises, le bouton natif imposerait sa propre police. */
   font-family: inherit;
   font-size: 0.9375rem;
   font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
   text-decoration: none;
   cursor: pointer;
   transition:
     background-color 0.18s ease,
     border-color 0.18s ease,
+    box-shadow 0.24s ease,
     color 0.18s ease;
 }
 
+/*
+ * Le seul vrai violet de la page, et il tient dans un rectangle : posé sur
+ * l'anthracite il se lit comme un objet éclairé, pas comme un aplat. Le
+ * liseré clair en haut est le reflet de la lampe ; l'ombre portée, sa
+ * retombée sur le sol.
+ */
 .btn--solid {
-  background-color: var(--oysen-purple);
-  color: var(--paper);
-  border: 1px solid var(--oysen-purple);
+  background-color: var(--oysen-purple-lit);
+  color: #fff;
+  border: 1px solid color-mix(in srgb, var(--beam) 26%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--beam) 24%, transparent),
+    0 16px 34px -20px rgba(122, 60, 160, 0.95);
 }
 
 .btn--solid:hover,
 .btn--solid:focus-visible {
-  background-color: #46165d;
-  border-color: #46165d;
+  background-color: #7e34a6;
+  border-color: color-mix(in srgb, var(--beam) 46%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--beam) 34%, transparent),
+    0 20px 42px -18px rgba(140, 72, 180, 1);
 }
 
 .btn--ghost {
   background-color: transparent;
-  border: 1px solid var(--line);
-  color: var(--ink);
+  /* Réglable par section : le hero le passe au gris de la charte. */
+  border: 1px solid var(--btn-ghost-border, var(--night-veil));
+  color: var(--dusk);
 }
 
 .btn--ghost:hover,
 .btn--ghost:focus-visible {
-  border-color: var(--oysen-purple);
-  color: var(--oysen-purple);
+  border-color: color-mix(in srgb, var(--beam) 42%, transparent);
+  color: var(--dawn);
+  box-shadow: 0 0 24px -6px color-mix(in srgb, var(--beam) 22%, transparent);
 }
 
-/* Chiffres à chasse fixe : le numéro ne tressaute pas à l'affichage. */
-.btn--phone {
-  letter-spacing: 0.04em;
-  font-variant-numeric: tabular-nums;
+/* Le changement de couleur seul ne suffit pas à signaler la prise au clavier. */
+.btn:focus-visible {
+  outline: 2px solid var(--beam);
+  outline-offset: 3px;
 }
 
-/* Le libellé alterne entre l'adresse et la confirmation : une largeur
-   plancher évite que le bouton se rétrécisse au moment de la copie. */
-.btn--email {
-  min-width: 11.5rem;
+/*
+ * Trois faits vérifiables, pas trois promesses : c'est ce qui distingue
+ * l'aiguillage crédible de la page de vente.
+ */
+.hero__proof {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0 1.6rem;
+  margin: 0;
+  padding: clamp(1.1rem, 2.5vh, 1.5rem) var(--pad) clamp(1.6rem, 3vh, 2.25rem);
+  list-style: none;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dusk);
+  /* Le filet, au gris de la charte, s'éteint sur les bords : une règle
+     pleine ferait barre. */
+  background-image: linear-gradient(
+    to right,
+    transparent,
+    var(--charte-gris) 15%,
+    var(--charte-gris) 85%,
+    transparent
+  );
+  background-repeat: no-repeat;
+  background-size: 100% 1px;
+  background-position: 0 0;
+}
+
+.hero__proof li {
+  position: relative;
+  padding: 0.35rem 0;
+}
+
+/* L'étoile prend la lumière du site ; le reste du fait reste en gris. */
+.hero__star {
+  margin-left: 0.15em;
+  color: var(--beam);
+}
+
+/* Le séparateur appartient au fait qui suit : jamais avant le premier. */
+.hero__proof li + li::before {
+  content: '·';
+  position: absolute;
+  left: -0.9rem;
+  color: var(--beam);
+  opacity: 0.5;
+}
+
+/* Empilés, les faits se lisent mieux sans point médian. */
+@media (max-width: 640px) {
+  .hero__proof {
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .hero__proof li + li::before {
+    display: none;
+  }
 }
 
 /* ---- La nouvelle baseline, en vrai texte ---- */
@@ -612,9 +994,18 @@ body {
   .stage {
     display: none;
   }
-  .soon__dots i {
+  /* Le mot ne tourne plus (voir MotQuiTourne) : il ne doit pas non plus glisser. */
+  .hero__cycle-word {
+    transition: none;
+  }
+
+  /* Sans rideau, le hero est là tout de suite, et rien ne monte. */
+  .hero__eyebrow,
+  .hero__title,
+  .hero__lede,
+  .hero__actions,
+  .hero__proof {
     animation: none;
-    opacity: 0.6;
   }
   .beams,
   .bloom,

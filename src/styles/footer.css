@@ -1,0 +1,420 @@
+/* ============================================================
+   PIED DE PAGE
+   ------------------------------------------------------------
+   La salle après la représentation. C'est la bande la plus
+   sombre du site et la plus silencieuse : la page vient de se
+   terminer sur l'appel à l'action et sa rampe violette, tout ce
+   qui suit relève du service, pas du discours.
+
+   Une seule chose y reste allumée : l'arête du haut, la même
+   ligne de lumière que les panneaux du menu et les cartes de
+   services, mais tenue très bas. La veilleuse qu'on laisse en
+   partant.
+   ============================================================ */
+
+.footer {
+  position: relative;
+  padding-inline: var(--pad);
+  padding-block: clamp(3rem, 7vh, 4.5rem) clamp(1.75rem, 4vh, 2.5rem);
+  background-color: #0b090e;
+}
+
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 1px;
+  background-image: linear-gradient(
+    to right,
+    transparent,
+    var(--beam) 22%,
+    var(--beam) 78%,
+    transparent
+  );
+  opacity: 0.35;
+}
+
+/*
+ * La marque tient la première colonne, plus large : le reste est un
+ * répertoire, elle est une signature. Les services en occupent deux, le
+ * temps d'y ranger six entrées sur deux colonnes.
+ */
+.footer__inner {
+  --footer-gap: clamp(2rem, 3.6vw, 3.5rem);
+  display: grid;
+  grid-template-columns: 1.75fr 1.1fr 1.1fr 0.9fr 1fr;
+  gap: var(--footer-gap);
+  /* Plus large que le reste du site : la phrase de présentation étouffait
+     dans la colonne de texte. */
+  max-width: 82rem;
+  margin-inline: auto;
+}
+
+.footer__col--services {
+  grid-column: span 2;
+}
+
+/*
+ * Deux filets légers découpent le pied de page en trois temps : la
+ * signature, la navigation, le contact. Ils sont posés au milieu de la
+ * gouttière et courent sur toute la hauteur de la rangée.
+ */
+.footer__col--services,
+.footer__col--contact {
+  position: relative;
+}
+
+.footer__col--services::before,
+.footer__col--contact::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(-1 * var(--footer-gap) / 2);
+  width: 1px;
+  background-color: color-mix(in srgb, var(--charte-gris) 45%, transparent);
+}
+
+.footer__brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  line-height: 1;
+}
+
+.footer__brand-name {
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 1.0625rem;
+  letter-spacing: 0.3em;
+  /* L'interlettrage ajoute un blanc après le N : sans cette reprise, le mot
+     paraît décalé vers la gauche. Même correction que dans la barre. */
+  text-indent: 0.3em;
+  color: var(--dawn);
+}
+
+.footer__brand-tag {
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 0.5625rem;
+  letter-spacing: 0.22em;
+  text-indent: 0.22em;
+  text-transform: uppercase;
+  color: var(--dusk);
+}
+
+/* Ce que fait l'agence, en une phrase, sous la signature. */
+.footer__brand-text {
+  margin: 0.55rem 0 0;
+  max-width: 42ch;
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: var(--dusk);
+}
+
+/* Les intitulés de colonne sont des étiquettes, pas des titres : ils restent gris. */
+.footer__title {
+  margin: 0 0 1.15rem;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--dusk);
+}
+
+.footer__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Les services se remplissent colonne par colonne : trois à gauche, trois
+   à droite, dans l'ordre du menu. */
+.footer__list--deux {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(3, auto);
+  gap: 0.6rem clamp(1rem, 2vw, 2rem);
+}
+
+/*
+ * Un lien de pied de page s'allume comme le reste du site, mais la lumière
+ * y est moindre : un simple passage au blanc, sans halo ni déplacement.
+ */
+.footer__link {
+  display: inline-block;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: inherit;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  text-align: left;
+  color: var(--dusk);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.footer__link:hover,
+.footer__link:focus-visible {
+  color: var(--dawn);
+}
+
+/*
+ * Les entrées de navigation s'allument d'un trait violet qui pousse depuis
+ * la gauche et s'arrête à la moitié du mot : la même langue que le site,
+ * ce qu'on pointe s'allume, mais en sourdine.
+ */
+nav.footer__col .footer__link {
+  position: relative;
+}
+
+nav.footer__col .footer__link::after {
+  content: '';
+  position: absolute;
+  bottom: -0.2rem;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: var(--oysen-purple-lit);
+  transition: width 0.28s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+nav.footer__col .footer__link:hover::after,
+nav.footer__col .footer__link:focus-visible::after {
+  width: 50%;
+}
+
+.footer__link:focus-visible {
+  outline: 2px solid var(--beam);
+  outline-offset: 3px;
+}
+
+/* Le bouton qui révèle le numéro : souligné, pour se distinguer d'un lien. */
+.footer__reveal {
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+  text-decoration-color: color-mix(in srgb, var(--beam) 45%, transparent);
+}
+
+/* Chiffres à chasse fixe : le numéro ne tressaute pas à l'affichage. */
+.footer__phone {
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+/*
+ * Le bouton Instagram, en relief doux : une lumière lavande très faible en
+ * haut à gauche, une ombre franche en bas à droite. Au survol il s'enfonce,
+ * les deux ombres passant à l'intérieur. Angles vifs, comme partout.
+ */
+.footer__insta {
+  display: inline-grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  margin-top: clamp(1.25rem, 3vh, 1.75rem);
+  color: var(--dusk);
+  background-color: #100d15;
+  box-shadow:
+    -0.25rem -0.25rem 0.6rem color-mix(in srgb, var(--beam) 6%, transparent),
+    0.3rem 0.3rem 0.75rem rgba(0, 0, 0, 0.8);
+  transition:
+    color 0.2s ease,
+    box-shadow 0.25s ease;
+}
+
+.footer__insta:hover,
+.footer__insta:focus-visible {
+  color: var(--dawn);
+  box-shadow:
+    inset -0.2rem -0.2rem 0.5rem color-mix(in srgb, var(--beam) 7%, transparent),
+    inset 0.25rem 0.25rem 0.6rem rgba(0, 0, 0, 0.85);
+}
+
+.footer__insta:focus-visible {
+  outline: 2px solid var(--beam);
+  outline-offset: 3px;
+}
+
+.footer__insta-icon {
+  display: block;
+}
+
+/*
+ * La zone desservie, sur toute la largeur : l'étiquette, puis les
+ * départements séparés par des points médians, qui se replient tout seuls.
+ */
+.footer__zones {
+  grid-column: 1 / -1;
+  margin-top: clamp(1rem, 3vh, 1.75rem);
+  text-align: center;
+}
+
+.footer__zones .footer__title {
+  margin-bottom: 0.7rem;
+}
+
+.footer__depts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--dusk);
+}
+
+/* Le point médian appartient au département qui suit : jamais avant le
+   premier, jamais seul en fin de ligne. */
+.footer__depts li + li::before {
+  content: '·';
+  margin: 0 0.6rem;
+  color: color-mix(in srgb, var(--beam) 45%, transparent);
+}
+
+/* ---- La ligne du bas ---- */
+
+.footer__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 2rem;
+  max-width: 82rem;
+  margin: clamp(2.5rem, 6vh, 4rem) auto 0;
+  padding-top: clamp(1.25rem, 3vh, 1.75rem);
+  border-top: 1px solid var(--night-veil);
+  font-size: 0.8125rem;
+  color: var(--dusk);
+}
+
+.footer__copy {
+  margin: 0;
+}
+
+.footer__legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.footer__legal .footer__link {
+  font-size: 0.8125rem;
+}
+
+/* ---- Largeurs intermédiaires et mobile ---- */
+
+@media (max-width: 1024px) {
+  .footer__inner {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(2rem, 5vw, 3rem);
+  }
+
+  /* La signature et les services reprennent toute la largeur, au-dessus du
+     répertoire. */
+  .footer__brand,
+  .footer__col--services {
+    grid-column: 1 / -1;
+  }
+
+  /* Les filets verticaux n'ont plus de gouttière à occuper : seul celui du
+     contact reste, entre les deux colonnes du bas. */
+  .footer__col--services::before {
+    display: none;
+  }
+
+  .footer__brand-text {
+    max-width: 58ch;
+  }
+}
+
+/*
+ * Mobile : une seule colonne, et tout se centre. Un répertoire empilé et
+ * calé à gauche laisse une colonne de blanc à droite ; centré, le pied de
+ * page se tient.
+ */
+@media (max-width: 560px) {
+  .footer__inner {
+    grid-template-columns: minmax(0, 1fr);
+    text-align: center;
+  }
+
+  /* Plus de gouttière, donc plus de filet vertical. */
+  .footer__col--contact::before {
+    display: none;
+  }
+
+  .footer__brand {
+    align-items: center;
+  }
+
+  .footer__brand-text {
+    margin-inline: auto;
+  }
+
+  /* Une colonne de services, comme le reste. */
+  .footer__list--deux {
+    grid-auto-flow: row;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+  }
+
+  .footer__list {
+    align-items: center;
+  }
+
+  .footer__list--deux,
+  .footer__col--contact {
+    justify-items: center;
+  }
+
+  .footer__col--contact {
+    display: grid;
+  }
+
+  .footer__link {
+    text-align: center;
+  }
+
+  /* Le trait pousse depuis le milieu du mot, puisque le mot est centré. */
+  nav.footer__col .footer__link::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .footer__bottom {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .footer__legal {
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer__link,
+  .footer__insta {
+    transition: none;
+  }
+
+  /* Le trait apparaît net, sans pousser. */
+  nav.footer__col .footer__link::after {
+    transition: none;
+  }
+}

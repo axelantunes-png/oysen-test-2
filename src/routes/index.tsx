@@ -1,5 +1,22 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
+
+import { Appel } from '../components/home/Appel'
+import { Faq } from '../components/home/Faq'
+import { Guide } from '../components/home/Guide'
+import { Methode } from '../components/home/Methode'
+import { Preuves } from '../components/home/Preuves'
+import { Probleme } from '../components/home/Probleme'
+import { Reassurance } from '../components/home/Reassurance'
+import { Realisations } from '../components/home/Realisations'
+import { Tri } from '../components/home/Tri'
+import {
+  NB_AVIS_GOOGLE,
+  NB_PARTENAIRES,
+  NOTE_GOOGLE,
+  RC_PRO,
+  ZONE,
+} from '../components/home/content'
 
 export const Route = createFileRoute('/')({
   component: Home,
@@ -7,6 +24,88 @@ export const Route = createFileRoute('/')({
 
 const LOGO = '/logo-oysen-provisoire.jpeg'
 const TAGLINE = 'ARCHITECTE D’ÉVÉNEMENTS'
+
+/**
+ * La dernière ligne du titre tourne. « Inoubliables » ouvre toujours la
+ * séquence : c'est la promesse principale, les deux autres la nuancent.
+ *
+ * Accordés au pluriel avec « souvenirs », et ponctués : le point voyage avec
+ * le mot, sinon il flotterait à droite de la boîte à largeur fixe.
+ */
+const MOTS = ['inoubliables.', 'spectaculaires.', 'surprenants.']
+
+/** Le plus long : il fixe la largeur, la ligne ne bouge donc jamais. */
+const MOT_LE_PLUS_LONG = 'spectaculaires.'
+
+const CYCLE_MS = 2800
+
+/*
+ * Quand la rotation démarre. Le rideau part à 4 s (intro) + 1,21 s
+ * (balayage) et met 1,2 s à se lever ; le titre suit 0,12 s plus tard et met
+ * 0,7 s à apparaître. La phrase est donc en place à 7,23 s, et les mots
+ * commencent à tourner deux secondes après. Ces valeurs viennent de
+ * `app.css` (--intro, --gloss-sweep, --rise, --hero-pas, --hero-fondu) : à
+ * changer des deux côtés.
+ */
+const RIDEAU_MS = 4000 + 1210 + 1200
+const PHRASE_MS = 120 + 700
+const ATTENTE_MS = 2000
+const DEPART_MOTS_MS = RIDEAU_MS + PHRASE_MS + ATTENTE_MS
+
+/**
+ * Un mot en remplace un autre comme on change de plan d'éclairage : l'ancien
+ * s'éteint en montant, le suivant s'allume en arrivant par en dessous.
+ *
+ * Les mots sont masqués aux lecteurs d'écran — un titre qui se réécrit
+ * toutes les trois secondes est illisible à l'oreille. Une version fixe leur
+ * est servie à côté.
+ */
+function MotQuiTourne() {
+  const [index, setIndex] = useState(0)
+
+  useEffect(() => {
+    /* Un texte qui se remplace tout seul est un mouvement : on s'abstient. */
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    const suivant = () => setIndex((courant) => (courant + 1) % MOTS.length)
+
+    /*
+     * Le premier mot tient la phrase pendant deux secondes : le temps de la
+     * lire une fois avant qu'elle ne se mette à changer.
+     */
+    let cycle: ReturnType<typeof setInterval> | undefined
+
+    const depart = setTimeout(() => {
+      suivant()
+      cycle = setInterval(suivant, CYCLE_MS)
+    }, DEPART_MOTS_MS)
+
+    return () => {
+      clearTimeout(depart)
+      if (cycle) clearInterval(cycle)
+    }
+  }, [])
+
+  return (
+    <span className="hero__cycle">
+      <span className="hero__cycle-sizer" aria-hidden="true">
+        {MOT_LE_PLUS_LONG}
+      </span>
+
+      {MOTS.map((mot, i) => (
+        <span
+          key={mot}
+          className={`hero__cycle-word${i === index ? ' is-current' : ''}`}
+          aria-hidden="true"
+        >
+          {mot}
+        </span>
+      ))}
+
+      <span className="sr-only">{MOTS[0]}</span>
+    </span>
+  )
+}
 
 /**
  * La scène est 3x plus large que le logo : les faisceaux peuvent balayer
@@ -49,11 +148,6 @@ const PATCH_SRC_Y = 20
 const PATCH_DY = 376 - PATCH_SRC_Y
 
 const BEAMS = ['l', 'r', 'd'] as const
-
-/** Affiché seulement après clic, jamais dans le HTML servi. */
-const PHONE_DISPLAY = '06 60 44 51 30'
-const PHONE_TEL = '+33660445130'
-const EMAIL = 'contact@oysen.fr'
 
 /** Les trois pivots, réutilisés à l'identique pour le masque et pour la lumière. */
 function Pivots({ shape }: { shape: string }) {
@@ -318,124 +412,110 @@ function IntroCurtain() {
   )
 }
 
-/**
- * navigator.clipboard n'existe qu'en contexte sécurisé et Safari le refuse
- * encore dans certains cas. On retombe alors sur un champ hors écran que
- * l'on sélectionne : la vieille méthode, mais elle passe partout.
- * Renvoie false si rien n'a pu être copié — l'adresse reste lisible à
- * l'écran, l'utilisateur peut toujours la sélectionner à la main.
+/*
+ * S1 — Hero.
+ *
+ * Un aiguillage, pas une page de vente : le surtitre situe l'activité et la
+ * zone, le H1 porte le bénéfice commun aux cinq cibles, le sous-titre pose
+ * le périmètre et lève l'objection du « combien d'interlocuteurs ? », puis
+ * deux sorties seulement. Le bandeau de faits ferme le bloc.
  */
-async function copyToClipboard(text: string): Promise<boolean> {
-  try {
-    await navigator.clipboard.writeText(text)
-    return true
-  } catch {
-    try {
-      const field = document.createElement('textarea')
-      field.value = text
-      field.setAttribute('readonly', '')
-      field.style.position = 'fixed'
-      field.style.top = '-1000px'
-      field.style.opacity = '0'
-      document.body.appendChild(field)
-      field.select()
-      /* iOS ignore select() sur un textarea : il lui faut la plage explicite. */
-      field.setSelectionRange(0, text.length)
-      const done = document.execCommand('copy')
-      document.body.removeChild(field)
-      return done
-    } catch {
-      return false
-    }
-  }
-}
-
 function Home() {
-  /**
-   * Le numéro n'est pas dans le HTML servi : il n'apparaît qu'au clic.
-   * Les aspirateurs d'adresses qui lisent la page sans exécuter le JS
-   * repartent donc les mains vides.
-   */
-  const [phoneShown, setPhoneShown] = useState(false)
-  const [copied, setCopied] = useState(false)
-  const copyTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
-
-  /* La confirmation ne doit pas survivre au démontage du composant. */
-  useEffect(
-    () => () => {
-      if (copyTimer.current) clearTimeout(copyTimer.current)
-    },
-    [],
-  )
-
-  async function handleCopyEmail() {
-    if (!(await copyToClipboard(EMAIL))) return
-    setCopied(true)
-    if (copyTimer.current) clearTimeout(copyTimer.current)
-    copyTimer.current = setTimeout(() => setCopied(false), 2200)
-  }
-
   return (
     <>
-      <main className="soon">
-        <p className="soon__brand">OYSEN</p>
-        <p className="soon__eyebrow">{TAGLINE}</p>
+      <main>
+        <section className="hero" aria-label="Oysen, architecte d’événements">
+          {/*
+            Photo d'ambiance, purement décorative : alt vide, les lecteurs
+            d'écran l'ignorent. Deux tailles, le navigateur prend la plus
+            petite qui couvre l'écran.
+          */}
+          <img
+            className="hero__photo"
+            src="/images/hero-1920.jpg"
+            srcSet="/images/hero-1280.jpg 1280w, /images/hero-1920.jpg 1920w"
+            sizes="100vw"
+            width={1920}
+            height={1280}
+            alt=""
+            decoding="async"
+          />
 
-        {/* Trois points : l'écho discret des trois projecteurs de l'intro. */}
-        <span className="soon__dots" aria-hidden="true">
-          <i />
-          <i />
-          <i />
-        </span>
+          {/*
+            Les trois projecteurs du rideau, restés allumés une fois l'intro
+            finie. Purement décoratifs : la page se lit sans eux.
+          */}
+          <span className="hero__lights" aria-hidden="true">
+            <i />
+            <i />
+            <i />
+          </span>
 
-        <h1 className="soon__title">
-          Notre site est
-          <br />
-          en construction.
-        </h1>
-        <p className="soon__lede">Retrouvez-nous ici très prochainement.</p>
+          <div className="hero__inner">
+            <p className="hero__eyebrow">
+              Organisation d’événements
+              <span aria-hidden="true">·</span>
+              {ZONE}
+            </p>
 
-        <div className="soon__contact">
-          <p className="soon__invite">
-            En attendant, vous pouvez nous joindre&nbsp;:
-          </p>
+            <h1 className="hero__title">
+              Vivez vos événements simplement.
+              <span className="hero__title-payoff">
+                Créez des souvenirs
+                <MotQuiTourne />
+              </span>
+            </h1>
 
-          <div className="soon__actions">
-            {/* aria-live : le lecteur d'écran annonce le numéro qui se substitue au bouton. */}
-            <span aria-live="polite">
-              {phoneShown ? (
-                <a
-                  className="btn btn--solid btn--phone"
-                  href={`tel:${PHONE_TEL}`}
-                >
-                  {PHONE_DISPLAY}
-                </a>
-              ) : (
-                <button
-                  type="button"
-                  className="btn btn--solid"
-                  onClick={() => setPhoneShown(true)}
-                >
-                  Afficher le numéro
-                </button>
-              )}
-            </span>
+            <p className="hero__lede">
+              Nous cherchons le lieu, sélectionnons les prestataires,
+              coordonnons la technique et pilotons le jour J.
+              <strong className="hero__lede-claim">
+                Oysen s’occupe de tout.
+              </strong>
+            </p>
 
-            {/*
-              Un bouton, pas un lien mailto : le clic copie l'adresse, il n'y
-              a plus qu'à la coller. aria-live fait annoncer la confirmation
-              par les lecteurs d'écran.
-            */}
-            <button
-              type="button"
-              className="btn btn--ghost btn--email"
-              onClick={handleCopyEmail}
-              aria-live="polite"
-            >
-              {copied ? 'Adresse copiée ✓' : EMAIL}
-            </button>
+            <div className="hero__actions">
+              <a className="btn btn--solid" href="/contact">
+                Imaginer mon événement
+              </a>
+              <a className="btn btn--ghost" href="/nos-souvenirs">
+                Voir nos souvenirs
+              </a>
+            </div>
           </div>
-        </div>
+
+          {/* Trois faits vérifiables, disponibles dès le lancement. */}
+          <ul className="hero__proof">
+            <li>
+              {NOTE_GOOGLE}
+              <span className="hero__star" aria-hidden="true">
+                ★
+              </span>
+              <span className="sr-only"> sur 5</span> sur Google (
+              {NB_AVIS_GOOGLE} avis)
+            </li>
+            <li>Parc matériel en propre</li>
+            <li>{NB_PARTENAIRES} prestataires partenaires</li>
+            <li>RC pro {RC_PRO}</li>
+          </ul>
+        </section>
+
+        {/*
+          L'ordre suit le raisonnement, pas l'envie de parler de soi : on
+          aiguille d'abord, on nomme la douleur ensuite, et Oysen n'apparaît
+          qu'après. La FAQ passe avant l'appel final — on lève les dernières
+          objections juste avant de demander, et la page se termine sur
+          l'action.
+        */}
+        <Tri />
+        <Probleme />
+        <Guide />
+        <Reassurance />
+        <Methode />
+        <Preuves />
+        <Realisations />
+        <Faq />
+        <Appel />
       </main>
 
       <IntroCurtain />

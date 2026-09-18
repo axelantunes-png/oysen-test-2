@@ -1,0 +1,1610 @@
+/* ============================================================
+   ACCUEIL : sections S2 à S10
+   ------------------------------------------------------------
+   La page est une salle qu'on traverse. Le hero est l'affiche,
+   sous les trois projecteurs ; le tri est l'éclairage de
+   service ; le problème est le noir complet, seul moment de la
+   page où la lumière est coupée ; elle revient sur la phrase de
+   bascule et Oysen entre juste après. Les preuves sont d'un ton
+   plus clair, la sortie retrouve une lueur violette — mais par
+   le bas, comme une rampe, là où le hero l'a par le haut.
+
+   Une seule langue d'interaction sur tout le site : ce qu'on
+   pointe s'allume. Le cône du menu, la ligne de tri, la carte de
+   réalisation obéissent au même geste.
+   ============================================================ */
+
+/* ---- Trame commune ---- */
+
+.section {
+  position: relative;
+  padding-block: clamp(4.5rem, 11vh, 8rem);
+  padding-inline: var(--pad);
+  background-color: var(--night);
+}
+
+.section__inner {
+  max-width: 73.75rem;
+  margin-inline: auto;
+}
+
+.section__eyebrow {
+  margin: 0 0 clamp(0.85rem, 2vh, 1.15rem);
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--beam);
+}
+
+.section__title {
+  margin: 0;
+  max-width: 26ch;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  font-size: clamp(1.65rem, 3.3vw, 2.5rem);
+  line-height: 1.16;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+  color: var(--dawn);
+}
+
+/* ---- S2 · La barre de tri ----------------------------------
+   Cinq affiches. La photo occupe toute la carte, couleurs gardées
+   mais ramenées à la moitié de leur intensité : la scène reste
+   vivante sans qu'une diode verte vienne taper à côté de la palette.
+   Par-dessus, le voile sombre du bas.
+
+   Le texte est posé en bas, sur un voile qui monte du sol : titre
+   d'affiche, ligne de qualification, filet, puis l'action. Ces quatre
+   étages donnent son assise à la carte.
+
+   Aucune numérotation : cinq possibilités, pas une séquence.
+
+   Au survol, la photo s'éclaire et avance d'un souffle, la lumière
+   tombe du haut de la carte et son arête s'allume, comme les
+   panneaux déroulants du menu.
+
+   Au-delà de 1024px, la section sort de la colonne de texte et
+   ne laisse que 2,5vw de chaque côté de l'écran.
+   ----------------------------------------------------------- */
+
+.section--tri {
+  /* Marge par côté. 2,5vw de chaque côté = 5vw au total. */
+  --tri-marge: 2.5vw;
+}
+
+/*
+ * Seule section à en-tête centré : les cinq cartes forment un bloc large et
+ * symétrique, un titre calé à gauche flotterait au-dessus. Ailleurs, la page
+ * reste alignée à gauche.
+ */
+.section--tri .section__eyebrow,
+.section--tri .section__title {
+  text-align: center;
+}
+
+.section--tri .section__title {
+  margin-inline: auto;
+}
+
+/*
+ * En flex plutôt qu'en grille : cinq entrées ne remplissent pas trois
+ * colonnes, et c'est le seul moyen de centrer la rangée incomplète sans
+ * figer la position de chaque carte.
+ */
+.tri {
+  --tri-gap: clamp(1rem, 1.6vw, 2rem);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--tri-gap);
+  margin: clamp(2.25rem, 5vh, 3.25rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tri > li {
+  display: flex;
+  flex: 0 1 calc((100% - 2 * var(--tri-gap)) / 3);
+}
+
+/*
+ * La section entière quitte la colonne de texte. Le calcul part du centre
+ * de l'écran, pas du bloc parent : il reste juste quel que soit le
+ * rembourrage de la section.
+ */
+@media (min-width: 1025px) {
+  .section--tri .section__inner {
+    width: calc(100vw - 2 * var(--tri-marge));
+    max-width: none;
+    margin-inline: calc(50% - 50vw + var(--tri-marge));
+  }
+}
+
+/*
+ * La carte. Hauteur bornée plutôt que ratio fixe : proche du carré sur un
+ * grand écran, franchement verticale sur un portable.
+ *
+ * Empilement, du bas vers le haut :
+ *   0  la photo                (.tri__media, .tri__img)
+ *   1  le voile du sol         (.tri__media::after)
+ *   2  la nappe de lumière     (.tri__link::before, au survol)
+ *   3  le texte                (.tri__body)
+ *   4  l'arête éclairée        (.tri__link::after, au survol)
+ */
+.tri__link {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: clamp(23rem, 32vw, 38rem);
+  overflow: hidden;
+  background-color: var(--night-raised);
+  /* Gris de la charte, au même dosage que les cartes de S3. */
+  border: 1px solid color-mix(in srgb, var(--charte-gris) 75%, transparent);
+  text-decoration: none;
+  isolation: isolate;
+}
+
+.tri__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+/*
+ * Les photos gardent leurs couleurs, ramenées à la moitié de leur intensité :
+ * assez pour que la scène reste vivante, pas assez pour que les diodes vertes
+ * d'une console viennent taper à côté de la palette. Au survol elles
+ * s'éclairent, retrouvent un peu de couleur et avancent d'un souffle — le
+ * zoom reste sous le seuil où l'on voit l'image bouger.
+ */
+.tri__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--tri-focus, 50% 50%);
+  filter: saturate(0.5) brightness(0.92) contrast(1.06);
+  transform: scale(1);
+  transition:
+    filter 0.45s ease,
+    transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/*
+ * Le voile qui monte du sol. Il est franc sous le texte et lâche vite :
+ * au-dessus de 75 % de la hauteur, la photo n'est plus touchée. Calibré
+ * pour qu'une haute lumière derrière un titre sur deux lignes laisse encore
+ * 5:1 de contraste, survol compris — ne pas l'alléger sans refaire la mesure.
+ */
+.tri__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background-image: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--night) 95%, transparent) 0%,
+    color-mix(in srgb, var(--night) 88%, transparent) 30%,
+    color-mix(in srgb, var(--night) 62%, transparent) 50%,
+    transparent 75%
+  );
+}
+
+/* La nappe, tombée du haut de la carte. */
+.tri__link::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background-image: radial-gradient(
+    95% 52% at 50% 0%,
+    color-mix(in srgb, var(--beam) 14%, transparent),
+    transparent 74%
+  );
+  opacity: 0;
+  transition: opacity 0.32s ease;
+}
+
+/* L'arête éclairée, reprise des panneaux déroulants du menu. */
+.tri__link::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 4;
+  height: 1px;
+  background-image: linear-gradient(
+    to right,
+    transparent,
+    var(--beam) 20%,
+    var(--beam) 80%,
+    transparent
+  );
+  opacity: 0;
+  transition: opacity 0.24s ease;
+}
+
+.tri__link:hover::before,
+.tri__link:focus-visible::before,
+.tri__link:hover::after,
+.tri__link:focus-visible::after {
+  opacity: 1;
+}
+
+.tri__link:hover .tri__img,
+.tri__link:focus-visible .tri__img {
+  filter: saturate(0.62) brightness(1.04) contrast(1.06);
+  transform: scale(1.03);
+}
+
+.tri__body {
+  position: relative;
+  z-index: 3;
+  display: block;
+  padding: clamp(1.35rem, 2.2vw, 2.25rem);
+}
+
+/* Titre d'affiche : c'est lui qui donne son poids à la carte. */
+.tri__name {
+  display: block;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  font-size: clamp(1.3rem, 1.95vw, 2.2rem);
+  line-height: 1.16;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+  color: var(--dawn);
+}
+
+/* La ligne qui fait tout le travail de la page : lisible au premier regard. */
+.tri__qualif {
+  display: block;
+  margin-top: 0.75rem;
+  font-size: clamp(0.9375rem, 0.95vw, 1.0625rem);
+  line-height: 1.55;
+  color: #d8d2e2;
+}
+
+/*
+ * Le pied de carte : un filet, puis l'action. La carte entière reste le
+ * lien — cette ligne dit seulement ce qui attend de l'autre côté, et donne
+ * au bloc son assise.
+ */
+.tri__more {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: clamp(1.1rem, 1.7vw, 1.6rem);
+  padding-top: 0.9rem;
+  border-top: 1px solid color-mix(in srgb, var(--charte-gris) 70%, transparent);
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--beam);
+  opacity: 0.78;
+  transition: opacity 0.22s ease;
+}
+
+.tri__link:hover .tri__more,
+.tri__link:focus-visible .tri__more {
+  opacity: 1;
+}
+
+.tri__arrow {
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  transform: translateX(-6px);
+  transition: transform 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.tri__link:hover .tri__arrow,
+.tri__link:focus-visible .tri__arrow {
+  transform: translateX(0);
+}
+
+/*
+ * En attendant la photo : le cadre de visée occupe la partie haute, là où
+ * l'image viendra, deux équerres et un libellé.
+ */
+.tri__slot {
+  position: absolute;
+  top: 0.875rem;
+  right: 0.875rem;
+  left: 0.875rem;
+  height: 58%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dusk);
+}
+
+.tri__slot::before,
+.tri__slot::after {
+  content: '';
+  position: absolute;
+  width: 1rem;
+  height: 1rem;
+  border-style: solid;
+  border-color: var(--charte-gris);
+}
+
+.tri__slot::before {
+  top: 0;
+  left: 0;
+  border-width: 1px 0 0 1px;
+}
+
+.tri__slot::after {
+  right: 0;
+  bottom: 0;
+  border-width: 0 1px 1px 0;
+}
+
+/* ============================================================
+   S2 — VERSION PRÉCÉDENTE, section dans la colonne de texte
+   ------------------------------------------------------------
+   Les cartes tenaient dans les 1180px du reste de la page, au
+   lieu de courir d'un bord à l'autre de l'écran. Pour y revenir :
+   supprimer le bloc « @media (min-width: 1025px) » ci-dessus qui
+   fait sortir .section--tri .section__inner de la colonne, et
+   remettre l'écart entre cartes à :
+
+   .tri {
+     --tri-gap: clamp(1rem, 2vw, 1.75rem);
+   }
+   ============================================================ */
+
+/* ---- S3 · Le problème --------------------------------------
+   Le seul noir complet de la page.
+   ----------------------------------------------------------- */
+
+.section--probleme {
+  background-color: #0b090e;
+  border-block: 1px solid var(--night-veil);
+}
+
+.probleme__title {
+  max-width: 24ch;
+  /* Centré dans sa colonne : sans la marge automatique, la largeur maximale
+     le laisserait calé à gauche malgré le centrage du texte. */
+  margin-inline: auto;
+  text-align: center;
+}
+
+/*
+ * S3 court presque sur la largeur de l'écran, comme S2, mais en retrait de
+ * chaque côté par rapport à elle. Le retrait suit la largeur de l'écran :
+ * 4,7vw, soit 90px sur un écran de 1920px, borné entre 2,5rem et 8rem. Règle propre à S3 : S2 n'en
+ * dépend pas.
+ */
+.section--probleme {
+  --probleme-marge: calc(2.5vw + clamp(2.5rem, 4.7vw, 8rem));
+}
+
+@media (min-width: 1025px) {
+  .section--probleme .section__inner {
+    width: calc(100vw - 2 * var(--probleme-marge));
+    max-width: none;
+    margin-inline: calc(50% - 50vw + var(--probleme-marge));
+  }
+}
+
+/* Le sous-titre : dans la lumière de la section, un ton sous le titre. */
+.probleme__lede {
+  max-width: 56ch;
+  margin: clamp(1rem, 2.2vh, 1.35rem) auto 0;
+  font-size: clamp(0.9375rem, 1vw, 1.125rem);
+  line-height: 1.6;
+  text-align: center;
+  color: color-mix(in srgb, var(--beam) 78%, var(--dusk));
+}
+
+/*
+ * Les quatre balises, dans un seul panneau découpé en quatre colonnes
+ * égales. Chaque colonne suit la même construction : pictogramme, titre
+ * souligné d'un filet, cinq démarches, puis la phrase de chute posée en bas
+ * sur son propre filet.
+ *
+ * Les séparations sont l'écart d'un pixel entre les colonnes, qui laisse
+ * voir le fond du panneau : elles suivent seules le passage à deux colonnes
+ * puis à une, sans règle à réécrire.
+ *
+ * Chaque colonne reprend les rangées du panneau (subgrid) : les filets sous
+ * les titres et au-dessus des phrases restent alignés d'une colonne à
+ * l'autre, même quand une phrase prend une ligne de plus que sa voisine.
+ *
+ * Angles vifs, comme partout sur le site. Bordure, séparations et filets au
+ * gris de la charte, pictogrammes et losanges en lavande.
+ */
+.balises {
+  --balises-trait: color-mix(in srgb, var(--charte-gris) 60%, transparent);
+  --balises-filet: color-mix(in srgb, var(--charte-gris) 55%, transparent);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  margin: clamp(2.75rem, 6vh, 4rem) 0 0;
+  padding: 0;
+  list-style: none;
+  background-color: var(--balises-trait);
+  /* Le fond s'arrête sous la bordure : sinon elle paraîtrait plus claire
+     que les séparations. */
+  background-clip: padding-box;
+  border: 1px solid var(--balises-trait);
+}
+
+/* Une colonne : quatre rangées, pictogramme, titre, démarches, phrase. */
+.balise {
+  display: grid;
+  grid-row: span 4;
+  grid-template-rows: subgrid;
+  row-gap: 0;
+  padding: clamp(1.75rem, 2.4vw, 2.75rem) clamp(1.5rem, 2.2vw, 2.5rem);
+  background-color: #15111b;
+}
+
+/* Le pictogramme dans un cadre carré : contour lavande, fond teinté du
+   violet de la charte. */
+.balise__icone {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: clamp(1.5rem, 2vw, 2rem);
+  color: var(--beam);
+  background-color: color-mix(in srgb, var(--charte-violet) 22%, transparent);
+  border: 1px solid color-mix(in srgb, var(--beam) 30%, transparent);
+}
+
+.balise__svg {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
+.balise__titre {
+  margin: 0;
+  padding-bottom: clamp(1rem, 1.4vw, 1.35rem);
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+  font-size: clamp(1.15rem, 1.35vw, 1.5rem);
+  line-height: 1.25;
+  color: var(--dawn);
+  border-bottom: 1px solid var(--balises-filet);
+}
+
+/*
+ * Les démarches, en liste simple, un losange lavande au trait devant
+ * chacune. La marge du bas garde un vide minimal avant la phrase de chute.
+ */
+.balise__puces {
+  display: grid;
+  align-content: start;
+  gap: clamp(0.7rem, 0.9vw, 0.95rem);
+  margin: clamp(1.25rem, 1.8vw, 1.75rem) 0 clamp(2rem, 4.5vw, 5rem);
+  padding: 0;
+  list-style: none;
+}
+
+.balise__puce {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: clamp(0.9375rem, 0.95vw, 1rem);
+  line-height: 1.4;
+  color: color-mix(in srgb, var(--dawn) 60%, var(--dusk));
+}
+
+/* Le losange est calé sur le milieu de la première ligne, même si le
+   libellé passe sur deux lignes. */
+.balise__puce::before {
+  content: '';
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-top: calc((1.4em - 0.5rem) / 2);
+  border: 1px solid var(--beam);
+  transform: rotate(45deg);
+}
+
+/* La phrase de chute, en bas de colonne, sous son filet. */
+.balise__chute {
+  margin: 0;
+  padding-top: clamp(1.25rem, 1.8vw, 1.75rem);
+  font-size: clamp(1rem, 1.1vw, 1.125rem);
+  font-weight: 600;
+  line-height: 1.5;
+  text-wrap: pretty;
+  color: var(--dawn);
+  border-top: 1px solid var(--balises-filet);
+}
+
+/*
+ * L'arrivée : un losange plein entre deux filets au gris de la charte,
+ * centré au-dessus de la phrase qui renverse la section.
+ */
+.probleme__bascule {
+  position: relative;
+  max-width: 72ch;
+  margin: clamp(3rem, 6.5vh, 4.25rem) auto 0;
+  padding-top: clamp(1.75rem, 3.5vh, 2.25rem);
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 500;
+  font-size: clamp(1.1rem, 1.4vw, 1.35rem);
+  line-height: 1.45;
+  text-align: center;
+  text-wrap: balance;
+  color: var(--dawn);
+}
+
+/* La question, sur sa propre ligne, en gras : même couleur que la phrase. */
+.probleme__bascule-question {
+  display: block;
+  font-weight: 600;
+}
+
+.probleme__bascule::before {
+  content: '';
+  position: absolute;
+  top: calc(0.5625rem / 2);
+  left: 50%;
+  width: min(15rem, 70%);
+  height: 1px;
+  transform: translateX(-50%);
+  /* Le filet s'interrompt au centre pour laisser passer le losange. */
+  background-image: linear-gradient(
+    to right,
+    transparent,
+    var(--charte-gris) 25%,
+    var(--charte-gris) calc(50% - 0.875rem),
+    transparent calc(50% - 0.875rem),
+    transparent calc(50% + 0.875rem),
+    var(--charte-gris) calc(50% + 0.875rem),
+    var(--charte-gris) 75%,
+    transparent
+  );
+}
+
+.probleme__bascule::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 0.5625rem;
+  height: 0.5625rem;
+  background-color: var(--beam);
+  transform: translateX(-50%) rotate(45deg);
+}
+
+/* Tablette : le panneau passe à deux colonnes. */
+@media (max-width: 1024px) {
+  .balises {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/*
+ * Mobile : une colonne, et les démarches se replient derrière un « + ».
+ * Quatre listes de cinq lignes feraient sinon un mur à faire défiler.
+ */
+@media (max-width: 640px) {
+  .balises {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Le titre devient le bouton : le « + » est calé à droite. */
+  .balise__bascule {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background: none;
+    border: 0;
+    font: inherit;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .balise__bascule:focus-visible {
+    outline: 2px solid var(--beam);
+    outline-offset: 4px;
+  }
+
+  /* Deux traits croisés : le vertical se couche quand la carte s'ouvre, le
+     « + » devient un « - ». */
+  .balise__plus {
+    position: relative;
+    flex: none;
+    width: 0.85rem;
+    height: 0.85rem;
+  }
+
+  .balise__plus::before,
+  .balise__plus::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: var(--beam);
+    transform: translateY(-50%);
+  }
+
+  .balise__plus::after {
+    transform: translateY(-50%) rotate(90deg);
+    transition: transform 0.28s ease;
+  }
+
+  .balise--ouverte .balise__plus::after {
+    transform: translateY(-50%) rotate(0deg);
+  }
+
+  /*
+   * Le dépliage : la rangée passe de 0 à sa hauteur naturelle. C'est le seul
+   * moyen d'animer une hauteur qu'on ne connaît pas à l'avance.
+   */
+  .balise__repli {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.32s ease;
+  }
+
+  .balise__repli-fond {
+    overflow: hidden;
+  }
+
+  .balise--ouverte .balise__repli {
+    grid-template-rows: 1fr;
+  }
+
+  /* Refermée, la liste ne laisse aucun blanc derrière elle. */
+  .balise__repli .balise__puces {
+    margin-bottom: clamp(1.5rem, 5vw, 2.5rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .balise__repli,
+  .balise__plus::after {
+    transition: none;
+  }
+}
+
+/* ---- S4 · Le guide -----------------------------------------
+   Un seul projecteur, décentré : Oysen entre en scène.
+
+   La section occupe 90 % de la hauteur de l'écran, contenu centré
+   verticalement : elle recevra une vidéo en fond.
+
+   Le nom au-dessus du rôle, puis trois cartes de même hauteur,
+   dans l'ordre où les choses se sont produites : le constat, la
+   décision, la méthode. En dessous, une dernière carte : les
+   faits de part et d'autre d'un filet, puis la phrase qui ferme
+   la section.
+
+   Le losange plein ouvre chaque mouvement, celui au trait chaque
+   ligne de liste : ce sont ceux de S3. Le fond des cartes est un
+   voile sombre plutôt qu'un aplat, pour que la vidéo à venir
+   passe derrière sans emporter la lisibilité du texte.
+   ----------------------------------------------------------- */
+
+.section--guide {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  /* La fusion des couches de traitement ne sort pas de la section. */
+  isolation: isolate;
+  min-height: 90vh;
+  /* Sur mobile, la hauteur réellement visible, barre d'adresse comprise. */
+  min-height: 90svh;
+  background-image: radial-gradient(
+    85% 60% at 22% -12%,
+    color-mix(in srgb, var(--oysen-purple) 30%, transparent),
+    transparent 62%
+  );
+}
+
+/*
+ * La vidéo de fond et son traitement, en trois couches :
+ *
+ *   0  la vidéo, désaturée et assombrie, recadrée au centre
+ *   1  la teinte violette de la charte, en fusion « color » : la vidéo garde
+ *      ses valeurs, elle prend notre couleur
+ *   2  le voile anthracite, le projecteur violet et la vignette, qui posent
+ *      le fond sous le texte et éteignent les bords
+ *
+ * Le contenu passe au-dessus. L'isolation garde la fusion à l'intérieur de
+ * la section : rien de ce qui est au-dessus ou en dessous n'est teinté.
+ */
+.guide__video {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(0.45) saturate(0.75) brightness(0.62) contrast(1.05);
+  pointer-events: none;
+}
+
+.section--guide::before,
+.section--guide::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.section--guide::before {
+  z-index: 1;
+  background-color: color-mix(in srgb, var(--charte-violet) 58%, transparent);
+  mix-blend-mode: color;
+}
+
+.section--guide::after {
+  z-index: 2;
+  background-color: color-mix(in srgb, var(--night) 45%, transparent);
+  background-image:
+    radial-gradient(
+      85% 60% at 22% -12%,
+      color-mix(in srgb, var(--oysen-purple) 26%, transparent),
+      transparent 62%
+    ),
+    radial-gradient(
+      120% 95% at 50% 50%,
+      transparent 42%,
+      color-mix(in srgb, #07030b 72%, transparent)
+    );
+}
+
+.section--guide .section__inner {
+  position: relative;
+  z-index: 3;
+}
+
+/* Le nom en capitales espacées, le rôle en grand juste dessous, centrés
+   au-dessus des cartes. */
+.guide__title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(0.65rem, 1.4vh, 1.1rem);
+  max-width: 24ch;
+  /* Sans la marge automatique, la largeur maximale le laisserait calé à
+     gauche malgré le centrage. */
+  margin-inline: auto;
+  text-align: center;
+}
+
+/* Le nom se lit par-dessus la vidéo : en blanc et plus gros que les
+   surtitres des autres sections. */
+.guide__marque {
+  font-size: clamp(0.95rem, 1.15vw, 1.125rem);
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--dawn);
+}
+
+.guide__role {
+  font-size: clamp(2rem, 4.2vw, 3.25rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.guide__mouvements {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.25rem, 2.2vw, 2rem);
+  margin: clamp(2.5rem, 5.5vh, 3.75rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+/*
+ * Les cartes ont la même hauteur : le contenu reste calé en haut, le vide
+ * tombe en bas de celles qui ont moins à dire.
+ */
+.guide__carte {
+  padding: clamp(1.5rem, 2.2vw, 2.25rem);
+  background-color: color-mix(in srgb, #0b090e 62%, transparent);
+  border: 1px solid color-mix(in srgb, var(--charte-gris) 70%, transparent);
+}
+
+.guide__label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+  font-size: clamp(1.05rem, 1.25vw, 1.25rem);
+  line-height: 1.3;
+  color: var(--dawn);
+}
+
+/* Le losange plein, calé sur le milieu de la première ligne. */
+.guide__label::before {
+  content: '';
+  flex: none;
+  width: 0.5625rem;
+  height: 0.5625rem;
+  margin-top: calc((1.3em - 0.5625rem) / 2);
+  background-color: var(--beam);
+  transform: rotate(45deg);
+}
+
+.guide__phrase {
+  margin: clamp(0.85rem, 1.2vw, 1.1rem) 0 0;
+  font-size: clamp(0.9375rem, 1.05vw, 1.0625rem);
+  line-height: 1.6;
+  color: color-mix(in srgb, var(--dawn) 70%, var(--dusk));
+}
+
+.guide__liste {
+  display: grid;
+  gap: clamp(0.5rem, 0.8vw, 0.7rem);
+  margin: clamp(1rem, 1.5vw, 1.35rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.guide__puce {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: clamp(0.9375rem, 0.95vw, 1rem);
+  line-height: 1.4;
+  color: color-mix(in srgb, var(--dawn) 60%, var(--dusk));
+}
+
+.guide__puce::before {
+  content: '';
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-top: calc((1.4em - 0.5rem) / 2);
+  border: 1px solid var(--beam);
+  transform: rotate(45deg);
+}
+
+/* Le socle : les faits de part et d'autre d'un filet, puis la phrase qui
+   ferme la section, sous son propre filet. */
+.guide__socle {
+  margin: clamp(1.25rem, 2.2vw, 2rem) 0 0;
+  padding: clamp(1.5rem, 2.4vw, 2.5rem);
+  background-color: color-mix(in srgb, #0b090e 62%, transparent);
+  border: 1px solid color-mix(in srgb, var(--charte-gris) 70%, transparent);
+}
+
+.guide__faits {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  column-gap: clamp(1.75rem, 3vw, 3rem);
+}
+
+.guide__fait {
+  margin: 0;
+  font-size: clamp(0.9375rem, 1vw, 1.0625rem);
+  line-height: 1.7;
+  color: var(--dusk);
+}
+
+.guide__fait + .guide__fait {
+  padding-left: clamp(1.75rem, 3vw, 3rem);
+  border-left: 1px solid color-mix(in srgb, var(--charte-gris) 55%, transparent);
+}
+
+/* La fermeture reprend la composition du titre : les deux métiers en
+   capitales espacées, la phrase en grand juste dessous. */
+.guide__signature {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(0.6rem, 1.2vh, 0.9rem);
+  margin: clamp(1.5rem, 3vh, 2.25rem) 0 0;
+  padding-top: clamp(1.5rem, 3vh, 2.25rem);
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  text-align: center;
+  text-wrap: balance;
+  border-top: 1px solid color-mix(in srgb, var(--charte-gris) 55%, transparent);
+}
+
+.guide__duo {
+  font-size: clamp(0.75rem, 0.9vw, 0.8125rem);
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--beam);
+}
+
+.guide__claim {
+  font-weight: 600;
+  font-size: clamp(1.1rem, 1.45vw, 1.45rem);
+  line-height: 1.45;
+  color: var(--dawn);
+}
+
+/* Mobile : les cartes s'empilent, les faits aussi, leur filet passe à
+   l'horizontale. */
+@media (max-width: 760px) {
+  .guide__mouvements {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .guide__faits {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: clamp(1.15rem, 2.5vh, 1.5rem);
+  }
+
+  .guide__fait + .guide__fait {
+    padding-top: clamp(1.15rem, 2.5vh, 1.5rem);
+    padding-left: 0;
+    border-top: 1px solid color-mix(in srgb, var(--charte-gris) 55%, transparent);
+    border-left: 0;
+  }
+}
+
+/* ---- S5 · La bande de réassurance -------------------------
+   Trois faits sur une ligne, séparés par des traits au gris de la
+   charte. Très basse : elle se lit d'un coup d'œil, juste après
+   la présentation d'Oysen et avant la méthode.
+
+   Elle tient dans la colonne de texte, comme les sections qui
+   l'encadrent maintenant.
+   ----------------------------------------------------------- */
+
+.reassurance {
+  padding: clamp(1.85rem, 4vh, 2.6rem) var(--pad);
+  background-color: #15111b;
+  border-bottom: 1px solid var(--night-veil);
+}
+
+.reassurance__liste {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  max-width: 73.75rem;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+
+/* Chiffre et libellé sur la même ligne, centrés dans leur colonne ; le
+   libellé passe dessous si la colonne est trop étroite. */
+.reassurance__point {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.2rem 0.55rem;
+  padding: 0.35rem 1rem;
+  text-align: center;
+}
+
+.reassurance__point + .reassurance__point {
+  border-left: 1px solid color-mix(in srgb, var(--charte-gris) 70%, transparent);
+}
+
+.reassurance__chiffre {
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+  font-size: clamp(1.15rem, 1.5vw, 1.45rem);
+  line-height: 1.2;
+  white-space: nowrap;
+  color: var(--dawn);
+}
+
+.reassurance__etoile {
+  margin-left: 0.1em;
+  color: var(--beam);
+}
+
+.reassurance__label {
+  font-size: clamp(0.875rem, 0.95vw, 1rem);
+  line-height: 1.35;
+  color: color-mix(in srgb, var(--dawn) 60%, var(--dusk));
+}
+
+/* Mobile : les trois points restent sur une ligne, le libellé sous le
+   chiffre. */
+@media (max-width: 760px) {
+  .reassurance__point {
+    flex-direction: column;
+    align-items: center;
+    padding-inline: 0.5rem;
+  }
+}
+
+/* ---- S6 · La méthode ---------------------------------------
+   Quatre cartes en deux rangées. Chacune porte ses deux
+   intitulés, « ce qui se passe » et « ce que vous recevez », en
+   capitales espacées lavande : la carte se lit seule.
+
+   Ici la numérotation dit quelque chose de vrai : chaque étape
+   produit ce dont la suivante a besoin. Elle est traitée en
+   repère de conduite, jamais en gros chiffre décoratif, et le
+   losange plein qui l'ouvre est celui des mouvements de S4.
+   ----------------------------------------------------------- */
+
+/* Tête de section centrée au-dessus des quatre cartes. */
+.section--methode .section__eyebrow,
+.section--methode .section__title {
+  text-align: center;
+}
+
+.section--methode .section__title {
+  margin-inline: auto;
+}
+
+.methode {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 1.75rem);
+  margin: clamp(2.5rem, 5.5vh, 3.5rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.methode__carte {
+  padding: clamp(1.35rem, 2.2vw, 2rem);
+  background-color: var(--night-raised);
+  border: 1px solid color-mix(in srgb, var(--charte-gris) 70%, transparent);
+}
+
+.methode__etape {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  margin: 0 0 clamp(1rem, 1.6vw, 1.35rem);
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+  font-size: clamp(1rem, 1.15vw, 1.15rem);
+  line-height: 1.35;
+  color: var(--dawn);
+}
+
+/* Le losange plein, calé sur le milieu de la première ligne. */
+.methode__etape::before {
+  content: '';
+  flex: none;
+  width: 0.5625rem;
+  height: 0.5625rem;
+  margin-top: calc((1.35em - 0.5625rem) / 2);
+  background-color: var(--beam);
+  transform: rotate(45deg);
+}
+
+/* Le rang, séparé du nom par un point médian. */
+.methode__num::after {
+  content: '·';
+  margin: 0 0.4em;
+  color: color-mix(in srgb, var(--beam) 60%, transparent);
+}
+
+.methode__details {
+  margin: 0;
+}
+
+.methode__details dt {
+  margin-bottom: 0.4rem;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--beam);
+}
+
+.methode__details dt:not(:first-child) {
+  margin-top: clamp(0.9rem, 1.5vw, 1.15rem);
+}
+
+.methode__details dd {
+  margin: 0;
+  font-size: clamp(0.9375rem, 1vw, 1rem);
+  line-height: 1.6;
+}
+
+.methode__deroule {
+  color: var(--dusk);
+}
+
+/* Ce qu'on emporte : d'un ton plus clair que le déroulé. */
+.methode__livrable {
+  color: var(--dawn);
+}
+
+/* ---- S7 · Les témoignages ----------------------------------
+   Trois témoignages filmés en portrait. Au-dessus de chaque
+   vidéo, une carte : qui parle, pour quel événement.
+
+   Entre les colonnes, un filet léger posé au milieu de la
+   gouttière : il sépare sans enfermer, là où une bordure aurait
+   refait trois boîtes.
+   ----------------------------------------------------------- */
+
+.section--preuves {
+  background-color: #181520;
+}
+
+/* Seule la tête de section est centrée. */
+.section--preuves .section__eyebrow,
+.preuves__title {
+  text-align: center;
+}
+
+.preuves__title {
+  margin-inline: auto;
+}
+
+/*
+ * Les trois témoignages. La rangée est bornée : à pleine largeur, trois
+ * portraits feraient un mur.
+ */
+.temoignages {
+  --temoignages-gap: clamp(1.5rem, 3vw, 2.75rem);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--temoignages-gap);
+  max-width: 60rem;
+  margin: clamp(2.25rem, 5vh, 3.25rem) auto 0;
+  padding: 0;
+  list-style: none;
+}
+
+.temoignage {
+  position: relative;
+}
+
+/* Le filet de séparation, au milieu de la gouttière. */
+.temoignage + .temoignage::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(-1 * var(--temoignages-gap) / 2);
+  width: 1px;
+  background-color: color-mix(in srgb, var(--charte-gris) 45%, transparent);
+}
+
+/* La carte d'identité du témoignage, au-dessus de la vidéo. */
+.temoignage__carte {
+  margin-bottom: clamp(0.85rem, 1.6vw, 1.15rem);
+  padding: clamp(0.85rem, 1.6vw, 1.15rem) clamp(1rem, 1.8vw, 1.35rem);
+  background-color: #1d1a25;
+  border: 1px solid var(--night-veil);
+}
+
+.temoignage__nom {
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+  font-size: clamp(0.9375rem, 1vw, 1.0625rem);
+  line-height: 1.3;
+  color: var(--dawn);
+}
+
+.temoignage__type {
+  margin: 0.35rem 0 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--beam);
+}
+
+/* La vidéo, au format portrait des vidéos verticales (9/16). */
+.temoignage__video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  object-fit: cover;
+  background-color: #1d1a25;
+  border: 1px solid var(--night-veil);
+}
+
+/*
+ * En plein écran, la vidéo garde ses proportions : elle prend la hauteur de
+ * l'écran et reste verticale, avec du noir de chaque côté. Sans ça, le cadre
+ * 9/16 et le recadrage « cover » la faisaient remplir un écran paysage, donc
+ * la rognaient de haut en bas.
+ *
+ * Deux règles séparées : un sélecteur inconnu invaliderait toute la règle.
+ */
+.temoignage__video:fullscreen {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto;
+  object-fit: contain;
+  background-color: #000;
+  border: 0;
+}
+
+.temoignage__video:-webkit-full-screen {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto;
+  object-fit: contain;
+  background-color: #000;
+  border: 0;
+}
+
+/*
+ * Sans vidéo, l'emplacement réservé, dans le même langage que les photos de
+ * S2 : deux équerres au gris de la charte et un libellé.
+ */
+.temoignage__slot {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  aspect-ratio: 9 / 16;
+  background-color: #1d1a25;
+  border: 1px solid var(--night-veil);
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--dusk);
+}
+
+.temoignage__slot::before,
+.temoignage__slot::after {
+  content: '';
+  position: absolute;
+  width: 1rem;
+  height: 1rem;
+  border-style: solid;
+  border-color: var(--charte-gris);
+}
+
+.temoignage__slot::before {
+  top: 0.875rem;
+  left: 0.875rem;
+  border-width: 1px 0 0 1px;
+}
+
+.temoignage__slot::after {
+  right: 0.875rem;
+  bottom: 0.875rem;
+  border-width: 0 1px 1px 0;
+}
+
+/* Le triangle de lecture, en lavande : l'emplacement attend une vidéo, pas
+   une photo. */
+.temoignage__play {
+  width: 0;
+  height: 0;
+  border-top: 0.6rem solid transparent;
+  border-bottom: 0.6rem solid transparent;
+  border-left: 1rem solid var(--beam);
+}
+
+/* ---- S8 · Les réalisations ---------------------------------
+   Résultat d'abord : la contrainte levée passe avant le nom de
+   l'événement. Chaque photo porte sa légende — sans elle, une
+   image d'événement laisse croire que le lieu est à nous.
+   ----------------------------------------------------------- */
+
+.section--realisations {
+  background-color: #181520;
+  border-top: 1px solid var(--night-veil);
+}
+
+/* Tête de section centrée au-dessus des trois cas. */
+.section--realisations .section__eyebrow,
+.section--realisations .section__title {
+  text-align: center;
+}
+
+.section--realisations .section__title {
+  margin-inline: auto;
+}
+
+.cas {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.25rem, 2.5vw, 2rem);
+  margin: clamp(2.25rem, 5vh, 3.25rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cas__link {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  text-decoration: none;
+}
+
+.cas__frame {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 4 / 3;
+  margin-bottom: 1.15rem;
+  overflow: hidden;
+  background-color: #14111a;
+  background-image: radial-gradient(
+    90% 70% at 50% 0%,
+    color-mix(in srgb, var(--beam) 7%, transparent),
+    transparent 72%
+  );
+  border: 1px solid var(--night-veil);
+  transition: border-color 0.22s ease;
+}
+
+.cas__slot {
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dusk);
+}
+
+.cas__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 0.7rem;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--beam);
+}
+
+.cas__meta span {
+  opacity: 0.45;
+}
+
+.cas__contrainte {
+  margin-bottom: 1.15rem;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--dawn);
+}
+
+.cas__more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: auto;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dusk);
+  transition: color 0.2s ease;
+}
+
+.cas__arrow {
+  width: 1.25rem;
+  height: 1.25rem;
+  transition: transform 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.cas__link:hover .cas__more,
+.cas__link:focus-visible .cas__more {
+  color: var(--beam);
+}
+
+.cas__link:hover .cas__arrow,
+.cas__link:focus-visible .cas__arrow {
+  transform: translateX(4px);
+}
+
+.cas__link:hover .cas__frame,
+.cas__link:focus-visible .cas__frame {
+  border-color: color-mix(in srgb, var(--beam) 35%, transparent);
+}
+
+/* ---- S9 · FAQ ----------------------------------------------
+   En clair, pas en accordéon : ces réponses sont écrites pour
+   être lues juste avant de cliquer, et extraites par les moteurs
+   de réponse. Un contenu replié est un contenu à moitié lu.
+   ----------------------------------------------------------- */
+
+/* Tête de section centrée au-dessus des deux colonnes de questions. */
+.section--faq .section__eyebrow,
+.section--faq .section__title {
+  text-align: center;
+}
+
+.section--faq .section__title {
+  margin-inline: auto;
+}
+
+.faq {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 clamp(2rem, 5vw, 4rem);
+  margin: clamp(2.25rem, 5vh, 3.25rem) 0 0;
+}
+
+.faq__item {
+  padding: clamp(1.35rem, 2.6vh, 1.85rem) 0;
+  border-top: 1px solid var(--night-veil);
+}
+
+.faq__q {
+  margin: 0 0 0.7rem;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 1.0625rem;
+  line-height: 1.35;
+  color: var(--dawn);
+}
+
+.faq__a {
+  margin: 0;
+  max-width: 56ch;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--dusk);
+}
+
+/* ---- S10 · L'appel final -----------------------------------
+   La lueur violette revient, mais par le bas : une rampe, là où
+   le hero a ses projecteurs. La page se referme comme elle s'est
+   ouverte, à l'envers.
+   ----------------------------------------------------------- */
+
+.section--appel {
+  text-align: center;
+  border-top: 1px solid var(--night-veil);
+  background-image: radial-gradient(
+    110% 90% at 50% 118%,
+    color-mix(in srgb, var(--oysen-purple) 40%, transparent),
+    transparent 64%
+  );
+}
+
+.appel__title {
+  max-width: 20ch;
+  margin-inline: auto;
+}
+
+.appel__lede {
+  margin: clamp(1.1rem, 2.5vh, 1.5rem) auto 0;
+  max-width: 50ch;
+  font-size: clamp(1rem, 1.3vw, 1.0625rem);
+  line-height: 1.7;
+  color: var(--dusk);
+}
+
+.appel__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: clamp(1.75rem, 4vh, 2.5rem);
+}
+
+/* Chiffres à chasse fixe : le numéro ne tressaute pas à l'affichage. */
+.appel__phone {
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.appel__microcopy {
+  margin: clamp(1.5rem, 3vh, 2rem) auto 0;
+  max-width: 58ch;
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: var(--dusk);
+}
+
+/* ---- Prise au clavier ---- */
+
+.tri__link:focus-visible,
+.cas__link:focus-visible {
+  outline: 2px solid var(--beam);
+  outline-offset: -3px;
+}
+
+/* ---- Largeurs intermédiaires et mobile ---- */
+
+@media (max-width: 1024px) {
+  .cas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Deux par rangée : la cinquième carte se centre toute seule. */
+  .tri > li {
+    flex-basis: calc((100% - var(--tri-gap)) / 2);
+  }
+}
+
+@media (max-width: 760px) {
+  .methode,
+  .cas,
+  .faq {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Deux témoignages de front, le troisième dessous : un portrait en pleine
+     largeur occuperait tout l'écran. */
+  .temoignages {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .tri > li {
+    flex-basis: 100%;
+  }
+
+  /*
+   * En pleine largeur, une affiche haute occuperait tout l'écran et
+   * repousserait la carte suivante hors du champ. On la ramène vers le
+   * paysage, sans descendre plus bas : le bloc de texte, filet et action
+   * compris, a besoin de son assise.
+   */
+  .tri__link {
+    height: clamp(20rem, 82vw, 25rem);
+  }
+}
+
+/* ---- Mouvement réduit ----
+   Les allumages sont des changements d'état, pas des animations :
+   sans mouvement, ils se produisent net. */
+
+@media (prefers-reduced-motion: reduce) {
+  .tri__link,
+  .tri__link::before,
+  .tri__link::after,
+  .tri__more,
+  .tri__arrow,
+  .tri__img,
+  .cas__frame,
+  .cas__more,
+  .cas__arrow {
+    transition: none;
+  }
+
+  .tri__arrow {
+    transform: translateX(0);
+  }
+
+  /* Le rapprochement de l'image au survol disparaît : seule la lumière reste. */
+  .tri__link:hover .tri__img,
+  .tri__link:focus-visible .tri__img {
+    transform: none;
+  }
+
+  /* La vidéo de fond de S5 est du mouvement continu : elle disparaît avec
+     son traitement, et la section retrouve sa lueur violette. */
+  .guide__video,
+  .section--guide::before,
+  .section--guide::after {
+    display: none;
+  }
+}
