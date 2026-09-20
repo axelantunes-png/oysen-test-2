@@ -34,7 +34,7 @@ export function Guide() {
         <h2 className="section__title guide__title" id="guide-title">
           <span className="guide__marque">Oysen</span>
           <span className="sr-only">&nbsp;: </span>
-          <span className="guide__role">Votre chef d’orchestre</span>
+          <span className="guide__role">L’architecte de vos souvenirs</span>
         </h2>
 
         <ol className="guide__mouvements">
@@ -60,7 +60,7 @@ export function Guide() {
         <div className="guide__socle">
           <div className="guide__faits">
             <p className="guide__fait">
-              Oysen organise vos événements en Haute-Garonne et sur toute
+              Oysen, agence événementielle en Haute-Garonne et sur toute
               l’Occitanie. Recherche du lieu, sélection des prestataires,
               technique, régie le jour J. Un seul interlocuteur.
             </p>
@@ -73,9 +73,7 @@ export function Guide() {
 
           <p className="guide__signature">
             <span className="guide__duo">Conception - Réalisation</span>
-            <span className="guide__claim">
-              Deux métiers, un seul interlocuteur.
-            </span>
+            <span className="guide__claim">Deux métiers, un expert.</span>
           </p>
         </div>
       </div>

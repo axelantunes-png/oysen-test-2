@@ -22,7 +22,7 @@ export function Methode() {
       <div className="section__inner">
         <p className="section__eyebrow">La méthode</p>
         <h2 className="section__title" id="methode-title">
-          Quatre étapes, et ce que vous avez en main à la fin de chacune.
+          Agence événementielle&nbsp;: comment ça se passe
         </h2>
 
         <ol className="methode">
@@ -35,7 +35,15 @@ export function Methode() {
 
               <dl className="methode__details">
                 <dt>Ce qui se passe</dt>
-                <dd className="methode__deroule">{etape.deroule}</dd>
+                <dd className="methode__deroule">
+                  <ul className="methode__puces">
+                    {etape.deroule.map((demarche) => (
+                      <li className="methode__puce" key={demarche}>
+                        {demarche}
+                      </li>
+                    ))}
+                  </ul>
+                </dd>
 
                 <dt>Ce que vous recevez</dt>
                 <dd className="methode__livrable">{etape.livrable}</dd>

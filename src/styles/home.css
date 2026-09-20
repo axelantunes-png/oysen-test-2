@@ -789,7 +789,8 @@
   flex-direction: column;
   align-items: center;
   gap: clamp(0.65rem, 1.4vh, 1.1rem);
-  max-width: 24ch;
+  /* Assez large pour que le rôle tienne sur une ligne. */
+  max-width: min(100%, 44ch);
   /* Sans la marge automatique, la largeur maximale le laisserait calé à
      gauche malgré le centrage. */
   margin-inline: auto;
@@ -810,6 +811,14 @@
   font-size: clamp(2rem, 4.2vw, 3.25rem);
   line-height: 1.05;
   letter-spacing: -0.02em;
+}
+
+/* Sur ordinateur, le rôle tient sur une seule ligne. En dessous, il se
+   replie normalement : la place manque. */
+@media (min-width: 1025px) {
+  .guide__role {
+    white-space: nowrap;
+  }
 }
 
 .guide__mouvements {
@@ -1127,6 +1136,33 @@
 
 .methode__deroule {
   color: var(--dusk);
+}
+
+/* Ce qui se passe, une démarche par ligne, au losange au trait des listes
+   du site. */
+.methode__puces {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.methode__puce {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  line-height: 1.5;
+}
+
+.methode__puce::before {
+  content: '';
+  flex: none;
+  width: 0.45rem;
+  height: 0.45rem;
+  margin-top: calc((1.5em - 0.45rem) / 2);
+  border: 1px solid var(--beam);
+  transform: rotate(45deg);
 }
 
 /* Ce qu'on emporte : d'un ton plus clair que le déroulé. */

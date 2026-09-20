@@ -249,7 +249,8 @@ export const MOUVEMENTS: readonly Mouvement[] = [
 export type Etape = {
   numero: string
   nom: string
-  deroule: string
+  /** Ce qui se passe, une ligne par démarche. */
+  deroule: readonly string[]
   livrable: string
 }
 
@@ -257,28 +258,40 @@ export const METHODE: readonly Etape[] = [
   {
     numero: '1',
     nom: 'Cadrage',
-    deroule:
-      'Qualification du besoin, analyse des contraintes techniques, visite du site',
+    deroule: ['Qualification du besoin', 'Analyse des contraintes techniques'],
     livrable: 'Une proposition chiffrée et un déroulé',
   },
   {
     numero: '2',
     nom: 'Sourcing',
-    deroule:
-      'Recherche du lieu, sélection et négociation des prestataires, contractualisation',
+    deroule: [
+      'Recherche du lieu',
+      'Visite du site',
+      'Sélection et négociation des prestataires',
+      'Contractualisation',
+    ],
     livrable: 'Une short-list argumentée et un budget ligne à ligne',
   },
   {
     numero: '3',
     nom: 'Production',
-    deroule:
-      'Rétroplanning, conformité, préparation et contrôle du matériel, essais techniques avant l’arrivée du public, matériel de secours sur les postes critiques',
+    deroule: [
+      'Rétroplanning',
+      'Conformité',
+      'Préparation et contrôle du matériel',
+      'Essais techniques avant l’arrivée du public',
+      'Matériel de secours sur les postes critiques',
+    ],
     livrable: 'Un rétroplanning daté et un dossier de conformité',
   },
   {
     numero: '4',
     nom: 'Régie',
-    deroule: 'Exploitation, coordination des intervenants, démontage',
+    deroule: [
+      'Exploitation',
+      'Coordination des intervenants',
+      'Démontage',
+    ],
     livrable: 'Un interlocuteur unique sur place, du montage au démontage',
   },
 ]
