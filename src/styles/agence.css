@@ -1,0 +1,2123 @@
+/* ============================================================
+   L'AGENCE : S1 à S9
+   ------------------------------------------------------------
+   La page parle la langue de l'accueil, chargée globalement :
+   la section, son bloc intérieur, le surtitre lavande, le titre
+   en Montserrat léger, les boutons. Cette feuille n'ajoute que
+   ce qui lui est propre, et n'est servie que sur cette page.
+
+   Ce qu'elle emprunte à l'accueil : le losange plein,
+   l'arête éclairée des cartes, les projecteurs, la rampe
+   violette de l'appel final.
+
+   Ce qui lui appartient : la planche d'architecte de
+   l'ouverture, le rail de l'histoire, la scène des valeurs,
+   et le triangle de l'approche.
+
+   Une règle de composition, celle du site : les têtes de
+   section sont centrées, les textes longs restent alignés à
+   gauche dans une colonne centrée.
+   ============================================================ */
+
+.section--agence .section__eyebrow,
+.section--agence .section__title {
+  text-align: center;
+}
+
+.section--agence .section__title {
+  margin-inline: auto;
+}
+
+/* ---- S1 · L'ouverture : la planche -------------------------
+   Une planche d'architecte, pas une affiche. Un cadre au gris
+   de la charte, le discours à gauche, le plan d'implantation à
+   droite, et en pied de feuille le cartouche qui la signe.
+
+   Trois lettrages, trois rôles : Montserrat léger pour le
+   titre, comme partout sur le site ; le corps du site pour le
+   texte ; Azeret Mono pour tout ce qui annote le dessin, comme
+   le lettrage d'un plan (repères, légende, cartouche).
+
+   La planche se dessine au chargement : les murs, la scène,
+   les tables, le pont lumière, puis les faisceaux qui partent
+   de chaque poste et aboutissent au losange de la régie, qui
+   s'allume en dernier. Les délais sont posés dans Plan.tsx.
+   ----------------------------------------------------------- */
+
+.ouverture {
+  display: grid;
+  min-height: calc(100dvh - var(--nav-h, 0px));
+  padding: clamp(0.75rem, 1.2vw, 1.25rem);
+  background-color: var(--night);
+}
+
+.ouverture__feuille {
+  position: relative;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  /* Les faisceaux se posent derrière le contenu, et s'arrêtent au cadre. */
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid var(--trait);
+  background-color: var(--night);
+  /* Une seule lueur, sur le plan : la lampe au-dessus de la table à dessin. */
+  background-image: radial-gradient(
+    55% 65% at 72% 46%,
+    color-mix(in srgb, var(--oysen-purple) 26%, transparent),
+    transparent 72%
+  );
+}
+
+.ouverture__corps {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  align-items: center;
+  gap: clamp(2rem, 5vw, 6rem);
+  padding: clamp(2rem, 5vh, 4rem) clamp(1.5rem, 4vw, 4.5rem);
+}
+
+/* ---- Le discours ---- */
+
+.ouverture__surtitre {
+  margin: 0 0 clamp(1.2rem, 2.5vh, 1.75rem);
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--beam);
+}
+
+/*
+ * Trois lignes : le nom, le métier, le lieu. Le lieu prend la couleur de la
+ * lumière, c'est lui que le visiteur vient vérifier.
+ */
+.ouverture__titre {
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  font-size: clamp(2rem, 3.4vw, 3.1rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--dawn);
+}
+
+.ouverture__titre-nom,
+.ouverture__titre-lieu {
+  display: block;
+}
+
+.ouverture__titre-lieu {
+  color: var(--beam);
+}
+
+.ouverture__lede {
+  margin: clamp(1.4rem, 3vh, 2rem) 0 0;
+  max-width: 44ch;
+  font-size: clamp(1rem, 1.2vw, 1.0625rem);
+  line-height: 1.7;
+  text-wrap: pretty;
+  color: var(--dusk);
+}
+
+.ouverture__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem clamp(1.25rem, 2.5vw, 2rem);
+  margin-top: clamp(1.75rem, 4vh, 2.5rem);
+}
+
+/* ---- Le plan ---- */
+
+.plan {
+  display: grid;
+  gap: clamp(1rem, 2.2vh, 1.5rem);
+  margin: 0;
+}
+
+.plan__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.plan__svg text {
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+}
+
+.plan__mur {
+  fill: none;
+  stroke: var(--dawn);
+  stroke-width: 6;
+}
+
+.plan__baie {
+  stroke: var(--dusk);
+  stroke-width: 1;
+}
+
+.plan__trait {
+  fill: none;
+  stroke: color-mix(in srgb, var(--beam) 75%, transparent);
+  stroke-width: 1.2;
+}
+
+/* La scène : un plancher surélevé, donc hachuré. */
+.plan__scene {
+  fill: url(#plan-hachure);
+  stroke: color-mix(in srgb, var(--beam) 75%, transparent);
+  stroke-width: 1.2;
+}
+
+.plan__hachure {
+  stroke: color-mix(in srgb, var(--beam) 22%, transparent);
+  stroke-width: 1;
+}
+
+/* L'écran est la seule surface qui émet : il est tracé en lumière. */
+.plan__led {
+  stroke: var(--beam);
+  stroke-width: 3.5;
+  filter: drop-shadow(0 0 0.35rem color-mix(in srgb, var(--beam) 70%, transparent));
+}
+
+.plan__cone {
+  fill: url(#plan-cone);
+}
+
+.plan__cone-haut {
+  stop-color: var(--beam);
+  stop-opacity: 0.2;
+}
+
+.plan__cone-bas {
+  stop-color: var(--beam);
+  stop-opacity: 0;
+}
+
+/* Ce qui est au-dessus du plan de coupe, ou au sol sans relief : en tireté. */
+.plan__dessus {
+  fill: none;
+  stroke: color-mix(in srgb, var(--beam) 55%, transparent);
+  stroke-width: 1;
+  stroke-dasharray: 5 4;
+}
+
+.plan__projecteur {
+  fill: var(--night);
+  stroke: var(--beam);
+  stroke-width: 1.2;
+}
+
+.plan__chaise {
+  fill: none;
+  stroke: color-mix(in srgb, var(--beam) 40%, transparent);
+  stroke-width: 1;
+}
+
+.plan__noms text {
+  fill: var(--dusk);
+  text-anchor: middle;
+  letter-spacing: 0.18em;
+}
+
+.plan__faisceau {
+  stroke: var(--beam);
+  stroke-width: 1;
+  stroke-opacity: 0.5;
+}
+
+/* Le repère masque le départ de son faisceau : le trait sort du cercle. */
+.plan__repere circle {
+  fill: var(--night);
+  stroke: var(--beam);
+  stroke-width: 1.2;
+}
+
+.plan__repere text {
+  fill: var(--dawn);
+  font-weight: 500;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.plan__losange {
+  fill: var(--beam);
+  filter: drop-shadow(0 0 0.5rem var(--beam));
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: plan-allume 0.9s cubic-bezier(0.22, 0.61, 0.36, 1)
+    calc(var(--apres-rideau, 0s) + var(--t, 0s)) both;
+}
+
+.plan__echelle-plein {
+  fill: var(--dusk);
+}
+
+.plan__echelle-vide {
+  fill: none;
+  stroke: var(--dusk);
+  stroke-width: 1;
+}
+
+.plan__echelle-texte {
+  fill: var(--dusk);
+  text-anchor: middle;
+}
+
+/* ---- La légende ---- */
+
+/* L'intitulé de la planche, souligné jusqu'au bord comme sur un plan. */
+.plan__intitule {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 0 clamp(0.9rem, 1.8vh, 1.2rem);
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--beam);
+}
+
+.plan__intitule::after {
+  content: '';
+  flex: 1;
+  border-top: 1px solid var(--trait);
+}
+
+.legende {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem clamp(1.25rem, 2.5vw, 2rem);
+  margin: 0;
+}
+
+.legende__item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.legende__repere {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid var(--beam);
+  border-radius: 50%;
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.625rem;
+  font-weight: 500;
+  color: var(--dawn);
+}
+
+.legende__poste {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin: 0;
+}
+
+.legende__nom {
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--dawn);
+}
+
+.legende__source {
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.6875rem;
+  color: var(--dusk);
+}
+
+/* La régie ferme la légende sur toute sa largeur : c'est là que tout aboutit. */
+.legende__item--regie {
+  grid-column: 1 / -1;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--trait-doux);
+}
+
+.legende__item--regie .legende__repere {
+  border-color: transparent;
+  font-size: 1rem;
+  color: var(--beam);
+}
+
+.legende__item--regie .legende__nom {
+  color: var(--beam);
+}
+
+/* ---- Le cartouche ----
+   Les filets sont le fond du cartouche vu à travers un pixel de
+   gouttière : un seul trait entre deux cases, quel que soit le
+   nombre de colonnes. */
+
+.cartouche {
+  display: grid;
+  grid-template-columns: minmax(9rem, 0.7fr) repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  margin: 0;
+  border-top: 1px solid var(--trait);
+  background-color: var(--trait);
+}
+
+.cartouche__case {
+  padding: clamp(0.9rem, 1.8vh, 1.25rem) clamp(1rem, 1.6vw, 1.5rem);
+  background-color: var(--night);
+}
+
+.cartouche__label {
+  margin: 0 0 0.45rem;
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--beam);
+}
+
+.cartouche__valeur {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: var(--dusk);
+}
+
+.cartouche__signature {
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 300;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--dawn);
+}
+
+/* ---- L'entrée ----
+   Le texte monte pendant que le plan se trace : on lit sans
+   attendre le dessin. Tout part à la levée du rideau
+   (--apres-rideau, app.css), tout de suite s'il ne se joue pas. */
+
+.plan__trace {
+  stroke-dasharray: 1;
+  animation: plan-trace var(--duree, 0.9s) cubic-bezier(0.65, 0, 0.35, 1)
+    calc(var(--apres-rideau, 0s) + var(--t, 0s)) both;
+}
+
+.plan__fondu {
+  animation: plan-apparait 0.7s ease
+    calc(var(--apres-rideau, 0s) + var(--t, 0s)) both;
+}
+
+.ouverture__texte > * {
+  animation: ouverture-monte 0.8s cubic-bezier(0.22, 0.61, 0.36, 1)
+    var(--apres-rideau, 0s) both;
+}
+
+.ouverture__texte > :nth-child(2) {
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.1s);
+}
+
+.ouverture__texte > :nth-child(3) {
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.25s);
+}
+
+.ouverture__texte > :nth-child(4) {
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.4s);
+}
+
+.cartouche {
+  animation: plan-apparait 0.8s ease calc(var(--apres-rideau, 0s) + 0.5s)
+    both;
+}
+
+.plan__legende {
+  animation: plan-apparait 0.8s ease calc(var(--apres-rideau, 0s) + 1.9s)
+    both;
+}
+
+@keyframes plan-trace {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+
+@keyframes plan-apparait {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes plan-allume {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.5);
+  }
+}
+
+@keyframes ouverture-monte {
+  from {
+    opacity: 0;
+    transform: translateY(1.25rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ouverture .plan__trace,
+  .ouverture .plan__fondu,
+  .ouverture .plan__losange,
+  .ouverture .ouverture__texte > *,
+  .ouverture .cartouche,
+  .ouverture .plan__legende {
+    animation: none;
+  }
+}
+
+/* ---- L'ouverture sur ordinateur ----
+   La planche tient dans l'écran, jamais plus : sa hauteur est
+   fixée, et c'est le plan qui cède. Il prend toute la hauteur
+   que le texte, la légende et le cartouche lui laissent, et se
+   centre dans sa boîte sans se déformer. */
+
+@media (min-width: 1025px) {
+  .ouverture {
+    height: calc(100dvh - var(--nav-h, 0px));
+    min-height: 0;
+  }
+
+  .ouverture__feuille,
+  .ouverture__corps {
+    min-height: 0;
+  }
+
+  .ouverture__corps {
+    padding-block: clamp(1.5rem, 4vh, 3.5rem);
+  }
+
+  /* Le discours se centre entre le bord du cadre et le « P » de
+     l'intitulé du plan, sans toucher à la grille : centré dans sa
+     colonne, puis décalé de la moitié de l'écart qui sépare la
+     marge du cadre (1.5rem à 4.5rem) de l'espace entre colonnes
+     (2rem à 6rem). */
+  .ouverture__texte {
+    position: relative;
+    left: calc((clamp(2rem, 5vw, 6rem) - clamp(1.5rem, 4vw, 4.5rem)) / 2);
+    justify-self: center;
+  }
+
+  .plan {
+    grid-template-rows: minmax(0, 1fr) auto;
+    align-self: stretch;
+    min-height: 0;
+  }
+
+  .plan__svg {
+    height: 100%;
+    min-height: 0;
+  }
+}
+
+/*
+ * Les trois faisceaux de l'accueil, sur ordinateur seulement, mais tirés
+ * depuis l'angle haut gauche de la planche : la lampe est au-dessus du
+ * discours et balaie la feuille vers le plan. Même cône, même dégradé que
+ * .hero__lights (app.css) ; seuls l'origine et les angles changent.
+ */
+.ouverture__faisceaux {
+  display: none;
+}
+
+@media (min-width: 1025px) {
+  .ouverture__faisceaux {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    display: block;
+    pointer-events: none;
+    animation: plan-apparait 1.4s ease calc(var(--apres-rideau, 0s) + 0.2s)
+      both;
+  }
+
+  .ouverture__faisceaux i {
+    position: absolute;
+    top: -6%;
+    left: -4%;
+    width: 46vmax;
+    height: 150vmax;
+    transform-origin: 50% 0;
+    /* Étroit à la lampe, ouvert au sol. */
+    clip-path: polygon(48.6% 0, 51.4% 0, 100% 100%, 0 100%);
+    background-image: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--beam) 17%, transparent),
+      color-mix(in srgb, var(--beam) 6%, transparent) 30%,
+      transparent 62%
+    );
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 4%,
+      #000 34%,
+      #000 66%,
+      transparent 96%
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent 4%,
+      #000 34%,
+      #000 66%,
+      transparent 96%
+    );
+    filter: blur(7px);
+  }
+
+  /* Vers le bas, la diagonale, puis presque à l'horizontale vers le plan. */
+  .ouverture__faisceaux i:nth-child(1) {
+    transform: translateX(-50%) rotate(-24deg);
+  }
+  .ouverture__faisceaux i:nth-child(2) {
+    transform: translateX(-50%) rotate(-48deg);
+    opacity: 0.75;
+  }
+  .ouverture__faisceaux i:nth-child(3) {
+    transform: translateX(-50%) rotate(-70deg);
+  }
+}
+
+@media (min-width: 1025px) and (prefers-reduced-motion: reduce) {
+  .ouverture .ouverture__faisceaux {
+    animation: none;
+  }
+}
+
+/* ---- L'ouverture sur tablette et mobile ----
+   Tout s'empile et se centre autour du plan. */
+
+@media (max-width: 1024px) {
+  .ouverture__corps {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ouverture__feuille {
+    background-image: radial-gradient(
+      90% 45% at 50% 68%,
+      color-mix(in srgb, var(--oysen-purple) 26%, transparent),
+      transparent 72%
+    );
+  }
+
+  .ouverture__texte {
+    text-align: center;
+  }
+
+  .ouverture__lede {
+    margin-inline: auto;
+  }
+
+  .ouverture__actions {
+    justify-content: center;
+  }
+
+  /* L'intitulé, souligné des deux côtés une fois centré. */
+  .plan__intitule {
+    justify-content: center;
+  }
+
+  .plan__intitule::before {
+    content: '';
+    flex: 1;
+    border-top: 1px solid var(--trait);
+  }
+
+  .legende__item {
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.5rem;
+    text-align: center;
+  }
+
+  .legende__poste {
+    align-items: center;
+  }
+
+  .cartouche {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cartouche__case {
+    text-align: center;
+  }
+}
+
+/*
+ * Sur téléphone, le plan est réduit de moitié : les repères, le losange et
+ * les traits fins y tomberaient sous le pixel. Ils sont grossis autour de
+ * leur propre centre, les traits épaissis d'autant, pour garder à l'écran
+ * la taille qu'ils ont sur ordinateur.
+ */
+@media (max-width: 760px) {
+  .cartouche {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* La légende garde ses deux colonnes : empilée, elle allongeait le hero
+     de six rangées. La régie, elle, tient toujours toute la largeur. */
+  .legende {
+    gap: 1rem 0.75rem;
+  }
+
+  /* Trop petits à cette largeur : la légende dit la même chose en clair. */
+  .plan__noms,
+  .plan__echelle-texte {
+    display: none;
+  }
+
+  .plan__repere,
+  .plan__losange {
+    transform-box: fill-box;
+    transform-origin: center;
+    transform: scale(1.7);
+  }
+
+  .plan__repere circle {
+    stroke-width: 1.6;
+  }
+
+  .plan__trait,
+  .plan__scene,
+  .plan__projecteur {
+    stroke-width: 2;
+  }
+
+  .plan__baie,
+  .plan__chaise,
+  .plan__dessus,
+  .plan__hachure {
+    stroke-width: 1.6;
+  }
+
+  .plan__faisceau {
+    stroke-width: 1.8;
+  }
+}
+
+/* ---- S2 · Notre histoire ----------------------------------
+   Une étape par bloc, jamais deux récits côte à côte. Chaque
+   bloc est une rangée : le rail, le titre, le récit. Un filet
+   et beaucoup d'air les séparent.
+
+   Le rail descend le long des blocs : la scène (lavande, la
+   lumière du site) et le chantier (le gris de la charte, le
+   trait du bâtiment). La trajectoire du fondateur est le seul
+   trait plein de lumière : elle court sur la scène, passe au
+   chantier quand la scène s'arrête, puis réunit les deux dans
+   le losange d'Oysen, celui de la régie du plan. Le rail ne
+   porte aucun texte : sa légende est sous le titre.
+
+   Chaque étape porte son segment de rail (Trajet.tsx). Le
+   filet est posé sur le corps de l'étape, pas sur la rangée :
+   il s'arrête au rail, qui reste continu d'un bloc à l'autre.
+   ----------------------------------------------------------- */
+
+/*
+ * La cible du bouton du hero. La barre de navigation reste collée en haut :
+ * sans cette marge, elle recouvrirait le haut de la section à l'arrivée.
+ */
+.section--agence-histoire {
+  scroll-margin-top: var(--nav-h, 0px);
+}
+
+/* Le saut depuis le hero glisse au lieu de couper, sauf à qui le refuse. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* ---- La légende du rail ---- */
+
+.histoire__legende {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem 1.75rem;
+  margin: clamp(1.25rem, 3vh, 1.75rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.histoire__voie {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dusk);
+}
+
+.histoire__voie::before {
+  content: '';
+  width: 1.75rem;
+  border-top: 1px solid;
+}
+
+.histoire__voie--scene::before {
+  border-top-color: color-mix(in srgb, var(--beam) 40%, transparent);
+}
+
+.histoire__voie--chantier::before {
+  border-top-color: var(--trait);
+}
+
+.histoire__voie--parcours::before {
+  border-top: 2px solid var(--beam);
+  box-shadow: 0 0 0.5rem color-mix(in srgb, var(--beam) 60%, transparent);
+}
+
+/* ---- Les étapes ---- */
+
+.histoire {
+  max-width: 64rem;
+  margin: clamp(2.5rem, 6vh, 4rem) auto 0;
+  padding: 0;
+  list-style: none;
+}
+
+.etape {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr);
+  column-gap: clamp(1.25rem, 3vw, 3rem);
+}
+
+.etape__corps {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 6fr);
+  gap: 1rem clamp(1.5rem, 4vw, 4rem);
+  padding-block: clamp(2.5rem, 7vh, 4.5rem);
+  border-top: 1px solid var(--trait-doux);
+}
+
+.etape__numero {
+  margin: 0 0 0.75rem;
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  color: var(--beam);
+}
+
+.etape__titre {
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(1.5rem, 2.4vw, 2.1rem);
+  font-weight: 300;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+  color: var(--dawn);
+}
+
+.etape__recit {
+  max-width: 56ch;
+}
+
+.etape__accroche {
+  margin: 0 0 0.75rem;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.125rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--dawn);
+}
+
+.etape__texte {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.75;
+  text-wrap: pretty;
+  color: var(--dusk);
+}
+
+/*
+ * La phrase à retenir referme l'histoire : détachée du récit, en grand, dans
+ * la couleur de la lumière. Elle suit un deux-points dans le texte, d'où sa
+ * minuscule ; seule, elle reprend sa capitale.
+ */
+.etape__conviction {
+  margin: clamp(1.5rem, 3vh, 2rem) 0 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(1.35rem, 2vw, 1.75rem);
+  font-weight: 300;
+  line-height: 1.3;
+  text-wrap: balance;
+  color: var(--beam);
+  text-shadow: 0 0 34px color-mix(in srgb, var(--beam) 32%, transparent);
+}
+
+.etape__conviction::first-letter {
+  text-transform: uppercase;
+}
+
+/* ---- Le rail ----
+   Scène au quart de la largeur, chantier aux trois quarts, la
+   jonction au milieu : les coordonnées de Trajet.tsx (15, 45 et
+   30 sur 60), et le losange aux sept dixièmes de la dernière
+   étape. */
+
+.trajet {
+  position: relative;
+}
+
+.trajet__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  /* La lueur est posée sur le SVG, pas sur le trait : étiré, le dessin
+     déformerait son propre flou. */
+  filter: drop-shadow(0 0 0.3rem color-mix(in srgb, var(--beam) 45%, transparent));
+}
+
+.trajet__voie {
+  fill: none;
+  stroke-width: 1;
+}
+
+.trajet__voie--scene {
+  stroke: color-mix(in srgb, var(--beam) 40%, transparent);
+}
+
+.trajet__voie--chantier {
+  stroke: var(--trait);
+}
+
+/* L'événementiel à l'arrêt : la voie de la scène ne tient plus qu'en pointillé. */
+.trajet__voie--arret {
+  stroke-dasharray: 2 6;
+}
+
+.trajet__ligne {
+  fill: none;
+  stroke: var(--beam);
+  stroke-width: 2;
+}
+
+.trajet__depart,
+.trajet__losange {
+  position: absolute;
+  background-color: var(--beam);
+  box-shadow: 0 0 0.9rem color-mix(in srgb, var(--beam) 70%, transparent);
+}
+
+.trajet__depart {
+  top: 0;
+  left: 25%;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.trajet__losange {
+  top: 70%;
+  left: 50%;
+  width: 0.8rem;
+  height: 0.8rem;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.trajet__nom {
+  position: absolute;
+  top: calc(70% + 0.85rem);
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.5625rem;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--beam);
+}
+
+/* Sur téléphone : le rail s'affine, le titre passe au-dessus du récit. */
+@media (max-width: 760px) {
+  .etape {
+    grid-template-columns: 2.75rem minmax(0, 1fr);
+    column-gap: 1rem;
+  }
+
+  .etape__corps {
+    grid-template-columns: minmax(0, 1fr);
+    padding-block: clamp(2rem, 5vh, 2.75rem);
+  }
+}
+
+/* ---- S5 · Les valeurs : la scène ---------------------------
+   La salle éteinte, un pont lumière en haut, trois projecteurs.
+   Chaque valeur tient dans sa flaque de lumière : le mot en
+   grand, en blanc, et sous lui une plaque dont l'arête
+   haute prend la lumière qui tombe du projecteur. Le pont est
+   tracé en tireté comme celui du plan de l'ouverture : c'est le
+   même, vu de face.
+
+   La lumière est celle des heros de l'accueil et de l'ouverture :
+   un lavande léger (--beam à 17 %, puis 6 %) posé sur une lueur
+   violette, jamais un blanc.
+
+   Empilement dans chaque colonne, du fond vers la surface :
+     1  le faisceau et la flaque au sol   (z-index -1)
+     2  la lampe, sur le pont
+     3  le mot et sa plaque
+
+   L'allumage : quand la colonne entre dans l'écran (apparition.ts
+   lui pose .est-vu), son projecteur s'allume avec un scintillement
+   de mise sous tension, le mot s'éclaire, puis les trois points
+   s'allument un à un. Un projecteur après l'autre, de gauche à
+   droite. Sans JavaScript, ou pour qui demande moins
+   d'animations, la scène est simplement allumée.
+   ----------------------------------------------------------- */
+
+.section--agence-valeurs {
+  background-color: #0b090e;
+  /* La lueur violette au-dessus du pont, comme en haut des heros. */
+  background-image: radial-gradient(
+    80% 45% at 50% 0%,
+    color-mix(in srgb, var(--oysen-purple) 24%, transparent),
+    transparent 70%
+  );
+  border-block: 1px solid var(--night-veil);
+}
+
+.valeurs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: clamp(3rem, 7vh, 4.5rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+/*
+ * La colonne est une pile verticale : la plaque prend la hauteur qui reste,
+ * les trois plaques ont donc la même hauteur même si un point passe sur deux
+ * lignes.
+ */
+.valeur {
+  /* La hauteur sous le pont : ce que le faisceau parcourt avant le mot. */
+  --scene-haut: clamp(8rem, 17vh, 11rem);
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--scene-haut) clamp(1rem, 2vw, 2rem) 0;
+  text-align: center;
+}
+
+/*
+ * Le pont lumière. Chaque colonne porte son tronçon, sans gouttière entre
+ * elles : les trois se rejoignent en un seul trait.
+ */
+.valeur::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  border-top: 1px dashed color-mix(in srgb, var(--beam) 35%, transparent);
+}
+
+/* La flaque de lumière, là où le faisceau touche le sol : sous le mot. */
+.valeur::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: calc(var(--scene-haut) + 1.5rem);
+  left: 50%;
+  width: min(100%, 24rem);
+  height: 7rem;
+  transform: translate(-50%, -50%);
+  background-image: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--oysen-purple) 55%, transparent),
+    color-mix(in srgb, var(--beam) 5%, transparent) 60%,
+    transparent
+  );
+  pointer-events: none;
+}
+
+/* La lampe, accrochée au pont. */
+.valeur__lampe {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 1.5rem;
+  height: 0.55rem;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background-color: var(--dawn);
+  box-shadow:
+    0 0 0.6rem var(--beam),
+    0 0 1.8rem color-mix(in srgb, var(--oysen-purple) 90%, transparent);
+}
+
+/*
+ * Le faisceau. Même dessin et même lumière que les projecteurs des heros :
+ * étroit à la lampe, ouvert en bas, adouci sur les bords par un masque, puis
+ * flouté. Deux couches : le lavande par-dessus, une lueur violette dessous.
+ */
+.valeur__faisceau {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 50%;
+  width: min(100%, 26rem);
+  height: calc(var(--scene-haut) + 4rem);
+  transform: translateX(-50%);
+  clip-path: polygon(47% 0, 53% 0, 100% 100%, 0 100%);
+  background-image:
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--beam) 17%, transparent),
+      color-mix(in srgb, var(--beam) 6%, transparent) 45%,
+      transparent 90%
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--oysen-purple) 55%, transparent),
+      color-mix(in srgb, var(--oysen-purple) 20%, transparent) 60%,
+      transparent
+    );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 4%,
+    #000 34%,
+    #000 66%,
+    transparent 96%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 4%,
+    #000 34%,
+    #000 66%,
+    transparent 96%
+  );
+  filter: blur(7px);
+  pointer-events: none;
+}
+
+/* Le mot, en blanc dans la lumière : c'est lui que la section donne à retenir. */
+.valeur__nom {
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(2.1rem, 3.4vw, 3.3rem);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--dawn);
+  text-shadow: 0 0 34px color-mix(in srgb, var(--beam) 40%, transparent);
+}
+
+/* ---- La plaque et ses trois points ---- */
+
+.valeur__points {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  max-width: 21rem;
+  margin: clamp(1.75rem, 3.5vh, 2.25rem) 0 0;
+  padding: 0.35rem clamp(1.1rem, 1.6vw, 1.5rem);
+  list-style: none;
+  text-align: left;
+  border: 1px solid var(--trait-doux);
+  /* La lumière du projecteur coule depuis l'arête haute, puis s'éteint. */
+  background-color: color-mix(in srgb, #15111b 85%, transparent);
+  background-image: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--oysen-purple) 30%, transparent),
+    transparent 55%
+  );
+  transition:
+    transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1),
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+/*
+ * Au survol, la plaque monte d'un souffle vers la lumière : son contour
+ * s'éclaircit, son arête brille davantage, une lueur violette la détache.
+ */
+.valeur__points:hover {
+  transform: translateY(-0.3rem);
+  border-color: color-mix(in srgb, var(--beam) 32%, transparent);
+  box-shadow: 0 1.25rem 2.5rem -1.5rem
+    color-mix(in srgb, var(--oysen-purple) 90%, transparent);
+}
+
+.valeur__points:hover::before {
+  box-shadow: 0 0 1.4rem color-mix(in srgb, var(--beam) 80%, transparent);
+}
+
+/* L'arête haute, éclairée au centre, là où tombe le faisceau. */
+.valeur__points::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  right: 0;
+  left: 0;
+  height: 1px;
+  background-image: linear-gradient(
+    to right,
+    transparent,
+    var(--beam) 50%,
+    transparent
+  );
+  box-shadow: 0 0 0.8rem color-mix(in srgb, var(--beam) 50%, transparent);
+  transition: box-shadow 0.35s ease;
+}
+
+.valeur__point {
+  display: flex;
+  align-items: baseline;
+  gap: 0.85rem;
+  padding: 0.85rem 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(0.9375rem, 1vw, 1rem);
+  font-weight: 400;
+  line-height: 1.45;
+  color: color-mix(in srgb, var(--dawn) 90%, var(--dusk));
+}
+
+.valeur__point + .valeur__point {
+  border-top: 1px solid color-mix(in srgb, var(--trait) 60%, transparent);
+}
+
+/* Le losange plein du site, allumé : chaque point est un engagement tenu. */
+.valeur__point::before {
+  content: '';
+  flex: none;
+  width: 0.42rem;
+  height: 0.42rem;
+  transform: translateY(-0.12rem) rotate(45deg);
+  background-color: var(--beam);
+  box-shadow: 0 0 0.5rem color-mix(in srgb, var(--beam) 70%, transparent);
+}
+
+/* ---- L'allumage ---- */
+
+/* Un projecteur après l'autre, de gauche à droite. */
+.valeur:nth-child(1) {
+  --allumage: 0.35s;
+}
+
+.valeur:nth-child(2) {
+  --allumage: 0.8s;
+}
+
+.valeur:nth-child(3) {
+  --allumage: 1.25s;
+}
+
+/* Tant que la colonne attend, la scène est éteinte, le mot dans l'ombre. */
+html[data-apparition] .valeur.a-apparaitre .valeur__faisceau,
+html[data-apparition] .valeur.a-apparaitre::after {
+  opacity: 0;
+}
+
+html[data-apparition] .valeur.a-apparaitre .valeur__lampe {
+  opacity: 0.3;
+  box-shadow: none;
+}
+
+html[data-apparition] .valeur.a-apparaitre .valeur__nom {
+  color: color-mix(in srgb, var(--dusk) 45%, transparent);
+  text-shadow: none;
+  transition:
+    color 0.6s ease,
+    text-shadow 0.6s ease;
+}
+
+html[data-apparition] .valeur.a-apparaitre .valeur__point {
+  opacity: 0;
+  transform: translateY(0.5rem);
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* Puis elle entre dans l'écran : le projecteur s'allume, le mot suit. */
+html[data-apparition] .valeur.est-vu .valeur__faisceau,
+html[data-apparition] .valeur.est-vu::after,
+html[data-apparition] .valeur.est-vu .valeur__lampe {
+  opacity: 1;
+  animation: valeur-allumage 1s linear var(--allumage) both;
+}
+
+html[data-apparition] .valeur.est-vu .valeur__lampe {
+  box-shadow:
+    0 0 0.6rem var(--beam),
+    0 0 1.8rem color-mix(in srgb, var(--oysen-purple) 90%, transparent);
+}
+
+html[data-apparition] .valeur.est-vu .valeur__nom {
+  color: var(--dawn);
+  text-shadow: 0 0 34px color-mix(in srgb, var(--beam) 40%, transparent);
+  transition-delay: calc(var(--allumage) + 0.25s);
+}
+
+/* Les trois points, un à un, une fois le mot allumé. */
+html[data-apparition] .valeur.est-vu .valeur__point {
+  opacity: 1;
+  transform: none;
+  transition-delay: calc(var(--allumage) + 0.55s);
+}
+
+html[data-apparition] .valeur.est-vu .valeur__point:nth-child(2) {
+  transition-delay: calc(var(--allumage) + 0.7s);
+}
+
+html[data-apparition] .valeur.est-vu .valeur__point:nth-child(3) {
+  transition-delay: calc(var(--allumage) + 0.85s);
+}
+
+/* La mise sous tension : deux ratés, puis la lumière tient. */
+@keyframes valeur-allumage {
+  0% {
+    opacity: 0;
+  }
+  8% {
+    opacity: 0.85;
+  }
+  12% {
+    opacity: 0.15;
+  }
+  20% {
+    opacity: 1;
+  }
+  26% {
+    opacity: 0.45;
+  }
+  34%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .valeur__faisceau,
+  .valeur::after,
+  .valeur__lampe {
+    animation: none;
+  }
+
+  /* La plaque s'éclaire toujours au survol, mais ne bouge plus. */
+  .valeur__points:hover {
+    transform: none;
+  }
+}
+
+/* Sur téléphone, chaque valeur a sa propre scène, l'une sous l'autre. */
+@media (max-width: 760px) {
+  .valeurs {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: clamp(3rem, 8vh, 4rem);
+  }
+
+  .valeur {
+    --scene-haut: clamp(6.5rem, 14vh, 8rem);
+  }
+}
+
+/* ---- S6 · Notre approche -----------------------------------
+   Trois temps, du schéma à la phrase.
+
+   1  Ce que le travail tient ensemble : un triangle de
+      structure, la seule forme qui ne se déforme pas, tracé
+      comme un treillis (Triangle.tsx). Il se dessine à
+      l'entrée dans l'écran, le losange du centre en dernier.
+   2  D'où vient la méthode : les cinq réflexes du chantier,
+      posés sur une chaîne de cotes, la ligne de mesure des
+      plans, avec ses traits obliques entre les segments.
+   3  Ce qu'elle produit : la maxime en grand, puis la
+      signature, les deux métiers reliés par le losange.
+   ----------------------------------------------------------- */
+
+.approche__titre {
+  max-width: 30ch;
+}
+
+.approche__titre-chute {
+  display: block;
+  color: var(--beam);
+}
+
+/* ---- 1 · Le triangle ---- */
+
+.approche__tenir {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  align-items: center;
+  gap: clamp(2rem, 6vw, 6rem);
+  max-width: 64rem;
+  margin: clamp(3rem, 7vh, 4.5rem) auto 0;
+}
+
+.approche__schema {
+  margin: 0;
+}
+
+.schema__svg {
+  display: block;
+  width: 100%;
+  max-width: 26rem;
+  height: auto;
+  margin-inline: auto;
+  overflow: visible;
+}
+
+/* Les membrures : le triangle lui-même, et ce qu'il tient, teinté. */
+.schema__membrure {
+  fill: color-mix(in srgb, var(--oysen-purple) 18%, transparent);
+  stroke: var(--dawn);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+}
+
+.schema__diagonale {
+  stroke: color-mix(in srgb, var(--beam) 55%, transparent);
+  stroke-width: 1.2;
+}
+
+.schema__noeud {
+  fill: var(--night);
+  stroke: var(--beam);
+  stroke-width: 1.5;
+}
+
+.schema__poles text {
+  fill: var(--dawn);
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-anchor: middle;
+}
+
+.schema__losange {
+  fill: var(--beam);
+  filter: drop-shadow(0 0 0.5rem var(--beam));
+}
+
+.schema__centre {
+  fill: var(--beam);
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  letter-spacing: 0.18em;
+  text-anchor: middle;
+}
+
+/* Le tracé : chaque trait se dessine à son heure (--t, Triangle.tsx). */
+.schema__trace {
+  stroke-dasharray: 1;
+  transition:
+    stroke-dashoffset 1s cubic-bezier(0.65, 0, 0.35, 1) var(--t, 0s),
+    fill-opacity 0.8s ease 1.1s;
+}
+
+.schema__apparait {
+  transition: opacity 0.6s ease var(--t, 0s);
+}
+
+/* Tant que le schéma attend son entrée, rien n'est tracé. */
+html[data-apparition] .approche__schema.a-apparaitre .schema__trace {
+  stroke-dashoffset: 1;
+}
+
+html[data-apparition] .approche__schema.a-apparaitre .schema__membrure {
+  fill-opacity: 0;
+}
+
+html[data-apparition] .approche__schema.a-apparaitre .schema__apparait {
+  opacity: 0;
+}
+
+html[data-apparition] .approche__schema.est-vu .schema__trace {
+  stroke-dashoffset: 0;
+}
+
+html[data-apparition] .approche__schema.est-vu .schema__membrure {
+  fill-opacity: 1;
+}
+
+html[data-apparition] .approche__schema.est-vu .schema__apparait {
+  opacity: 1;
+}
+
+/* Les trois choses tenues ensemble ressortent du reste de la phrase. */
+.approche__intro {
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(1.25rem, 1.9vw, 1.6rem);
+  font-weight: 300;
+  line-height: 1.5;
+  text-wrap: pretty;
+  color: var(--dusk);
+}
+
+.approche__intro-phrase {
+  margin: 0;
+}
+
+/* Les trois choses à concilier, en puces losange comme sur l'accueil. */
+.approche__puces {
+  display: grid;
+  gap: 0.5rem;
+  margin: clamp(0.75rem, 1.5vh, 1rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.approche__puce {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  font-weight: 400;
+  color: var(--dawn);
+}
+
+/* Le losange est calé sur le milieu de la première ligne. */
+.approche__puce::before {
+  content: '';
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-top: calc((1.5em - 0.5rem) / 2);
+  border: 1px solid var(--beam);
+  transform: rotate(45deg);
+}
+
+/* ---- 2 · La méthode et sa chaîne de cotes ---- */
+
+.approche__methode {
+  max-width: 64rem;
+  margin: clamp(4rem, 10vh, 6.5rem) auto 0;
+  padding-top: clamp(3rem, 7vh, 4.5rem);
+  text-align: center;
+  border-top: 1px solid var(--trait-doux);
+}
+
+.approche__sous-titre {
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  font-weight: 300;
+  line-height: 1.2;
+  color: var(--dawn);
+}
+
+.approche__texte {
+  max-width: 52ch;
+  margin: 1rem auto 0;
+  font-size: 1rem;
+  line-height: 1.7;
+  text-wrap: pretty;
+  color: var(--dusk);
+}
+
+/*
+ * La chaîne de cotes. Chaque réflexe est un segment : le verbe au-dessus de
+ * la ligne, sa suite dessous, un trait oblique à sa limite gauche. Le trait
+ * de la limite droite, en fin de chaîne, est porté par la liste. Les
+ * hauteurs des rangées sont fixées pour que ce dernier trait tombe sur la
+ * ligne.
+ */
+.reflexes {
+  --verbe-h: 2.6rem;
+  --ligne-h: 1.75rem;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin: clamp(2.5rem, 6vh, 3.5rem) 0;
+  padding: 0;
+  list-style: none;
+}
+
+.reflexes::after {
+  content: '';
+  position: absolute;
+  top: calc(var(--verbe-h) + var(--ligne-h) / 2);
+  right: 0;
+  width: 1px;
+  height: 1.1rem;
+  transform: translate(50%, -50%) rotate(45deg);
+  background-color: var(--beam);
+}
+
+.reflexe {
+  position: relative;
+  display: grid;
+  grid-template-rows: var(--verbe-h) var(--ligne-h) auto;
+  justify-items: center;
+  padding-inline: 0.5rem;
+}
+
+/* La ligne de cote. */
+.reflexe::before {
+  content: '';
+  grid-row: 2;
+  align-self: center;
+  justify-self: stretch;
+  margin-inline: -0.5rem;
+  border-top: 1px solid color-mix(in srgb, var(--beam) 50%, transparent);
+}
+
+/* Le trait oblique, à la limite gauche du segment. */
+.reflexe::after {
+  content: '';
+  position: absolute;
+  top: calc(var(--verbe-h) + var(--ligne-h) / 2);
+  left: 0;
+  width: 1px;
+  height: 1.1rem;
+  transform: translate(-50%, -50%) rotate(45deg);
+  background-color: var(--beam);
+}
+
+.reflexe__verbe {
+  grid-row: 1;
+  align-self: end;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(1.2rem, 1.8vw, 1.6rem);
+  font-weight: 300;
+  line-height: 1;
+  color: var(--dawn);
+}
+
+.reflexe__suite {
+  grid-row: 3;
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  text-wrap: balance;
+  color: var(--dusk);
+}
+
+/* ---- 3 · La maxime et la signature ---- */
+
+.approche__maxime {
+  max-width: 24ch;
+  margin: clamp(4.5rem, 11vh, 7rem) auto 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(1.75rem, 3.4vw, 3rem);
+  font-weight: 300;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-align: center;
+  text-wrap: balance;
+  color: var(--dawn);
+}
+
+.approche__maxime-chute {
+  display: block;
+  margin-top: 0.15em;
+  color: var(--beam);
+  text-shadow: 0 0 34px color-mix(in srgb, var(--beam) 32%, transparent);
+}
+
+.approche__marque {
+  max-width: 44ch;
+  margin: 1.25rem auto 0;
+  font-size: 1rem;
+  line-height: 1.7;
+  text-align: center;
+  color: var(--dusk);
+}
+
+.approche__signature {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.9rem;
+  margin: clamp(3.5rem, 9vh, 5.5rem) auto 0;
+}
+
+.approche__metiers {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2rem);
+}
+
+.approche__metier {
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(0.8125rem, 1.2vw, 1rem);
+  font-weight: 400;
+  letter-spacing: 0.3em;
+  /* L'interlettrage laisse un blanc après la dernière lettre : on le reprend
+     devant, le mot reste centré sur son trait. */
+  text-indent: 0.3em;
+  text-transform: uppercase;
+  color: var(--dawn);
+}
+
+/* Le trait qui relie les deux métiers, et le losange en son milieu. */
+.approche__lien {
+  position: relative;
+  width: clamp(3rem, 12vw, 9rem);
+  height: 1px;
+  background-image: linear-gradient(
+    to right,
+    transparent,
+    var(--beam) 50%,
+    transparent
+  );
+}
+
+.approche__lien::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.55rem;
+  height: 0.55rem;
+  transform: translate(-50%, -50%) rotate(45deg);
+  background-color: var(--beam);
+  box-shadow: 0 0 0.7rem color-mix(in srgb, var(--beam) 70%, transparent);
+}
+
+.approche__devise {
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--beam);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .schema__trace,
+  .schema__apparait {
+    transition: none;
+  }
+}
+
+/* Sur tablette, le schéma passe au-dessus de sa phrase. */
+@media (max-width: 1024px) {
+  .approche__tenir {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 40rem;
+  }
+
+  .schema__svg {
+    max-width: 22rem;
+  }
+
+  .approche__intro {
+    text-align: center;
+  }
+
+  /* La liste se centre en bloc, les puces restent alignées entre elles. */
+  .approche__puces {
+    width: fit-content;
+    margin-inline: auto;
+    text-align: left;
+  }
+}
+
+/*
+ * Sur téléphone, la chaîne de cotes se redresse et devient l'axe de la
+ * section : la ligne descend au milieu, chaque réflexe est un segment
+ * borné par deux traits obliques, et se lit de part et d'autre de l'axe,
+ * le verbe à gauche, sa suite à droite, au milieu du segment comme la
+ * valeur d'une cote.
+ */
+@media (max-width: 760px) {
+  .reflexes {
+    --segment-pad: 1.15rem;
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 24rem;
+    margin-inline: auto;
+  }
+
+  /* Le trait de fin de chaîne, sous le dernier segment. */
+  .reflexes::after {
+    top: auto;
+    right: auto;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 50%) rotate(45deg);
+  }
+
+  .reflexe {
+    grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr);
+    grid-template-rows: auto;
+    align-items: center;
+    column-gap: 1rem;
+    min-height: 4.25rem;
+    padding: var(--segment-pad) 0;
+  }
+
+  /* La ligne de cote, d'un trait à l'autre sans interruption. */
+  .reflexe::before {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: stretch;
+    justify-self: stretch;
+    margin: calc(var(--segment-pad) * -1) 0;
+    border-top: 0;
+    border-left: 1px solid color-mix(in srgb, var(--beam) 50%, transparent);
+  }
+
+  /* Le trait oblique, à la limite haute du segment. */
+  .reflexe::after {
+    top: 0;
+    left: 50%;
+  }
+
+  .reflexe__verbe {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: center;
+    justify-self: end;
+    font-size: clamp(1.1rem, 5.2vw, 1.35rem);
+    text-align: right;
+  }
+
+  .reflexe__suite {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: start;
+    font-size: 0.6875rem;
+    text-align: left;
+  }
+
+  .approche__metier {
+    letter-spacing: 0.18em;
+    text-indent: 0.18em;
+  }
+
+  .approche__lien {
+    width: 2rem;
+  }
+}
+
+/* ---- S7 · Le fondateur -------------------------------------
+   Un visage, trois lignes, une porte. Le portrait à gauche,
+   éclairé par le haut comme les valeurs sous leurs projecteurs ;
+   le nom en grand à droite, puis le texte et le renvoi vers la
+   page « Le fondateur ».
+
+   En attendant la photo, un cadre de visée tient la place : les
+   quatre équerres de cadrage et la mention « Portrait à
+   fournir », comme les cartes de l'accueil sans photo.
+   ----------------------------------------------------------- */
+
+/*
+ * Photo à gauche, texte à droite. La tête (surtitre et nom) et le texte
+ * sont deux blocs, empilés sans écart et centrés ensemble sur la hauteur
+ * de la photo par les deux rangées souples qui les encadrent.
+ */
+.fondateur {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  grid-template-rows: 1fr auto auto 1fr;
+  grid-template-areas:
+    'portrait .'
+    'portrait tete'
+    'portrait texte'
+    'portrait .';
+  gap: 0 clamp(2.5rem, 6vw, 6rem);
+  max-width: 60rem;
+}
+
+/* Un cran plus clair que l'approche, comme les preuves sur l'accueil : la
+   section se détache de celle qui la précède. */
+.section--agence-fondateur {
+  background-color: #181520;
+  border-top: 1px solid var(--trait-doux);
+}
+
+.fondateur__tete {
+  grid-area: tete;
+}
+
+.fondateur__texte {
+  grid-area: texte;
+}
+
+.fondateur__portrait {
+  grid-area: portrait;
+  align-self: center;
+  position: relative;
+  justify-self: end;
+  width: 100%;
+  max-width: 24rem;
+  aspect-ratio: 4 / 5;
+  margin: 0;
+  border: 1px solid var(--trait-doux);
+  background-color: #15111b;
+  /* La lumière tombe du haut sur le visage, comme sur les valeurs. */
+  background-image: radial-gradient(
+    75% 55% at 50% 0%,
+    color-mix(in srgb, var(--oysen-purple) 45%, transparent),
+    transparent 72%
+  );
+}
+
+/*
+ * La photo, quand elle arrivera. Traitée pour la salle sombre, comme les
+ * cartes de l'accueil : couleurs ramenées à la moitié, un souffle plus
+ * sombre, un peu de contraste.
+ */
+.fondateur__photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.5) brightness(0.92) contrast(1.06);
+}
+
+/* Le cadre de visée : quatre équerres lavande, et la mention au centre. */
+.fondateur__cadre {
+  position: absolute;
+  inset: clamp(0.9rem, 1.6vw, 1.25rem);
+  display: grid;
+  place-items: center;
+  --equerre: color-mix(in srgb, var(--beam) 55%, transparent);
+  background:
+    linear-gradient(var(--equerre), var(--equerre)) top left / 1.5rem 1px
+      no-repeat,
+    linear-gradient(var(--equerre), var(--equerre)) top left / 1px 1.5rem
+      no-repeat,
+    linear-gradient(var(--equerre), var(--equerre)) top right / 1.5rem 1px
+      no-repeat,
+    linear-gradient(var(--equerre), var(--equerre)) top right / 1px 1.5rem
+      no-repeat,
+    linear-gradient(var(--equerre), var(--equerre)) bottom left / 1.5rem 1px
+      no-repeat,
+    linear-gradient(var(--equerre), var(--equerre)) bottom left / 1px 1.5rem
+      no-repeat,
+    linear-gradient(var(--equerre), var(--equerre)) bottom right / 1.5rem 1px
+      no-repeat,
+    linear-gradient(var(--equerre), var(--equerre)) bottom right / 1px 1.5rem
+      no-repeat;
+}
+
+.fondateur__visee {
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--beam) 70%, transparent);
+}
+
+/* ---- Le texte ---- */
+
+.section--agence-fondateur .section__eyebrow {
+  text-align: left;
+}
+
+.fondateur__nom {
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(2.4rem, 4.6vw, 3.8rem);
+  font-weight: 300;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  color: var(--dawn);
+}
+
+.fondateur__role {
+  max-width: 38ch;
+  margin: clamp(1.1rem, 2.5vh, 1.5rem) 0 0;
+  font-size: clamp(1.05rem, 1.3vw, 1.2rem);
+  line-height: 1.55;
+  text-wrap: pretty;
+  color: color-mix(in srgb, var(--dawn) 88%, var(--dusk));
+}
+
+.fondateur__parcours {
+  max-width: 42ch;
+  margin: 0.9rem 0 0;
+  font-size: 1rem;
+  line-height: 1.7;
+  text-wrap: pretty;
+  color: var(--dusk);
+}
+
+/*
+ * Les deux voies du rail de l'histoire, reprises dans la phrase : le
+ * chantier au gris de la charte, la scène en lavande.
+ */
+.fondateur__voie {
+  color: var(--dawn);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+}
+
+.fondateur__voie--chantier {
+  text-decoration-color: var(--dusk);
+}
+
+.fondateur__voie--scene {
+  text-decoration-color: var(--beam);
+}
+
+.fondateur__lien {
+  margin-top: clamp(1.5rem, 3.5vh, 2.25rem);
+}
+
+/* Sur téléphone, le surtitre et le nom passent avant le portrait, le texte
+   après, et tout se centre. */
+@media (max-width: 760px) {
+  .fondateur {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    grid-template-areas:
+      'tete'
+      'portrait'
+      'texte';
+    gap: clamp(1.75rem, 4vh, 2.25rem) 0;
+  }
+
+  .fondateur__tete {
+    text-align: center;
+  }
+
+  .fondateur__role {
+    margin-top: 0;
+  }
+
+  .fondateur__portrait {
+    justify-self: center;
+    max-width: 18rem;
+  }
+
+  .fondateur__texte {
+    text-align: center;
+  }
+
+  .section--agence-fondateur .section__eyebrow {
+    text-align: center;
+  }
+
+  .fondateur__role,
+  .fondateur__parcours {
+    margin-inline: auto;
+  }
+}
+
+/* ---- Le renvoi vers une autre page ---- */
+
+/*
+ * Le renvoi vers une autre page, en capitales espacées : même objet que le
+ * « Voir la fiche » des réalisations. Ce qu'on pointe s'allume, et la flèche
+ * avance d'un souffle.
+ */
+.agence__more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dusk);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.agence__more:hover,
+.agence__more:focus-visible {
+  color: var(--beam);
+}
+
+.agence__arrow {
+  width: 1.25rem;
+  height: 1.25rem;
+  transition: transform 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.agence__more:hover .agence__arrow,
+.agence__more:focus-visible .agence__arrow {
+  transform: translateX(0.3rem);
+}
+
+.agence__more:focus-visible {
+  outline: 2px solid var(--beam);
+  outline-offset: 3px;
+}
+
+/* ---- S9 · La sortie ----------------------------------------
+   La rampe violette de l'appel final : la page se referme comme
+   l'accueil, par le bas.
+   ----------------------------------------------------------- */
+
+.section--agence-sortie {
+  text-align: center;
+  border-top: 1px solid var(--night-veil);
+  background-image: radial-gradient(
+    110% 90% at 50% 118%,
+    color-mix(in srgb, var(--oysen-purple) 40%, transparent),
+    transparent 64%
+  );
+}
+
+.agence__sortie-titre {
+  max-width: 20ch;
+}
+
+.agence__lede {
+  margin: clamp(1.4rem, 3vh, 2rem) auto 0;
+  max-width: 58ch;
+  font-size: clamp(1rem, 1.3vw, 1.0625rem);
+  line-height: 1.7;
+  text-wrap: pretty;
+  color: var(--dusk);
+}
+
+.agence__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: clamp(1.75rem, 4vh, 2.5rem);
+}
+
+/* Le second chemin, sous le premier : une phrase, puis le bouton contact. */
+.agence__direct {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  margin-top: clamp(1.75rem, 4vh, 2.5rem);
+}
+
+.agence__direct-texte {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--dusk);
+}
+
+/* ---- Largeurs intermédiaires et mobile ---- */
+
+@media (prefers-reduced-motion: reduce) {
+  .agence__more,
+  .agence__arrow {
+    transition: none;
+  }
+}

@@ -29,11 +29,18 @@ const LEGAL = [
 
 const INSTAGRAM = 'https://www.instagram.com/oysen.events/'
 
+/**
+ * À RENSEIGNER : l'adresse de la page Facebook. Tant qu'elle est vide, le
+ * logo est posé mais inerte, et il sort de l'arbre d'accessibilité : une
+ * icône qui ne mène nulle part n'a rien à annoncer.
+ */
+const FACEBOOK = ''
+
 /** Le glyphe Instagram, au même trait que les pictogrammes du site. */
 function InstagramIcon() {
   return (
     <svg
-      className="footer__insta-icon"
+      className="footer__reseau-icon"
       viewBox="0 0 24 24"
       width="20"
       height="20"
@@ -63,6 +70,39 @@ function InstagramIcon() {
   )
 }
 
+/** Le glyphe Facebook, dans le même cadre et au même trait qu'Instagram. */
+function FacebookIcon() {
+  return (
+    <svg
+      className="footer__reseau-icon"
+      viewBox="0 0 24 24"
+      width="20"
+      height="20"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <rect
+        x="3.25"
+        y="3.25"
+        width="17.5"
+        height="17.5"
+        rx="5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M14.9 7.7h-1a2 2 0 0 0-2 2v7.6M9.7 11.9h4.6"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
 /**
  * Le pied de page : la salle après la représentation.
  *
@@ -83,8 +123,17 @@ export function Footer() {
     <footer className="footer">
       <div className="footer__inner">
         <div className="footer__brand">
-          <span className="footer__brand-name">OYSEN</span>
-          <span className="footer__brand-tag">Architecte d’événements</span>
+          {/* Le logo définitif entier, mention comprise. */}
+          <img
+            className="footer__logo"
+            src="/images/logo-oysen-pied-280.webp"
+            srcSet="/images/logo-oysen-pied-280.webp 1x, /images/logo-oysen-pied-560.webp 2x"
+            width={280}
+            height={125}
+            alt="Oysen, créateur d’événements"
+            loading="lazy"
+            decoding="async"
+          />
 
           <p className="footer__brand-text">
             Agence événementielle installée à {ZONE}. Nous cherchons le lieu,
@@ -150,17 +199,41 @@ export function Footer() {
             </li>
           </ul>
 
-          {/* Le bouton est en relief doux : c'est le seul objet du pied de
+          {/* Les boutons sont en relief doux : les seuls objets du pied de
               page qu'on peut presser. */}
-          <a
-            className="footer__insta"
-            href={INSTAGRAM}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Oysen sur Instagram, nouvel onglet"
-          >
-            <InstagramIcon />
-          </a>
+          <div className="footer__reseaux">
+            <h2 className="footer__title">Nos réseaux</h2>
+
+            <div className="footer__reseaux-liste">
+              <a
+                className="footer__reseau"
+                href={INSTAGRAM}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Oysen sur Instagram, nouvel onglet"
+              >
+                <InstagramIcon />
+              </a>
+
+              {FACEBOOK ? (
+                <a
+                  className="footer__reseau"
+                  href={FACEBOOK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Oysen sur Facebook, nouvel onglet"
+                >
+                  <FacebookIcon />
+                </a>
+              ) : (
+                /* Sans adresse : le même bouton en tout point, il ne mène
+                   simplement nulle part et ne s'annonce pas. */
+                <a className="footer__reseau" aria-hidden="true">
+                  <FacebookIcon />
+                </a>
+              )}
+            </div>
+          </div>
         </div>
 
         {/* La zone desservie court sur toute la largeur : sept départements

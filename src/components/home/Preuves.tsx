@@ -54,7 +54,7 @@ export function Preuves() {
       <div className="section__inner">
         <p className="section__eyebrow">Témoignages</p>
         <h2 className="section__title preuves__title" id="preuves-title">
-          Ce qu’ils disent de nous.
+          Ils étaient à votre place.
         </h2>
 
         <ul className="temoignages">

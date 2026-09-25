@@ -61,33 +61,16 @@
 
 .nav__brand {
   display: flex;
-  flex-direction: column;
-  gap: 0.34rem;
+  align-items: center;
   line-height: 1;
   text-decoration: none;
 }
 
-.nav__brand-name {
+/* Le logo tient la hauteur de l'ancienne signature en deux lignes. */
+.nav__logo {
   display: block;
-  font-family: var(--nav-font);
-  font-weight: 400;
-  font-size: 1.0625rem;
-  letter-spacing: 0.3em;
-  /* L'interlettrage ajoute un blanc après le N : sans cette reprise, le mot
-     paraît décalé vers la gauche. Même correction que sur la page d'accueil. */
-  text-indent: 0.3em;
-  color: var(--dawn);
-}
-
-.nav__brand-tag {
-  display: block;
-  font-family: var(--nav-font);
-  font-weight: 500;
-  font-size: 0.5625rem;
-  letter-spacing: 0.22em;
-  text-indent: 0.22em;
-  text-transform: uppercase;
-  color: var(--dusk);
+  width: auto;
+  height: 2.4rem;
 }
 
 /* ---- Les entrées de premier niveau ---- */
@@ -204,6 +187,20 @@
   transform: translate(-50%, 50%) scaleX(1);
 }
 
+/*
+ * La page où l'on se trouve : un trait au violet de la charte (celui du
+ * rideau) sous le libellé, qui reste posé. Deux pixels : en un seul, ce
+ * violet sombre se perdrait sur la barre. Pour un menu, c'est le menu qui le porte dès qu'une de ses
+ * sous-pages est affichée. Le trait souligne le texte seul, jamais le
+ * chevron, et laisse au survol son faisceau.
+ */
+.nav__link--actif {
+  text-decoration: underline;
+  text-decoration-color: var(--charte-violet);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.7em;
+}
+
 .nav__caret {
   flex: none;
   width: 0.625rem;
@@ -299,6 +296,17 @@
 .nav__sublink:hover::before,
 .nav__sublink:focus-visible::before {
   height: 1.15rem;
+}
+
+/* Dans le déroulant, la sous-page affichée garde son trait allumé. */
+.nav__sublink[aria-current='page'] {
+  color: var(--dawn);
+}
+
+.nav__sublink[aria-current='page']::before {
+  height: 1.15rem;
+  width: 2px;
+  background-color: var(--charte-violet);
 }
 
 .nav__link:focus-visible,
@@ -424,6 +432,21 @@
     color: var(--dawn);
     text-decoration: none;
     cursor: pointer;
+  }
+
+  /* Même trait violet que sur la barre, à l'échelle du menu plein écran. */
+  .nav__mobile-link--actif {
+    text-decoration: underline;
+    text-decoration-color: var(--charte-violet);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.45em;
+  }
+
+  .nav__mobile-sublink[aria-current='page'] {
+    color: var(--dawn);
+    border-left: 2px solid var(--charte-violet);
+    /* Le filet gagne un pixel : le texte ne doit pas bouger pour autant. */
+    padding-left: calc(1.05rem - 1px);
   }
 
   /* L'accordéon : 0fr -> 1fr, la hauteur se calcule toute seule. */

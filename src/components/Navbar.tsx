@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react'
+import { useRouterState } from '@tanstack/react-router'
 
 type SubItem = { label: string; href: string }
 type NavItem = { label: string; href: string; children?: SubItem[] }
@@ -45,6 +46,7 @@ export const NAV: NavItem[] = [
     label: 'Qui sommes-nous',
     href: '/qui-sommes-nous',
     children: [
+      { label: 'L’agence', href: '/qui-sommes-nous/l-agence' },
       { label: 'Le fondateur', href: '/qui-sommes-nous/le-fondateur' },
       { label: 'Nos partenaires', href: '/qui-sommes-nous/nos-partenaires' },
     ],
@@ -53,6 +55,28 @@ export const NAV: NavItem[] = [
   { label: 'Contact', href: '/contact' },
   { label: 'Blog', href: '/blog' },
 ]
+
+/** L'adresse, sans barre finale : « /contact/ » vaut « /contact ». */
+function normaliser(chemin: string) {
+  return chemin.length > 1 ? chemin.replace(/\/+$/, '') : chemin
+}
+
+/** Le lien mène-t-il à la page affichée, ou à une page placée sous lui ? */
+function mene(href: string, chemin: string) {
+  if (href === '/') return chemin === '/'
+  return chemin === href || chemin.startsWith(`${href}/`)
+}
+
+/*
+ * L'entrée active : celle de la page, ou, pour un menu, celle dont une
+ * sous-page est affichée. Le trait se pose alors sur le menu lui-même.
+ */
+function estActif(item: NavItem, chemin: string) {
+  return (
+    mene(item.href, chemin) ||
+    (item.children?.some((child) => mene(child.href, chemin)) ?? false)
+  )
+}
 
 /** En dessous, la barre passe au menu plein écran. */
 const DESKTOP = '(min-width: 1024px)'
@@ -88,6 +112,10 @@ export function Navbar() {
   const [hidden, setHidden] = useState(false)
   const navRef = useRef<HTMLElement>(null)
   const uid = useId()
+  /* Lu dans le routeur : juste dès le rendu serveur, sans attendre le client. */
+  const chemin = normaliser(
+    useRouterState({ select: (state) => state.location.pathname }),
+  )
 
   /*
    * Un menu ouvert verrouille la barre en place : l'escamoter emporterait
@@ -186,8 +214,19 @@ export function Navbar() {
       >
         <div className="nav__inner">
           <a className="nav__brand" href="/">
-            <span className="nav__brand-name">OYSEN</span>
-            <span className="nav__brand-tag">Architecte d’événements</span>
+            {/*
+              Le logo définitif, recadré sur le mot et son Y : la mention
+              « Créateur d'événements » serait illisible à cette hauteur.
+              Deux densités, en WebP (voir A-FAIRE.md § 8).
+            */}
+            <img
+              className="nav__logo"
+              src="/images/logo-oysen-barre-220.webp"
+              srcSet="/images/logo-oysen-barre-220.webp 1x, /images/logo-oysen-barre-440.webp 2x"
+              width={220}
+              height={80}
+              alt="Oysen, accueil"
+            />
           </a>
 
           <nav className="nav__nav" aria-label="Navigation principale">
@@ -196,7 +235,11 @@ export function Navbar() {
                 if (!item.children) {
                   return (
                     <li className="nav__item" key={item.label}>
-                      <a className="nav__link" href={item.href}>
+                      <a
+                        className={`nav__link${estActif(item, chemin) ? ' nav__link--actif' : ''}`}
+                        href={item.href}
+                        aria-current={mene(item.href, chemin) ? 'page' : undefined}
+                      >
                         {item.label}
                       </a>
                     </li>
@@ -222,7 +265,7 @@ export function Navbar() {
                   >
                     <button
                       type="button"
-                      className="nav__link"
+                      className={`nav__link${estActif(item, chemin) ? ' nav__link--actif' : ''}`}
                       aria-expanded={open}
                       aria-controls={panelId}
                       onClick={() => setOpenMenu(open ? null : item.label)}
@@ -237,7 +280,13 @@ export function Navbar() {
                     >
                       {item.children.map((child) => (
                         <li key={child.href}>
-                          <a className="nav__sublink" href={child.href}>
+                          <a
+                            className="nav__sublink"
+                            href={child.href}
+                            aria-current={
+                              mene(child.href, chemin) ? 'page' : undefined
+                            }
+                          >
                             {child.label}
                           </a>
                         </li>
@@ -285,8 +334,9 @@ export function Navbar() {
                 return (
                   <li className="nav__mobile-item" key={item.label}>
                     <a
-                      className="nav__mobile-link"
+                      className={`nav__mobile-link${estActif(item, chemin) ? ' nav__mobile-link--actif' : ''}`}
                       href={item.href}
+                      aria-current={mene(item.href, chemin) ? 'page' : undefined}
                       onClick={() => setDrawerOpen(false)}
                     >
                       {item.label}
@@ -302,7 +352,7 @@ export function Navbar() {
                 <li className="nav__mobile-item" key={item.label}>
                   <button
                     type="button"
-                    className="nav__mobile-link"
+                    className={`nav__mobile-link${estActif(item, chemin) ? ' nav__mobile-link--actif' : ''}`}
                     aria-expanded={open}
                     aria-controls={sectionId}
                     onClick={() => setOpenSection(open ? null : item.label)}
@@ -321,6 +371,9 @@ export function Navbar() {
                           <a
                             className="nav__mobile-sublink"
                             href={child.href}
+                            aria-current={
+                              mene(child.href, chemin) ? 'page' : undefined
+                            }
                             onClick={() => setDrawerOpen(false)}
                           >
                             {child.label}

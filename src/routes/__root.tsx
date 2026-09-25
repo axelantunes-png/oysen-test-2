@@ -4,6 +4,7 @@ import type { ReactNode } from 'react'
 import { useApparition } from '../components/apparition'
 import { Footer } from '../components/Footer'
 import { Navbar } from '../components/Navbar'
+import { IntroCurtain, RIDEAU_SCRIPT } from '../components/Rideau'
 
 import appCss from '../styles/app.css?url'
 import footerCss from '../styles/footer.css?url'
@@ -48,14 +49,23 @@ function RootDocument({ children }: { children: ReactNode }) {
   useApparition()
 
   return (
-    <html lang="fr">
+    /*
+     * RIDEAU_SCRIPT peut poser `data-rideau` sur <html> avant l'hydratation :
+     * l'écart est voulu, React n'a pas à le signaler.
+     */
+    <html lang="fr" suppressHydrationWarning>
       <head>
+        {/* En tête de <head>, bloquant : la décision précède le premier
+            affichage, le rideau ne peut donc pas apparaître puis disparaître. */}
+        <script dangerouslySetInnerHTML={{ __html: RIDEAU_SCRIPT }} />
         <HeadContent />
       </head>
       <body>
         <Navbar />
         {children}
         <Footer />
+        {/* Sur toutes les pages, joué seulement à l'arrivée sur le site. */}
+        <IntroCurtain />
         <Scripts />
       </body>
     </html>

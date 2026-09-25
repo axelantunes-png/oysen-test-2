@@ -13,8 +13,8 @@ import type { BaliseIconName } from './icons'
 /** Zone d'intervention. */
 export const ZONE = 'Toulouse'
 
-/** À RENSEIGNER — délai de réponse annoncé sur tous les appels à l'action. */
-export const DELAI_REPONSE_H = '[X]'
+/** Délai de réponse annoncé sur tous les appels à l'action. */
+export const DELAI_REPONSE_H = '48'
 
 /** Nombre de prestataires du réseau Oysen. */
 export const NB_PARTENAIRES = '13'
@@ -22,11 +22,8 @@ export const NB_PARTENAIRES = '13'
 /** Note Google affichée dans le bandeau du hero. */
 export const NOTE_GOOGLE = '5'
 
-/** À RENSEIGNER — nombre d'avis Google sur lequel repose la note. */
-export const NB_AVIS_GOOGLE = '[N]'
-
-/** À RENSEIGNER : nombre d'événements réalisés, dans la bande de réassurance. */
-export const NB_EVENEMENTS = '[N]'
+/** Nombre d'événements réalisés, dans la bande de réassurance. */
+export const NB_EVENEMENTS = '40'
 
 /**
  * Les départements desservis, affichés dans le pied de page. L'ordre est

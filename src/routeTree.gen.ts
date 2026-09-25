@@ -10,33 +10,43 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as QuiSommesNousLAgenceRouteImport } from './routes/qui-sommes-nous/l-agence'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const QuiSommesNousLAgenceRoute = QuiSommesNousLAgenceRouteImport.update({
+  id: '/qui-sommes-nous/l-agence',
+  path: '/qui-sommes-nous/l-agence',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/qui-sommes-nous/l-agence': typeof QuiSommesNousLAgenceRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/qui-sommes-nous/l-agence': typeof QuiSommesNousLAgenceRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/qui-sommes-nous/l-agence': typeof QuiSommesNousLAgenceRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/qui-sommes-nous/l-agence'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/qui-sommes-nous/l-agence'
+  id: '__root__' | '/' | '/qui-sommes-nous/l-agence'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  QuiSommesNousLAgenceRoute: typeof QuiSommesNousLAgenceRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +58,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/qui-sommes-nous/l-agence': {
+      id: '/qui-sommes-nous/l-agence'
+      path: '/qui-sommes-nous/l-agence'
+      fullPath: '/qui-sommes-nous/l-agence'
+      preLoaderRoute: typeof QuiSommesNousLAgenceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  QuiSommesNousLAgenceRoute: QuiSommesNousLAgenceRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

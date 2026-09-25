@@ -74,7 +74,7 @@
   bottom: 0;
   left: calc(-1 * var(--footer-gap) / 2);
   width: 1px;
-  background-color: color-mix(in srgb, var(--charte-gris) 45%, transparent);
+  background-color: var(--trait-doux);
 }
 
 .footer__brand {
@@ -84,30 +84,15 @@
   line-height: 1;
 }
 
-.footer__brand-name {
-  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
-  font-weight: 400;
-  font-size: 1.0625rem;
-  letter-spacing: 0.3em;
-  /* L'interlettrage ajoute un blanc après le N : sans cette reprise, le mot
-     paraît décalé vers la gauche. Même correction que dans la barre. */
-  text-indent: 0.3em;
-  color: var(--dawn);
-}
-
-.footer__brand-tag {
-  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
-  font-weight: 500;
-  font-size: 0.5625rem;
-  letter-spacing: 0.22em;
-  text-indent: 0.22em;
-  text-transform: uppercase;
-  color: var(--dusk);
+.footer__logo {
+  display: block;
+  width: 12rem;
+  height: auto;
 }
 
 /* Ce que fait l'agence, en une phrase, sous la signature. */
 .footer__brand-text {
-  margin: 0.55rem 0 0;
+  margin: 0.9rem 0 0;
   max-width: 42ch;
   font-size: 0.875rem;
   line-height: 1.65;
@@ -212,16 +197,29 @@ nav.footer__col .footer__link:focus-visible::after {
 }
 
 /*
- * Le bouton Instagram, en relief doux : une lumière lavande très faible en
+ * Les réseaux : l'étiquette, puis les boutons en rang. L'étiquette reprend
+ * celle des colonnes, l'écart au-dessus est celui que portait le bouton seul.
+ */
+.footer__reseaux {
+  margin-top: clamp(1.25rem, 3vh, 1.75rem);
+}
+
+.footer__reseaux-liste {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/*
+ * Un bouton de réseau, en relief doux : une lumière lavande très faible en
  * haut à gauche, une ombre franche en bas à droite. Au survol il s'enfonce,
  * les deux ombres passant à l'intérieur. Angles vifs, comme partout.
  */
-.footer__insta {
+.footer__reseau {
   display: inline-grid;
   place-items: center;
   width: 3rem;
   height: 3rem;
-  margin-top: clamp(1.25rem, 3vh, 1.75rem);
   color: var(--dusk);
   background-color: #100d15;
   box-shadow:
@@ -232,20 +230,21 @@ nav.footer__col .footer__link:focus-visible::after {
     box-shadow 0.25s ease;
 }
 
-.footer__insta:hover,
-.footer__insta:focus-visible {
+/* Le relief ne répond qu'aux boutons qui mènent quelque part. */
+a.footer__reseau:hover,
+a.footer__reseau:focus-visible {
   color: var(--dawn);
   box-shadow:
     inset -0.2rem -0.2rem 0.5rem color-mix(in srgb, var(--beam) 7%, transparent),
     inset 0.25rem 0.25rem 0.6rem rgba(0, 0, 0, 0.85);
 }
 
-.footer__insta:focus-visible {
+a.footer__reseau:focus-visible {
   outline: 2px solid var(--beam);
   outline-offset: 3px;
 }
 
-.footer__insta-icon {
+.footer__reseau-icon {
   display: block;
 }
 
@@ -387,6 +386,15 @@ nav.footer__col .footer__link:focus-visible::after {
     display: grid;
   }
 
+  /* Le pied de page est centré ici : l'étiquette et ses deux boutons aussi. */
+  .footer__reseaux {
+    text-align: center;
+  }
+
+  .footer__reseaux-liste {
+    justify-content: center;
+  }
+
   .footer__link {
     text-align: center;
   }
@@ -409,7 +417,7 @@ nav.footer__col .footer__link:focus-visible::after {
 
 @media (prefers-reduced-motion: reduce) {
   .footer__link,
-  .footer__insta {
+  .footer__reseau {
     transition: none;
   }
 
