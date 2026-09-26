@@ -144,9 +144,7 @@ function Home() {
 
           <div className="hero__inner">
             <p className="hero__eyebrow">
-              Organisation d’événements
-              <span aria-hidden="true">·</span>
-              {ZONE}
+              Agence événementielle à {ZONE}
             </p>
 
             <h1 className="hero__title">

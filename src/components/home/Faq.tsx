@@ -3,9 +3,10 @@ import { FAQ } from './content'
 /**
  * S9. FAQ d'accueil, balisée FAQPage.
  *
- * Affichée en clair et non en accordéon : ces réponses sont écrites pour
- * être lues par quelqu'un qui hésite juste avant de cliquer, et extraites
- * par les moteurs de réponse. Un contenu replié est un contenu à moitié lu.
+ * En dépliants : un <details> par question. Replié, le texte reste dans la
+ * page, lisible par les moteurs de réponse, et le navigateur l'ouvre seul
+ * quand on y cherche un mot. Aucun script : le clavier et les lecteurs
+ * d'écran sont servis par l'élément natif.
  *
  * Le balisage ne produira d'effet qu'une fois le « noindex » retiré de
  * __root.tsx et de public/robots.txt, au lancement.
@@ -29,14 +30,17 @@ export function Faq() {
           Ce qu’on nous demande avant de nous écrire.
         </h2>
 
-        <dl className="faq">
+        <div className="faq">
           {FAQ.map((item) => (
-            <div className="faq__item" key={item.q}>
-              <dt className="faq__q">{item.q}</dt>
-              <dd className="faq__a">{item.a}</dd>
-            </div>
+            <details className="faq__item" key={item.q}>
+              <summary className="faq__q">
+                <span className="faq__q-texte">{item.q}</span>
+                <span className="faq__signe" aria-hidden="true" />
+              </summary>
+              <p className="faq__a">{item.a}</p>
+            </details>
           ))}
-        </dl>
+        </div>
       </div>
 
       <script

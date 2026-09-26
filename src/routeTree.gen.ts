@@ -10,11 +10,23 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ContactIndexRouteImport } from './routes/contact/index'
+import { Route as ContactMerciRouteImport } from './routes/contact/merci'
 import { Route as QuiSommesNousLAgenceRouteImport } from './routes/qui-sommes-nous/l-agence'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactIndexRoute = ContactIndexRouteImport.update({
+  id: '/contact/',
+  path: '/contact/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactMerciRoute = ContactMerciRouteImport.update({
+  id: '/contact/merci',
+  path: '/contact/merci',
   getParentRoute: () => rootRouteImport,
 } as any)
 const QuiSommesNousLAgenceRoute = QuiSommesNousLAgenceRouteImport.update({
@@ -25,28 +37,41 @@ const QuiSommesNousLAgenceRoute = QuiSommesNousLAgenceRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/contact/merci': typeof ContactMerciRoute
   '/qui-sommes-nous/l-agence': typeof QuiSommesNousLAgenceRoute
+  '/contact/': typeof ContactIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/contact/merci': typeof ContactMerciRoute
   '/qui-sommes-nous/l-agence': typeof QuiSommesNousLAgenceRoute
+  '/contact': typeof ContactIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/contact/merci': typeof ContactMerciRoute
   '/qui-sommes-nous/l-agence': typeof QuiSommesNousLAgenceRoute
+  '/contact/': typeof ContactIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/qui-sommes-nous/l-agence'
+  fullPaths: '/' | '/contact/merci' | '/qui-sommes-nous/l-agence' | '/contact/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/qui-sommes-nous/l-agence'
-  id: '__root__' | '/' | '/qui-sommes-nous/l-agence'
+  to: '/' | '/contact/merci' | '/qui-sommes-nous/l-agence' | '/contact'
+  id:
+    | '__root__'
+    | '/'
+    | '/contact/merci'
+    | '/qui-sommes-nous/l-agence'
+    | '/contact/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ContactMerciRoute: typeof ContactMerciRoute
   QuiSommesNousLAgenceRoute: typeof QuiSommesNousLAgenceRoute
+  ContactIndexRoute: typeof ContactIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -56,6 +81,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact/': {
+      id: '/contact/'
+      path: '/contact'
+      fullPath: '/contact/'
+      preLoaderRoute: typeof ContactIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact/merci': {
+      id: '/contact/merci'
+      path: '/contact/merci'
+      fullPath: '/contact/merci'
+      preLoaderRoute: typeof ContactMerciRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/qui-sommes-nous/l-agence': {
@@ -70,7 +109,9 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ContactMerciRoute: ContactMerciRoute,
   QuiSommesNousLAgenceRoute: QuiSommesNousLAgenceRoute,
+  ContactIndexRoute: ContactIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -344,28 +344,41 @@ export const REALISATIONS = [
 ]
 
 /**
- * Quatre questions, réponse directe en tête, 40 à 60 mots : le format que
- * les moteurs de réponse extraient le plus volontiers. Affichées en clair
- * plutôt qu'en accordéon — un contenu replié est un contenu à moitié lu.
+ * Sept questions, réponse directe en tête : le format que les moteurs de
+ * réponse extraient le plus volontiers. Affichées en dépliants (Faq.tsx),
+ * les réponses restent dans la page et dans le balisage FAQPage.
  *
  * À VALIDER : les engagements qu'elles contiennent (frais de déplacement
- * annoncés au devis, avis systématique) doivent être tenables.
+ * annoncés au devis, secours sur chaque équipement critique, technicien
+ * présent pendant l'événement) doivent être tenables.
  */
 export const FAQ = [
   {
-    q: 'Quels types d’événements organisez-vous ?',
-    a: `Cinq familles : événements d’entreprise, manifestations de collectivités et d’institutions, mariages et événements privés, festivals et événements culturels, et prestation technique pour ceux qui pilotent eux-mêmes. Nous intervenons sur toute la chaîne, de la recherche de lieu au démontage, ou sur une seule partie si vous le préférez.`,
+    q: 'Que fait une agence événementielle, exactement ?',
+    a: 'Une agence événementielle conçoit, coordonne et réalise un événement à la place de son client. Oysen prend en charge la recherche du lieu, la sélection et le pilotage des prestataires, la prestation technique, la présence le jour J et le démontage. Vous pouvez aussi ne confier qu’une partie, la technique seule par exemple.',
   },
   {
-    q: 'Sur quelle zone intervenez-vous ?',
-    a: `${ZONE} et sa région. Nous nous déplaçons au-delà lorsque le projet le justifie ; les frais de déplacement sont alors annoncés dans le devis, jamais ajoutés ensuite. Notre parc matériel partant du même endroit que nos équipes, la logistique reste sous notre contrôle plutôt que sous celui d’un loueur.`,
+    q: 'Combien coûte l’organisation d’un événement d’entreprise ?',
+    a: 'Le coût d’un séminaire, d’une soirée d’entreprise ou d’une convention dépend de trois variables : le nombre de participants, le niveau technique et la durée. Oysen ne publie pas de grille tarifaire, elle serait fausse dans la plupart des cas, et donne un ordre de grandeur dès le premier échange.',
   },
   {
-    q: 'Combien coûte l’organisation d’un événement ?',
-    a: 'Cela dépend de trois variables : le nombre de personnes, le niveau technique attendu et la durée. Nous ne publions pas de grille tarifaire, elle serait fausse dans la plupart des cas. En revanche, dès le premier échange, nous vous donnons un ordre de grandeur avant toute proposition détaillée.',
+    q: 'Combien de temps à l’avance faut-il réserver une agence événementielle ?',
+    a: '12 à 18 mois pour un mariage, quelques semaines à plusieurs mois pour un séminaire d’entreprise ou une manifestation publique, quelques jours pour une location de matériel. Un délai court n’est pas rédhibitoire : dites-le dès le premier message, Oysen vous dira ce qui reste faisable.',
   },
   {
-    q: 'À quel moment faut-il vous contacter ?',
-    a: 'Le plus tôt possible, et si possible avant d’avoir réservé le lieu : c’est le choix qui contraint tout le reste : jauge, technique, sécurité, budget. Un délai court n’est pas rédhibitoire pour autant ; dites-le nous dès le premier message, nous vous dirons franchement ce qui reste faisable.',
+    q: 'Quelle agence événementielle choisir à Toulouse ?',
+    a: 'Trois critères comptent : qui possède le matériel technique, qui coordonne réellement les prestataires, et qui est présent le jour J. Oysen est une entreprise générale de l’événementiel basée à Toulouse : conception, coordination et technique sont assurées par le même interlocuteur, avec son propre parc son, lumière et structure.',
+  },
+  {
+    q: 'Faut-il passer par une agence ou contacter les prestataires soi-même ?',
+    a: 'Contacter directement le traiteur, le DJ, le loueur, le décorateur et l’éclairagiste coûte moins cher sur le papier, mais la coordination reste à votre charge. Une agence événementielle comme Oysen prend ce rôle : un seul contrat, un seul interlocuteur, une seule responsabilité le jour J.',
+  },
+  {
+    q: 'Que se passe-t-il en cas de panne technique pendant un événement ?',
+    a: 'Le matériel est vérifié avant chaque départ et les essais sont terminés avant l’arrivée du public. Oysen prévoit une solution de secours sur chaque équipement critique et un technicien reste présent pendant l’événement : un incident se règle sur place, pas au téléphone.',
+  },
+  {
+    q: 'Dans quels départements Oysen organise-t-elle des événements ?',
+    a: 'Oysen est une agence événementielle basée à Toulouse qui intervient sur sept départements : Haute-Garonne, Gers, Tarn, Tarn-et-Garonne, Ariège, Aude et Hautes-Pyrénées. Au-delà, c’est possible, les frais de déplacement sont annoncés dans le devis.',
   },
 ]

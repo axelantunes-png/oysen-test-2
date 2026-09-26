@@ -1468,9 +1468,10 @@
 }
 
 /* ---- S9 · FAQ ----------------------------------------------
-   En clair, pas en accordéon : ces réponses sont écrites pour
-   être lues juste avant de cliquer, et extraites par les moteurs
-   de réponse. Un contenu replié est un contenu à moitié lu.
+   Des dépliants, sur une seule colonne centrée : la question
+   seule, un filet entre chaque, et à droite un signe « + » qui
+   devient « − » à l'ouverture. La question ouverte passe en
+   lavande, et la réponse glisse sous elle.
    ----------------------------------------------------------- */
 
 /* Tête de section centrée au-dessus des deux colonnes de questions. */
@@ -1484,32 +1485,112 @@
 }
 
 .faq {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0 clamp(2rem, 5vw, 4rem);
-  margin: clamp(2.25rem, 5vh, 3.25rem) 0 0;
+  max-width: 50rem;
+  margin: clamp(2.25rem, 5vh, 3.25rem) auto 0;
+  border-bottom: 1px solid var(--night-veil);
+  /* Permet d'animer la hauteur jusqu'à « auto » (voir ::details-content). */
+  interpolate-size: allow-keywords;
 }
 
 .faq__item {
-  padding: clamp(1.35rem, 2.6vh, 1.85rem) 0;
   border-top: 1px solid var(--night-veil);
 }
 
+/* La question : toute la rangée est cliquable. */
 .faq__q {
-  margin: 0 0 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: clamp(1.25rem, 2.6vh, 1.6rem) 0;
   font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
   font-weight: 500;
   font-size: 1.0625rem;
-  line-height: 1.35;
+  line-height: 1.4;
   color: var(--dawn);
+  cursor: pointer;
+  list-style: none;
+  transition: color 0.25s ease;
+}
+
+/* Le triangle natif du navigateur, retiré partout. */
+.faq__q::-webkit-details-marker {
+  display: none;
+}
+
+.faq__q::marker {
+  content: '';
+}
+
+.faq__q:hover,
+.faq__item[open] .faq__q {
+  color: var(--beam);
+}
+
+.faq__q:focus-visible {
+  outline: 1px solid var(--beam);
+  outline-offset: 0.35rem;
+}
+
+/* Le signe : deux traits lavande, le vertical se couche à l'ouverture. */
+.faq__signe {
+  position: relative;
+  flex: none;
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.faq__signe::before,
+.faq__signe::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: var(--beam);
+  transition: transform 0.3s ease;
+}
+
+.faq__signe::after {
+  transform: rotate(90deg);
+}
+
+.faq__item[open] .faq__signe::after {
+  transform: rotate(0deg);
 }
 
 .faq__a {
   margin: 0;
-  max-width: 56ch;
+  max-width: 62ch;
+  padding: 0 0 clamp(1.35rem, 2.8vh, 1.75rem);
   font-size: 0.9375rem;
   line-height: 1.7;
+  text-wrap: pretty;
   color: var(--dusk);
+}
+
+/* L'ouverture glisse, là où le navigateur sait animer le contenu d'un
+   dépliant ; ailleurs, il s'ouvre d'un coup, sans rien perdre. */
+.faq__item::details-content {
+  height: 0;
+  overflow: clip;
+  transition:
+    height 0.35s ease,
+    content-visibility 0.35s allow-discrete;
+}
+
+.faq__item[open]::details-content {
+  height: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq__q,
+  .faq__signe::before,
+  .faq__signe::after,
+  .faq__item::details-content {
+    transition: none;
+  }
 }
 
 /* ---- S10 · L'appel final -----------------------------------
@@ -1626,8 +1707,7 @@
 
 @media (max-width: 760px) {
   .methode,
-  .cas,
-  .faq {
+  .cas {
     grid-template-columns: minmax(0, 1fr);
   }
 

@@ -372,12 +372,6 @@ html[data-rideau='non'] .stage {
   color: var(--beam);
 }
 
-/* Le point médian sépare, il ne pèse pas. */
-.hero__eyebrow span {
-  margin: 0 0.55em;
-  opacity: 0.45;
-}
-
 .hero__title {
   margin: 0;
   /* Deux lignes par membre de phrase : la condition, puis la promesse.
