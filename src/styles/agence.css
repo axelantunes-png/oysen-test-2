@@ -2121,3 +2121,124 @@ html[data-apparition] .approche__schema.est-vu .schema__apparait {
     transition: none;
   }
 }
+
+/* ---- S5 · Les plaques des valeurs, éclairées ----
+   Le même traitement que les cartes d'expertise de « Le fondateur »,
+   dans les couleurs d'origine des plaques (le fond #15111b, la lumière
+   violette qui coule de l'arête, le lavande de l'arête).
+
+   La bordure est éclairée par le haut et s'éteint en descendant. Dans
+   chaque plaque, un petit projecteur, placé à un endroit différent
+   d'une plaque à l'autre : un cône net (dégradé conique centré sur la
+   source), éteint avec la distance, et une lueur sur la lampe. Au
+   survol, le projecteur monte. */
+
+.valeur__points {
+  /* La source (--x, --y), la direction (--dir, 0deg vers le haut, sens
+     horaire) et la demi-ouverture du cône (--ouv). */
+  --x: 0%;
+  --y: 0%;
+  --dir: 140deg;
+  --ouv: 13deg;
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid transparent;
+  background:
+    radial-gradient(
+        70% 80% at var(--x) var(--y),
+        color-mix(in srgb, var(--beam) 10%, transparent),
+        transparent 65%
+      )
+      padding-box,
+    linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--oysen-purple) 30%, transparent),
+        transparent 55%
+      )
+      padding-box,
+    linear-gradient(
+        color-mix(in srgb, #15111b 85%, transparent),
+        color-mix(in srgb, #15111b 85%, transparent)
+      )
+      padding-box,
+    linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--beam) 50%, transparent),
+        var(--night-veil) 35%,
+        var(--trait-doux)
+      )
+      border-box;
+  box-shadow: 0 1.5rem 3rem -2rem rgba(0, 0, 0, 0.7);
+}
+
+/* Rigueur : du coin haut gauche, vers le bas à droite. */
+.valeur:nth-child(1) .valeur__points {
+  --x: 0%;
+  --y: 0%;
+  --dir: 138deg;
+}
+
+/* Fiabilité : du coin haut droit, vers le bas à gauche. */
+.valeur:nth-child(2) .valeur__points {
+  --x: 100%;
+  --y: 0%;
+  --dir: 222deg;
+}
+
+/* Réactivité : du coin bas gauche, vers le haut, comme un pied de scène. */
+.valeur:nth-child(3) .valeur__points {
+  --x: 0%;
+  --y: 100%;
+  --dir: 55deg;
+  --ouv: 12deg;
+}
+
+/* L'arête haute reste dans la plaque, qui rogne désormais son contenu. */
+.valeur__points::before {
+  top: 0;
+}
+
+.valeur__points::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    radial-gradient(
+      circle at var(--x) var(--y),
+      color-mix(in srgb, var(--beam) 30%, transparent),
+      transparent 4.5rem
+    ),
+    conic-gradient(
+      from calc(var(--dir) - var(--ouv)) at var(--x) var(--y),
+      transparent 0deg,
+      color-mix(in srgb, var(--beam) 7%, transparent) calc(var(--ouv) * 0.45),
+      color-mix(in srgb, var(--beam) 16%, transparent) var(--ouv),
+      color-mix(in srgb, var(--beam) 7%, transparent) calc(var(--ouv) * 1.55),
+      transparent calc(var(--ouv) * 2),
+      transparent 360deg
+    );
+  -webkit-mask-image: radial-gradient(
+    circle at var(--x) var(--y),
+    #000 10%,
+    transparent 95%
+  );
+  mask-image: radial-gradient(
+    circle at var(--x) var(--y),
+    #000 10%,
+    transparent 95%
+  );
+  opacity: 0.8;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.valeur__points:hover::after {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .valeur__points::after {
+    transition: none;
+  }
+}

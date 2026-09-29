@@ -48,7 +48,6 @@ export const NAV: NavItem[] = [
     children: [
       { label: 'L’agence', href: '/qui-sommes-nous/l-agence' },
       { label: 'Le fondateur', href: '/qui-sommes-nous/le-fondateur' },
-      { label: 'Nos partenaires', href: '/qui-sommes-nous/nos-partenaires' },
     ],
   },
   { label: 'Nos souvenirs', href: '/nos-souvenirs' },

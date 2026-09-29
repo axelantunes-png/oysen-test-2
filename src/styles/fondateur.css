@@ -1,0 +1,1931 @@
+/* ============================================================
+   LE FONDATEUR
+   ------------------------------------------------------------
+   Pour l'instant, le hero seul, puis un écran vide.
+
+   Deux mondes de part et d'autre du fondateur : à gauche le
+   chantier (la trame d'un plan, le gris de la charte), à
+   droite la scène (les projecteurs, le lavande). Il se tient
+   à droite, détouré, éclairé des deux côtés à la fois.
+
+   Le reste parle la langue du site : surtitre, Montserrat
+   léger, Azeret Mono pour ce qui annote.
+   ============================================================ */
+
+.fondateur-page {
+  /* Le gris de la charte, remonté pour se lire en texte (8:1 sur le fond). */
+  --chantier: #a4aaad;
+  /* La largeur du portrait détouré : tout le hero se règle sur elle. */
+  --corps-w: clamp(16rem, 29vw, 31rem);
+}
+
+/* ---- Le hero ----
+   Le texte à gauche, sur la trame du plan ; le buste à droite, sous les
+   projecteurs, légèrement décollé du sol. Une couture verticale passe
+   derrière lui. */
+
+/*
+ * Pas de limite entre le hero et la suite : son décor (la trame, les
+ * projecteurs, la lueur) déborde sous la section suivante et s'y éteint
+ * sur --fondu.
+ *
+ * Le débordement ne se fait que vers le bas : clip-path rogne le haut et
+ * les côtés, mais laisse --fondu de marge sous le hero.
+ */
+.fondateur-hero {
+  --fondu: clamp(12rem, 35vh, 22rem);
+  position: relative;
+  isolation: isolate;
+  overflow-x: clip;
+  display: grid;
+  min-height: 70vh;
+  padding: clamp(2rem, 5vh, 3.5rem) var(--pad) 0;
+  clip-path: inset(0 0 calc(-1 * var(--fondu)) 0);
+}
+
+.fondateur-hero__decor {
+  position: absolute;
+  inset: 0 0 calc(-1 * var(--fondu));
+  z-index: -1;
+  pointer-events: none;
+  /* La lueur violette derrière le buste : la salle derrière lui. */
+  background-image: radial-gradient(
+    32% 42% at 67% calc(100% - var(--fondu) - 6rem),
+    color-mix(in srgb, var(--oysen-purple) 34%, transparent),
+    transparent 72%
+  );
+  /* Tout le décor s'éteint en descendant, dès le bas du buste. */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 calc(100% - 1.6 * var(--fondu)),
+    transparent
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    #000 calc(100% - 1.6 * var(--fondu)),
+    transparent
+  );
+}
+
+
+/*
+ * Le côté chantier : une trame de plan, carreaux fins et carreaux maîtres,
+ * sous le texte, qui s'efface vers le bord de l'écran.
+ */
+.fondateur-hero__plan {
+  --fin: color-mix(in srgb, var(--charte-gris) 24%, transparent);
+  --maitre: color-mix(in srgb, var(--charte-gris) 55%, transparent);
+  position: absolute;
+  inset: 0 33% 0 0;
+  background-image:
+    linear-gradient(to right, var(--maitre) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--maitre) 1px, transparent 1px),
+    linear-gradient(to right, var(--fin) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--fin) 1px, transparent 1px);
+  background-size:
+    12.5rem 12.5rem,
+    12.5rem 12.5rem,
+    2.5rem 2.5rem,
+    2.5rem 2.5rem;
+  background-position: 100% 100%;
+  -webkit-mask-image: radial-gradient(
+    90% 85% at 70% 65%,
+    #000 5%,
+    transparent 72%
+  );
+  mask-image: radial-gradient(90% 85% at 70% 65%, #000 5%, transparent 72%);
+  opacity: 0.6;
+}
+
+/* Le côté scène : deux projecteurs tombent du haut vers le buste. */
+.fondateur-hero__projecteurs {
+  position: absolute;
+  inset: 0 0 0 50%;
+  overflow: hidden;
+}
+
+.fondateur-hero__projecteurs i {
+  position: absolute;
+  top: -12%;
+  left: 70%;
+  width: 34vmax;
+  height: 125%;
+  transform-origin: 50% 0;
+  transform: translateX(-50%) rotate(22deg);
+  /* Étroit à la lampe, ouvert au sol : les projecteurs de l'accueil. */
+  clip-path: polygon(48.6% 0, 51.4% 0, 100% 100%, 0 100%);
+  background-image: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--beam) 18%, transparent),
+    color-mix(in srgb, var(--beam) 6%, transparent) 45%,
+    transparent 80%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 4%,
+    #000 34%,
+    #000 66%,
+    transparent 96%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 4%,
+    #000 34%,
+    #000 66%,
+    transparent 96%
+  );
+  filter: blur(7px);
+}
+
+.fondateur-hero__projecteurs i:nth-child(2) {
+  left: 95%;
+  transform: translateX(-50%) rotate(36deg);
+  opacity: 0.65;
+}
+
+/* Le troisième ne sert que sur ordinateur et téléphone (voir plus bas). */
+.fondateur-hero__projecteurs i:nth-child(3) {
+  display: none;
+}
+
+/*
+ * Sur ordinateur, les sources partent du coin haut droit et visent plus
+ * haut sur le buste : le visage plutôt que les épaules.
+ */
+@media (min-width: 1024px) {
+  .fondateur-hero__projecteurs i {
+    top: -10%;
+    left: 100%;
+    transform: translateX(-50%) rotate(50deg);
+  }
+
+  /* Le second, bien à part sur la même rampe, pour que les deux sources
+     restent distinctes. */
+  .fondateur-hero__projecteurs i:nth-child(2) {
+    top: -14%;
+    left: 64%;
+    transform: translateX(-50%) rotate(30deg);
+  }
+
+  /* Le troisième part du bord droit de l'écran, sous le coin, et vise le
+     buste presque à l'horizontale. */
+  .fondateur-hero__projecteurs i:nth-child(3) {
+    display: block;
+    top: 16%;
+    left: 100%;
+    transform: translateX(-50%) rotate(68deg);
+    opacity: 0.75;
+  }
+}
+
+/*
+ * Le texte à gauche, le buste à droite. La scène occupe toute la hauteur
+ * du hero : le buste se pose en bas, le texte se tient au-dessus du
+ * milieu, à hauteur du visage plutôt que des épaules.
+ */
+.fondateur-hero__scene {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: clamp(2rem, 5vw, 6rem);
+  width: 100%;
+  max-width: 76rem;
+  margin-inline: auto;
+}
+
+.fondateur-hero__texte {
+  align-self: center;
+  padding-bottom: clamp(4rem, 18vh, 12rem);
+}
+
+.fondateur-hero .fondateur-hero__surtitre {
+  margin: 0 0 clamp(1rem, 2.5vh, 1.5rem);
+  font-size: 0.75rem;
+  line-height: 1.7;
+}
+
+/* Sur ordinateur, le hero est plus bas ; le surtitre tient sur une ligne. */
+@media (min-width: 1024px) {
+  .fondateur-hero {
+    min-height: 60vh;
+  }
+
+  .fondateur-hero .fondateur-hero__surtitre {
+    white-space: nowrap;
+  }
+}
+
+.fondateur-hero__nom {
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  font-size: clamp(2.75rem, 5vw, 5.5rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+  color: var(--dawn);
+}
+
+/* Le prénom sous la lumière de service, le nom sous les projecteurs. */
+.fondateur-hero__prenom {
+  color: color-mix(in srgb, var(--dawn) 86%, var(--chantier));
+}
+
+.fondateur-hero__famille {
+  text-shadow: 0 0 2.2rem color-mix(in srgb, var(--beam) 34%, transparent);
+}
+
+.fondateur-hero__role {
+  margin: clamp(1rem, 2.5vh, 1.5rem) 0 0;
+  font-size: clamp(1rem, 1.3vw, 1.1875rem);
+  line-height: 1.6;
+  color: var(--dusk);
+}
+
+/* Sa manière de voir le métier, adossée au filet lavande du site. */
+.fondateur-hero__citation {
+  max-width: 34rem;
+  margin: clamp(1.5rem, 3.5vh, 2.25rem) 0 0;
+  padding-left: 1.1rem;
+  border-left: 1px solid var(--beam);
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  font-size: clamp(1.0625rem, 1.35vw, 1.25rem);
+  line-height: 1.55;
+  text-wrap: pretty;
+  color: var(--dawn);
+}
+
+/* Le buste, décalé à droite et légèrement décollé du sol. */
+.fondateur-hero__portrait {
+  position: relative;
+  z-index: 1;
+  align-self: end;
+  width: var(--corps-w);
+  margin: 0 0 clamp(2.75rem, 9vh, 6rem);
+}
+
+/* La couture : l'axe de la page, qui monte derrière lui. */
+.fondateur-hero__portrait::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  z-index: -1;
+  width: 1px;
+  height: 120vh;
+  background-image: linear-gradient(
+    to top,
+    transparent,
+    color-mix(in srgb, var(--beam) 18%, transparent) 20%,
+    color-mix(in srgb, var(--beam) 38%, transparent) 55%,
+    transparent 80%
+  );
+}
+
+/*
+ * Le buste détouré, traité pour la salle sombre comme toutes les photos du
+ * site (couleurs à moitié, un souffle plus sombre), puis éclairé à
+ * contre-jour : le lavande de la scène le détoure par la droite, le gris
+ * du chantier par la gauche, la lueur violette par le haut. Les ombres
+ * suivent le contour du corps, pas un cadre. Le pied s'efface.
+ */
+.fondateur-hero__corps {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: saturate(0.5) brightness(0.92) contrast(1.06)
+    drop-shadow(0.3rem -0.15rem 0.4rem color-mix(in srgb, var(--beam) 55%, transparent))
+    drop-shadow(-0.3rem -0.15rem 0.4rem color-mix(in srgb, var(--chantier) 32%, transparent))
+    drop-shadow(0 -0.6rem 2.5rem color-mix(in srgb, var(--oysen-purple) 70%, transparent));
+  -webkit-mask-image: linear-gradient(to bottom, #000 82%, transparent);
+  mask-image: linear-gradient(to bottom, #000 82%, transparent);
+}
+
+/* La mention de la silhouette d'attente, au creux de la poitrine. */
+.fondateur-hero__visee {
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  fill: color-mix(in srgb, var(--beam) 70%, transparent);
+}
+
+/*
+ * L'entrée, après le rideau s'il se joue : le buste monte, la lumière
+ * vient, puis le texte, ligne après ligne.
+ */
+.fondateur-hero__portrait {
+  animation: fondateur-monte 1.1s cubic-bezier(0.22, 0.61, 0.36, 1)
+    calc(var(--apres-rideau, 0s) + 0.1s) both;
+}
+
+.fondateur-hero__projecteurs,
+.fondateur-hero__plan {
+  animation: fondateur-fondu 1.6s ease calc(var(--apres-rideau, 0s) + 0.45s)
+    both;
+}
+
+.fondateur-hero__texte > * {
+  animation: fondateur-monte 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.fondateur-hero__texte > :nth-child(1) {
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.2s);
+}
+
+.fondateur-hero__texte > :nth-child(2) {
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.32s);
+}
+
+.fondateur-hero__texte > :nth-child(3) {
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.44s);
+}
+
+.fondateur-hero__texte > :nth-child(4) {
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.56s);
+}
+
+@keyframes fondateur-fondu {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fondateur-monte {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+}
+
+/* ============================================================
+   LE RÉCIT
+   ------------------------------------------------------------
+   Une mise en page classique, mais qui occupe la largeur : les
+   sections s'ouvrent à 100rem, les têtes sont alignées à
+   gauche avec, en regard à droite, ce qui les accompagne. Le
+   contenu est distribué sur la largeur (frise, cartes,
+   colonnes) plutôt qu'empilé dans une colonne.
+
+   La langue du site : surtitre lavande, titres en Montserrat
+   léger, filets au gris de la charte, Azeret Mono pour les
+   dates et les étiquettes. Les fonds et les lumières de chaque
+   section sont réunis plus bas, dans « Les ambiances ».
+   ============================================================ */
+
+.section--fondateur .section__inner {
+  max-width: 100rem;
+}
+
+/* ---- La tête de section ----
+   Surtitre et titre à gauche, l'accompagnement à droite, un filet
+   dessous qui court sur toute la largeur. */
+
+.fondateur-tete {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 1.5rem 4rem;
+  margin-bottom: clamp(2.5rem, 6vh, 4rem);
+  padding-bottom: clamp(1.5rem, 3.5vh, 2.25rem);
+  border-bottom: 1px solid var(--trait-doux);
+}
+
+.fondateur-tete .section__title {
+  max-width: 22ch;
+  font-size: clamp(1.9rem, 3.4vw, 3rem);
+}
+
+.fondateur-tete__cote {
+  display: grid;
+  justify-items: end;
+  gap: 0.9rem;
+  text-align: right;
+}
+
+.fondateur-tete__texte {
+  max-width: 36ch;
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: var(--dusk);
+}
+
+/* ---- 1 · L'introduction ----
+   Sans fond : le décor du hero vient s'y éteindre. L'accroche en grand
+   sur sept douzièmes, la suite en regard, adossée au filet lavande ;
+   puis trois repères sur toute la largeur. */
+
+.section.section--fondateur-intro {
+  padding-top: clamp(3rem, 8vh, 5rem);
+  background-color: transparent;
+}
+
+.intro-fondateur {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+  align-items: end;
+  gap: 2rem clamp(3rem, 6vw, 7rem);
+}
+
+.intro-fondateur__accroche {
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  font-size: clamp(1.25rem, 1.7vw, 1.6rem);
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+  text-wrap: pretty;
+  color: var(--dawn);
+}
+
+.intro-fondateur__texte {
+  margin: 0;
+  padding-left: 1.5rem;
+  border-left: 1px solid var(--beam);
+  font-size: clamp(1.0625rem, 1.25vw, 1.1875rem);
+  line-height: 1.75;
+  text-wrap: pretty;
+  color: color-mix(in srgb, var(--dawn) 80%, var(--dusk));
+}
+
+.reperes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: clamp(3rem, 8vh, 5rem) 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--trait-doux);
+}
+
+.repere {
+  display: grid;
+  align-content: start;
+  gap: 0.45rem;
+  padding: clamp(1.5rem, 3.5vh, 2rem) 2rem 0 0;
+}
+
+.repere + .repere {
+  padding-left: clamp(1.5rem, 3vw, 3rem);
+  border-left: 1px solid var(--trait-doux);
+}
+
+.repere__label {
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--beam);
+}
+
+.repere__valeur {
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  font-size: clamp(1.4rem, 2.2vw, 1.95rem);
+  line-height: 1.2;
+  color: var(--dawn);
+}
+
+.repere__detail {
+  font-size: 0.9375rem;
+  color: var(--dusk);
+}
+
+/* ---- 2 · Formation et parcours ----
+   D'abord le fil vertical (tablette, téléphone) : chaque étape à droite
+   du fil, accrochée par un losange évidé ; Oysen, au bout, par un
+   losange plein qui brille. Sur ordinateur, voir la frise plus bas. */
+
+.frise {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.jalon {
+  position: relative;
+  padding: 0 0 clamp(2rem, 4.5vh, 2.5rem) 2rem;
+  border-left: 1px solid var(--trait);
+}
+
+.jalon:last-child {
+  padding-bottom: 0;
+  border-left-color: transparent;
+}
+
+.jalon::before {
+  content: '';
+  position: absolute;
+  top: 0.3rem;
+  left: -0.5px;
+  width: 0.6rem;
+  height: 0.6rem;
+  border: 1px solid var(--beam);
+  background-color: var(--night);
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.jalon:last-child::before {
+  background-color: var(--beam);
+  box-shadow: 0 0 0.9rem color-mix(in srgb, var(--beam) 65%, transparent);
+}
+
+.jalon__bloc {
+  display: grid;
+  gap: 0.45rem;
+  max-width: 38rem;
+}
+
+.jalon__date {
+  margin: 0;
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  line-height: 1.4;
+  color: var(--beam);
+}
+
+.jalon__titre {
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.2rem;
+  font-weight: 400;
+  line-height: 1.3;
+  color: var(--dawn);
+}
+
+.jalon:last-child .jalon__titre {
+  color: var(--beam);
+}
+
+.jalon__texte {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  text-wrap: pretty;
+  color: var(--dusk);
+}
+
+/*
+ * La frise, sur ordinateur. Huit colonnes, le fil au milieu sur toute
+ * la largeur. Chaque étape occupe deux colonnes à partir de la sienne
+ * (--col, posé dans le composant) : les impaires au-dessus du fil, les
+ * paires au-dessous, reliées à leur losange par un trait. Les étapes
+ * partagent les trois rangées de la frise (subgrid) : toutes celles du
+ * haut finissent à la même hauteur, toutes celles du bas partent de la
+ * même.
+ */
+@media (min-width: 1100px) {
+  .frise {
+    display: grid;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    grid-template-rows: auto 3rem auto;
+    column-gap: 1.75rem;
+  }
+
+  /* Le fil : il s'allume en lavande en arrivant sur Oysen. */
+  .frise::before {
+    content: '';
+    grid-row: 2;
+    grid-column: 1 / -1;
+    align-self: center;
+    height: 1px;
+    background-image: linear-gradient(
+      to right,
+      var(--trait) 0%,
+      var(--trait) 72%,
+      var(--beam) 92%,
+      transparent
+    );
+  }
+
+  .jalon {
+    display: grid;
+    grid-column: var(--col) / span 2;
+    grid-row: 1 / 4;
+    grid-template-rows: subgrid;
+    padding: 0;
+    border-left: 0;
+  }
+
+  .jalon::before {
+    position: relative;
+    top: auto;
+    left: auto;
+    grid-row: 2;
+    align-self: center;
+    justify-self: start;
+  }
+
+  /* Le trait qui relie l'étape à son losange. */
+  .jalon::after {
+    content: '';
+    grid-row: 2;
+    justify-self: start;
+    width: 1px;
+    height: 50%;
+    background-color: var(--trait-doux);
+  }
+
+  .jalon__bloc {
+    padding-left: 1.1rem;
+    border-left: 1px solid var(--trait-doux);
+  }
+
+  .jalon:nth-child(odd) .jalon__bloc {
+    grid-row: 1;
+    align-self: end;
+    padding-bottom: 0.25rem;
+  }
+
+  .jalon:nth-child(odd)::after {
+    align-self: start;
+  }
+
+  .jalon:nth-child(even) .jalon__bloc {
+    grid-row: 3;
+    align-self: start;
+    padding-top: 0.25rem;
+  }
+
+  .jalon:nth-child(even)::after {
+    align-self: end;
+  }
+}
+
+/* ---- 3 · Ce que je sais faire ----
+   Cinq cartes sur toute la largeur : trois, puis deux plus larges.
+   Le poste en tête, le savoir-faire en grand, le détail en pied de
+   carte. Au survol, l'arête haute s'allume. */
+
+.savoirs {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: clamp(1rem, 1.5vw, 1.5rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.savoir {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  grid-column: span 2;
+  gap: 1rem;
+  min-height: 17rem;
+  padding: clamp(1.75rem, 2.5vw, 2.5rem);
+  border: 1px solid var(--trait);
+  background-color: var(--night-raised);
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.savoir:nth-child(n + 4) {
+  grid-column: span 3;
+}
+
+.savoir::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  left: -1px;
+  height: 1px;
+  background-color: var(--beam);
+  box-shadow: 0 0 0.9rem color-mix(in srgb, var(--beam) 60%, transparent);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.savoir:hover {
+  border-color: color-mix(in srgb, var(--beam) 35%, var(--trait));
+}
+
+.savoir:hover::before {
+  opacity: 1;
+}
+
+.savoir__poste {
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--beam);
+}
+
+.savoir__titre {
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  font-size: clamp(1.5rem, 2.1vw, 1.95rem);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--dawn);
+}
+
+.savoir__texte {
+  margin: auto 0 0;
+  padding-top: 1rem;
+  font-size: 1rem;
+  line-height: 1.7;
+  text-wrap: pretty;
+  color: var(--dusk);
+}
+
+/* ---- 4 · Ce que le terrain m'a appris ----
+   Un cran plus clair. La première leçon en grand à gauche, les quatre
+   autres en liste à droite, entre des filets. */
+
+.section.section--fondateur-lecons {
+  background-color: var(--night-raised);
+  border-block: 1px solid var(--trait-doux);
+}
+
+.lecons-grille {
+  display: grid;
+  grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+  align-items: start;
+  gap: 2.5rem clamp(3rem, 7vw, 8rem);
+}
+
+.lecon-une {
+  margin: 0;
+}
+
+.lecon-une p {
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  font-size: clamp(1.35rem, 2vw, 1.85rem);
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+  color: var(--dawn);
+}
+
+.lecons {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--trait);
+}
+
+.lecons li {
+  padding-block: clamp(1.25rem, 3vh, 1.6rem);
+  border-bottom: 1px solid var(--trait);
+}
+
+.lecon {
+  margin: 0;
+}
+
+.lecon p {
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  font-size: clamp(1.15rem, 1.5vw, 1.35rem);
+  line-height: 1.45;
+  text-wrap: pretty;
+  color: var(--dawn);
+}
+
+/* ---- 5 · Un événement qui m'a marqué ----
+   La fiche en regard du titre, trois cases côte à côte ; puis le récit
+   en trois temps, chacun sous un filet dont l'amorce est lavande. */
+
+.fiche {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  margin: 0;
+  border: 1px solid var(--trait);
+  background-color: var(--night-raised);
+  text-align: left;
+}
+
+.fiche__case {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1rem 1.75rem;
+}
+
+.fiche__case + .fiche__case {
+  border-left: 1px solid var(--trait-doux);
+}
+
+.fiche dt {
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dusk);
+}
+
+.fiche dd {
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--dawn);
+}
+
+.temps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2.5rem clamp(2rem, 4vw, 4.5rem);
+}
+
+.temps__bloc {
+  padding-top: 1.5rem;
+  background-image:
+    linear-gradient(var(--beam), var(--beam)),
+    linear-gradient(var(--trait), var(--trait));
+  background-repeat: no-repeat;
+  background-size:
+    3rem 1px,
+    100% 1px;
+  background-position: 0 0;
+}
+
+.temps__titre {
+  margin: 0 0 0.9rem;
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--beam);
+}
+
+.temps__texte {
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  text-wrap: pretty;
+  color: color-mix(in srgb, var(--dawn) 80%, var(--dusk));
+}
+
+.marquant__lien {
+  margin-top: clamp(2.5rem, 6vh, 3.5rem);
+}
+
+/* Un lien de texte suivi d'une flèche, qui avance au survol. */
+.lien-fleche {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--beam);
+}
+
+.lien-fleche__icone {
+  flex: none;
+  width: 1.15rem;
+  height: 1.15rem;
+  transition: transform 0.25s ease;
+}
+
+.lien-fleche:hover,
+.lien-fleche:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+
+.lien-fleche:hover .lien-fleche__icone,
+.lien-fleche:focus-visible .lien-fleche__icone {
+  transform: translateX(0.3rem);
+}
+
+.lien-fleche:focus-visible {
+  outline: 2px solid var(--beam);
+  outline-offset: 4px;
+}
+
+/* ---- 6 · Ce que j'écris ----
+   Trois cartes d'articles sur toute la largeur. Au survol, la carte
+   s'allume, comme partout sur le site. */
+
+.articles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1rem, 1.5vw, 1.5rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.article {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  height: 100%;
+  min-height: 18rem;
+  padding: clamp(1.75rem, 2.5vw, 2.5rem);
+  border: 1px solid var(--trait);
+  background-color: var(--night-raised);
+  text-decoration: none;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.article__date {
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dusk);
+}
+
+.article__titre {
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(1.4rem, 1.9vw, 1.75rem);
+  font-weight: 300;
+  line-height: 1.25;
+  color: var(--dawn);
+}
+
+.article__extrait {
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--dusk);
+}
+
+.article__lire {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 0.6rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--beam);
+}
+
+.article__fleche {
+  width: 1rem;
+  height: 1rem;
+  transition: transform 0.25s ease;
+}
+
+.article:hover,
+.article:focus-visible {
+  border-color: color-mix(in srgb, var(--beam) 55%, transparent);
+  box-shadow: 0 0 2rem -0.75rem color-mix(in srgb, var(--beam) 35%, transparent);
+}
+
+.article:hover .article__fleche,
+.article:focus-visible .article__fleche {
+  transform: translateX(0.25rem);
+}
+
+.article:focus-visible {
+  outline: 2px solid var(--beam);
+  outline-offset: 3px;
+}
+
+/* ---- 7 · La sortie ----
+   Exactement celle de la page « L'agence » (agence.css, S9) : la rampe
+   violette par le bas, une question, le bouton vers les services, puis
+   le second chemin vers le contact. Les règles sont reprises ici, cette
+   feuille n'étant servie que sur cette page. */
+
+.section.section--fondateur-appel {
+  text-align: center;
+  border-top: 1px solid var(--night-veil);
+  background-image: radial-gradient(
+    110% 90% at 50% 118%,
+    color-mix(in srgb, var(--oysen-purple) 40%, transparent),
+    transparent 64%
+  );
+}
+
+.section--fondateur-appel .section__title {
+  max-width: 20ch;
+  margin-inline: auto;
+}
+
+.fondateur-sortie__lede {
+  margin: clamp(1.4rem, 3vh, 2rem) auto 0;
+  max-width: 58ch;
+  font-size: clamp(1rem, 1.3vw, 1.0625rem);
+  line-height: 1.7;
+  text-wrap: pretty;
+  color: var(--dusk);
+}
+
+.fondateur-sortie__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: clamp(1.75rem, 4vh, 2.5rem);
+}
+
+/* Le second chemin, sous le premier : une phrase, puis le bouton contact. */
+.fondateur-sortie__direct {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  margin-top: clamp(1.75rem, 4vh, 2.5rem);
+}
+
+.fondateur-sortie__direct-texte {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--dusk);
+}
+
+/* ============================================================
+   LES AMBIANCES
+   ------------------------------------------------------------
+   Chaque section a sa lumière, tirée de ce qu'elle raconte, et
+   la page alterne l'ombre et l'éclairé comme l'accueil :
+
+   Parcours    la trame du plan, sous la frise, et une lueur
+               violette au bout du fil, sur Oysen
+   Savoirs     la lueur de la salle par le haut ; les cartes
+               éclairées d'en haut, l'arête déjà allumée
+   Leçons      le moment fort : un cran plus clair, la lueur
+               violette derrière la grande leçon, un grand
+               guillemet au trait lavande en fond
+   Événement   une poursuite tombe du haut sur le récit
+   Blog        un cran plus clair, cartes éclairées d'en haut
+   Appel       la rampe violette par le bas, comme l'accueil
+
+   Les sections plus claires s'ouvrent sur un voile de lumière,
+   jamais sur un gris. Tout ce qui décore est posé sous le
+   contenu (z-index -1, dans la section isolée).
+   ============================================================ */
+
+.section--fondateur {
+  isolation: isolate;
+}
+
+.section--fondateur-parcours::before,
+.section--fondateur-lecons::before,
+.section--fondateur-marquant::before {
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* ---- Parcours : le plan sous la frise ---- */
+
+.section.section--fondateur-parcours {
+  background-image: radial-gradient(
+    34% 48% at 86% 55%,
+    color-mix(in srgb, var(--oysen-purple) 30%, transparent),
+    transparent 72%
+  );
+}
+
+.section--fondateur-parcours::before {
+  --fin: color-mix(in srgb, var(--charte-gris) 26%, transparent);
+  --maitre: color-mix(in srgb, var(--charte-gris) 55%, transparent);
+  content: '';
+  inset: 0;
+  background-image:
+    linear-gradient(to right, var(--maitre) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--maitre) 1px, transparent 1px),
+    linear-gradient(to right, var(--fin) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--fin) 1px, transparent 1px);
+  background-size:
+    12.5rem 12.5rem,
+    12.5rem 12.5rem,
+    2.5rem 2.5rem,
+    2.5rem 2.5rem;
+  background-position: 50% 50%;
+  -webkit-mask-image: radial-gradient(
+    62% 58% at 50% 58%,
+    #000 15%,
+    transparent 78%
+  );
+  mask-image: radial-gradient(62% 58% at 50% 58%, #000 15%, transparent 78%);
+  opacity: 0.45;
+}
+
+/* ---- Savoirs : la salle éclairée par le haut ---- */
+
+.section.section--fondateur-savoirs {
+  border-top: 1px solid var(--night-veil);
+  background-image: radial-gradient(
+    85% 60% at 22% -12%,
+    color-mix(in srgb, var(--oysen-purple) 30%, transparent),
+    transparent 62%
+  );
+}
+
+.savoir {
+  border-color: var(--night-veil);
+  background-color: color-mix(in srgb, var(--night-raised) 85%, transparent);
+  background-image: radial-gradient(
+    90% 70% at 50% 0%,
+    color-mix(in srgb, var(--beam) 9%, transparent),
+    transparent 72%
+  );
+}
+
+/* L'arête haute est déjà allumée ; le survol la pousse à fond. */
+.savoir::before {
+  opacity: 0.35;
+}
+
+/* ---- Leçons : le moment fort ---- */
+
+.section.section--fondateur-lecons {
+  overflow: hidden;
+  background-color: #181520;
+  border-block: 1px solid var(--night-veil);
+  background-image:
+    radial-gradient(
+      55% 85% at 18% 50%,
+      color-mix(in srgb, var(--oysen-purple) 36%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      120% 100% at 50% 50%,
+      transparent 55%,
+      color-mix(in srgb, #07030b 45%, transparent)
+    );
+}
+
+/* Le grand guillemet, au trait, derrière la première leçon. */
+.section--fondateur-lecons::before {
+  content: '«';
+  top: 50%;
+  left: max(var(--pad), calc((100% - 100rem) / 2));
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  font-size: clamp(16rem, 28vw, 32rem);
+  line-height: 0.8;
+  color: transparent;
+  -webkit-text-stroke: 1px color-mix(in srgb, var(--beam) 24%, transparent);
+  transform: translate(-12%, -46%);
+}
+
+.lecon-une p {
+  text-shadow: 0 0 2.4rem color-mix(in srgb, var(--beam) 22%, transparent);
+}
+
+.lecons,
+.lecons li {
+  border-color: var(--night-veil);
+}
+
+/* ---- Événement : une poursuite sur le récit ---- */
+
+.section.section--fondateur-marquant {
+  overflow: hidden;
+  border-top: 1px solid var(--night-veil);
+}
+
+.section--fondateur-marquant::before {
+  content: '';
+  top: -6%;
+  left: 50%;
+  width: min(80rem, 110vw);
+  height: 112%;
+  transform: translateX(-50%);
+  /* Étroit à la lampe, ouvert au sol : les projecteurs du site. */
+  clip-path: polygon(46% 0, 54% 0, 100% 100%, 0 100%);
+  background-image: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--beam) 13%, transparent),
+    color-mix(in srgb, var(--beam) 5%, transparent) 50%,
+    transparent 88%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 4%,
+    #000 34%,
+    #000 66%,
+    transparent 96%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 4%,
+    #000 34%,
+    #000 66%,
+    transparent 96%
+  );
+  filter: blur(8px);
+}
+
+/* ---- Blog : un cran plus clair ---- */
+
+.section.section--fondateur-articles {
+  background-color: #181520;
+  border-top: 1px solid var(--night-veil);
+}
+
+.article {
+  border-color: var(--night-veil);
+  background-color: #14111a;
+  background-image: radial-gradient(
+    90% 70% at 50% 0%,
+    color-mix(in srgb, var(--beam) 8%, transparent),
+    transparent 72%
+  );
+}
+
+/* Sur téléphone, le guillemet se range en haut à gauche, plus petit. */
+@media (max-width: 760px) {
+  .section--fondateur-lecons::before {
+    top: 1rem;
+    font-size: 12rem;
+    transform: translateX(-8%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fondateur-hero__texte > *,
+  .fondateur-hero__portrait,
+  .fondateur-hero__projecteurs,
+  .fondateur-hero__plan {
+    animation: none;
+  }
+
+  .savoir,
+  .savoir::before,
+  .lien-fleche__icone,
+  .article,
+  .article__fleche {
+    transition: none;
+  }
+}
+
+/* ---- Tablette ----
+   Les têtes s'empilent, les compositions en regard passent sur une
+   colonne ; les savoir-faire vont deux par deux. */
+
+@media (max-width: 1023px) {
+  .fondateur-tete,
+  .intro-fondateur,
+  .lecons-grille {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .fondateur-tete__cote {
+    justify-items: start;
+    text-align: left;
+  }
+
+  .savoirs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .savoir,
+  .savoir:nth-child(n + 4) {
+    grid-column: span 1;
+  }
+
+  .savoir:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .temps,
+  .articles {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .articles {
+    max-width: 38rem;
+  }
+
+  .article {
+    min-height: 0;
+  }
+}
+
+/* ---- Téléphone ----
+   Le texte passe au-dessus du buste, centré. */
+
+@media (max-width: 760px) {
+  .fondateur-page {
+    --corps-w: min(72vw, 20rem);
+  }
+
+  .fondateur-hero {
+    min-height: 0;
+    padding-top: 2rem;
+  }
+
+  .fondateur-hero__scene {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 2rem;
+    text-align: center;
+  }
+
+  .fondateur-hero__texte {
+    padding-bottom: 0;
+  }
+
+  .fondateur-hero .fondateur-hero__surtitre {
+    margin-inline: auto;
+  }
+
+  .fondateur-hero__nom {
+    font-size: clamp(2.5rem, 12vw, 3.5rem);
+  }
+
+  /* Centrée, la citation se passe de son filet. */
+  .fondateur-hero__citation {
+    margin-inline: auto;
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .fondateur-hero__portrait {
+    justify-self: center;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Centrée, la couture couperait l'écran en deux, texte compris. */
+  .fondateur-hero__portrait::before {
+    display: none;
+  }
+
+  /*
+   * Le buste est centré sous le texte : la lueur revient au milieu. Les
+   * projecteurs reprennent exactement ceux du hero de l'accueil
+   * (.hero__lights, app.css) : trois faisceaux depuis le haut, au centre,
+   * aux mêmes angles, sur toute la hauteur du hero.
+   */
+  .fondateur-hero__decor {
+    background-image: radial-gradient(
+      45% 30% at 50% calc(100% - var(--fondu) - 4rem),
+      color-mix(in srgb, var(--oysen-purple) 34%, transparent),
+      transparent 72%
+    );
+  }
+
+  .fondateur-hero__projecteurs {
+    inset: 0 0 var(--fondu);
+  }
+
+  .fondateur-hero__projecteurs i {
+    top: -14%;
+    left: 50%;
+    width: 42vmax;
+    height: 125%;
+    background-image: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--beam) 17%, transparent),
+      color-mix(in srgb, var(--beam) 6%, transparent) 40%,
+      transparent 78%
+    );
+  }
+
+  .fondateur-hero__projecteurs i:nth-child(1) {
+    transform: translateX(-50%) rotate(-27deg);
+  }
+
+  .fondateur-hero__projecteurs i:nth-child(2) {
+    left: 50%;
+    transform: translateX(-50%) rotate(1deg);
+    opacity: 0.75;
+  }
+
+  .fondateur-hero__projecteurs i:nth-child(3) {
+    display: block;
+    transform: translateX(-50%) rotate(25deg);
+  }
+}
+
+
+/* ---- Téléphone : le récit ----
+   Tout passe sur une colonne. */
+
+@media (max-width: 760px) {
+  .reperes,
+  .savoirs,
+  .fiche {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .repere,
+  .repere + .repere {
+    padding: 1.25rem 0 0;
+    border-left: 0;
+  }
+
+  .fiche__case + .fiche__case {
+    border-top: 1px solid var(--trait-doux);
+    border-left: 0;
+  }
+
+  .savoir:last-child {
+    grid-column: auto;
+  }
+
+  .savoir {
+    min-height: 0;
+  }
+}
+
+/* Le titre de l'expertise, long, tient sur une ligne sur ordinateur : il
+   se règle sur la largeur de l'écran pour ne jamais déborder. */
+@media (min-width: 1024px) {
+  .section--fondateur-savoirs .fondateur-tete .section__title {
+    max-width: none;
+    font-size: clamp(1.9rem, 2.5vw, 3rem);
+    white-space: nowrap;
+  }
+}
+
+/* Parcours et expertise : pas d'accompagnement à droite, la tête se
+   centre (surtitre et titre). */
+.section--fondateur-parcours .fondateur-tete,
+.section--fondateur-savoirs .fondateur-tete {
+  grid-template-columns: minmax(0, 1fr);
+  text-align: center;
+}
+
+.section--fondateur-parcours .fondateur-tete .section__title,
+.section--fondateur-savoirs .fondateur-tete .section__title {
+  margin-inline: auto;
+}
+
+/* ---- Les cartes de l'expertise ----
+   Chaque carte est un petit plateau sous un projecteur, placé à un
+   endroit différent d'une carte à l'autre. Le pictogramme du métier
+   brille. La bordure est éclairée
+   par le haut et s'éteint en descendant, au lieu d'un cadre uniforme.
+   Au survol, le projecteur monte : le cône, le pictogramme, l'arête. */
+
+.savoir {
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid transparent;
+  background:
+    radial-gradient(
+        70% 80% at var(--x) var(--y),
+        color-mix(in srgb, var(--beam) 13%, transparent),
+        transparent 65%
+      )
+      padding-box,
+    linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--night-raised) 92%, var(--beam)),
+        var(--night-raised) 55%,
+        color-mix(in srgb, var(--night) 60%, var(--night-raised))
+      )
+      padding-box,
+    linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--beam) 50%, transparent),
+        var(--night-veil) 35%,
+        color-mix(in srgb, var(--charte-gris) 55%, transparent)
+      )
+      border-box;
+  box-shadow: 0 1.5rem 3rem -2rem rgba(0, 0, 0, 0.7);
+  transition:
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
+}
+
+/*
+ * Le faisceau de chaque carte. Un dégradé conique centré sur la source :
+ * le cône est net par construction, sans flou ni rotation, et ses bords
+ * s'adoucissent d'eux-mêmes (le lavande monte puis redescend sur la
+ * largeur du cône). Un masque radial l'éteint avec la distance, et une
+ * petite lueur marque la lampe.
+ *
+ * Chaque carte a sa source (--x, --y), sa direction (--dir, 0deg vers le
+ * haut, sens horaire) et son ouverture (--ouv, la moitié du cône).
+ */
+.savoir {
+  --x: 100%;
+  --y: 0%;
+  --dir: 225deg;
+  --ouv: 13deg;
+}
+
+/* Repérage : du coin haut droit, vers le bas à gauche. */
+.savoir:nth-child(1) {
+  --x: 100%;
+  --y: 0%;
+  --dir: 232deg;
+}
+
+/* Son : du coin haut gauche, vers le bas à droite. */
+.savoir:nth-child(2) {
+  --x: 0%;
+  --y: 0%;
+  --dir: 138deg;
+}
+
+/* Lumière : du haut, au centre, droit vers le sol. */
+.savoir:nth-child(3) {
+  --x: 50%;
+  --y: 0%;
+  --dir: 180deg;
+  --ouv: 11deg;
+}
+
+/* Structure : du bord gauche, en rasant vers la droite. */
+.savoir:nth-child(4) {
+  --x: 0%;
+  --y: 22%;
+  --dir: 104deg;
+  --ouv: 10deg;
+}
+
+/* Régie : du coin bas droit, vers le haut, comme un pied de scène. */
+.savoir:nth-child(5) {
+  --x: 100%;
+  --y: 100%;
+  --dir: 300deg;
+  --ouv: 12deg;
+}
+
+.savoir::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    radial-gradient(
+      circle at var(--x) var(--y),
+      color-mix(in srgb, var(--beam) 32%, transparent),
+      transparent 4.5rem
+    ),
+    conic-gradient(
+      from calc(var(--dir) - var(--ouv)) at var(--x) var(--y),
+      transparent 0deg,
+      color-mix(in srgb, var(--beam) 7%, transparent) calc(var(--ouv) * 0.45),
+      color-mix(in srgb, var(--beam) 17%, transparent) var(--ouv),
+      color-mix(in srgb, var(--beam) 7%, transparent) calc(var(--ouv) * 1.55),
+      transparent calc(var(--ouv) * 2),
+      transparent 360deg
+    );
+  -webkit-mask-image: radial-gradient(
+    circle at var(--x) var(--y),
+    #000 10%,
+    transparent 95%
+  );
+  mask-image: radial-gradient(
+    circle at var(--x) var(--y),
+    #000 10%,
+    transparent 95%
+  );
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.savoir__tete {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.savoir__picto {
+  flex: none;
+  width: clamp(3rem, 3.6vw, 3.75rem);
+  height: clamp(3rem, 3.6vw, 3.75rem);
+  color: var(--beam);
+  filter: drop-shadow(
+    0 0 0.45rem color-mix(in srgb, var(--beam) 45%, transparent)
+  );
+  opacity: 0.85;
+  transition:
+    opacity 0.3s ease,
+    filter 0.3s ease;
+}
+
+/* Le texte sous un filet court, amorcé en lavande. */
+.savoir__texte {
+  background-image:
+    linear-gradient(var(--beam), var(--beam)),
+    linear-gradient(var(--night-veil), var(--night-veil));
+  background-repeat: no-repeat;
+  background-size:
+    2.25rem 1px,
+    100% 1px;
+  background-position: 0 0;
+  padding-top: 1.25rem;
+}
+
+.savoir:hover {
+  box-shadow:
+    0 1.5rem 3rem -2rem rgba(0, 0, 0, 0.7),
+    0 0 2.5rem -1rem color-mix(in srgb, var(--beam) 30%, transparent);
+}
+
+.savoir:hover::after {
+  opacity: 1;
+}
+
+.savoir:hover .savoir__picto {
+  opacity: 1;
+  filter: drop-shadow(
+    0 0 0.8rem color-mix(in srgb, var(--beam) 70%, transparent)
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .savoir::after,
+  .savoir__picto {
+    transition: none;
+  }
+}
+
+/* La carte rogne son cône : l'arête allumée au survol passe à l'intérieur. */
+.savoir::before {
+  top: 0;
+  right: 0;
+  left: 0;
+}
+
+/* Blog : la tête se centre ; le lien vers tous les articles passe sous
+   les cartes, centré. */
+.section--fondateur-articles .fondateur-tete {
+  grid-template-columns: minmax(0, 1fr);
+  text-align: center;
+}
+
+.section--fondateur-articles .fondateur-tete .section__title {
+  margin-inline: auto;
+}
+
+.articles__tous {
+  margin: clamp(2rem, 5vh, 3rem) 0 0;
+  text-align: center;
+}
+
+/* ---- La fiche de l'événement, éclairée ----
+   Le même traitement que les cartes de l'expertise : la bordure
+   éclairée par le haut, qui s'éteint en descendant ; un projecteur
+   dans la fiche, du coin haut gauche vers la droite, avec sa lueur
+   sur la lampe et une brillance douce autour ; une ombre portée. */
+
+.fiche {
+  --x: 0%;
+  --y: 0%;
+  --dir: 118deg;
+  --ouv: 11deg;
+  position: relative;
+  isolation: isolate;
+  border: 1px solid transparent;
+  background:
+    radial-gradient(
+        70% 90% at var(--x) var(--y),
+        color-mix(in srgb, var(--beam) 12%, transparent),
+        transparent 65%
+      )
+      padding-box,
+    linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--night-raised) 92%, var(--beam)),
+        var(--night-raised) 55%,
+        color-mix(in srgb, var(--night) 60%, var(--night-raised))
+      )
+      padding-box,
+    linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--beam) 50%, transparent),
+        var(--night-veil) 45%,
+        color-mix(in srgb, var(--charte-gris) 55%, transparent)
+      )
+      border-box;
+  box-shadow: 0 1.5rem 3rem -2rem rgba(0, 0, 0, 0.7);
+}
+
+.fiche::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    radial-gradient(
+      circle at var(--x) var(--y),
+      color-mix(in srgb, var(--beam) 30%, transparent),
+      transparent 4rem
+    ),
+    conic-gradient(
+      from calc(var(--dir) - var(--ouv)) at var(--x) var(--y),
+      transparent 0deg,
+      color-mix(in srgb, var(--beam) 7%, transparent) calc(var(--ouv) * 0.45),
+      color-mix(in srgb, var(--beam) 16%, transparent) var(--ouv),
+      color-mix(in srgb, var(--beam) 7%, transparent) calc(var(--ouv) * 1.55),
+      transparent calc(var(--ouv) * 2),
+      transparent 360deg
+    );
+  -webkit-mask-image: radial-gradient(
+    circle at var(--x) var(--y),
+    #000 10%,
+    transparent 95%
+  );
+  mask-image: radial-gradient(
+    circle at var(--x) var(--y),
+    #000 10%,
+    transparent 95%
+  );
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+/* ---- Téléphone : hero et introduction resserrés ----
+   L'accroche de l'introduction disparaît. Dans le hero, la citation
+   passe sous le portrait : le bloc de texte s'efface (display: contents)
+   pour que ses lignes se rangent directement dans la scène, et l'ordre
+   place la citation après la photo. */
+
+@media (max-width: 760px) {
+  .intro-fondateur__accroche {
+    display: none;
+  }
+
+  .fondateur-hero__scene {
+    row-gap: 0;
+  }
+
+  .fondateur-hero__texte {
+    display: contents;
+  }
+
+  .fondateur-hero__portrait {
+    order: 1;
+    margin: 2rem 0 0;
+  }
+
+  .fondateur-hero__citation {
+    order: 2;
+    margin: 1.5rem auto 2.5rem;
+  }
+}
+
+/* Téléphone : l'introduction et ses trois repères se centrent. Centré,
+   le paragraphe se passe de son filet lavande. */
+@media (max-width: 760px) {
+  .intro-fondateur__texte {
+    padding-left: 0;
+    border-left: 0;
+    text-align: center;
+  }
+
+  .reperes {
+    text-align: center;
+  }
+
+  .repere {
+    justify-items: center;
+  }
+}
+
+/*
+ * Téléphone : les trois repères se tiennent à égale distance du filet
+ * qui les ouvre et du début de la section suivante. L'introduction perd
+ * son pied, et le vide sous le filet reprend exactement le haut de la
+ * section suivante (la trame commune des sections, home.css).
+ */
+@media (max-width: 760px) {
+  .section.section--fondateur-intro {
+    padding-bottom: 0;
+  }
+
+  .reperes {
+    padding-top: clamp(4.5rem, 11vh, 8rem);
+  }
+
+  .reperes .repere:first-child {
+    padding-top: 0;
+  }
+}
+
+/* ---- Parcours : la tête dans une carte légère ----
+   Pas de fond : seulement ce qui fait briller les cartes de la page, la
+   bordure éclairée par le haut qui s'éteint en descendant, un faisceau
+   du coin haut gauche avec sa lueur sur la lampe, et la brillance douce
+   autour. La carte épouse sa tête, centrée ; le filet sous la tête
+   disparaît, la carte le remplace. Sur téléphone seulement. */
+
+@media (max-width: 760px) {
+  .section--fondateur-parcours .fondateur-tete {
+    --x: 0%;
+    --y: 0%;
+    --dir: 118deg;
+    --ouv: 11deg;
+    position: relative;
+    isolation: isolate;
+    width: fit-content;
+    max-width: 100%;
+    margin-inline: auto;
+    padding: clamp(1.5rem, 3.5vh, 2.25rem) clamp(2rem, 5vw, 4rem);
+    border-bottom: 0;
+    background-image: radial-gradient(
+      70% 90% at var(--x) var(--y),
+      color-mix(in srgb, var(--beam) 10%, transparent),
+      transparent 65%
+    );
+  }
+
+  /* La bordure, dessinée seule : un cadre d'un pixel en dégradé, découpé
+     par un double masque, sans rien peindre à l'intérieur. */
+  .section--fondateur-parcours .fondateur-tete::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    background-image: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--beam) 50%, transparent),
+      var(--night-veil) 45%,
+      color-mix(in srgb, var(--charte-gris) 40%, transparent)
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#000 0 0) content-box exclude,
+      linear-gradient(#000 0 0);
+    pointer-events: none;
+  }
+
+  /* Le faisceau. */
+  .section--fondateur-parcours .fondateur-tete::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image:
+      radial-gradient(
+        circle at var(--x) var(--y),
+        color-mix(in srgb, var(--beam) 30%, transparent),
+        transparent 4rem
+      ),
+      conic-gradient(
+        from calc(var(--dir) - var(--ouv)) at var(--x) var(--y),
+        transparent 0deg,
+        color-mix(in srgb, var(--beam) 7%, transparent) calc(var(--ouv) * 0.45),
+        color-mix(in srgb, var(--beam) 16%, transparent) var(--ouv),
+        color-mix(in srgb, var(--beam) 7%, transparent) calc(var(--ouv) * 1.55),
+        transparent calc(var(--ouv) * 2),
+        transparent 360deg
+      );
+    -webkit-mask-image: radial-gradient(
+      circle at var(--x) var(--y),
+      #000 10%,
+      transparent 95%
+    );
+    mask-image: radial-gradient(
+      circle at var(--x) var(--y),
+      #000 10%,
+      transparent 95%
+    );
+    opacity: 0.8;
+    pointer-events: none;
+  }
+}
+
+/* Téléphone : « Retours de terrain » se centre, tête et leçons, et le
+   grand guillemet de fond disparaît. */
+@media (max-width: 760px) {
+  .section--fondateur-lecons::before {
+    display: none;
+  }
+
+  .section--fondateur-lecons .fondateur-tete,
+  .lecon-une,
+  .lecons {
+    text-align: center;
+  }
+
+  .section--fondateur-lecons .fondateur-tete .section__title {
+    margin-inline: auto;
+  }
+}
+
+/* Téléphone : « Sur le terrain » se centre, tête et fiche. */
+@media (max-width: 760px) {
+  .section--fondateur-marquant .fondateur-tete {
+    text-align: center;
+  }
+
+  .section--fondateur-marquant .fondateur-tete .section__title {
+    margin-inline: auto;
+  }
+
+  .section--fondateur-marquant .fondateur-tete__cote {
+    justify-items: center;
+  }
+
+  .fiche {
+    width: 100%;
+    text-align: center;
+  }
+}

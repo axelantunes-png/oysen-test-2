@@ -19,6 +19,8 @@ const SECTIONS_CASCADE = [
   '.section--appel',
   /* Toute la page « L'agence » : ses sections portent la même classe. */
   '.section--agence',
+  /* Le récit de la page « Le fondateur », sous son hero. */
+  '.section--fondateur',
 ]
 
 /**
@@ -92,6 +94,26 @@ const CASCADE = [
   '.fondateur__portrait',
   '.fondateur__texte',
   '.agence__actions',
+  /*
+   * « Le fondateur » : ce qui accompagne chaque tête de section, les deux
+   * paragraphes de l'introduction et ses repères, chaque étape de la
+   * frise, chaque savoir-faire, les leçons, les trois temps de
+   * l'événement, les articles, puis l'appel.
+   */
+  '.fondateur-tete__cote',
+  '.intro-fondateur > p',
+  '.reperes > li',
+  '.jalon',
+  '.savoir',
+  '.lecon-une',
+  '.lecons > li',
+  '.temps__bloc',
+  '.marquant__lien',
+  '.articles > li',
+  '.articles__tous',
+  '.fondateur-sortie__lede',
+  '.fondateur-sortie__actions',
+  '.fondateur-sortie__direct',
 ].join(', ')
 
 /** La classe que porte tout élément qui attend son entrée (voir app.css). */
@@ -128,6 +150,22 @@ const PAS_CASCADE = 90
  * avertissement en console qu'une page sans apparition.
  */
 const MAX_ATTENTE = 120
+
+/*
+ * La fin de la levée du rideau (Rideau.tsx, .stage dans app.css). On attend
+ * ses propres animations plutôt qu'une durée calculée : le rideau ne part
+ * qu'une fois la feuille de style appliquée, parfois des secondes après le
+ * début du chargement. Sans rideau (arrivée depuis une autre page du site),
+ * il n'a pas d'animation : la promesse est tenue tout de suite.
+ */
+function leveeDuRideau() {
+  const rideau = document.querySelector('.stage')
+  const animations = rideau ? rideau.getAnimations() : []
+
+  return Promise.all(
+    animations.map((animation) => animation.finished.catch(() => undefined)),
+  )
+}
 
 function estRepris(element: Element) {
   return Object.keys(element).some((cle) => cle.startsWith('__reactFiber$'))
@@ -244,8 +282,22 @@ function observer(racine: HTMLElement, suivis: NodeListOf<HTMLElement>) {
 
   for (const element of suivis) {
     element.classList.add(MARQUE)
-    observateur.observe(element)
   }
+
+  /*
+   * L'observation, elle, attend que le rideau soit levé. Ce qui est déjà à
+   * l'écran au chargement (sous un hero moins haut que l'écran, sur « Le
+   * fondateur ») entrerait sinon sous le rideau, sans qu'on le voie. Si la
+   * page a été quittée entre-temps, le nettoyage a retiré l'attribut : on
+   * n'observe plus rien.
+   */
+  void leveeDuRideau().then(() => {
+    if (!racine.dataset.apparition) return
+
+    for (const element of suivis) {
+      observateur.observe(element)
+    }
+  })
 
   return observateur
 }

@@ -12,7 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ContactIndexRouteImport } from './routes/contact/index'
 import { Route as ContactMerciRouteImport } from './routes/contact/merci'
+import { Route as NosServicesIndexRouteImport } from './routes/nos-services/index'
 import { Route as QuiSommesNousLAgenceRouteImport } from './routes/qui-sommes-nous/l-agence'
+import { Route as QuiSommesNousLeFondateurRouteImport } from './routes/qui-sommes-nous/le-fondateur'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -29,49 +31,82 @@ const ContactMerciRoute = ContactMerciRouteImport.update({
   path: '/contact/merci',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NosServicesIndexRoute = NosServicesIndexRouteImport.update({
+  id: '/nos-services/',
+  path: '/nos-services/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const QuiSommesNousLAgenceRoute = QuiSommesNousLAgenceRouteImport.update({
   id: '/qui-sommes-nous/l-agence',
   path: '/qui-sommes-nous/l-agence',
   getParentRoute: () => rootRouteImport,
 } as any)
+const QuiSommesNousLeFondateurRoute =
+  QuiSommesNousLeFondateurRouteImport.update({
+    id: '/qui-sommes-nous/le-fondateur',
+    path: '/qui-sommes-nous/le-fondateur',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/contact/merci': typeof ContactMerciRoute
   '/qui-sommes-nous/l-agence': typeof QuiSommesNousLAgenceRoute
+  '/qui-sommes-nous/le-fondateur': typeof QuiSommesNousLeFondateurRoute
   '/contact/': typeof ContactIndexRoute
+  '/nos-services/': typeof NosServicesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/contact/merci': typeof ContactMerciRoute
   '/qui-sommes-nous/l-agence': typeof QuiSommesNousLAgenceRoute
+  '/qui-sommes-nous/le-fondateur': typeof QuiSommesNousLeFondateurRoute
   '/contact': typeof ContactIndexRoute
+  '/nos-services': typeof NosServicesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/contact/merci': typeof ContactMerciRoute
   '/qui-sommes-nous/l-agence': typeof QuiSommesNousLAgenceRoute
+  '/qui-sommes-nous/le-fondateur': typeof QuiSommesNousLeFondateurRoute
   '/contact/': typeof ContactIndexRoute
+  '/nos-services/': typeof NosServicesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/contact/merci' | '/qui-sommes-nous/l-agence' | '/contact/'
+  fullPaths:
+    | '/'
+    | '/contact/merci'
+    | '/qui-sommes-nous/l-agence'
+    | '/qui-sommes-nous/le-fondateur'
+    | '/contact/'
+    | '/nos-services/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/contact/merci' | '/qui-sommes-nous/l-agence' | '/contact'
+  to:
+    | '/'
+    | '/contact/merci'
+    | '/qui-sommes-nous/l-agence'
+    | '/qui-sommes-nous/le-fondateur'
+    | '/contact'
+    | '/nos-services'
   id:
     | '__root__'
     | '/'
     | '/contact/merci'
     | '/qui-sommes-nous/l-agence'
+    | '/qui-sommes-nous/le-fondateur'
     | '/contact/'
+    | '/nos-services/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ContactMerciRoute: typeof ContactMerciRoute
   QuiSommesNousLAgenceRoute: typeof QuiSommesNousLAgenceRoute
+  QuiSommesNousLeFondateurRoute: typeof QuiSommesNousLeFondateurRoute
   ContactIndexRoute: typeof ContactIndexRoute
+  NosServicesIndexRoute: typeof NosServicesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -97,11 +132,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactMerciRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/nos-services/': {
+      id: '/nos-services/'
+      path: '/nos-services'
+      fullPath: '/nos-services/'
+      preLoaderRoute: typeof NosServicesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/qui-sommes-nous/l-agence': {
       id: '/qui-sommes-nous/l-agence'
       path: '/qui-sommes-nous/l-agence'
       fullPath: '/qui-sommes-nous/l-agence'
       preLoaderRoute: typeof QuiSommesNousLAgenceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/qui-sommes-nous/le-fondateur': {
+      id: '/qui-sommes-nous/le-fondateur'
+      path: '/qui-sommes-nous/le-fondateur'
+      fullPath: '/qui-sommes-nous/le-fondateur'
+      preLoaderRoute: typeof QuiSommesNousLeFondateurRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -111,7 +160,9 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ContactMerciRoute: ContactMerciRoute,
   QuiSommesNousLAgenceRoute: QuiSommesNousLAgenceRoute,
+  QuiSommesNousLeFondateurRoute: QuiSommesNousLeFondateurRoute,
   ContactIndexRoute: ContactIndexRoute,
+  NosServicesIndexRoute: NosServicesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -29,7 +29,7 @@ export const EN_BREF: readonly Bref[] = [
   {
     nom: 'Parc matériel en propre',
     texte:
-      'Sonorisation jusqu’à 400 personnes, éclairage, structure, écran LED. Et les techniciens avec.',
+      'Sonorisation jusqu’à 1500 personnes, éclairage, structure, écran LED. Et les techniciens avec.',
   },
   {
     nom: `RC pro ${RC_PRO}`,
@@ -52,7 +52,7 @@ export type Poste = {
 }
 
 export const LEGENDE: readonly Poste[] = [
-  { repere: '01', nom: 'Son', source: 'jusqu’à 400 personnes, parc Oysen' },
+  { repere: '01', nom: 'Son', source: 'jusqu’à 1500 personnes, parc Oysen' },
   { repere: '02', nom: 'Lumière', source: 'parc Oysen' },
   { repere: '03', nom: 'Scène et structure', source: 'parc Oysen' },
   { repere: '04', nom: 'Écran LED', source: 'parc Oysen' },

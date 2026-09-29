@@ -1767,3 +1767,259 @@
     display: none;
   }
 }
+
+/* ---- S3 · Les balises, éclairées ----
+   Le même traitement que les cartes d'expertise de « Le fondateur »,
+   dans les couleurs d'origine des balises (le fond #15111b, le contour
+   au gris de la charte, le lavande des pictogrammes).
+
+   Le contour gris reste en place, les quatre colonnes forment toujours
+   un seul panneau. Par-dessus, une arête lavande qui s'éteint en
+   descendant : la bordure est éclairée par le haut. Dans chaque balise,
+   un petit projecteur, placé à un endroit différent d'une balise à
+   l'autre : un cône net (dégradé conique centré sur la source), éteint
+   avec la distance, une lueur sur la lampe et une brillance douce dans
+   le fond autour d'elle. Au survol, le projecteur monte. */
+
+.balise {
+  /* La source (--x, --y), la direction (--dir, 0deg vers le haut, sens
+     horaire) et la demi-ouverture du cône (--ouv). */
+  --x: 0%;
+  --y: 0%;
+  --dir: 138deg;
+  --ouv: 13deg;
+  position: relative;
+  isolation: isolate;
+  background-image: radial-gradient(
+    70% 80% at var(--x) var(--y),
+    color-mix(in srgb, var(--beam) 10%, transparent),
+    transparent 65%
+  );
+}
+
+/* Les prestataires : du coin haut gauche, vers le bas à droite. */
+.balise:nth-child(1) {
+  --x: 0%;
+  --y: 0%;
+  --dir: 145deg;
+}
+
+/* Le lieu : du coin haut droit, vers le bas à gauche. */
+.balise:nth-child(2) {
+  --x: 100%;
+  --y: 0%;
+  --dir: 215deg;
+}
+
+/* Le budget : du haut, au centre, droit vers le bas. */
+.balise:nth-child(3) {
+  --x: 50%;
+  --y: 0%;
+  --dir: 180deg;
+  --ouv: 11deg;
+}
+
+/* La réglementation : du coin bas droit, vers le haut. */
+.balise:nth-child(4) {
+  --x: 100%;
+  --y: 100%;
+  --dir: 325deg;
+  --ouv: 12deg;
+}
+
+/* L'arête éclairée, posée sur le contour gris : un cadre d'un pixel en
+   dégradé, découpé par un double masque. */
+.balise::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  padding: 1px;
+  background-image: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--beam) 50%, transparent),
+    var(--night-veil) 35%,
+    transparent 75%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+  pointer-events: none;
+}
+
+/* Le faisceau. */
+.balise::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    radial-gradient(
+      circle at var(--x) var(--y),
+      color-mix(in srgb, var(--beam) 30%, transparent),
+      transparent 4.5rem
+    ),
+    conic-gradient(
+      from calc(var(--dir) - var(--ouv)) at var(--x) var(--y),
+      transparent 0deg,
+      color-mix(in srgb, var(--beam) 7%, transparent) calc(var(--ouv) * 0.45),
+      color-mix(in srgb, var(--beam) 16%, transparent) var(--ouv),
+      color-mix(in srgb, var(--beam) 7%, transparent) calc(var(--ouv) * 1.55),
+      transparent calc(var(--ouv) * 2),
+      transparent 360deg
+    );
+  -webkit-mask-image: radial-gradient(
+    circle at var(--x) var(--y),
+    #000 10%,
+    transparent 95%
+  );
+  mask-image: radial-gradient(
+    circle at var(--x) var(--y),
+    #000 10%,
+    transparent 95%
+  );
+  opacity: 0.8;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.balise:hover::after {
+  opacity: 1;
+}
+
+/* Le panneau se détache du fond noir de la section. */
+.balises {
+  box-shadow: 0 2rem 4rem -2.5rem rgba(0, 0, 0, 0.8);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .balise::after {
+    transition: none;
+  }
+}
+
+/* ---- S6 · Les cartes de la méthode, éclairées ----
+   Le même traitement que les cartes d'expertise de « Le fondateur »,
+   dans les couleurs d'origine des cartes (le fond --night-raised, le
+   contour au gris de la charte, le lavande des intitulés).
+
+   La bordure est éclairée par le haut et s'éteint en descendant vers
+   le gris d'origine. Dans chaque carte, un petit projecteur placé au
+   coin extérieur de la grille : les quatre faisceaux convergent vers
+   le centre des deux rangées. Un cône net (dégradé conique centré sur
+   la source), éteint avec la distance, une lueur sur la lampe et une
+   brillance douce dans le fond autour d'elle. Au survol, le projecteur
+   monte et la carte prend un halo lavande. */
+
+.methode__carte {
+  /* La source (--x, --y), la direction (--dir, 0deg vers le haut, sens
+     horaire) et la demi-ouverture du cône (--ouv). */
+  --x: 0%;
+  --y: 0%;
+  --dir: 135deg;
+  --ouv: 13deg;
+  position: relative;
+  isolation: isolate;
+  border: 1px solid transparent;
+  background:
+    radial-gradient(
+        70% 80% at var(--x) var(--y),
+        color-mix(in srgb, var(--beam) 10%, transparent),
+        transparent 65%
+      )
+      padding-box,
+    linear-gradient(var(--night-raised), var(--night-raised)) padding-box,
+    linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--beam) 50%, transparent),
+        var(--night-veil) 35%,
+        var(--trait)
+      )
+      border-box;
+  box-shadow: 0 1.5rem 3rem -2rem rgba(0, 0, 0, 0.7);
+  transition: box-shadow 0.3s ease;
+}
+
+/* 1 · Cadrage : du coin haut gauche. */
+.methode__carte:nth-child(1) {
+  --x: 0%;
+  --y: 0%;
+  --dir: 128deg;
+}
+
+/* 2 · Sourcing : du coin haut droit. */
+.methode__carte:nth-child(2) {
+  --x: 100%;
+  --y: 0%;
+  --dir: 232deg;
+}
+
+/* 3 · Production : du coin bas gauche, vers le haut. */
+.methode__carte:nth-child(3) {
+  --x: 0%;
+  --y: 100%;
+  --dir: 52deg;
+}
+
+/* 4 · Régie : du coin bas droit, vers le haut. */
+.methode__carte:nth-child(4) {
+  --x: 100%;
+  --y: 100%;
+  --dir: 308deg;
+}
+
+/* Le faisceau. */
+.methode__carte::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    radial-gradient(
+      circle at var(--x) var(--y),
+      color-mix(in srgb, var(--beam) 30%, transparent),
+      transparent 4.5rem
+    ),
+    conic-gradient(
+      from calc(var(--dir) - var(--ouv)) at var(--x) var(--y),
+      transparent 0deg,
+      color-mix(in srgb, var(--beam) 7%, transparent) calc(var(--ouv) * 0.45),
+      color-mix(in srgb, var(--beam) 16%, transparent) var(--ouv),
+      color-mix(in srgb, var(--beam) 7%, transparent) calc(var(--ouv) * 1.55),
+      transparent calc(var(--ouv) * 2),
+      transparent 360deg
+    );
+  -webkit-mask-image: radial-gradient(
+    circle at var(--x) var(--y),
+    #000 10%,
+    transparent 95%
+  );
+  mask-image: radial-gradient(
+    circle at var(--x) var(--y),
+    #000 10%,
+    transparent 95%
+  );
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.methode__carte:hover {
+  box-shadow:
+    0 1.5rem 3rem -2rem rgba(0, 0, 0, 0.7),
+    0 0 2.5rem -1rem color-mix(in srgb, var(--beam) 30%, transparent);
+}
+
+.methode__carte:hover::after {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .methode__carte,
+  .methode__carte::after {
+    transition: none;
+  }
+}

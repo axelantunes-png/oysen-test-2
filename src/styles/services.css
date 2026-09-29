@@ -1,0 +1,363 @@
+/* ============================================================
+   NOS SERVICES
+   ------------------------------------------------------------
+   Le hero montre les cinq services avant de les nommer : cinq
+   plateaux côte à côte, les photos des affiches du dessous,
+   traitées pour la salle sombre (désaturées, assombries,
+   teintées du violet de la charte), chacun sous son propre
+   projecteur. Au chargement, les projecteurs s'allument l'un
+   après l'autre, de gauche à droite, avec le raté de mise sous
+   tension des valeurs de L'agence.
+
+   Le contenu se tient au centre, devant les plateaux, sur
+   une ombre douce qui les éteint derrière lui seulement. Le bas du hero se fond dans la barre de tri, qui
+   suit sans filet.
+
+   Empilement, du fond vers la surface :
+     1  les plateaux (photo, teinte, faisceau)   z-index -2
+     2  le voile, la lueur, le fondu du bas      z-index -1
+     3  le texte
+   ============================================================ */
+
+.services-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  align-items: center;
+  min-height: min(88vh, 62rem);
+  padding: clamp(3rem, 9vh, 6rem) var(--pad) clamp(5rem, 14vh, 9rem);
+  background-color: var(--night);
+  /* Le bouton secondaire au gris de la charte, comme au hero de l'accueil. */
+  --btn-ghost-border: var(--charte-gris);
+}
+
+/* ---- Les cinq plateaux ---- */
+
+.services-hero__plateaux {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.plateau {
+  position: relative;
+  overflow: hidden;
+  animation: plateau-apparait 1.2s ease
+    calc(var(--apres-rideau, 0s) + var(--rang) * 0.14s) both;
+}
+
+/* Entre deux plateaux, un voile de lumière, jamais un gris. */
+.plateau + .plateau {
+  border-left: 1px solid var(--night-veil);
+}
+
+.plateau__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--focus);
+  filter: grayscale(0.55) saturate(0.7) brightness(0.45) contrast(1.05);
+}
+
+/* La teinte violette de la charte, en fusion « color » : la photo garde
+   ses valeurs, elle prend notre couleur. */
+.plateau::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: color-mix(in srgb, var(--charte-violet) 55%, transparent);
+  mix-blend-mode: color;
+  pointer-events: none;
+}
+
+/* Le projecteur du plateau : étroit à la lampe, ouvert au sol, comme
+   ceux de l'accueil. */
+.plateau__faisceau {
+  position: absolute;
+  top: -4%;
+  left: 50%;
+  z-index: 1;
+  width: 150%;
+  height: 95%;
+  transform: translateX(-50%);
+  clip-path: polygon(47% 0, 53% 0, 100% 100%, 0 100%);
+  background-image: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--beam) 24%, transparent),
+    color-mix(in srgb, var(--beam) 7%, transparent) 45%,
+    transparent 85%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 8%,
+    #000 38%,
+    #000 62%,
+    transparent 92%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 8%,
+    #000 38%,
+    #000 62%,
+    transparent 92%
+  );
+  filter: blur(6px);
+  pointer-events: none;
+  animation: plateau-allumage 1s linear
+    calc(var(--apres-rideau, 0s) + 0.35s + var(--rang) * 0.14s) both;
+}
+
+/* Le nom du service, au pied du plateau, comme une étiquette de régie. */
+.plateau__nom {
+  position: absolute;
+  right: 1rem;
+  bottom: clamp(5.5rem, 15vh, 9.5rem);
+  left: 1rem;
+  z-index: 2;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  line-height: 1.5;
+  text-align: center;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--dawn) 72%, transparent);
+}
+
+@keyframes plateau-apparait {
+  from {
+    opacity: 0;
+  }
+}
+
+/* La mise sous tension : deux ratés, puis la lumière tient. */
+@keyframes plateau-allumage {
+  0% {
+    opacity: 0;
+  }
+  8% {
+    opacity: 0.85;
+  }
+  12% {
+    opacity: 0.15;
+  }
+  20% {
+    opacity: 1;
+  }
+  26% {
+    opacity: 0.45;
+  }
+  34%,
+  100% {
+    opacity: 1;
+  }
+}
+
+/* ---- Le voile, la lueur, le fondu ---- */
+
+.services-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    /* L'ombre derrière le texte : les plateaux restent vivants autour. */
+    radial-gradient(
+      52% 58% at 50% 46%,
+      color-mix(in srgb, var(--night) 70%, transparent),
+      color-mix(in srgb, var(--night) 30%, transparent) 62%,
+      transparent 100%
+    ),
+    /* La bouffée violette, tombée du haut. */
+    radial-gradient(
+      90% 55% at 50% -10%,
+      color-mix(in srgb, var(--oysen-purple) 34%, transparent),
+      transparent 65%
+    ),
+    /* Le pied du hero se fond dans la section suivante. */
+    linear-gradient(to bottom, transparent 62%, var(--night) 98%);
+}
+
+/* ---- Le contenu ---- */
+
+.services-hero__inner {
+  display: grid;
+  justify-items: center;
+  width: 100%;
+}
+
+/* Le contenu, centré, directement devant les plateaux. */
+.services-hero__plaque {
+  width: 100%;
+  max-width: 70rem;
+  text-align: center;
+}
+
+/* Le surtitre entre deux losanges pleins, le signe du site. */
+.services-hero__surtitre {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin: 0 0 clamp(1.1rem, 2.5vh, 1.5rem);
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--beam);
+}
+
+.services-hero__surtitre::before,
+.services-hero__surtitre::after {
+  content: '';
+  flex: none;
+  width: 0.4rem;
+  height: 0.4rem;
+  background-color: var(--beam);
+  box-shadow: 0 0 0.5rem color-mix(in srgb, var(--beam) 70%, transparent);
+  transform: rotate(45deg);
+}
+
+/* Le titre en deux temps : la promesse en blanc, le métier dessous,
+   éclairé en lavande. */
+.services-hero__titre {
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  font-size: clamp(2.1rem, 4.2vw, 3.7rem);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+  color: var(--dawn);
+}
+
+.services-hero__titre-suite {
+  display: block;
+  /* Le métier sur une seule ligne, dès que l'écran le permet. */
+  white-space: nowrap;
+  margin-top: 0.1em;
+  color: var(--beam);
+  text-shadow: 0 0 34px color-mix(in srgb, var(--beam) 45%, transparent);
+}
+
+/* Un filet court, lavande au centre, entre le titre et le texte. */
+.services-hero__lede {
+  max-width: 46ch;
+  margin: clamp(1.4rem, 3vh, 1.9rem) auto 0;
+  padding-top: clamp(1.4rem, 3vh, 1.9rem);
+  font-size: clamp(1rem, 1.25vw, 1.125rem);
+  line-height: 1.7;
+  text-wrap: pretty;
+  color: color-mix(in srgb, var(--dawn) 80%, var(--dusk));
+  background-image: linear-gradient(
+    to right,
+    transparent,
+    var(--beam),
+    transparent
+  );
+  background-repeat: no-repeat;
+  background-size: 6rem 1px;
+  background-position: 50% 0;
+}
+
+.services-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: clamp(1.75rem, 4vh, 2.5rem);
+}
+
+/* L'entrée, après le rideau s'il se joue : pendant que les projecteurs
+   s'allument, les lignes montent une à une. */
+.services-hero__plaque > * {
+  animation: hero-monte 0.8s cubic-bezier(0.22, 0.61, 0.36, 1)
+    calc(var(--apres-rideau, 0s) + 0.35s) both;
+}
+
+.services-hero__plaque > :nth-child(2) {
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.47s);
+}
+
+.services-hero__plaque > :nth-child(3) {
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.59s);
+}
+
+.services-hero__plaque > :nth-child(4) {
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.71s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .plateau,
+  .plateau__faisceau,
+  .services-hero__plaque > * {
+    animation: none;
+  }
+}
+
+/* ---- Téléphone ----
+   Les plateaux restent en fond, en cinq bandes horizontales, sans leurs
+   noms ; un voile uniforme soutient le texte. */
+
+@media (max-width: 760px) {
+  /* Toujours un écran plein : la grille des plateaux suit le hero. La
+     hauteur réellement visible (svh) évite que la barre d'adresse la
+     coupe. */
+  .services-hero {
+    min-height: 100vh;
+    min-height: 100svh;
+    padding-block: clamp(2.5rem, 7vh, 4rem) clamp(4rem, 10vh, 5.5rem);
+  }
+
+  .plateau__nom {
+    display: none;
+  }
+
+  /* Les plateaux s'empilent en cinq bandes horizontales, séparées par un
+     voile de lumière en haut plutôt qu'à gauche. */
+  .services-hero__plateaux {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: repeat(5, minmax(0, 1fr));
+  }
+
+  .plateau + .plateau {
+    border-top: 1px solid var(--night-veil);
+    border-left: 0;
+  }
+
+  .services-hero::before {
+    background-image:
+      linear-gradient(
+        color-mix(in srgb, var(--night) 55%, transparent),
+        color-mix(in srgb, var(--night) 55%, transparent)
+      ),
+      radial-gradient(
+        120% 55% at 50% -10%,
+        color-mix(in srgb, var(--oysen-purple) 34%, transparent),
+        transparent 65%
+      ),
+      linear-gradient(to bottom, transparent 62%, var(--night) 98%);
+  }
+
+  .services-hero__surtitre {
+    gap: 0.6rem;
+    letter-spacing: 0.16em;
+  }
+
+  /* Trop long pour un téléphone : le métier revient à la ligne. */
+  .services-hero__titre-suite {
+    white-space: normal;
+  }
+}
+
+/* « Choisir mon événement » mène au titre des affiches : il s'arrête sous
+   la barre de navigation collante, pas derrière. */
+#tri-title {
+  scroll-margin-top: calc(var(--nav-h, 0px) + 2.5rem);
+}

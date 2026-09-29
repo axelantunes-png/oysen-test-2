@@ -66,7 +66,7 @@ export function Guide() {
             </p>
 
             <p className="guide__fait">
-              Sonorisation jusqu’à 400 personnes, éclairage, structure, écran
+              Sonorisation jusqu’à 1500 personnes, éclairage, structure, écran
               LED.
             </p>
           </div>
