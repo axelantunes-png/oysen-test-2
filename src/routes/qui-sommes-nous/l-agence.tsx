@@ -34,11 +34,6 @@ export const Route = createFileRoute('/qui-sommes-nous/l-agence')({
     /* La feuille n'est chargée que sur cette page, pas sur tout le site. */
     links: [
       { rel: 'stylesheet', href: agenceCss },
-      /* Le lettrage des annotations du plan, servi sur cette page seulement. */
-      {
-        rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500&display=swap',
-      },
     ],
   }),
   component: Agence,

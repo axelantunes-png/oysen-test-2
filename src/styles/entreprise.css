@@ -1,0 +1,1471 @@
+/* ============================================================
+   ÉVÉNEMENTS D'ENTREPRISE
+   ------------------------------------------------------------
+   Dans la salle sombre du site, avec sa langue : l'anthracite,
+   le lavande des projecteurs, les losanges, les cartes éclairées
+   par le haut, et ce qu'on pointe qui s'allume.
+
+   Son signe est le conducteur de régie, le déroulé minute par
+   minute d'un jour J : en bas du hero, un fil de 07:30 à
+   l'ouverture des portes, que la lumière parcourt en cochant
+   chaque essai. Au-dessus, les trois faisceaux de l'accueil,
+   tirés d'une rampe en haut à droite, tombent sur le texte. Les
+   repères du dispositif (S4) reprennent la voix du conducteur, en
+   mono (Azeret Mono, comme sur L'agence) : « Top 01 ».
+
+   Le rythme des fonds : le hero dans la salle éteinte, les formats en
+   salle, les bénéfices d'un ton plus clair, la sortie sur la rampe
+   violette de l'accueil.
+   ============================================================ */
+
+.page-entreprise {
+  /* La bande d'un ton plus clair des bénéfices. */
+  --salle-claire: #18151d;
+  --mono: 'Azeret Mono', ui-monospace, monospace;
+}
+
+.section--entreprise .section__inner {
+  max-width: 76rem;
+}
+
+/* ---- La tête des sections ---- */
+
+.entreprise-tete .section__title {
+  max-width: 30ch;
+}
+
+.entreprise-tete__texte {
+  max-width: 58ch;
+  margin: clamp(1rem, 2.5vh, 1.4rem) 0 0;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  text-wrap: pretty;
+  color: var(--dusk);
+}
+
+.entreprise-tete--centree {
+  text-align: center;
+}
+
+.entreprise-tete--centree .section__title,
+.entreprise-tete--centree .entreprise-tete__texte {
+  margin-inline: auto;
+}
+
+/* Le bouton qui clôt une section, centré. */
+.entreprise-action {
+  margin: clamp(2.5rem, 5.5vh, 3.5rem) 0 0;
+  text-align: center;
+}
+
+/* ---- Le lien clair : du texte lavande et une flèche ---- */
+
+.lien-clair {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--beam);
+}
+
+.lien-clair__fleche {
+  flex: none;
+  width: 1.1rem;
+  height: 1.1rem;
+  transition: transform 0.25s ease;
+}
+
+.lien-clair:hover,
+.lien-clair:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+
+.lien-clair:hover .lien-clair__fleche,
+.lien-clair:focus-visible .lien-clair__fleche {
+  transform: translateX(0.3rem);
+}
+
+.lien-clair:focus-visible {
+  outline: 2px solid var(--beam);
+  outline-offset: 4px;
+}
+
+.format__charge li,
+.dispositif__puces li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  line-height: 1.55;
+}
+
+.format__charge li::before,
+.dispositif__puces li::before {
+  content: '';
+  flex: none;
+  width: 0.45rem;
+  height: 0.45rem;
+  margin-top: calc((1.55em - 0.45rem) / 2);
+  border: 1px solid var(--beam);
+  transform: rotate(45deg);
+}
+
+/* ============================================================
+   S1 · LE HERO
+   La salle avant l'ouverture des portes. Empilement, du fond vers
+   la surface :
+     1  la photo, éteinte                 (.entreprise-hero__fond, -2)
+     2  le voile, la rampe, les faisceaux (.entreprise-hero__salle, -1)
+     3  le texte, le conducteur, les preuves
+   Les faisceaux sont ceux de l'accueil (même cône, même dégradé que
+   .hero__lights, app.css). Ici, la rampe est en haut à droite et
+   les trois croisent la salle vers le texte. Ils s'allument une
+   fois, en fondu d'opacité seulement : rien ne bouge ensuite, ce
+   qui ménage les téléphones.
+   ============================================================ */
+
+.entreprise-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: 1fr auto auto;
+  min-height: calc(100dvh - var(--nav-h, 0px));
+  padding: clamp(3rem, 9vh, 6rem) var(--pad) clamp(2rem, 5vh, 3rem);
+  background-color: var(--night);
+  --btn-ghost-border: var(--charte-gris);
+}
+
+/* La photo, comme les plateaux de Nos services, mais plus éteinte : la
+   salle attend encore sa lumière. */
+.entreprise-hero__fond {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 40%;
+  filter: grayscale(0.65) saturate(0.55) brightness(0.3) contrast(1.1);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Le voile : plus dense au centre, derrière le texte, la lueur violette
+   de la rampe en haut à droite, et le bas qui retombe dans le noir sous
+   le conducteur. */
+.entreprise-hero__salle {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background-image:
+    radial-gradient(
+      60% 55% at 50% 42%,
+      color-mix(in srgb, var(--night) 85%, transparent),
+      color-mix(in srgb, var(--night) 60%, transparent) 55%,
+      color-mix(in srgb, var(--night) 45%, transparent) 100%
+    ),
+    radial-gradient(
+      70% 60% at 82% -8%,
+      color-mix(in srgb, var(--oysen-purple) 50%, transparent),
+      transparent 66%
+    ),
+    linear-gradient(to bottom, transparent 55%, var(--night) 96%);
+}
+
+.entreprise-hero__faisceaux i {
+  position: absolute;
+  top: -10%;
+  width: 34vmax;
+  height: 135%;
+  transform-origin: 50% 0;
+  /* Étroit à la lampe, ouvert au sol. */
+  clip-path: polygon(48.6% 0, 51.4% 0, 100% 100%, 0 100%);
+  background-image: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--beam) 18%, transparent),
+    color-mix(in srgb, var(--beam) 6%, transparent) 42%,
+    transparent 78%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 4%,
+    #000 34%,
+    #000 66%,
+    transparent 96%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 4%,
+    #000 34%,
+    #000 66%,
+    transparent 96%
+  );
+  filter: blur(7px);
+  animation: faisceau-allume 1.2s ease
+    calc(var(--apres-rideau, 0s) + 0.15s + var(--rang, 0) * 0.18s) both;
+}
+
+/* La rampe en haut à droite : trois lampes, trois angles, qui tombent
+   toutes sur le texte, au centre. */
+.entreprise-hero__faisceaux i:nth-child(1) {
+  --rang: 0;
+  left: 60%;
+  transform: translateX(-50%) rotate(14deg);
+}
+
+.entreprise-hero__faisceaux i:nth-child(2) {
+  --rang: 1;
+  left: 76%;
+  transform: translateX(-50%) rotate(28deg);
+  opacity: 0.7;
+}
+
+.entreprise-hero__faisceaux i:nth-child(3) {
+  --rang: 2;
+  left: 92%;
+  transform: translateX(-50%) rotate(38deg);
+}
+
+@keyframes faisceau-allume {
+  from {
+    opacity: 0;
+  }
+}
+
+.entreprise-hero__inner {
+  display: grid;
+  align-items: center;
+  width: 100%;
+  max-width: 76rem;
+  margin-inline: auto;
+}
+
+.entreprise-hero__texte {
+  max-width: 58rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+/* L'accroche, éclairée par les faisceaux : une lueur lavande très douce. */
+/* Deux lignes au plus sur ordinateur : assez large pour la phrase
+   coupée en deux, l'équilibrage partage les deux moitiés. */
+.entreprise-hero__titre {
+  margin: 0 auto;
+  max-width: 38ch;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  font-size: clamp(2rem, 3.2vw, 2.75rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  color: var(--dawn);
+  text-shadow: 0 0 34px color-mix(in srgb, var(--beam) 25%, transparent);
+}
+
+.entreprise-hero__lede {
+  max-width: 52ch;
+  margin: clamp(1.25rem, 3vh, 1.75rem) auto 0;
+  font-size: clamp(1rem, 1.25vw, 1.0625rem);
+  line-height: 1.65;
+  text-wrap: pretty;
+  color: var(--dusk);
+}
+
+.entreprise-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem 2rem;
+  margin-top: clamp(2rem, 4.5vh, 2.75rem);
+}
+
+.entreprise-hero__appel {
+  display: grid;
+  justify-items: center;
+  gap: 0.7rem;
+}
+
+.entreprise-hero__rassurance {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--dusk);
+}
+
+/* ---- Le conducteur du jour J ----
+   Un fil horizontal, cinq repères. La lumière le parcourt de gauche à
+   droite : chaque essai se coche, et le dernier repère, l'ouverture
+   des portes, s'allume. */
+
+.jour-j {
+  width: 100%;
+  max-width: 76rem;
+  margin: clamp(2.5rem, 7vh, 4.5rem) auto 0;
+  font-family: var(--mono);
+}
+
+.jour-j__tete {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.1rem;
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--beam);
+}
+
+.jour-j__fil {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1.25rem;
+  margin: 0;
+  padding: 1.5rem 0 0;
+  list-style: none;
+}
+
+/* Le fil, éteint, puis la lumière qui le parcourt. */
+.jour-j__fil::before,
+.jour-j__fil::after {
+  content: '';
+  position: absolute;
+  top: 0.4rem;
+  left: 0;
+  right: 0;
+  height: 1px;
+}
+
+.jour-j__fil::before {
+  background-color: var(--night-veil);
+}
+
+.jour-j__fil::after {
+  background-image: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--beam) 35%, transparent),
+    var(--beam)
+  );
+  transform-origin: 0 50%;
+  animation: jour-j-fil 2.4s cubic-bezier(0.45, 0, 0.2, 1)
+    calc(var(--apres-rideau, 0s) + 0.6s) both;
+}
+
+@keyframes jour-j-fil {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+.jour-j__repere {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 0.35rem;
+  animation: jour-j-repere 0.5s ease
+    calc(var(--apres-rideau, 0s) + 0.75s + var(--rang) * 0.48s) both;
+}
+
+/* Le losange du repère, posé sur le fil : évidé, plein une fois l'essai
+   fait, cerclé pour l'ouverture des portes. */
+.jour-j__repere::before {
+  content: '';
+  position: absolute;
+  top: calc(-1.5rem + 0.4rem);
+  left: 0;
+  width: 0.55rem;
+  height: 0.55rem;
+  background-color: var(--night);
+  border: 1px solid var(--beam);
+  transform: translate(0, -50%) rotate(45deg);
+}
+
+.jour-j__repere--essai::before,
+.jour-j__repere:last-child::before {
+  animation: jour-j-coche 0.35s ease
+    calc(var(--apres-rideau, 0s) + 1s + var(--rang) * 0.48s) both;
+}
+
+@keyframes jour-j-coche {
+  to {
+    background-color: var(--beam);
+  }
+}
+
+.jour-j__repere:last-child::before {
+  width: 0.75rem;
+  height: 0.75rem;
+  box-shadow: 0 0 0 0.35rem color-mix(in srgb, var(--beam) 16%, transparent);
+}
+
+@keyframes jour-j-repere {
+  from {
+    opacity: 0;
+    transform: translateY(0.4rem);
+  }
+}
+
+.jour-j__heure {
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--dusk);
+}
+
+.jour-j__action {
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--dawn);
+}
+
+.jour-j__statut {
+  justify-self: start;
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--beam);
+}
+
+.jour-j__statut::before {
+  content: '✓ ';
+}
+
+/* L'ouverture des portes : tout est prêt. */
+.jour-j__repere:last-child .jour-j__heure,
+.jour-j__repere:last-child .jour-j__action {
+  font-weight: 600;
+  color: var(--beam);
+}
+
+/* ---- Les preuves ---- */
+
+.entreprise-preuves {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem clamp(1.5rem, 3.5vw, 3rem);
+  width: 100%;
+  max-width: 76rem;
+  margin: clamp(2rem, 5vh, 3rem) auto 0;
+  padding: clamp(1.1rem, 2.5vh, 1.5rem) 0 0;
+  list-style: none;
+  font-size: 0.875rem;
+  color: var(--dusk);
+  border-top: 1px solid var(--night-veil);
+}
+
+.entreprise-preuves li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.entreprise-preuves li::before {
+  content: '';
+  flex: none;
+  width: 0.4rem;
+  height: 0.4rem;
+  background-color: var(--beam);
+  transform: rotate(45deg);
+}
+
+/* ---- L'entrée du hero, après le rideau s'il se joue ---- */
+
+.entreprise-hero__texte > * {
+  animation: hero-monte 0.8s cubic-bezier(0.22, 0.61, 0.36, 1)
+    calc(var(--apres-rideau, 0s) + 0.1s) both;
+}
+
+.entreprise-hero__texte > :nth-child(2) {
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.22s);
+}
+
+.entreprise-hero__texte > :nth-child(3) {
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.34s);
+}
+
+.entreprise-hero__texte > :nth-child(4) {
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.46s);
+}
+
+.entreprise-preuves {
+  animation: entreprise-fondu 1s ease calc(var(--apres-rideau, 0s) + 0.6s) both;
+}
+
+@keyframes entreprise-fondu {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ---- Le hero sur tablette et téléphone ---- */
+
+@media (max-width: 1023px) {
+  .entreprise-hero {
+    min-height: 0;
+  }
+
+  /* La rampe recule : les faisceaux partent du bord droit et tombent
+     derrière le texte, moins larges. */
+  .entreprise-hero__faisceaux i {
+    width: 46vmax;
+  }
+
+  .entreprise-hero__faisceaux i:nth-child(1) {
+    left: 70%;
+    transform: translateX(-50%) rotate(20deg);
+  }
+
+  .entreprise-hero__faisceaux i:nth-child(3) {
+    display: none;
+  }
+}
+
+@media (max-width: 760px) {
+  /* Sur téléphone, le conducteur se retire : le hero s'en tient au
+     texte et aux preuves. */
+  .jour-j {
+    display: none;
+  }
+
+  .entreprise-preuves {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* ============================================================
+   S2 · LES FORMATS
+   ============================================================ */
+
+.formats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1rem, 1.8vw, 1.5rem);
+  margin: clamp(2.5rem, 5.5vh, 3.5rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ---- Les cartes, éclairées ----
+   Le même traitement que les cartes d'expertise de « Le fondateur » et
+   la méthode de l'accueil : chaque carte est un petit plateau sous son
+   projecteur. Un cône net (dégradé conique centré sur la source), éteint
+   avec la distance, une lueur sur la lampe et une brillance douce autour.
+   La bordure est éclairée par le haut et s'éteint en descendant ; l'arête
+   haute est déjà allumée, le survol la pousse à fond, avec le cône et un
+   halo lavande. Les cartes ne sont pas des liens : le survol éclaire,
+   rien de plus.
+
+   Les six sources sont placées au bord extérieur de la grille : les
+   faisceaux convergent vers le centre des deux rangées. Chaque carte a sa
+   source (--x, --y), sa direction (--dir, 0deg vers le haut, sens
+   horaire) et la demi-ouverture de son cône (--ouv). */
+
+.format {
+  --x: 0%;
+  --y: 0%;
+  --dir: 135deg;
+  --ouv: 13deg;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  padding: clamp(1.35rem, 2.2vw, 1.85rem);
+  border: 1px solid transparent;
+  background:
+    radial-gradient(
+        70% 80% at var(--x) var(--y),
+        color-mix(in srgb, var(--beam) 13%, transparent),
+        transparent 65%
+      )
+      padding-box,
+    linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--night-raised) 92%, var(--beam)),
+        var(--night-raised) 55%,
+        color-mix(in srgb, var(--night) 60%, var(--night-raised))
+      )
+      padding-box,
+    linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--beam) 50%, transparent),
+        var(--night-veil) 35%,
+        color-mix(in srgb, var(--charte-gris) 55%, transparent)
+      )
+      border-box;
+  box-shadow: 0 1.5rem 3rem -2rem rgba(0, 0, 0, 0.7);
+  transition: box-shadow 0.3s ease;
+}
+
+/* Rangée du haut : les coins hauts et le milieu du haut, vers le bas. */
+.format:nth-child(1) {
+  --x: 0%;
+  --y: 0%;
+  --dir: 135deg;
+}
+
+.format:nth-child(2) {
+  --x: 50%;
+  --y: 0%;
+  --dir: 180deg;
+  --ouv: 11deg;
+}
+
+.format:nth-child(3) {
+  --x: 100%;
+  --y: 0%;
+  --dir: 225deg;
+}
+
+/* Rangée du bas : les coins bas et le milieu du bas, vers le haut. */
+.format:nth-child(4) {
+  --x: 0%;
+  --y: 100%;
+  --dir: 45deg;
+}
+
+.format:nth-child(5) {
+  --x: 50%;
+  --y: 100%;
+  --dir: 0deg;
+  --ouv: 11deg;
+}
+
+.format:nth-child(6) {
+  --x: 100%;
+  --y: 100%;
+  --dir: 315deg;
+}
+
+/* Le faisceau. */
+.format::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    radial-gradient(
+      circle at var(--x) var(--y),
+      color-mix(in srgb, var(--beam) 32%, transparent),
+      transparent 4.5rem
+    ),
+    conic-gradient(
+      from calc(var(--dir) - var(--ouv)) at var(--x) var(--y),
+      transparent 0deg,
+      color-mix(in srgb, var(--beam) 7%, transparent) calc(var(--ouv) * 0.45),
+      color-mix(in srgb, var(--beam) 17%, transparent) var(--ouv),
+      color-mix(in srgb, var(--beam) 7%, transparent) calc(var(--ouv) * 1.55),
+      transparent calc(var(--ouv) * 2),
+      transparent 360deg
+    );
+  -webkit-mask-image: radial-gradient(
+    circle at var(--x) var(--y),
+    #000 10%,
+    transparent 95%
+  );
+  mask-image: radial-gradient(
+    circle at var(--x) var(--y),
+    #000 10%,
+    transparent 95%
+  );
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+/* L'arête haute, allumée à moitié ; à fond au survol. */
+.format::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 1px;
+  background-color: var(--beam);
+  box-shadow: 0 0 0.9rem color-mix(in srgb, var(--beam) 60%, transparent);
+  opacity: 0.35;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.format:hover {
+  box-shadow:
+    0 1.5rem 3rem -2rem rgba(0, 0, 0, 0.7),
+    0 0 2.5rem -1rem color-mix(in srgb, var(--beam) 30%, transparent);
+}
+
+.format:hover::after,
+.format:hover::before {
+  opacity: 1;
+}
+
+.format__nom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem 0.75rem;
+  text-align: center;
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--dawn);
+}
+
+.format__pastille {
+  padding: 0.25rem 0.5rem;
+  font-family: var(--mono);
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--beam);
+  border: 1px solid color-mix(in srgb, var(--beam) 50%, transparent);
+}
+
+.format__pour {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--dusk);
+}
+
+.format__charge {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.875rem;
+  color: var(--dusk);
+}
+
+.format__resultat {
+  margin: 0;
+  padding-top: 0.9rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--dawn);
+  border-top: 1px solid var(--night-veil);
+}
+
+/* ============================================================
+   S4 · LE DISPOSITIF
+   ============================================================ */
+
+.dispositif {
+  /* L'écart entre deux cartes, repris par la lumière qui court. */
+  --ecart: clamp(0.85rem, 1.4vw, 1.25rem);
+  /* La carte survolée, de 1 à 5 (voir plus bas). */
+  --actif: 1;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--ecart);
+  margin: clamp(2.5rem, 5.5vh, 3.5rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ---- Les cartes, éclairées ----
+   Le traitement des formats (plus haut) et des cartes de « Le
+   fondateur » : un projecteur par carte, un cône net éteint avec la
+   distance, une lueur sur la lampe, la bordure éclairée par le haut et
+   l'arête haute à moitié allumée. Les cinq lampes sont accrochées en
+   haut, comme une rampe au-dessus des cinq étapes : celles des bords
+   visent le centre, celle du milieu tombe droit. */
+
+.dispositif__carte {
+  --x: 50%;
+  --y: 0%;
+  --dir: 180deg;
+  --ouv: 12deg;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(1.2rem, 1.8vw, 1.6rem);
+  border: 1px solid transparent;
+  background:
+    radial-gradient(
+        70% 80% at var(--x) var(--y),
+        color-mix(in srgb, var(--beam) 13%, transparent),
+        transparent 65%
+      )
+      padding-box,
+    linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--night-raised) 92%, var(--beam)),
+        var(--night-raised) 55%,
+        color-mix(in srgb, var(--night) 60%, var(--night-raised))
+      )
+      padding-box,
+    linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--beam) 50%, transparent),
+        var(--night-veil) 35%,
+        color-mix(in srgb, var(--charte-gris) 55%, transparent)
+      )
+      border-box;
+  box-shadow: 0 1.5rem 3rem -2rem rgba(0, 0, 0, 0.7);
+  transition: box-shadow 0.3s ease;
+}
+
+.dispositif__carte:nth-child(1) {
+  --x: 0%;
+  --dir: 145deg;
+}
+
+.dispositif__carte:nth-child(2) {
+  --x: 25%;
+  --dir: 162deg;
+}
+
+.dispositif__carte:nth-child(3) {
+  --x: 50%;
+  --dir: 180deg;
+  --ouv: 10deg;
+}
+
+.dispositif__carte:nth-child(4) {
+  --x: 75%;
+  --dir: 198deg;
+}
+
+.dispositif__carte:nth-child(5) {
+  --x: 100%;
+  --dir: 215deg;
+}
+
+/* Le faisceau. */
+.dispositif__carte::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    radial-gradient(
+      circle at var(--x) var(--y),
+      color-mix(in srgb, var(--beam) 32%, transparent),
+      transparent 4.5rem
+    ),
+    conic-gradient(
+      from calc(var(--dir) - var(--ouv)) at var(--x) var(--y),
+      transparent 0deg,
+      color-mix(in srgb, var(--beam) 7%, transparent) calc(var(--ouv) * 0.45),
+      color-mix(in srgb, var(--beam) 17%, transparent) var(--ouv),
+      color-mix(in srgb, var(--beam) 7%, transparent) calc(var(--ouv) * 1.55),
+      transparent calc(var(--ouv) * 2),
+      transparent 360deg
+    );
+  -webkit-mask-image: radial-gradient(
+    circle at var(--x) var(--y),
+    #000 10%,
+    transparent 95%
+  );
+  mask-image: radial-gradient(
+    circle at var(--x) var(--y),
+    #000 10%,
+    transparent 95%
+  );
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+/* L'arête haute, allumée à moitié ; à fond au survol. */
+.dispositif__carte::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 1px;
+  background-color: var(--beam);
+  box-shadow: 0 0 0.9rem color-mix(in srgb, var(--beam) 60%, transparent);
+  opacity: 0.35;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.dispositif__carte:hover {
+  box-shadow:
+    0 1.5rem 3rem -2rem rgba(0, 0, 0, 0.7),
+    0 0 2.5rem -1rem color-mix(in srgb, var(--beam) 30%, transparent);
+}
+
+.dispositif__carte:hover::after,
+.dispositif__carte:hover::before {
+  opacity: 1;
+}
+
+/* ---- La lumière qui court de carte en carte ----
+   Sur ordinateur, quand les cinq étapes tiennent sur une rangée : une
+   barre lumineuse posée sur l'arête des cartes rejoint celle qu'on
+   survole. En passant d'une carte à l'autre, elle glisse par-dessus
+   l'écart, dans l'ordre des étapes. Elle n'existe que pendant le
+   survol de la rangée. */
+
+@media (min-width: 1101px) and (hover: hover) {
+  .dispositif::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: calc(
+      (var(--actif) - 1) * ((100% - 4 * var(--ecart)) / 5 + var(--ecart))
+    );
+    z-index: 2;
+    width: calc((100% - 4 * var(--ecart)) / 5);
+    height: 2px;
+    background-color: var(--beam);
+    box-shadow:
+      0 0 0.6rem var(--beam),
+      0 0 1.6rem color-mix(in srgb, var(--beam) 55%, transparent);
+    opacity: 0;
+    transition:
+      left 0.45s cubic-bezier(0.3, 0.7, 0.2, 1),
+      opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .dispositif:hover::before {
+    opacity: 1;
+  }
+
+  .dispositif:has(> :nth-child(1):hover) {
+    --actif: 1;
+  }
+
+  .dispositif:has(> :nth-child(2):hover) {
+    --actif: 2;
+  }
+
+  .dispositif:has(> :nth-child(3):hover) {
+    --actif: 3;
+  }
+
+  .dispositif:has(> :nth-child(4):hover) {
+    --actif: 4;
+  }
+
+  .dispositif:has(> :nth-child(5):hover) {
+    --actif: 5;
+  }
+}
+
+/* Le top du conducteur, ouvert par le losange plein du site. */
+.dispositif__top {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0 0 0.6rem;
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--beam);
+}
+
+.dispositif__top::before {
+  content: '';
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: var(--beam);
+  transform: rotate(45deg);
+}
+
+.dispositif__nom {
+  margin: 0 0 1.1rem;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.3;
+  text-wrap: balance;
+  color: var(--dawn);
+}
+
+.dispositif__details {
+  margin: 0;
+}
+
+.dispositif__details dt {
+  margin-bottom: 0.45rem;
+  font-family: var(--mono);
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dusk);
+}
+
+.dispositif__details dt:not(:first-child) {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--night-veil);
+}
+
+.dispositif__details dd {
+  margin: 0;
+}
+
+.dispositif__puces {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.875rem;
+  color: var(--dusk);
+}
+
+.dispositif__vous {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--dawn);
+}
+
+.dispositif__notes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.5rem, 3vw, 3rem);
+  margin-top: clamp(2.5rem, 5.5vh, 3.5rem);
+}
+
+.dispositif__note {
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--night-veil);
+}
+
+.dispositif__note p {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--dusk);
+}
+
+.dispositif__note .dispositif__note-titre {
+  margin-bottom: 0.5rem;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--dawn);
+}
+
+/* ============================================================
+   S5 · LES BÉNÉFICES
+   Six phrases, chacune sous sa lampe. Le filet du haut est le pont
+   où la lampe est accrochée ; le cône part de la lampe et s'ouvre
+   sur la phrase. Pas de flou animé : un dégradé net, adouci par un
+   masque, qui monte en intensité au survol. La phrase prend alors
+   la lumière.
+   ============================================================ */
+
+.section.section--entreprise-benefices {
+  background-color: var(--salle-claire);
+  border-block: 1px solid var(--night-veil);
+}
+
+.benefices {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(2.5rem, 5vh, 3.25rem) clamp(1.25rem, 2.5vw, 2rem);
+  margin: clamp(2.5rem, 5.5vh, 3.5rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.benefice {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  place-items: center;
+  min-height: 9.5rem;
+  padding: 3.25rem 1rem 1.25rem;
+  text-align: center;
+  /* Le pont : un filet, plus clair au milieu, sous la lampe. */
+  background-image: linear-gradient(
+    to right,
+    transparent,
+    var(--night-veil) 20%,
+    color-mix(in srgb, var(--beam) 45%, transparent) 50%,
+    var(--night-veil) 80%,
+    transparent
+  );
+  background-size: 100% 1px;
+  background-repeat: no-repeat;
+}
+
+/* La lampe, accrochée au milieu du pont. */
+.benefice::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 0.55rem;
+  height: 0.55rem;
+  background-color: var(--beam);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0.5rem var(--beam),
+    0 0 1.4rem color-mix(in srgb, var(--beam) 50%, transparent);
+  transform: translate(-50%, -50%);
+  opacity: 0.75;
+  transition: opacity 0.3s ease;
+}
+
+/* Le cône : étroit à la lampe, ouvert sur la phrase. */
+.benefice::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: -1;
+  width: min(100%, 18rem);
+  height: 100%;
+  clip-path: polygon(47% 0, 53% 0, 100% 100%, 0 100%);
+  background-image: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--beam) 22%, transparent),
+    color-mix(in srgb, var(--beam) 8%, transparent) 55%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 6%,
+    #000 36%,
+    #000 64%,
+    transparent 94%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 6%,
+    #000 36%,
+    #000 64%,
+    transparent 94%
+  );
+  transform: translateX(-50%);
+  opacity: 0.45;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.benefice__titre {
+  max-width: 18ch;
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(1.1rem, 1.5vw, 1.3rem);
+  font-weight: 400;
+  line-height: 1.35;
+  text-wrap: balance;
+  color: var(--dawn);
+  transition:
+    color 0.3s ease,
+    text-shadow 0.3s ease;
+}
+
+/* Au survol, la lampe monte : le cône s'allume, la phrase prend la
+   lumière. */
+.benefice:hover::before,
+.benefice:hover::after {
+  opacity: 1;
+}
+
+.benefice:hover .benefice__titre {
+  color: #fff;
+  text-shadow: 0 0 1.5rem color-mix(in srgb, var(--beam) 45%, transparent);
+}
+
+.benefices__assurance {
+  margin: clamp(2.5rem, 5.5vh, 3.5rem) 0 0;
+  font-size: 0.875rem;
+  text-align: center;
+  color: var(--dusk);
+}
+
+/* ---- ESSAI · Notes de violet (à valider) ----
+   Le violet de la charte, celui des boutons (--charte-violet), posé
+   comme une gélatine devant chaque lampe : le cône part lavande et
+   vire au violet en descendant, puis laisse une flaque violette au sol,
+   sous la phrase. La lampe prend un anneau violet, et la section une
+   lueur basse. Trop sombre pour du texte, le violet n'est ici que de la
+   lumière.
+   Pour revenir en arrière : supprimer ce bloc, rien d'autre. */
+
+.section.section--entreprise-benefices {
+  background-image: radial-gradient(
+    70% 60% at 50% 115%,
+    color-mix(in srgb, var(--charte-violet) 45%, transparent),
+    transparent 70%
+  );
+}
+
+.benefice::before {
+  box-shadow:
+    0 0 0.5rem var(--beam),
+    0 0 0 0.3rem color-mix(in srgb, var(--charte-violet) 70%, transparent),
+    0 0 1.6rem 0.4rem color-mix(in srgb, var(--charte-violet) 80%, transparent);
+}
+
+.benefice::after {
+  background-image:
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--beam) 22%, transparent),
+      color-mix(in srgb, var(--charte-violet) 38%, transparent) 55%,
+      color-mix(in srgb, var(--charte-violet) 10%, transparent) 100%
+    );
+}
+
+/* La flaque de lumière violette, au sol sous la phrase. */
+.benefice__titre {
+  position: relative;
+}
+
+.benefice__titre::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -1.1rem;
+  z-index: -1;
+  width: 14rem;
+  height: 2.6rem;
+  background-image: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--charte-violet) 75%, transparent),
+    transparent
+  );
+  transform: translateX(-50%);
+  opacity: 0.55;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.benefice:hover .benefice__titre::after {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .benefice__titre::after {
+    transition: none;
+  }
+}
+
+/* ============================================================
+   S6 · CE QUE VOUS POUVEZ VÉRIFIER
+   ============================================================ */
+
+.verifier {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  align-items: start;
+  gap: clamp(2.5rem, 5vw, 5rem);
+}
+
+/* La tête reste en vue pendant qu'on parcourt la liste. */
+.verifier .entreprise-tete {
+  position: sticky;
+  top: calc(var(--nav-h, 4.5rem) + 2rem);
+}
+
+.verifier__liste {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-bottom: 1px solid var(--night-veil);
+}
+
+.verifier__item {
+  display: grid;
+  gap: 0.5rem;
+  padding: clamp(1.25rem, 2.8vh, 1.6rem) 0;
+  border-top: 1px solid var(--night-veil);
+}
+
+.verifier__titre {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--dawn);
+}
+
+.verifier__titre::before {
+  content: '';
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: var(--beam);
+  transform: rotate(45deg);
+}
+
+.verifier__texte {
+  margin: 0;
+  max-width: 60ch;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--dusk);
+}
+
+.verifier__item .lien-clair {
+  justify-self: start;
+  font-size: 0.875rem;
+}
+
+/* Les cas, quand il y en aura. */
+.cas-e {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+  margin: clamp(3rem, 7vh, 4.5rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cas-e__item {
+  padding: clamp(1.35rem, 2.2vw, 1.85rem);
+  background-color: var(--night-raised);
+  border: 1px solid var(--trait);
+}
+
+.cas-e__titre {
+  margin: 0 0 1rem;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--dawn);
+}
+
+.cas-e__star {
+  margin: 0;
+}
+
+.cas-e__star dt {
+  margin: 0.9rem 0 0.3rem;
+  font-family: var(--mono);
+  font-size: 0.5625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--beam);
+}
+
+.cas-e__star dd {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--dusk);
+}
+
+.cas-e__mention {
+  margin: 1rem 0 0;
+  font-size: 0.8125rem;
+  font-style: italic;
+  color: var(--dusk);
+}
+
+/* ============================================================
+   S8 · LES QUESTIONS
+   Les dépliants de l'accueil (home.css), tels quels.
+   ============================================================ */
+
+/* ============================================================
+   MOUVEMENT RÉDUIT
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .entreprise-hero__texte > *,
+  .entreprise-hero__faisceaux i,
+  .entreprise-preuves,
+  .jour-j__fil::after,
+  .jour-j__repere,
+  .jour-j__repere::before {
+    animation: none;
+  }
+
+  /* Sans animation, les essais sont cochés d'emblée. */
+  .jour-j__repere--essai::before,
+  .jour-j__repere:last-child::before {
+    background-color: var(--beam);
+  }
+
+  .lien-clair__fleche,
+  .format,
+  .format::before,
+  .format::after,
+  .dispositif__carte,
+  .dispositif__carte::before,
+  .dispositif__carte::after,
+  .dispositif::before,
+  .benefice::before,
+  .benefice::after,
+  .benefice__titre {
+    transition: none;
+  }
+}
+
+/* ============================================================
+   TABLETTE
+   ============================================================ */
+
+@media (max-width: 1100px) {
+  .dispositif {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1023px) {
+  .verifier {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .verifier .entreprise-tete {
+    position: static;
+  }
+
+  .formats,
+  .benefices {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dispositif {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ============================================================
+   TÉLÉPHONE
+   ============================================================ */
+
+@media (max-width: 760px) {
+  .formats,
+  .benefices,
+  .dispositif,
+  .dispositif__notes,
+  .cas-e {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* « Avant de signer » : la tête se centre au-dessus de la liste. */
+  .verifier .entreprise-tete {
+    text-align: center;
+  }
+
+  .verifier .entreprise-tete .section__title {
+    margin-inline: auto;
+  }
+}

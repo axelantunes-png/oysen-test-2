@@ -202,6 +202,46 @@ export function Formulaire() {
 
   useEffect(() => setDateMin(aujourdhui()), [])
 
+  /*
+   * Une page de service peut présélectionner le profil et le besoin
+   * (?profil=particulier&besoin=organisation depuis « Mariage et événement
+   * privé ») : le visiteur arrive directement sur les bonnes questions.
+   * Lu après l'hydratation, le serveur ne connaît pas l'adresse complète.
+   */
+  useEffect(() => {
+    const parametres = new URLSearchParams(window.location.search)
+    const profil = PROFILS.find((p) => p.valeur === parametres.get('profil'))
+    const besoin = besoinsPour(profil?.valeur ?? '').find(
+      (b) => b.valeur === parametres.get('besoin'),
+    )
+    if (!profil && !besoin) return
+
+    /* ?type=… coche d'avance la première question à choix unique du bloc,
+       si la valeur en est une option (« Séminaire » depuis la carte du
+       même nom, sur « Événements d'entreprise »). */
+    const bloc = resoudreBloc(profil?.valeur ?? '', besoin?.valeur ?? '')
+    const type = parametres.get('type')
+    const question = bloc
+      ? BLOCS[bloc].questions.find((q) => q.type === 'unique')
+      : undefined
+    const preselection =
+      question && type && question.options?.includes(type)
+        ? { [question.id]: type }
+        : {}
+
+    /* ?message=… préremplit le message (« Recevoir notre dossier de
+       références », sur « Collectivités et institutions »). */
+    const message = parametres.get('message')?.slice(0, 500)
+
+    setDonnees((d) => ({
+      ...d,
+      profil: profil?.valeur ?? d.profil,
+      besoin: besoin?.valeur ?? d.besoin,
+      reponses: { ...d.reponses, ...preselection },
+      message: message || d.message,
+    }))
+  }, [])
+
   /* Changement d'étape : on remonte en tête du formulaire, le titre prend
      le focus, et l'étape est annoncée aux lecteurs d'écran. Rien au
      chargement : l'étape n'a pas changé. */

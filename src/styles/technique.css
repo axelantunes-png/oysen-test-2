@@ -1,0 +1,1112 @@
+/* ============================================================
+   PRESTATION TECHNIQUE
+   ------------------------------------------------------------
+   Dans la salle sombre du site, avec sa langue : l'anthracite,
+   le lavande des projecteurs, les losanges, les cartes éclairées
+   par le haut, et ce qu'on pointe qui s'allume.
+
+   Les faisceaux, constants d'une page à l'autre, tombent ici
+   d'un vrai pont lumière : une poutre en aluminium triangulée
+   traverse le haut du hero, cinq projecteurs y sont accrochés,
+   leurs cônes convergent vers le texte. C'est le sujet même de la
+   page : la structure et la lumière. Les projecteurs s'allument
+   une fois, en fondu d'opacité, puis ne bougent plus.
+
+   Le rythme des fonds : le hero sous son pont, la comparaison en
+   salle, les domaines sur une bande plus claire, les publics et
+   le parc en salle, les questions en salle, la sortie sur la rampe violette de l'accueil.
+   ============================================================ */
+
+.page-technique {
+  --noir: #0d0a11;
+  --salle-claire: #18151d;
+  --mono: 'Azeret Mono', ui-monospace, monospace;
+  /* L'aluminium du pont : un gris clair, froid. */
+  --alu: color-mix(in srgb, #c9c6d2 55%, transparent);
+}
+
+.section--technique .section__inner {
+  max-width: 76rem;
+}
+
+/* ---- La tête des sections, centrée ---- */
+
+.tech-tete {
+  text-align: center;
+}
+
+.tech-tete .section__title {
+  max-width: 30ch;
+  margin-inline: auto;
+}
+
+.tech-tete__texte {
+  max-width: 56ch;
+  margin: clamp(1rem, 2.5vh, 1.4rem) auto 0;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  text-wrap: pretty;
+  color: var(--dusk);
+}
+
+/* ---- Le lien lavande et sa flèche ---- */
+
+.tech-lien {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--beam);
+}
+
+.tech-lien__fleche {
+  flex: none;
+  width: 1.1rem;
+  height: 1.1rem;
+  transition: transform 0.25s ease;
+}
+
+.tech-lien:hover,
+.tech-lien:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+
+.tech-lien:hover .tech-lien__fleche,
+.tech-lien:focus-visible .tech-lien__fleche {
+  transform: translateX(0.3rem);
+}
+
+.tech-lien:focus-visible {
+  outline: 2px solid var(--beam);
+  outline-offset: 4px;
+}
+
+/* ============================================================
+   S1 · LE HERO
+   ============================================================ */
+
+.tech-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  align-items: center;
+  min-height: min(92vh, 58rem);
+  padding: clamp(7rem, 17vh, 10rem) var(--pad) clamp(3rem, 8vh, 5rem);
+  background-color: var(--night);
+  --btn-ghost-border: var(--charte-gris);
+}
+
+/* La salle, éteinte. */
+.tech-hero__fond {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 45%;
+  filter: grayscale(0.65) saturate(0.55) brightness(0.28) contrast(1.1);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Le voile, dense derrière le texte ; une lueur violette sous le pont. */
+.tech-hero__salle {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background-image:
+    radial-gradient(
+      60% 50% at 50% 58%,
+      color-mix(in srgb, var(--night) 82%, transparent),
+      color-mix(in srgb, var(--night) 55%, transparent) 60%,
+      color-mix(in srgb, var(--night) 40%, transparent) 100%
+    ),
+    radial-gradient(
+      80% 40% at 50% 0%,
+      color-mix(in srgb, var(--oysen-purple) 45%, transparent),
+      transparent 70%
+    );
+}
+
+/* ---- Le pont lumière ----
+   Deux membrures et leur treillis en croix, en aluminium. */
+.pont {
+  position: absolute;
+  top: clamp(1.5rem, 4vh, 2.5rem);
+  left: -1%;
+  right: -1%;
+  height: 1.6rem;
+  border-block: 2px solid var(--alu);
+  background-image:
+    linear-gradient(
+      to bottom right,
+      transparent calc(50% - 0.75px),
+      var(--alu) calc(50% - 0.75px),
+      var(--alu) calc(50% + 0.75px),
+      transparent calc(50% + 0.75px)
+    ),
+    linear-gradient(
+      to top right,
+      transparent calc(50% - 0.75px),
+      var(--alu) calc(50% - 0.75px),
+      var(--alu) calc(50% + 0.75px),
+      transparent calc(50% + 0.75px)
+    );
+  background-size: 1.6rem 100%;
+  box-shadow: 0 0.4rem 1.2rem rgba(0, 0, 0, 0.5);
+  animation: tech-fondu 1s ease calc(var(--apres-rideau, 0s) + 0.05s) both;
+}
+
+/* Les cinq projecteurs, accrochés sous le pont, à intervalles égaux. */
+.pont__projecteurs {
+  position: absolute;
+  top: calc(clamp(1.5rem, 4vh, 2.5rem) + 1.6rem);
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.pont__projecteur {
+  --angle: 0deg;
+  position: relative;
+}
+
+/* L'orientation : les deux des bords visent le centre, celui du
+   milieu tombe droit. */
+.pont__projecteur:nth-child(1) {
+  --angle: -18deg;
+}
+
+.pont__projecteur:nth-child(2) {
+  --angle: -9deg;
+}
+
+.pont__projecteur:nth-child(4) {
+  --angle: 9deg;
+}
+
+.pont__projecteur:nth-child(5) {
+  --angle: 18deg;
+}
+
+/* Le corps du projecteur, et la lentille allumée. */
+.pont__lampe {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 1.1rem;
+  height: 1.45rem;
+  background-color: #1b1822;
+  border: 1px solid var(--alu);
+  border-radius: 0 0 0.3rem 0.3rem;
+  transform: translateX(-50%) rotate(var(--angle));
+  transform-origin: 50% 0;
+}
+
+.pont__lampe::after {
+  content: '';
+  position: absolute;
+  bottom: -0.15rem;
+  left: 50%;
+  width: 0.75rem;
+  height: 0.3rem;
+  background-color: var(--beam);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0.6rem var(--beam),
+    0 0 1.6rem color-mix(in srgb, var(--beam) 60%, transparent);
+  transform: translateX(-50%);
+  animation: tech-fondu 0.8s ease
+    calc(var(--apres-rideau, 0s) + 0.3s + var(--rang) * 0.15s) both;
+}
+
+/* Le faisceau : étroit à la lentille, ouvert vers le sol. */
+.pont__faisceau {
+  position: absolute;
+  top: 1.35rem;
+  left: 50%;
+  width: 26vmax;
+  height: min(100vh, 62rem);
+  transform-origin: 50% 0;
+  transform: translateX(-50%) rotate(var(--angle));
+  clip-path: polygon(48.6% 0, 51.4% 0, 100% 100%, 0 100%);
+  background-image: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--beam) 17%, transparent),
+    color-mix(in srgb, var(--beam) 6%, transparent) 45%,
+    transparent 82%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 4%,
+    #000 34%,
+    #000 66%,
+    transparent 96%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 4%,
+    #000 34%,
+    #000 66%,
+    transparent 96%
+  );
+  filter: blur(7px);
+  animation: tech-fondu 1.2s ease
+    calc(var(--apres-rideau, 0s) + 0.35s + var(--rang) * 0.15s) both;
+}
+
+.pont__projecteur:nth-child(even) .pont__faisceau {
+  opacity: 0.65;
+}
+
+@keyframes tech-fondu {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ---- Le texte ---- */
+
+.tech-hero__texte {
+  max-width: 58rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.tech-hero__titre {
+  max-width: 24ch;
+  margin: 0 auto;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  font-size: clamp(2rem, 3.4vw, 2.9rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  color: var(--dawn);
+  text-shadow: 0 0 34px color-mix(in srgb, var(--beam) 25%, transparent);
+}
+
+.tech-hero__lede {
+  max-width: 52ch;
+  margin: clamp(1.25rem, 3vh, 1.75rem) auto 0;
+  font-size: clamp(1rem, 1.25vw, 1.0625rem);
+  line-height: 1.65;
+  text-wrap: pretty;
+  color: var(--dusk);
+}
+
+.tech-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem 2rem;
+  margin-top: clamp(2rem, 4.5vh, 2.75rem);
+}
+
+/* Les cinq domaines, en repères, sous les boutons. */
+.tech-hero__domaines {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1rem;
+  margin: clamp(1.75rem, 4vh, 2.25rem) 0 0;
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--beam);
+}
+
+.tech-hero__domaines span {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.tech-hero__domaines span + span::before {
+  content: '';
+  width: 0.35rem;
+  height: 0.35rem;
+  background-color: color-mix(in srgb, var(--beam) 60%, transparent);
+  transform: rotate(45deg);
+}
+
+/* L'entrée, après le rideau s'il se joue. */
+.tech-hero__texte > * {
+  animation: hero-monte 0.8s cubic-bezier(0.22, 0.61, 0.36, 1)
+    calc(var(--apres-rideau, 0s) + 0.1s) both;
+}
+
+.tech-hero__texte > :nth-child(2) {
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.22s);
+}
+
+.tech-hero__texte > :nth-child(3) {
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.34s);
+}
+
+.tech-hero__texte > :nth-child(4) {
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.46s);
+}
+
+.tech-hero__texte > :nth-child(5) {
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.58s);
+}
+
+/* ============================================================
+   S2 · AVEC NOS TECHNICIENS, OU SANS ?
+   Un vrai tableau. La colonne de la prestation est éclairée d'un
+   bout à l'autre : fond plus clair, arête lavande en tête.
+   ============================================================ */
+
+.comparaison {
+  max-width: 62rem;
+  margin: clamp(2.75rem, 6vh, 3.75rem) auto 0;
+}
+
+.comparaison__table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.9375rem;
+}
+
+.comparaison__table thead th {
+  padding: 1.35rem 1.25rem 1.2rem;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: center;
+  color: var(--dusk);
+  border-top: 1px solid var(--night-veil);
+}
+
+.comparaison__table thead th.comparaison__prestation {
+  color: var(--dawn);
+  border-top: 2px solid var(--beam);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--beam) 40%, transparent);
+  background:
+    radial-gradient(
+      90% 120% at 50% 0%,
+      color-mix(in srgb, var(--beam) 16%, transparent),
+      transparent 70%
+    ),
+    var(--night-raised);
+}
+
+.comparaison__table tbody th {
+  width: 24%;
+  padding: 1.1rem 1.25rem 1.1rem 0;
+  font-family: var(--mono);
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-align: left;
+  text-transform: uppercase;
+  color: var(--beam);
+  border-top: 1px solid var(--night-veil);
+}
+
+.comparaison__table tbody td {
+  padding: 1.1rem 1.25rem;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--dusk);
+  border-top: 1px solid var(--night-veil);
+}
+
+.comparaison__table tbody td.comparaison__prestation {
+  color: var(--dawn);
+  background-color: var(--night-raised);
+}
+
+.comparaison__table tbody tr:last-child th,
+.comparaison__table tbody tr:last-child td {
+  border-bottom: 1px solid var(--night-veil);
+}
+
+/* La dernière ligne, celle qui décide : un cran plus appuyée. */
+.comparaison__table tbody tr:last-child td {
+  font-weight: 500;
+}
+
+.comparaison__table tbody tr:last-child td.comparaison__prestation {
+  color: var(--beam);
+}
+
+/* Le lien de la location, centré sous sa colonne. */
+.comparaison__table tfoot td {
+  padding: 1.25rem 1.25rem 0;
+}
+
+.comparaison__lien {
+  text-align: center;
+}
+
+.comparaison__suite {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  margin-top: clamp(2rem, 4.5vh, 2.75rem);
+  text-align: center;
+}
+
+.comparaison__sortie {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: var(--dusk);
+}
+
+.comparaison__sortie a {
+  color: var(--beam);
+  text-underline-offset: 0.25em;
+}
+
+/* ============================================================
+   S3 · LES DOMAINES
+   Sept cartes éclairées : quatre sur la première rangée, trois sur
+   la seconde. Chacune sous son projecteur (rampe en haut pour la
+   première rangée, au sol pour la seconde : les faisceaux se
+   rejoignent entre les deux), avec son pictogramme lumineux.
+   ============================================================ */
+
+.section.section--technique-domaines {
+  background-color: var(--salle-claire);
+  border-block: 1px solid var(--night-veil);
+}
+
+.domaines {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: clamp(1rem, 1.6vw, 1.5rem);
+  margin: clamp(2.75rem, 6vh, 3.75rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.domaine {
+  --x: 50%;
+  --y: 0%;
+  --dir: 180deg;
+  --ouv: 12deg;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  grid-column: span 3;
+  gap: 0.75rem;
+  min-height: 14rem;
+  padding: clamp(1.5rem, 2.2vw, 2rem);
+  border: 1px solid transparent;
+  background:
+    radial-gradient(
+        70% 80% at var(--x) var(--y),
+        color-mix(in srgb, var(--beam) 13%, transparent),
+        transparent 65%
+      )
+      padding-box,
+    linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--night-raised) 92%, var(--beam)),
+        var(--night-raised) 55%,
+        color-mix(in srgb, var(--night) 60%, var(--night-raised))
+      )
+      padding-box,
+    linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--beam) 50%, transparent),
+        var(--night-veil) 35%,
+        color-mix(in srgb, var(--charte-gris) 55%, transparent)
+      )
+      border-box;
+  box-shadow: 0 1.5rem 3rem -2rem rgba(0, 0, 0, 0.7);
+  transition: box-shadow 0.3s ease;
+}
+
+/* La seconde rangée, trois cartes plus larges. */
+.domaine:nth-child(n + 5) {
+  grid-column: span 4;
+}
+
+/* Les sources : rampe en haut, puis au sol. */
+.domaine:nth-child(1) {
+  --x: 0%;
+  --dir: 145deg;
+}
+
+.domaine:nth-child(2) {
+  --x: 35%;
+  --dir: 168deg;
+}
+
+.domaine:nth-child(3) {
+  --x: 65%;
+  --dir: 192deg;
+}
+
+.domaine:nth-child(4) {
+  --x: 100%;
+  --dir: 215deg;
+}
+
+.domaine:nth-child(5) {
+  --x: 0%;
+  --y: 100%;
+  --dir: 45deg;
+}
+
+.domaine:nth-child(6) {
+  --x: 50%;
+  --y: 100%;
+  --dir: 0deg;
+  --ouv: 10deg;
+}
+
+.domaine:nth-child(7) {
+  --x: 100%;
+  --y: 100%;
+  --dir: 315deg;
+}
+
+/* Le faisceau. */
+.domaine::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    radial-gradient(
+      circle at var(--x) var(--y),
+      color-mix(in srgb, var(--beam) 32%, transparent),
+      transparent 4.5rem
+    ),
+    conic-gradient(
+      from calc(var(--dir) - var(--ouv)) at var(--x) var(--y),
+      transparent 0deg,
+      color-mix(in srgb, var(--beam) 7%, transparent) calc(var(--ouv) * 0.45),
+      color-mix(in srgb, var(--beam) 17%, transparent) var(--ouv),
+      color-mix(in srgb, var(--beam) 7%, transparent) calc(var(--ouv) * 1.55),
+      transparent calc(var(--ouv) * 2),
+      transparent 360deg
+    );
+  -webkit-mask-image: radial-gradient(
+    circle at var(--x) var(--y),
+    #000 10%,
+    transparent 95%
+  );
+  mask-image: radial-gradient(
+    circle at var(--x) var(--y),
+    #000 10%,
+    transparent 95%
+  );
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+/* L'arête haute, allumée à moitié ; à fond au survol. */
+.domaine::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 1px;
+  background-color: var(--beam);
+  box-shadow: 0 0 0.9rem color-mix(in srgb, var(--beam) 60%, transparent);
+  opacity: 0.35;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.domaine:hover {
+  box-shadow:
+    0 1.5rem 3rem -2rem rgba(0, 0, 0, 0.7),
+    0 0 2.5rem -1rem color-mix(in srgb, var(--beam) 30%, transparent);
+}
+
+.domaine:hover::after,
+.domaine:hover::before {
+  opacity: 1;
+}
+
+.domaine__picto {
+  width: clamp(2.5rem, 3vw, 3rem);
+  height: clamp(2.5rem, 3vw, 3rem);
+  margin-bottom: 0.5rem;
+  color: var(--beam);
+  filter: drop-shadow(0 0 0.45rem color-mix(in srgb, var(--beam) 45%, transparent));
+  opacity: 0.85;
+  transition:
+    opacity 0.3s ease,
+    filter 0.3s ease;
+}
+
+.domaine:hover .domaine__picto {
+  opacity: 1;
+  filter: drop-shadow(0 0 0.8rem color-mix(in srgb, var(--beam) 70%, transparent));
+}
+
+.domaine__nom {
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--dawn);
+}
+
+.domaine__apport {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--dusk);
+}
+
+/* ============================================================
+   S4 · POUR QUI
+   Les agences en grand, sous la lumière ; les quatre autres
+   publics en regard, entre des filets.
+   ============================================================ */
+
+.publics-tech {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  align-items: stretch;
+  gap: clamp(1.5rem, 3.5vw, 3.5rem);
+  margin-top: clamp(2.75rem, 6vh, 3.75rem);
+}
+
+/* Le bloc des agences : une grande carte éclairée du coin haut gauche,
+   une lueur violette, l'arête lavande allumée. */
+.agences {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  scroll-margin-top: calc(var(--nav-h, 4.5rem) + 1.5rem);
+  padding: clamp(2rem, 3.5vw, 3rem);
+  border: 1px solid transparent;
+  background:
+    radial-gradient(
+        80% 90% at 0% 0%,
+        color-mix(in srgb, var(--oysen-purple) 40%, transparent),
+        transparent 70%
+      )
+      padding-box,
+    radial-gradient(
+        60% 70% at 0% 0%,
+        color-mix(in srgb, var(--beam) 12%, transparent),
+        transparent 70%
+      )
+      padding-box,
+    linear-gradient(var(--night-raised), var(--night-raised)) padding-box,
+    linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--beam) 60%, transparent),
+        var(--night-veil) 40%,
+        color-mix(in srgb, var(--charte-gris) 55%, transparent)
+      )
+      border-box;
+  box-shadow:
+    0 1.5rem 3rem -2rem rgba(0, 0, 0, 0.7),
+    0 0 3rem -1.5rem color-mix(in srgb, var(--beam) 30%, transparent);
+}
+
+.agences::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 1px;
+  background-color: var(--beam);
+  box-shadow: 0 0 1rem color-mix(in srgb, var(--beam) 60%, transparent);
+}
+
+.agences__label {
+  margin: 0;
+  padding: 0.35rem 0.75rem;
+  font-family: var(--mono);
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--beam);
+  border: 1px solid color-mix(in srgb, var(--beam) 45%, transparent);
+}
+
+.agences__titre {
+  max-width: 22ch;
+  margin: 0.25rem 0 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(1.5rem, 2.3vw, 2rem);
+  font-weight: 300;
+  line-height: 1.2;
+  text-wrap: balance;
+  color: var(--dawn);
+}
+
+.agences__texte {
+  max-width: 52ch;
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--dusk);
+}
+
+.agences__bouton {
+  margin-top: auto;
+}
+
+.publics-tech__autres {
+  display: grid;
+  align-content: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.public-tech {
+  padding: clamp(1.25rem, 3vh, 1.6rem) 0;
+  border-top: 1px solid var(--night-veil);
+}
+
+.public-tech:last-child {
+  border-bottom: 1px solid var(--night-veil);
+}
+
+.public-tech__nom {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin: 0 0 0.5rem;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--dawn);
+}
+
+.public-tech__nom::before {
+  content: '';
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: var(--beam);
+  transform: rotate(45deg);
+}
+
+.public-tech__texte {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--dusk);
+}
+
+/* ============================================================
+   S5 · LE PARC
+   Quatre engagements, chacun sous un filet amorcé en lavande ; le
+   bandeau des marques à remplir ; l'encart « Plus grand ? ».
+   ============================================================ */
+
+.section.section--technique-parc {
+  border-top: 1px solid var(--night-veil);
+}
+
+.engagements {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(1.5rem, 3vw, 2.75rem);
+  margin: clamp(2.75rem, 6vh, 3.75rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.engagement {
+  padding-top: 1.25rem;
+  background-image:
+    linear-gradient(var(--beam), var(--beam)),
+    linear-gradient(var(--night-veil), var(--night-veil));
+  background-repeat: no-repeat;
+  background-size:
+    2.25rem 1px,
+    100% 1px;
+}
+
+.engagement__nom {
+  margin: 0 0 0.6rem;
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--beam);
+}
+
+.engagement__texte {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--dawn);
+}
+
+/* Le bandeau des marques : six emplacements, hachurés comme des
+   épreuves tant qu'ils sont vides. */
+.marques {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  margin: clamp(3rem, 7vh, 4rem) 0 0;
+  padding: clamp(1.5rem, 3.5vh, 2rem) 0;
+  list-style: none;
+  border-block: 1px solid var(--night-veil);
+}
+
+.marques__item {
+  display: grid;
+  justify-items: center;
+  gap: 0.7rem;
+  padding: 0 clamp(0.5rem, 1.5vw, 1.25rem);
+  text-align: center;
+}
+
+.marques__item + .marques__item {
+  border-left: 1px solid var(--night-veil);
+}
+
+.marques__logo {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  max-width: 9rem;
+  aspect-ratio: 16 / 9;
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.06em;
+  color: var(--dusk);
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent 0 0.6rem,
+    color-mix(in srgb, var(--beam) 5%, transparent) 0.6rem 0.65rem
+  );
+  border: 1px dashed var(--night-veil);
+}
+
+.marques__nom {
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  color: var(--dawn);
+}
+
+/* « Plus grand ? » : un encart, le filet lavande à gauche. */
+.plus-grand {
+  display: grid;
+  justify-items: start;
+  gap: 0.6rem;
+  max-width: 54rem;
+  margin: clamp(2.5rem, 5.5vh, 3.25rem) auto 0;
+  padding: 1.35rem 1.6rem;
+  background-color: color-mix(in srgb, var(--night-raised) 70%, transparent);
+  border: 1px solid var(--night-veil);
+  border-left: 2px solid var(--beam);
+}
+
+.plus-grand__titre {
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--dawn);
+}
+
+.plus-grand__texte {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--dusk);
+}
+
+/* ============================================================
+   MOUVEMENT RÉDUIT
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .tech-hero__texte > *,
+  .pont,
+  .pont__lampe::after,
+  .pont__faisceau {
+    animation: none;
+  }
+
+  .tech-lien__fleche,
+  .domaine,
+  .domaine::before,
+  .domaine::after,
+  .domaine__picto {
+    transition: none;
+  }
+}
+
+/* ============================================================
+   TABLETTE
+   ============================================================ */
+
+@media (max-width: 1023px) {
+  .tech-hero {
+    min-height: 0;
+  }
+
+  .pont__faisceau {
+    width: 36vmax;
+  }
+
+  .domaines {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .domaine,
+  .domaine:nth-child(n + 5) {
+    grid-column: auto;
+  }
+
+  /* La septième, seule sur sa rangée, prend toute la largeur. */
+  .domaine:nth-child(7) {
+    grid-column: 1 / -1;
+  }
+
+  .publics-tech {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .engagements {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .marques {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    row-gap: 1.75rem;
+  }
+
+  .marques__item:nth-child(4) {
+    border-left: 0;
+  }
+}
+
+/* ============================================================
+   TÉLÉPHONE
+   ============================================================ */
+
+@media (max-width: 760px) {
+  /* Trois projecteurs seulement sous le pont. */
+  .pont__projecteur:nth-child(2),
+  .pont__projecteur:nth-child(4) {
+    display: none;
+  }
+
+  .pont__projecteurs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .domaines,
+  .engagements {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .domaine:nth-child(7) {
+    grid-column: auto;
+  }
+
+  .domaine {
+    min-height: 0;
+  }
+
+  .marques {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .marques__item:nth-child(odd) {
+    border-left: 0;
+  }
+
+  .marques__item:nth-child(even) {
+    border-left: 1px solid var(--night-veil);
+  }
+
+  /* Le tableau se lit ligne par ligne : l'intitulé, puis les deux
+     réponses, chacune sous le nom de sa formule. */
+  .comparaison__table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .comparaison__table tbody tr {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-bottom: 1px solid var(--night-veil);
+  }
+
+  .comparaison__table tbody th {
+    grid-column: 1 / -1;
+    width: auto;
+    padding: 1.1rem 0 0.6rem;
+  }
+
+  .comparaison__table tbody td {
+    padding: 0.85rem;
+    text-align: left;
+    border-top: 0;
+  }
+
+  .comparaison__table tbody td::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 0.35rem;
+    font-family: var(--mono);
+    font-size: 0.5rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dusk);
+  }
+
+  .comparaison__table tbody tr:last-child th,
+  .comparaison__table tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  /* Le lien reste sous la colonne de la location, à droite. */
+  .comparaison__table tfoot tr {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .comparaison__table tfoot td {
+    padding: 1.25rem 0.85rem 0;
+  }
+
+  .comparaison__table tfoot td[colspan] {
+    padding: 0;
+  }
+
+  .comparaison__lien {
+    text-align: left;
+  }
+}

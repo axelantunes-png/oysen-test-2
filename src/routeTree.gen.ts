@@ -13,6 +13,12 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ContactIndexRouteImport } from './routes/contact/index'
 import { Route as ContactMerciRouteImport } from './routes/contact/merci'
 import { Route as NosServicesIndexRouteImport } from './routes/nos-services/index'
+import { Route as NosServicesCollectivitesInstitutionnelsRouteImport } from './routes/nos-services/collectivites-institutionnels'
+import { Route as NosServicesEvenementsEntrepriseRouteImport } from './routes/nos-services/evenements-entreprise'
+import { Route as NosServicesFestivalsEvenementsCulturelsRouteImport } from './routes/nos-services/festivals-evenements-culturels'
+import { Route as NosServicesLocationDeMaterielRouteImport } from './routes/nos-services/location-de-materiel'
+import { Route as NosServicesMariagesEvenementsPrivesRouteImport } from './routes/nos-services/mariages-evenements-prives'
+import { Route as NosServicesPrestationTechniqueRouteImport } from './routes/nos-services/prestation-technique'
 import { Route as QuiSommesNousLAgenceRouteImport } from './routes/qui-sommes-nous/l-agence'
 import { Route as QuiSommesNousLeFondateurRouteImport } from './routes/qui-sommes-nous/le-fondateur'
 
@@ -36,6 +42,42 @@ const NosServicesIndexRoute = NosServicesIndexRouteImport.update({
   path: '/nos-services/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NosServicesCollectivitesInstitutionnelsRoute =
+  NosServicesCollectivitesInstitutionnelsRouteImport.update({
+    id: '/nos-services/collectivites-institutionnels',
+    path: '/nos-services/collectivites-institutionnels',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const NosServicesEvenementsEntrepriseRoute =
+  NosServicesEvenementsEntrepriseRouteImport.update({
+    id: '/nos-services/evenements-entreprise',
+    path: '/nos-services/evenements-entreprise',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const NosServicesFestivalsEvenementsCulturelsRoute =
+  NosServicesFestivalsEvenementsCulturelsRouteImport.update({
+    id: '/nos-services/festivals-evenements-culturels',
+    path: '/nos-services/festivals-evenements-culturels',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const NosServicesLocationDeMaterielRoute =
+  NosServicesLocationDeMaterielRouteImport.update({
+    id: '/nos-services/location-de-materiel',
+    path: '/nos-services/location-de-materiel',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const NosServicesMariagesEvenementsPrivesRoute =
+  NosServicesMariagesEvenementsPrivesRouteImport.update({
+    id: '/nos-services/mariages-evenements-prives',
+    path: '/nos-services/mariages-evenements-prives',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const NosServicesPrestationTechniqueRoute =
+  NosServicesPrestationTechniqueRouteImport.update({
+    id: '/nos-services/prestation-technique',
+    path: '/nos-services/prestation-technique',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const QuiSommesNousLAgenceRoute = QuiSommesNousLAgenceRouteImport.update({
   id: '/qui-sommes-nous/l-agence',
   path: '/qui-sommes-nous/l-agence',
@@ -51,6 +93,12 @@ const QuiSommesNousLeFondateurRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/contact/merci': typeof ContactMerciRoute
+  '/nos-services/collectivites-institutionnels': typeof NosServicesCollectivitesInstitutionnelsRoute
+  '/nos-services/evenements-entreprise': typeof NosServicesEvenementsEntrepriseRoute
+  '/nos-services/festivals-evenements-culturels': typeof NosServicesFestivalsEvenementsCulturelsRoute
+  '/nos-services/location-de-materiel': typeof NosServicesLocationDeMaterielRoute
+  '/nos-services/mariages-evenements-prives': typeof NosServicesMariagesEvenementsPrivesRoute
+  '/nos-services/prestation-technique': typeof NosServicesPrestationTechniqueRoute
   '/qui-sommes-nous/l-agence': typeof QuiSommesNousLAgenceRoute
   '/qui-sommes-nous/le-fondateur': typeof QuiSommesNousLeFondateurRoute
   '/contact/': typeof ContactIndexRoute
@@ -59,6 +107,12 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/contact/merci': typeof ContactMerciRoute
+  '/nos-services/collectivites-institutionnels': typeof NosServicesCollectivitesInstitutionnelsRoute
+  '/nos-services/evenements-entreprise': typeof NosServicesEvenementsEntrepriseRoute
+  '/nos-services/festivals-evenements-culturels': typeof NosServicesFestivalsEvenementsCulturelsRoute
+  '/nos-services/location-de-materiel': typeof NosServicesLocationDeMaterielRoute
+  '/nos-services/mariages-evenements-prives': typeof NosServicesMariagesEvenementsPrivesRoute
+  '/nos-services/prestation-technique': typeof NosServicesPrestationTechniqueRoute
   '/qui-sommes-nous/l-agence': typeof QuiSommesNousLAgenceRoute
   '/qui-sommes-nous/le-fondateur': typeof QuiSommesNousLeFondateurRoute
   '/contact': typeof ContactIndexRoute
@@ -68,6 +122,12 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/contact/merci': typeof ContactMerciRoute
+  '/nos-services/collectivites-institutionnels': typeof NosServicesCollectivitesInstitutionnelsRoute
+  '/nos-services/evenements-entreprise': typeof NosServicesEvenementsEntrepriseRoute
+  '/nos-services/festivals-evenements-culturels': typeof NosServicesFestivalsEvenementsCulturelsRoute
+  '/nos-services/location-de-materiel': typeof NosServicesLocationDeMaterielRoute
+  '/nos-services/mariages-evenements-prives': typeof NosServicesMariagesEvenementsPrivesRoute
+  '/nos-services/prestation-technique': typeof NosServicesPrestationTechniqueRoute
   '/qui-sommes-nous/l-agence': typeof QuiSommesNousLAgenceRoute
   '/qui-sommes-nous/le-fondateur': typeof QuiSommesNousLeFondateurRoute
   '/contact/': typeof ContactIndexRoute
@@ -78,6 +138,12 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/contact/merci'
+    | '/nos-services/collectivites-institutionnels'
+    | '/nos-services/evenements-entreprise'
+    | '/nos-services/festivals-evenements-culturels'
+    | '/nos-services/location-de-materiel'
+    | '/nos-services/mariages-evenements-prives'
+    | '/nos-services/prestation-technique'
     | '/qui-sommes-nous/l-agence'
     | '/qui-sommes-nous/le-fondateur'
     | '/contact/'
@@ -86,6 +152,12 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/contact/merci'
+    | '/nos-services/collectivites-institutionnels'
+    | '/nos-services/evenements-entreprise'
+    | '/nos-services/festivals-evenements-culturels'
+    | '/nos-services/location-de-materiel'
+    | '/nos-services/mariages-evenements-prives'
+    | '/nos-services/prestation-technique'
     | '/qui-sommes-nous/l-agence'
     | '/qui-sommes-nous/le-fondateur'
     | '/contact'
@@ -94,6 +166,12 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/contact/merci'
+    | '/nos-services/collectivites-institutionnels'
+    | '/nos-services/evenements-entreprise'
+    | '/nos-services/festivals-evenements-culturels'
+    | '/nos-services/location-de-materiel'
+    | '/nos-services/mariages-evenements-prives'
+    | '/nos-services/prestation-technique'
     | '/qui-sommes-nous/l-agence'
     | '/qui-sommes-nous/le-fondateur'
     | '/contact/'
@@ -103,6 +181,12 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ContactMerciRoute: typeof ContactMerciRoute
+  NosServicesCollectivitesInstitutionnelsRoute: typeof NosServicesCollectivitesInstitutionnelsRoute
+  NosServicesEvenementsEntrepriseRoute: typeof NosServicesEvenementsEntrepriseRoute
+  NosServicesFestivalsEvenementsCulturelsRoute: typeof NosServicesFestivalsEvenementsCulturelsRoute
+  NosServicesLocationDeMaterielRoute: typeof NosServicesLocationDeMaterielRoute
+  NosServicesMariagesEvenementsPrivesRoute: typeof NosServicesMariagesEvenementsPrivesRoute
+  NosServicesPrestationTechniqueRoute: typeof NosServicesPrestationTechniqueRoute
   QuiSommesNousLAgenceRoute: typeof QuiSommesNousLAgenceRoute
   QuiSommesNousLeFondateurRoute: typeof QuiSommesNousLeFondateurRoute
   ContactIndexRoute: typeof ContactIndexRoute
@@ -139,6 +223,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NosServicesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/nos-services/collectivites-institutionnels': {
+      id: '/nos-services/collectivites-institutionnels'
+      path: '/nos-services/collectivites-institutionnels'
+      fullPath: '/nos-services/collectivites-institutionnels'
+      preLoaderRoute: typeof NosServicesCollectivitesInstitutionnelsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/nos-services/evenements-entreprise': {
+      id: '/nos-services/evenements-entreprise'
+      path: '/nos-services/evenements-entreprise'
+      fullPath: '/nos-services/evenements-entreprise'
+      preLoaderRoute: typeof NosServicesEvenementsEntrepriseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/nos-services/festivals-evenements-culturels': {
+      id: '/nos-services/festivals-evenements-culturels'
+      path: '/nos-services/festivals-evenements-culturels'
+      fullPath: '/nos-services/festivals-evenements-culturels'
+      preLoaderRoute: typeof NosServicesFestivalsEvenementsCulturelsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/nos-services/location-de-materiel': {
+      id: '/nos-services/location-de-materiel'
+      path: '/nos-services/location-de-materiel'
+      fullPath: '/nos-services/location-de-materiel'
+      preLoaderRoute: typeof NosServicesLocationDeMaterielRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/nos-services/mariages-evenements-prives': {
+      id: '/nos-services/mariages-evenements-prives'
+      path: '/nos-services/mariages-evenements-prives'
+      fullPath: '/nos-services/mariages-evenements-prives'
+      preLoaderRoute: typeof NosServicesMariagesEvenementsPrivesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/nos-services/prestation-technique': {
+      id: '/nos-services/prestation-technique'
+      path: '/nos-services/prestation-technique'
+      fullPath: '/nos-services/prestation-technique'
+      preLoaderRoute: typeof NosServicesPrestationTechniqueRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/qui-sommes-nous/l-agence': {
       id: '/qui-sommes-nous/l-agence'
       path: '/qui-sommes-nous/l-agence'
@@ -159,6 +285,15 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ContactMerciRoute: ContactMerciRoute,
+  NosServicesCollectivitesInstitutionnelsRoute:
+    NosServicesCollectivitesInstitutionnelsRoute,
+  NosServicesEvenementsEntrepriseRoute: NosServicesEvenementsEntrepriseRoute,
+  NosServicesFestivalsEvenementsCulturelsRoute:
+    NosServicesFestivalsEvenementsCulturelsRoute,
+  NosServicesLocationDeMaterielRoute: NosServicesLocationDeMaterielRoute,
+  NosServicesMariagesEvenementsPrivesRoute:
+    NosServicesMariagesEvenementsPrivesRoute,
+  NosServicesPrestationTechniqueRoute: NosServicesPrestationTechniqueRoute,
   QuiSommesNousLAgenceRoute: QuiSommesNousLAgenceRoute,
   QuiSommesNousLeFondateurRoute: QuiSommesNousLeFondateurRoute,
   ContactIndexRoute: ContactIndexRoute,

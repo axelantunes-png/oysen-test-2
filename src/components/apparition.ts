@@ -21,6 +21,18 @@ const SECTIONS_CASCADE = [
   '.section--agence',
   /* Le récit de la page « Le fondateur », sous son hero. */
   '.section--fondateur',
+  /* Les sections de la page « Mariage et événement privé ». */
+  '.section--mariage',
+  /* Les sections de la page « Événements d'entreprise ». */
+  '.section--entreprise',
+  /* Les sections de la page « Festivals et événements culturels ». */
+  '.section--festival',
+  /* Les sections de la page « Collectivités et institutions ». */
+  '.section--collectivite',
+  /* Les sections de la page « Location de matériel ». */
+  '.section--location',
+  /* Les sections de la page « Prestation technique ». */
+  '.section--technique',
 ]
 
 /**
@@ -97,16 +109,14 @@ const CASCADE = [
   /*
    * « Le fondateur » : ce qui accompagne chaque tête de section, les deux
    * paragraphes de l'introduction et ses repères, chaque étape de la
-   * frise, chaque savoir-faire, les leçons, les trois temps de
-   * l'événement, les articles, puis l'appel.
+   * frise, chaque savoir-faire, les trois temps de l'événement, les
+   * articles, puis l'appel.
    */
   '.fondateur-tete__cote',
   '.intro-fondateur > p',
   '.reperes > li',
   '.jalon',
   '.savoir',
-  '.lecon-une',
-  '.lecons > li',
   '.temps__bloc',
   '.marquant__lien',
   '.articles > li',
@@ -114,6 +124,101 @@ const CASCADE = [
   '.fondateur-sortie__lede',
   '.fondateur-sortie__actions',
   '.fondateur-sortie__direct',
+  /*
+   * « Mariage et événement privé » : le texte sous chaque tête, les deux
+   * volets de l'avant-après et la phrase qui les relie, les formules, les
+   * étapes du rétroplanning, les tuiles de la galerie, les couples, les
+   * budgets et ce qui les fait varier, les questions, l'invitation.
+   */
+  '.mariage-tete__texte',
+  '.bab__avant',
+  '.bab__apres',
+  '.bab__passerelle',
+  '.bab__suite',
+  '.formules > li',
+  '.formules__prive',
+  '.voies',
+  '.planning__etape',
+  '.galerie__tuile',
+  '.couples > li',
+  '.budgets > li',
+  '.variables',
+  '.budget__action',
+  '.questions-mariage .faq__item',
+  '.invitation',
+  /*
+   * « Événements d'entreprise » : le texte sous chaque tête, les formats,
+   * les étapes et leurs notes, les bénéfices, ce qui se vérifie, les
+   * questions, les boutons qui closent une section.
+   */
+  '.entreprise-tete__texte',
+  '.formats > li',
+  '.dispositif__carte',
+  '.dispositif__notes',
+  '.benefice',
+  '.benefices__assurance',
+  '.verifier__item',
+  '.section--entreprise-questions .faq__item',
+  '.entreprise-action',
+  /*
+   * « Festivals et événements culturels » : le texte sous chaque tête,
+   * les trois critères, les familles et le matériel, les précautions
+   * sous leurs lampes, notre approche, les cinq étapes, les questions.
+   */
+  '.fest-tete__texte',
+  '.choix__criteres',
+  '.famille',
+  '.materiel__item',
+  '.vigie',
+  '.approche',
+  '.etape-p',
+  '.etapes-p__conclusion',
+  '.section--festival-questions .faq__item',
+  /*
+   * « Collectivités et institutions » : le texte sous chaque tête, les
+   * cinq pièces, chaque point exigé, les interventions, la capacité et
+   * les sorties, les étapes et leurs notes, ce qui se vérifie, les
+   * questions, les boutons.
+   */
+  '.coll-tete__texte',
+  '.pieces > li',
+  '.pieces__reunies',
+  '.exigence',
+  '.interventions > li',
+  '.capacite',
+  '.coll-sorties',
+  '.etape-coll',
+  '.methode-coll__notes',
+  '.coll-verifier__item',
+  '.section--collectivite-questions .faq__item',
+  '.coll-action',
+  /*
+   * « Location de matériel » : le texte sous chaque tête, les cinq
+   * corps du matériel, les cinq étapes, les engagements sous leurs lampes, la
+   * plaque du technicien, les questions, le formulaire.
+   */
+  '.loc-tete__texte',
+  '.corps',
+  '.loc-etape',
+  '.garde',
+  '.plaque',
+  '.section--location-questions .faq__item',
+  '.dispo',
+  /*
+   * « Prestation technique » : le texte sous chaque tête, le tableau et
+   * sa suite, les domaines, les agences et les autres publics, les
+   * engagements et les marques, l'encart, les questions.
+   */
+  '.tech-tete__texte',
+  '.comparaison',
+  '.comparaison__suite',
+  '.domaine',
+  '.agences',
+  '.public-tech',
+  '.engagement',
+  '.marques__item',
+  '.plus-grand',
+  '.section--technique-questions .faq__item',
 ].join(', ')
 
 /** La classe que porte tout élément qui attend son entrée (voir app.css). */

@@ -1,0 +1,109 @@
+/* ============================================================
+   S6 · UN CAS RÉEL
+   Le noir complet. La trame du cas en quatre temps, reliés par le
+   fil à losanges, chacun avec son numéro léger. Les crochets
+   restent visibles tant que le cas n'est pas rédigé.
+   ============================================================ */
+
+.section.section--technique-cas {
+  background-color: var(--noir);
+}
+
+.cas-tech {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  margin: clamp(2.75rem, 6vh, 3.75rem) 0 0;
+  padding: 2.25rem 0 0;
+  list-style: none;
+}
+
+.cas-tech::before {
+  content: '';
+  position: absolute;
+  top: 0.45rem;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-image: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--beam) 55%, transparent),
+    var(--night-veil) 85%,
+    transparent
+  );
+}
+
+.cas-tech__etape {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 0.55rem;
+}
+
+.cas-tech__etape::before {
+  content: '';
+  position: absolute;
+  top: calc(-2.25rem + 0.45rem);
+  left: 0;
+  width: 0.6rem;
+  height: 0.6rem;
+  background-color: var(--beam);
+  transform: translateY(-50%) rotate(45deg);
+  box-shadow: 0 0 0 0.3rem color-mix(in srgb, var(--beam) 14%, transparent);
+}
+
+.cas-tech__numero {
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 2.5rem;
+  font-weight: 200;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: color-mix(in srgb, var(--beam) 70%, transparent);
+}
+
+.cas-tech__nom {
+  margin: 0.35rem 0 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--dawn);
+}
+
+.cas-tech__texte {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--dusk);
+}
+
+
+/* ---- (tablette) ---- */
+  /* Le cas : les quatre temps s'empilent, le fil passe à gauche. */
+  .cas-tech {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+    max-width: 40rem;
+    margin-inline: auto;
+    padding: 0 0 0 1.75rem;
+  }
+
+  .cas-tech::before {
+    top: 0.45rem;
+    bottom: 0.45rem;
+    left: 0.3rem;
+    right: auto;
+    width: 1px;
+    height: auto;
+    background-image: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--beam) 55%, transparent),
+      var(--night-veil)
+    );
+  }
+
+  .cas-tech__etape::before {
+    top: 0.45rem;
+    left: calc(-1.75rem + 0.3rem);
+    transform: translate(-50%, -50%) rotate(45deg);
+  }

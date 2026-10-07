@@ -106,8 +106,9 @@ function MotQuiTourne() {
 /*
  * S1 — Hero.
  *
- * Un aiguillage, pas une page de vente : le surtitre situe l'activité et la
- * zone, le H1 porte le bénéfice commun aux cinq cibles, le sous-titre pose
+ * Un aiguillage, pas une page de vente : le surtitre (le H1) situe
+ * l'activité et la zone, l'accroche porte le bénéfice commun aux cinq
+ * cibles, le sous-titre pose
  * le périmètre et lève l'objection du « combien d'interlocuteurs ? », puis
  * deux sorties seulement. Le bandeau de faits ferme le bloc.
  */
@@ -143,17 +144,20 @@ function Home() {
           </span>
 
           <div className="hero__inner">
-            <p className="hero__eyebrow">
+            {/* Le h1 est le surtitre, porteur de la requête (agence
+                événementielle, Toulouse) ; la grande phrase en dessous reste
+                l'accroche, en simple paragraphe. */}
+            <h1 className="hero__eyebrow">
               Agence événementielle à {ZONE}
-            </p>
+            </h1>
 
-            <h1 className="hero__title">
+            <p className="hero__title">
               Vivez vos événements simplement.
               <span className="hero__title-payoff">
                 Créez des souvenirs
                 <MotQuiTourne />
               </span>
-            </h1>
+            </p>
 
             <p className="hero__lede">
               Nous cherchons le lieu, sélectionnons les prestataires,

@@ -22,11 +22,6 @@ export const Route = createFileRoute('/qui-sommes-nous/le-fondateur')({
     ],
     links: [
       { rel: 'stylesheet', href: fondateurCss },
-      /* Le lettrage des annotations (voies, périodes), comme sur L'agence. */
-      {
-        rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500&display=swap',
-      },
     ],
   }),
   component: Fondateur,
@@ -51,8 +46,8 @@ const PORTRAIT: string | null = null
  * à sa gauche.
  *
  * La suite est un récit à la première personne, mis en page sobrement :
- * une colonne de lecture, un parcours daté, des savoir-faire, des leçons,
- * un événement, ses articles, puis l'appel.
+ * une colonne de lecture, un parcours daté, des savoir-faire, un
+ * événement, ses articles, puis l'appel.
  *
  * Tout ce qui est en faux texte est marqué « À REMPLACER » dans le code.
  */
@@ -63,7 +58,6 @@ function Fondateur() {
       <Introduction />
       <Parcours />
       <Savoirs />
-      <Lecons />
       <Marquant />
       <Articles />
       <Appel />
@@ -403,80 +397,32 @@ function Savoirs() {
   )
 }
 
-/* ---- 4 · Ce que le terrain m'a appris ----
-   La première leçon en grand à gauche, les quatre autres en liste à
-   droite, entre des filets. */
-
-const LECONS = [
-  'Les problèmes du jour J se règlent rarement le jour J. Ils se règlent pendant la préparation.',
-  'Un planning qui oublie le démontage n’est pas terminé.',
-  'Une régie réussie, c’est une régie que personne ne remarque.',
-  'Un bon devis se reconnaît à ce qu’il n’oublie rien, pas à son prix.',
-  // À REMPLACER : une leçon tirée d'un événement précis.
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-]
-
-function Lecons() {
-  const [premiere, ...suivantes] = LECONS
-
-  return (
-    <section
-      className="section section--fondateur section--fondateur-lecons"
-      aria-labelledby="lecons-title"
-    >
-      <div className="section__inner">
-        <Tete
-          surtitre="Retours de terrain"
-          titre="Ce que le terrain m’a appris"
-          id="lecons-title"
-        />
-
-        <div className="lecons-grille">
-          <blockquote className="lecon-une">
-            <p>«&nbsp;{premiere}&nbsp;»</p>
-          </blockquote>
-
-          <ul className="lecons">
-            {suivantes.map((lecon) => (
-              <li key={lecon}>
-                <blockquote className="lecon">
-                  <p>«&nbsp;{lecon}&nbsp;»</p>
-                </blockquote>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-/* ---- 5 · Un événement qui m'a marqué ----
+/* ---- 4 · Un événement qui m'a marqué ----
    La fiche de l'événement en regard du titre, puis le récit en trois
    temps, côte à côte. */
 
-/* À REMPLACER : la fiche et le récit sont en faux texte. */
+/* La fiche et le récit d'un gala de 600 personnes, en salle des fêtes. */
 const FICHE = [
-  { label: 'Lieu', valeur: 'Lorem ipsum' },
-  { label: 'Année', valeur: 'Lorem' },
-  { label: 'Invités', valeur: 'Lorem' },
+  { label: 'Lieu', valeur: 'Salle des fêtes' },
+  { label: 'Année', valeur: '2022' },
+  { label: 'Invités', valeur: '600' },
 ]
 
 const TEMPS = [
   {
     titre: 'Ce qui était difficile',
     texte:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+      'Accueillir 600 personnes dans de bonnes conditions, et restituer la salle à 7h00, après un gala fini à 3h du matin.',
   },
   {
     titre: 'Ce que j’ai fait',
     texte:
-      'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit.',
+      'J’ai coordonné tout le projet, de la première idée au dernier coup de balai : lieu, billetterie, restauration, sécurité, Croix-Rouge, prestataires et technique.',
   },
   {
     titre: 'Ce que j’en ai retenu',
     texte:
-      'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+      'La billetterie est un vrai outil de pilotage, et le démontage doit être prévu dès la conception de l’événement.',
   },
 ]
 
@@ -520,7 +466,7 @@ function Marquant() {
   )
 }
 
-/* ---- 6 · Ce que j'écris ----
+/* ---- 5 · Ce que j'écris ----
    Ses trois derniers articles du blog. En attendant les vrais, trois
    cartes en faux texte (À REMPLACER par la liste automatique). */
 
@@ -582,7 +528,7 @@ function Articles() {
   )
 }
 
-/* ---- 7 · La sortie ----
+/* ---- 6 · La sortie ----
    La même que celle de la page « L'agence » : la rampe violette par le
    bas, une question, deux chemins, aucune pression. */
 

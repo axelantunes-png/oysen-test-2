@@ -1,0 +1,433 @@
+/* ---- S4 · Le déroulé, en calendrier ----
+   En haut, les huit étapes sur un fil, de gauche à droite : chacune est
+   un onglet, l'étape choisie a le losange plein. Dessous, les trois
+   formules, chacune une ligne qui part du milieu de son étape. Un
+   curseur violet descend de l'étape choisie, traverse les lignes (un
+   point s'allume sur celles qui la comprennent) et se pose sur le filet
+   de la fiche. La fiche, seule à l'écran, se lit en trois temps : le
+   titre, ce que nous faisons, ce qui reste de votre côté.
+
+   Tout se cale sur les huit huitièmes de la largeur : le milieu de
+   l'étape n est à (n - 0.5) / 8, que ce soit pour un onglet, le départ
+   d'une ligne ou le curseur. (Versions précédentes :
+   archives/mariage-s4-deroule-v1, -v2-allee et -v3-frise.) */
+
+.calendrier {
+  /* Le milieu de l'étape choisie, en pourcentage de la largeur. */
+  --x-actif: calc((var(--actif) - 0.5) / 8 * 100%);
+  /* L'espace entre les lignes et la fiche, que le curseur franchit. */
+  --vers-fiche: clamp(2.25rem, 5vh, 3rem);
+
+  margin-top: clamp(3rem, 7vh, 4.5rem);
+}
+
+/* -- Les huit étapes -- */
+
+.calendrier__etapes {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  grid-template-rows: auto 1.75rem auto;
+}
+
+/* Le fil, du milieu de la première étape au milieu de la dernière. */
+.calendrier__etapes::before {
+  content: '';
+  grid-row: 2;
+  grid-column: 1 / -1;
+  align-self: center;
+  height: 1px;
+  margin-inline: calc(100% / 16);
+  background-color: var(--filet);
+}
+
+.calendrier__onglet {
+  display: grid;
+  grid-row: 1 / 4;
+  grid-column: var(--rang);
+  grid-template-rows: subgrid;
+  justify-items: center;
+  padding: 0 0.4rem;
+  font: inherit;
+  text-align: center;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.calendrier__onglet:focus-visible {
+  outline: 2px solid var(--violet);
+  outline-offset: 4px;
+}
+
+.calendrier__repere {
+  display: grid;
+  align-self: end;
+  gap: 0.2rem;
+  padding-bottom: 0.4rem;
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-weight: 500;
+}
+
+.calendrier__numero {
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  color: var(--violet);
+}
+
+.calendrier__quand {
+  font-size: 0.625rem;
+  line-height: 1.35;
+  letter-spacing: 0.03em;
+  color: var(--gris-mauve);
+}
+
+.calendrier__losange {
+  align-self: center;
+  width: 0.6rem;
+  height: 0.6rem;
+  border: 1px solid var(--violet);
+  background-color: var(--papier);
+  transform: rotate(45deg);
+  transition:
+    background-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.calendrier__onglet--jour-j .calendrier__losange {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.calendrier__onglet:hover .calendrier__losange {
+  background-color: color-mix(in srgb, var(--violet) 25%, var(--papier));
+}
+
+.calendrier__onglet--actif .calendrier__losange,
+.calendrier__onglet--actif:hover .calendrier__losange {
+  background-color: var(--violet);
+  box-shadow: 0 0 0 0.35rem color-mix(in srgb, var(--violet) 14%, transparent);
+}
+
+.calendrier__titre {
+  align-self: start;
+  padding-top: 0.45rem;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.3;
+  text-wrap: balance;
+  color: var(--encre);
+  transition: color 0.3s ease;
+}
+
+.calendrier__onglet:hover .calendrier__titre,
+.calendrier__onglet--actif .calendrier__titre {
+  color: var(--violet);
+}
+
+/* -- Les trois formules -- */
+
+.voies {
+  position: relative;
+  display: grid;
+  row-gap: 1rem;
+  margin: 1.75rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.voie {
+  --x-depart: calc((var(--depuis) - 0.5) / 8 * 100%);
+
+  position: relative;
+  padding: 0 calc(100% / 16) 0.7rem var(--x-depart);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--gris-mauve);
+  transition: color 0.3s ease;
+}
+
+/* La ligne, sable tant que l'étape choisie n'est pas dans la formule,
+   violette dès qu'elle y est. */
+.voie::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: var(--x-depart);
+  right: calc(100% / 16);
+  height: 1px;
+  background-color: var(--filet);
+  transition: background-color 0.3s ease;
+}
+
+.voie--comprise::before {
+  background-color: color-mix(in srgb, var(--violet) 70%, var(--papier));
+}
+
+/* Le point où le curseur croise une ligne qui comprend l'étape. */
+.voie--comprise::after {
+  content: '';
+  position: absolute;
+  bottom: 0.5px;
+  left: var(--x-actif);
+  z-index: 1;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background-color: var(--violet);
+  transform: translate(-50%, 50%);
+  transition: left 0.45s cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+
+.voie__nom {
+  margin-right: 0.6rem;
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: inherit;
+}
+
+.voie--comprise .voie__nom {
+  color: var(--violet);
+}
+
+/* Le losange du départ, plein pour une formule allumée. */
+.voie__nom::before {
+  content: '';
+  position: absolute;
+  bottom: 0.5px;
+  left: var(--x-depart);
+  width: 0.45rem;
+  height: 0.45rem;
+  border: 1px solid var(--filet);
+  background-color: var(--papier);
+  transform: translate(-50%, 50%) rotate(45deg);
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.voie--comprise .voie__nom::before {
+  border-color: var(--violet);
+  background-color: var(--violet);
+}
+
+/* Le curseur : de sous l'étape choisie jusqu'au filet de la fiche. */
+.voies::before {
+  content: '';
+  position: absolute;
+  top: -1rem;
+  bottom: calc(-1 * var(--vers-fiche));
+  left: var(--x-actif);
+  width: 1px;
+  background-color: var(--violet);
+  transform: translateX(-50%);
+  transition: left 0.45s cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+
+/* Et le losange où il se pose. */
+.voies::after {
+  content: '';
+  position: absolute;
+  bottom: calc(-1 * var(--vers-fiche));
+  left: var(--x-actif);
+  width: 0.45rem;
+  height: 0.45rem;
+  background-color: var(--violet);
+  transform: translate(-50%, 50%) rotate(45deg);
+  transition: left 0.45s cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+
+/* -- La fiche de l'étape -- */
+
+.calendrier__fiches {
+  margin-top: var(--vers-fiche);
+  padding-top: clamp(2.25rem, 5vh, 3rem);
+  border-top: 1px solid var(--filet);
+}
+
+.fiche {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 1.5rem clamp(2rem, 4vw, 4rem);
+  animation: fiche-entree 0.45s ease both;
+}
+
+/* display: grid l'emporterait sur l'attribut hidden. */
+.fiche[hidden] {
+  display: none;
+}
+
+@keyframes fiche-entree {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+}
+
+.fiche__repere {
+  margin: 0;
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--gris-mauve);
+}
+
+.fiche__numero {
+  margin-right: 0.6rem;
+  color: var(--violet);
+}
+
+.fiche__titre {
+  margin: 0.6rem 0 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(1.75rem, 2.6vw, 2.4rem);
+  font-weight: 300;
+  line-height: 1.15;
+  text-wrap: balance;
+  color: var(--encre);
+}
+
+.fiche--jour-j .fiche__repere,
+.fiche--jour-j .fiche__titre {
+  color: var(--violet);
+}
+
+.fiche__nous {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.65;
+  text-wrap: pretty;
+  color: var(--encre);
+}
+
+/* La part des mariés, à l'italique de faire-part. */
+.fiche__vous {
+  margin: 0;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: clamp(1.4rem, 2vw, 1.75rem);
+  line-height: 1.3;
+  text-wrap: pretty;
+  color: var(--violet);
+}
+
+.fiche__qui {
+  display: block;
+  margin-bottom: 0.45rem;
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-style: normal;
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gris-mauve);
+}
+
+.fiche__pied {
+  display: flex;
+  flex-wrap: wrap;
+  grid-column: 1 / -1;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  margin-top: 1rem;
+}
+
+.fiche__formules {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--gris-mauve);
+}
+
+.fiche__formule {
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+
+.fiche__suite {
+  display: flex;
+  gap: 2rem;
+  margin: 0 0 0 auto;
+}
+
+.fiche__bouton {
+  padding: 0;
+  font-family: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.fiche__bouton--avant .lien-doux__fleche {
+  transform: rotate(180deg);
+}
+
+.fiche__bouton--avant:hover .lien-doux__fleche,
+.fiche__bouton--avant:focus-visible .lien-doux__fleche {
+  transform: translateX(-0.3rem) rotate(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fiche {
+    animation: none;
+  }
+
+  .voies::before,
+  .voies::after,
+  .voie--comprise::after {
+    transition: none;
+  }
+}
+
+/* -- Tablette et téléphone --
+   Les onglets ne gardent que leur numéro et leur losange : le titre
+   reste lu par les lecteurs d'écran, et s'affiche dans la fiche. La
+   fiche s'empile. */
+
+@media (max-width: 1023px) {
+  .calendrier__quand,
+  .calendrier__titre {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .calendrier__etapes {
+    grid-template-rows: auto 1.75rem;
+  }
+
+  .calendrier__onglet {
+    grid-row: 1 / 3;
+    padding-inline: 0;
+  }
+
+  .voies {
+    margin-top: 1.5rem;
+  }
+
+  .voie__texte {
+    display: block;
+  }
+
+  .fiche {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .fiche__suite {
+    margin-left: 0;
+  }
+}
+

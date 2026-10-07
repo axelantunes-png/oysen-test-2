@@ -1,0 +1,1523 @@
+/* ============================================================
+   MARIAGE ET ÉVÉNEMENT PRIVÉ
+   ------------------------------------------------------------
+   La seule page claire du site. Elle reprend les couleurs de
+   la toute première version (commit initial) : le papier,
+   l'encre, le gris mauve du texte secondaire, les filets
+   sable, et le violet du logo, cette fois en encre et non en
+   lumière.
+
+   Un mariage se prépare sur papier : la page en a la matière.
+   Son signe est le cadre de faire-part, un double filet violet
+   aux coins marqués d'un losange (.faire-part). Il n'encadre
+   que trois choses : la photo du hero, la formule la plus
+   complète et l'invitation finale.
+
+   Trois voix :
+     Montserrat léger      les titres, comme partout sur le site
+     Cormorant Garamond    l'italique de faire-part, réservée aux
+                           mots d'émotion, au jour rêvé et aux
+                           témoignages
+     Azeret Mono           les repères du compte à rebours et
+                           les étiquettes
+
+   Les composants partagés du site (boutons, surtitres, titres
+   de section, FAQ, apparition) lisent des variables : la page
+   les redéfinit pour elle seule, ils prennent ses couleurs
+   sans une ligne de plus.
+   ============================================================ */
+
+.page-mariage {
+  /* La palette de la première version. */
+  --papier: #f6f3ef;
+  --papier-fonce: #efe9e2;
+  --carte: #fbf9f6;
+  --encre: #1c1420;
+  --gris-mauve: #6d6076;
+  --filet: #e2dbd4;
+  --violet: #5a1e76;
+  --violet-fonce: #46165d;
+
+  /* Les variables du site, repeintes pour la page. */
+  --night: var(--papier);
+  --night-raised: var(--carte);
+  --dawn: var(--encre);
+  --dusk: var(--gris-mauve);
+  --beam: var(--violet);
+  --trait: var(--filet);
+  --trait-doux: color-mix(in srgb, var(--filet) 80%, transparent);
+  --night-veil: color-mix(in srgb, var(--violet) 18%, transparent);
+  --btn-ghost-border: var(--filet);
+
+  color: var(--encre);
+  background-color: var(--papier);
+  color-scheme: light;
+}
+
+.page-mariage em {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-weight: 500;
+  /* L'italique est plus petite à corps égal : on la remonte d'un cran. */
+  font-size: 1.12em;
+  letter-spacing: 0;
+  color: var(--violet);
+}
+
+/* ---- Le cadre de faire-part ----
+   Un filet extérieur, un filet intérieur plus pâle, et un losange
+   plein sur chaque coin. */
+
+.faire-part {
+  position: relative;
+  border: 1px solid color-mix(in srgb, var(--violet) 42%, transparent);
+}
+
+.faire-part::before {
+  content: '';
+  position: absolute;
+  inset: 0.45rem;
+  z-index: 1;
+  border: 1px solid color-mix(in srgb, var(--violet) 20%, transparent);
+  pointer-events: none;
+}
+
+.faire-part__coins i {
+  position: absolute;
+  z-index: 2;
+  width: 0.55rem;
+  height: 0.55rem;
+  background-color: var(--violet);
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.faire-part__coins i:nth-child(1) {
+  top: 0;
+  left: 0;
+}
+
+.faire-part__coins i:nth-child(2) {
+  top: 0;
+  left: 100%;
+}
+
+.faire-part__coins i:nth-child(3) {
+  top: 100%;
+  left: 0;
+}
+
+.faire-part__coins i:nth-child(4) {
+  top: 100%;
+  left: 100%;
+}
+
+/* ---- Le lien doux : du texte violet et une flèche ---- */
+
+.lien-doux {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--violet);
+}
+
+.lien-doux__fleche {
+  flex: none;
+  width: 1.1rem;
+  height: 1.1rem;
+  transition: transform 0.25s ease;
+}
+
+.lien-doux:hover,
+.lien-doux:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+
+.lien-doux:hover .lien-doux__fleche,
+.lien-doux:focus-visible .lien-doux__fleche {
+  transform: translateX(0.3rem);
+}
+
+.lien-doux:focus-visible {
+  outline: 2px solid var(--violet);
+  outline-offset: 4px;
+}
+
+/* ---- La trame des sections ---- */
+
+.section--mariage .section__inner {
+  max-width: 76rem;
+}
+
+.mariage-tete {
+  text-align: center;
+}
+
+.mariage-tete .section__title {
+  max-width: 24ch;
+  margin-inline: auto;
+}
+
+.mariage-tete__texte {
+  max-width: 50ch;
+  margin: clamp(1rem, 2.5vh, 1.4rem) auto 0;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  text-wrap: pretty;
+  color: var(--gris-mauve);
+}
+
+/* ---- S1 · Le hero ---- */
+
+.mariage-hero {
+  padding: clamp(2.5rem, 7vh, 5rem) var(--pad) clamp(3.5rem, 9vh, 6rem);
+  background-color: var(--papier);
+  /* La lueur de la première version, très basse, et une seconde, rose
+     de papier, derrière la photo. */
+  background-image:
+    radial-gradient(
+      120% 80% at 12% 0%,
+      color-mix(in srgb, var(--violet) 9%, transparent),
+      transparent 62%
+    ),
+    radial-gradient(
+      45% 60% at 78% 55%,
+      color-mix(in srgb, var(--violet) 7%, transparent),
+      transparent 70%
+    );
+}
+
+.mariage-hero__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+  align-items: center;
+  gap: clamp(2.5rem, 6vw, 6rem);
+  max-width: 76rem;
+  margin-inline: auto;
+}
+
+/* L'accroche, composée comme une ligne de faire-part : toute en
+   Cormorant Garamond, droite et à l'encre, puis les derniers mots dans
+   l'italique de la même famille, en violet, à la même taille. La
+   Cormorant a l'œil petit : elle est réglée plus grande que ne le
+   serait une Montserrat pour paraître du même corps. */
+.mariage-hero__titre {
+  margin: 0;
+  max-width: 21ch;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 500;
+  font-size: clamp(2.3rem, 3.7vw, 3.4rem);
+  line-height: 1.08;
+  letter-spacing: -0.005em;
+  text-wrap: balance;
+  color: var(--encre);
+}
+
+.mariage-hero__titre em {
+  font-family: inherit;
+  font-weight: inherit;
+  font-size: 1em;
+  letter-spacing: inherit;
+}
+
+.mariage-hero__lede {
+  max-width: 46ch;
+  margin: clamp(1.4rem, 3vh, 2rem) 0 0;
+  font-size: clamp(1rem, 1.3vw, 1.125rem);
+  line-height: 1.7;
+  text-wrap: pretty;
+  color: var(--gris-mauve);
+}
+
+/* La promesse, juste sous le paragraphe : même corps, en violet et un
+   cran plus appuyée. */
+.mariage-hero__promesse {
+  max-width: 46ch;
+  margin: 0.75rem 0 0;
+  font-size: clamp(1rem, 1.3vw, 1.125rem);
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--violet);
+}
+
+.mariage-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 2rem;
+  margin-top: clamp(2rem, 4.5vh, 2.75rem);
+}
+
+.mariage-hero__photo {
+  margin: 0;
+  padding: 0.9rem;
+  background-color: var(--carte);
+  box-shadow: 0 2rem 4rem -2.5rem rgba(28, 20, 32, 0.35);
+}
+
+/*
+ * La photo, traitée pour la page claire : couleurs adoucies, un souffle
+ * de papier dans les blancs. Sur le reste du site, les photos sont
+ * assombries pour la salle ; ici, elles s'éclairent.
+ */
+.mariage-hero__photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: 50% 55%;
+  filter: saturate(0.8) sepia(0.08) brightness(1.03);
+}
+
+/* L'entrée, après le rideau s'il se joue. */
+.mariage-hero__texte > * {
+  animation: hero-monte 0.8s cubic-bezier(0.22, 0.61, 0.36, 1)
+    calc(var(--apres-rideau, 0s) + 0.1s) both;
+}
+
+.mariage-hero__texte > :nth-child(2) {
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.22s);
+}
+
+.mariage-hero__texte > :nth-child(3) {
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.34s);
+}
+
+.mariage-hero__texte > :nth-child(4) {
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.46s);
+}
+
+.mariage-hero__texte > :nth-child(5) {
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.58s);
+}
+
+.mariage-hero__photo {
+  animation: mariage-fondu 1.2s ease calc(var(--apres-rideau, 0s) + 0.2s)
+    both;
+}
+
+@keyframes mariage-fondu {
+  from {
+    opacity: 0;
+  }
+}
+/* Le bouton, et sous lui, la réassurance en petit. */
+.mariage-hero__appel {
+  display: grid;
+  justify-items: start;
+  gap: 0.7rem;
+}
+
+.mariage-hero__rassurance {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--gris-mauve);
+}
+
+/* Les trois preuves, sur toute la largeur, sous un filet sable. */
+.mariage-preuves {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem clamp(1.5rem, 4vw, 3.5rem);
+  max-width: 76rem;
+  margin: clamp(2.75rem, 7vh, 4.5rem) auto 0;
+  padding: clamp(1.25rem, 3vh, 1.75rem) 0 0;
+  list-style: none;
+  border-top: 1px solid var(--filet);
+}
+
+.mariage-preuves li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--encre);
+}
+
+.mariage-preuves li::before {
+  content: '';
+  flex: none;
+  width: 0.4rem;
+  height: 0.4rem;
+  background-color: var(--violet);
+  transform: rotate(45deg);
+}
+
+/* ---- S2 · Avant, après ---- */
+
+.bab {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(3rem, 6vw, 5.5rem) minmax(0, 1fr);
+  margin-top: clamp(2.75rem, 6vh, 4rem);
+}
+
+.bab__label {
+  margin: 0 0 1rem;
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+
+/* La charge mentale : les tâches qui arrivent chez vous. */
+.bab__avant {
+  padding: clamp(2rem, 3vw, 2.75rem);
+  border: 1px solid var(--filet);
+  background-color: var(--papier-fonce);
+}
+
+.bab__avant .bab__label {
+  color: var(--gris-mauve);
+}
+
+.bab__titre {
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.35rem;
+  font-weight: 400;
+  line-height: 1.3;
+  color: var(--encre);
+}
+
+.bab__intro {
+  margin: 0.7rem 0 1.5rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--gris-mauve);
+}
+
+.taches {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  /* La liste s'efface vers le bas : elle continue, on ne la voit plus. */
+  -webkit-mask-image: linear-gradient(to bottom, #000 50%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 50%, transparent 100%);
+}
+
+.tache {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  color: var(--gris-mauve);
+}
+
+/* La case à cocher, vide. */
+.tache::before {
+  content: '';
+  flex: none;
+  width: 0.8rem;
+  height: 0.8rem;
+  margin-top: calc((1.4em - 0.8rem) / 2);
+  border: 1px solid color-mix(in srgb, var(--gris-mauve) 60%, transparent);
+}
+
+/* Le pont : un filet et le losange d'Oysen, entre les deux. */
+.bab__pont {
+  position: relative;
+}
+
+.bab__pont::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  height: 1px;
+  background-image: linear-gradient(to right, var(--filet), var(--violet));
+}
+
+.bab__pont::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.8rem;
+  height: 0.8rem;
+  background-color: var(--violet);
+  transform: translate(-50%, -50%) rotate(45deg);
+  box-shadow: 0 0 0 0.35rem var(--papier);
+}
+
+/* Le jour J avec Oysen : de l'air, la salle en haut qui se fond dans le
+   papier, puis la phrase et ce qui la rend vraie. */
+.bab__apres {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 28rem;
+  padding: clamp(2rem, 3vw, 2.75rem);
+  border: 1px solid var(--filet);
+  background-color: var(--carte);
+  background-image:
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--carte) 40%, transparent),
+      var(--carte) 62%
+    ),
+    url('/images/services/mariage-evenement-prive-800.jpg');
+  background-size: cover;
+  background-position: 50% 35%;
+}
+
+.bab__reve {
+  margin: 0;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(1.7rem, 2.7vw, 2.4rem);
+  line-height: 1.25;
+  text-wrap: balance;
+  color: var(--encre);
+}
+
+.bab__points {
+  display: grid;
+  gap: 0.55rem;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bab__points li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  font-size: 0.9875rem;
+  line-height: 1.5;
+  color: var(--encre);
+}
+
+.bab__points li::before {
+  content: '';
+  flex: none;
+  width: 0.42rem;
+  height: 0.42rem;
+  margin-top: calc((1.5em - 0.42rem) / 2);
+  background-color: var(--violet);
+  transform: rotate(45deg);
+}
+
+/* La phrase qui fait le pont. */
+.bab__passerelle {
+  max-width: 36ch;
+  margin: clamp(3rem, 7vh, 4.5rem) auto 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  font-size: clamp(1.3rem, 2vw, 1.7rem);
+  line-height: 1.45;
+  text-align: center;
+  text-wrap: balance;
+  color: var(--encre);
+}
+
+.bab__passerelle strong {
+  font-weight: 500;
+  color: var(--violet);
+}
+
+.bab__suite {
+  margin: 1.25rem 0 0;
+  text-align: center;
+}
+
+/* ---- S3 · Les formules ---- */
+
+.section.section--mariage-formules {
+  background-color: var(--papier-fonce);
+}
+
+.formules {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  gap: clamp(1rem, 2vw, 1.75rem);
+  margin: clamp(3.5rem, 8vh, 5rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.formule {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding: clamp(2rem, 3vw, 2.75rem);
+  border: 1px solid var(--filet);
+  background-color: var(--carte);
+}
+
+/* La plus complète : dans son cadre, plus haute que les autres. */
+.formule--vedette {
+  margin-block: -0.9rem;
+  padding-block: calc(clamp(2rem, 3vw, 2.75rem) + 0.9rem);
+  box-shadow: 0 2rem 4rem -2.5rem
+    color-mix(in srgb, var(--violet) 55%, transparent);
+}
+
+.formule__mention {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: 3;
+  margin: 0;
+  padding: 0.45rem 1rem;
+  transform: translate(-50%, -50%);
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #fff;
+  background-color: var(--violet);
+}
+
+.formule__nom {
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  font-size: clamp(1.45rem, 2.1vw, 1.85rem);
+  line-height: 1.2;
+  color: var(--encre);
+}
+
+.formule__accroche {
+  margin: 0;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 1.3rem;
+  line-height: 1.35;
+  color: var(--violet);
+}
+
+/* Pour qui : une ligne, en petit. */
+.formule__pour {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--gris-mauve);
+}
+
+.formule__prestations {
+  margin: 0.5rem 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--filet);
+}
+
+.prestation {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding-block: 0.7rem;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  color: var(--encre);
+  border-bottom: 1px solid color-mix(in srgb, var(--filet) 70%, transparent);
+}
+
+/* Comprise : le losange plein. */
+.prestation::before {
+  content: '';
+  flex: none;
+  width: 0.45rem;
+  height: 0.45rem;
+  margin-top: calc((1.45em - 0.45rem) / 2);
+  background-color: var(--violet);
+  transform: rotate(45deg);
+}
+
+.prestation__texte {
+  flex: 1;
+}
+
+/* En option ou à valider : le losange évidé, et une pastille. */
+.prestation--option::before,
+.prestation--avalider::before {
+  border: 1px solid var(--violet);
+  background-color: transparent;
+}
+
+.prestation__pastille {
+  flex: none;
+  padding: 0.15rem 0.5rem;
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  line-height: 1.6;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--violet);
+  border: 1px solid color-mix(in srgb, var(--violet) 35%, transparent);
+}
+
+/* Pas comprise : elle reste visible, pâlie et barrée, au losange évidé. */
+.prestation--non {
+  color: color-mix(in srgb, var(--gris-mauve) 55%, transparent);
+  text-decoration: line-through;
+  text-decoration-color: color-mix(in srgb, var(--gris-mauve) 40%, transparent);
+}
+
+.prestation--non::before {
+  border: 1px solid color-mix(in srgb, var(--gris-mauve) 50%, transparent);
+  background-color: transparent;
+}
+
+.formule__lien {
+  margin-top: auto;
+  padding-top: 1rem;
+}
+
+.formules__prive {
+  max-width: 48ch;
+  margin: clamp(2.75rem, 6vh, 3.75rem) auto 0;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 1.3rem;
+  line-height: 1.45;
+  text-align: center;
+  color: var(--gris-mauve);
+}
+
+/* ---- S4 · Le déroulé, en rétroplanning ----
+   En tête, trois lignes, une par formule. Chacune part d'un losange,
+   au prorata des huit étapes : la complète tout à gauche, la partielle
+   à la 3, le jour J à la 5. Dessous, les huit étapes.
+
+   Sur grand écran, la frise prend toute la largeur de l'écran moins
+   3.5rem de chaque côté (50px à l'échelle de 90 %) et les étapes s'y
+   rangent en huit colonnes. Elles partagent leurs rangées (subgrid) :
+   numéros, périodes, titres, « Nous » et « Vous » s'alignent d'une
+   colonne à l'autre, et se lisent aussi en travers. Sous chaque numéro,
+   un trait : bout à bout, ils graduent la frise, et chaque ligne de
+   formule part exactement au-dessus du sien.
+
+   Plus étroit, les lignes gardent leurs départs au-dessus d'une échelle
+   de 01 à 08, et les étapes s'empilent, le numéro dans la marge.
+   Aucun texte n'est masqué, à aucune largeur. */
+
+.planning {
+  margin-top: clamp(2.75rem, 6vh, 4rem);
+}
+
+/* -- Les trois lignes -- */
+
+.voies {
+  display: grid;
+  row-gap: 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.voie {
+  position: relative;
+  /* Le départ, au prorata des huit étapes. */
+  margin-left: calc((var(--depuis) - 1) / 8 * 100%);
+  padding: 0 0 0.75rem 0.1rem;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--gris-mauve);
+}
+
+/* La ligne, qui s'efface en arrivant au bout. */
+.voie::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-image: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--violet) 70%, var(--papier)) calc(100% - 4rem),
+    transparent
+  );
+}
+
+/* Le losange du départ. */
+.voie::after {
+  content: '';
+  position: absolute;
+  bottom: 0.5px;
+  left: 0;
+  width: 0.55rem;
+  height: 0.55rem;
+  background-color: var(--violet);
+  transform: translate(-50%, 50%) rotate(45deg);
+}
+
+.voie__nom {
+  margin-right: 0.6rem;
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+
+/* L'échelle sous les lignes : huit numéros, un par huitième. */
+.voies__echelle {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  margin: 0.9rem 0 0;
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--gris-mauve);
+}
+
+.voies__echelle span {
+  transform: translateX(-0.35em);
+}
+
+/* -- Les étapes, empilées -- */
+
+.planning__etapes {
+  margin: clamp(2.5rem, 6vh, 3.5rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.planning__etape {
+  display: grid;
+  grid-template-columns: 3.25rem minmax(0, 1fr);
+  grid-template-areas:
+    'numero quand'
+    'numero titre'
+    'numero nous'
+    'numero vous';
+  column-gap: 1rem;
+  padding: 1.5rem 0 1.75rem;
+  border-top: 1px solid var(--filet);
+}
+
+.planning__etape--jour-j {
+  border-top-color: var(--violet);
+}
+
+/* Le numéro, en chiffres légers : c'est lui que les formules citent. */
+.planning__numero {
+  grid-area: numero;
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 2.25rem;
+  font-weight: 200;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: color-mix(in srgb, var(--violet) 60%, var(--papier));
+}
+
+.planning__etape--jour-j .planning__numero {
+  font-weight: 300;
+  color: var(--violet);
+}
+
+.planning__quand {
+  grid-area: quand;
+  margin: 0;
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--gris-mauve);
+}
+
+.planning__etape--jour-j .planning__quand {
+  color: var(--violet);
+}
+
+.planning__titre {
+  grid-area: titre;
+  margin: 0.35rem 0 0.9rem;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+  line-height: 1.3;
+  text-wrap: balance;
+  color: var(--encre);
+}
+
+.planning__nous {
+  grid-area: nous;
+  margin: 0 0 0.9rem;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  text-wrap: pretty;
+  color: var(--encre);
+}
+
+/* La part des mariés, à l'italique de faire-part. */
+.planning__vous {
+  grid-area: vous;
+  margin: 0;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 1.2rem;
+  line-height: 1.35;
+  text-wrap: pretty;
+  color: var(--violet);
+}
+
+.planning__etape--jour-j .planning__vous {
+  font-size: 1.35rem;
+}
+
+.planning__qui {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-style: normal;
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gris-mauve);
+}
+
+/* -- Tablette : « Nous » et « Vous » côte à côte -- */
+
+@media (min-width: 761px) {
+  .planning__etape {
+    grid-template-columns: 4.5rem minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+      'numero quand quand'
+      'numero titre titre'
+      'numero nous vous';
+    column-gap: 2rem;
+  }
+
+  .planning__numero {
+    font-size: 2.75rem;
+  }
+
+  .planning__nous {
+    margin-bottom: 0;
+  }
+}
+
+/* -- Grand écran : la frise en huit colonnes -- */
+
+@media (min-width: 1280px) {
+  /* La section sert de mesure : 100cqw est la largeur de son contenu,
+     sans la barre de défilement que 100vw compterait ; avec ses deux
+     marges --pad, c'est la largeur de l'écran. */
+  .section--mariage-deroule {
+    container-type: inline-size;
+  }
+
+  .planning {
+    --ecran: calc(100cqw + 2 * var(--pad));
+
+    display: grid;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    column-gap: clamp(1.75rem, 2cqw, 3rem);
+    width: calc(var(--ecran) - 7rem);
+    margin-left: calc(50% - var(--ecran) / 2 + 3.5rem);
+  }
+
+  /* Les lignes, calées sur les colonnes des étapes. */
+  .voies {
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    row-gap: 1.1rem;
+  }
+
+  .voie {
+    grid-column: var(--depuis) / -1;
+    margin-left: 0;
+    white-space: nowrap;
+  }
+
+  .voies__echelle {
+    display: none;
+  }
+
+  .planning__etapes {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    grid-template-rows: repeat(5, auto);
+    margin-top: clamp(2.25rem, 5vh, 3rem);
+  }
+
+  .planning__etape {
+    grid-column: var(--col);
+    grid-row: 1 / 6;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: subgrid;
+    grid-template-areas: none;
+    padding: 0;
+    border-top: 0;
+  }
+
+  .planning__numero,
+  .planning__quand,
+  .planning__titre,
+  .planning__nous,
+  .planning__vous {
+    grid-area: auto;
+  }
+
+  /* Le trait de graduation, sous le numéro. */
+  .planning__numero {
+    margin-bottom: 1rem;
+    padding-bottom: 0.85rem;
+    font-size: clamp(2.5rem, 3.2cqw, 3.5rem);
+    border-bottom: 1px solid var(--filet);
+  }
+
+  .planning__etape--jour-j .planning__numero {
+    border-bottom-color: var(--violet);
+    box-shadow: 0 1px 0 var(--violet);
+  }
+
+  .planning__titre {
+    font-size: 1rem;
+  }
+
+  .planning__nous {
+    margin-bottom: 0.9rem;
+    font-size: 0.875rem;
+  }
+
+  .planning__vous {
+    font-size: 1.1rem;
+  }
+
+  .planning__etape--jour-j .planning__vous {
+    font-size: 1.25rem;
+  }
+}
+
+/* ---- S5 · La galerie ----
+   Une mosaïque d'album : une grande, une haute, des larges, des
+   carrées. Les emplacements vides sont hachurés, comme une épreuve ;
+   la photo porte sa légende en pied. */
+
+.galerie {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-rows: clamp(9rem, 14vw, 14rem);
+  grid-auto-flow: dense;
+  gap: 0.75rem;
+  margin: clamp(2.75rem, 6vh, 4rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.galerie__tuile {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--filet);
+  background-color: var(--papier-fonce);
+}
+
+.galerie__tuile--grande {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.galerie__tuile--haute {
+  grid-row: span 2;
+}
+
+.galerie__tuile--large {
+  grid-column: span 2;
+}
+
+.galerie__figure {
+  height: 100%;
+  margin: 0;
+}
+
+.galerie__tuile img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.8) sepia(0.08) brightness(1.03);
+  transition: transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.galerie__tuile:hover img {
+  transform: scale(1.03);
+}
+
+.galerie__legende {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 0.75rem 1rem;
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.06em;
+  line-height: 1.5;
+  color: var(--encre);
+  background-color: color-mix(in srgb, var(--carte) 90%, transparent);
+  border-top: 1px solid var(--filet);
+}
+
+.galerie__attente {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gris-mauve);
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent 0 0.9rem,
+    color-mix(in srgb, var(--filet) 70%, transparent) 0.9rem 0.95rem
+  );
+}
+
+.galerie__suite {
+  margin: clamp(2rem, 4.5vh, 2.75rem) 0 0;
+  text-align: center;
+}
+
+/* ---- S6 · Les témoignages ---- */
+
+.section.section--mariage-temoignages {
+  background-color: var(--papier-fonce);
+}
+
+.couples {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 1.75rem);
+  margin: clamp(2.75rem, 6vh, 4rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.couple {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(2rem, 3vw, 2.75rem);
+  border: 1px solid var(--filet);
+  background-color: var(--carte);
+}
+
+/* Le guillemet d'ouverture, en grand, à l'italique de faire-part. */
+.couple::before {
+  content: '«';
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 4rem;
+  line-height: 0.6;
+  color: color-mix(in srgb, var(--violet) 55%, transparent);
+}
+
+.couple__citation {
+  flex: 1;
+  margin: 1.25rem 0 1.75rem;
+}
+
+.couple__citation p {
+  margin: 0;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: clamp(1.25rem, 1.6vw, 1.45rem);
+  line-height: 1.45;
+  text-wrap: pretty;
+  color: var(--encre);
+}
+
+.couple__nom {
+  margin: 0;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--filet);
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--encre);
+}
+
+.couple__detail {
+  margin: 0.35rem 0 0;
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gris-mauve);
+}
+
+/* ---- S7 · Le budget indicatif ---- */
+
+.budgets {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 1.75rem);
+  margin: clamp(2.75rem, 6vh, 4rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.budget {
+  padding: clamp(1.5rem, 2.5vw, 2rem) 0 0;
+  border-top: 2px solid var(--filet);
+}
+
+.budget--vedette {
+  border-top-color: var(--violet);
+}
+
+.budget__nom {
+  margin: 0;
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+
+.budget__montant {
+  margin: 0.9rem 0 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  font-size: clamp(2.2rem, 3.6vw, 3.2rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--encre);
+}
+
+.budget__a-partir {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.875rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--gris-mauve);
+}
+
+.budget__ttc {
+  font-size: 0.35em;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: var(--gris-mauve);
+}
+
+.budget__base {
+  max-width: 30ch;
+  margin: 0.7rem 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--gris-mauve);
+}
+
+/* Ce qui fait varier, et ce que contient le devis, côte à côte. */
+.variables {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2rem clamp(2rem, 5vw, 4.5rem);
+  margin-top: clamp(2.75rem, 6vh, 4rem);
+  padding: clamp(1.75rem, 3vw, 2.5rem);
+  border: 1px solid var(--filet);
+  background-color: var(--carte);
+}
+
+.variables__titre {
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--encre);
+}
+
+.variables__liste {
+  display: grid;
+  gap: 0.7rem;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.variable {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--gris-mauve);
+}
+
+.variable::before {
+  content: '';
+  flex: none;
+  width: 0.42rem;
+  height: 0.42rem;
+  margin-top: calc((1.55em - 0.42rem) / 2);
+  border: 1px solid var(--violet);
+  transform: rotate(45deg);
+}
+
+.budget__action {
+  margin: clamp(2.25rem, 5vh, 3rem) 0 0;
+  text-align: center;
+}
+
+/* ---- S8 · Les questions ----
+   La tête à gauche, qui reste en vue ; les dépliants à droite (les
+   classes .faq de l'accueil, repeintes par les variables de la page). */
+
+.questions-mariage {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+  align-items: start;
+  gap: 2.5rem clamp(3rem, 6vw, 6rem);
+}
+
+.questions-mariage__tete {
+  position: sticky;
+  top: calc(var(--nav-h, 0px) + 2rem);
+  display: grid;
+  justify-items: start;
+  gap: 0.25rem;
+}
+
+.questions-mariage__tete .mariage-tete__texte {
+  margin: 1rem 0 1.25rem;
+}
+
+.questions-mariage .faq {
+  max-width: none;
+  margin: 0;
+}
+
+/* ---- S9 · L'invitation ---- */
+
+.section.section--mariage-invitation {
+  padding-block: clamp(5rem, 13vh, 8rem);
+  background-image: radial-gradient(
+    80% 70% at 50% 100%,
+    color-mix(in srgb, var(--violet) 12%, transparent),
+    transparent 70%
+  );
+}
+
+.invitation {
+  display: grid;
+  justify-items: center;
+  gap: 1.1rem;
+  max-width: 48rem;
+  margin-inline: auto;
+  padding: clamp(2.75rem, 6vh, 4rem) clamp(1.5rem, 5vw, 4rem);
+  text-align: center;
+  background-color: var(--carte);
+  box-shadow: 0 2rem 4rem -2.5rem
+    color-mix(in srgb, var(--violet) 45%, transparent);
+}
+
+.invitation .section__eyebrow {
+  margin: 0;
+}
+
+.invitation__titre {
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  font-size: clamp(2rem, 3.6vw, 3rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  color: var(--encre);
+}
+
+.invitation__texte {
+  max-width: 46ch;
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--gris-mauve);
+}
+
+/* Ce qui se passe ensuite : trois temps, numérotés parce qu'ils se
+   suivent, alignés à gauche dans la carte centrée. */
+.ensuite {
+  display: grid;
+  gap: 0.75rem;
+  width: min(100%, 30rem);
+  margin: 0.75rem 0 1rem;
+  padding: 1.25rem 0 0;
+  list-style: none;
+  counter-reset: ensuite;
+  text-align: left;
+  border-top: 1px solid var(--filet);
+}
+
+.ensuite__temps {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+  font-size: 0.9875rem;
+  line-height: 1.5;
+  color: var(--encre);
+  counter-increment: ensuite;
+}
+
+.ensuite__temps::before {
+  content: '0' counter(ensuite);
+  flex: none;
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--violet);
+}
+
+.invitation__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem 2rem;
+}
+
+.invitation__note {
+  margin: 0.5rem 0 0;
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  color: var(--gris-mauve);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mariage-hero__texte > *,
+  .mariage-hero__photo {
+    animation: none;
+  }
+
+  .lien-doux__fleche,
+  .galerie__tuile img {
+    transition: none;
+  }
+}
+
+/* ---- Tablette ---- */
+
+@media (max-width: 1023px) {
+  .mariage-hero__inner,
+  .questions-mariage {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .mariage-hero__photo {
+    width: min(100%, 30rem);
+    justify-self: center;
+  }
+
+  .questions-mariage__tete {
+    position: static;
+  }
+
+  .formules,
+  .couples,
+  .budgets {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 36rem;
+    margin-inline: auto;
+  }
+
+  .formule--vedette {
+    margin-block: 0;
+  }
+}
+
+/* ---- Téléphone ---- */
+
+@media (max-width: 760px) {
+  .mariage-hero__texte {
+    text-align: center;
+  }
+
+  .mariage-hero__titre,
+  .mariage-hero__lede,
+  .mariage-hero__promesse {
+    margin-inline: auto;
+  }
+
+  .mariage-hero__actions {
+    justify-content: center;
+  }
+
+  .mariage-hero__appel {
+    justify-items: center;
+  }
+
+  .mariage-preuves {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .bab {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .bab__pont {
+    height: 3.5rem;
+  }
+
+  .bab__pont::before {
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 1px;
+    height: auto;
+    background-image: linear-gradient(to bottom, var(--filet), var(--violet));
+  }
+
+  .bab__apres {
+    min-height: 22rem;
+  }
+
+  .taches {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .galerie {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 9rem;
+  }
+
+  .variables {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Les preuves du hero arrivent après le texte, d'un simple fondu. */
+.mariage-preuves {
+  animation: mariage-fondu 1s ease calc(var(--apres-rideau, 0s) + 0.6s) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mariage-preuves {
+    animation: none;
+  }
+}

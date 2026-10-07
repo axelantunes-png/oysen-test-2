@@ -27,17 +27,16 @@ export const Route = createRootRoute({
       { rel: 'stylesheet', href: homeCss },
       { rel: 'stylesheet', href: footerCss },
       { rel: 'icon', href: '/logo-oysen-provisoire.jpeg' },
-      // Montserrat Light : la géométrique la plus proche du lettrage du logo.
-      // Sert la nouvelle baseline « ARCHITECTE D’ÉVÉNEMENTS ».
-      { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+      // Montserrat, hébergée avec le site (déclarée dans app.css) : la
+      // police de toutes les pages, préchargée pour arriver avec le HTML.
+      // crossOrigin est obligatoire pour qu'un préchargement de police
+      // serve vraiment.
       {
-        rel: 'preconnect',
-        href: 'https://fonts.gstatic.com',
+        rel: 'preload',
+        href: '/fonts/montserrat-normal.woff2',
+        as: 'font',
+        type: 'font/woff2',
         crossOrigin: 'anonymous',
-      },
-      {
-        rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap',
       },
     ],
   }),

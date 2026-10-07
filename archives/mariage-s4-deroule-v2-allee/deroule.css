@@ -1,0 +1,391 @@
+/* ---- S4 · Le déroulé, en allée ----
+   Comme une allée de cérémonie : le temps descend au milieu, ce que
+   nous faisons d'un côté, ce qui reste du vôtre de l'autre, à
+   l'italique. Aucune case, aucun filet entre les étapes : l'espace
+   suffit à les séparer.
+
+   Dans l'allée, un fil par formule en cours, qui se fonce en
+   approchant du jour J. Chaque fil part d'un losange au nom de sa
+   formule : la complète au centre dès la 1, la partielle à gauche à
+   la 3, le jour J à droite à la 5. Le repère et le titre de chaque
+   étape reposent sur un cartouche couleur papier qui coupe les fils.
+   (Version précédente : archives/mariage-s4-deroule-v1.) */
+
+.departs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem 2.75rem;
+  margin: clamp(2rem, 5vh, 2.75rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Le losange de la légende est celui qui ouvre chaque fil. */
+.depart {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  font-size: 0.875rem;
+  color: var(--gris-mauve);
+}
+
+.depart::before {
+  content: '';
+  flex: none;
+  width: 0.4rem;
+  height: 0.4rem;
+  background-color: var(--violet);
+  transform: translateY(-0.1rem) rotate(45deg);
+}
+
+.depart__formule {
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+
+.allee {
+  /* Les trois colonnes : nous, l'allée, vous. */
+  --colonnes: minmax(0, 1fr) minmax(0, 16rem) minmax(0, 1fr);
+  --gouttiere: clamp(1.5rem, 3.5vw, 3.5rem);
+  /* L'axe de l'allée, et l'écart entre deux fils. */
+  --axe: 50%;
+  --ecart: 0.45rem;
+  /* La hauteur du départ d'un fil, sous le haut de son étape. */
+  --depart: 0.85rem;
+
+  margin-top: clamp(3rem, 7vh, 4.5rem);
+}
+
+.allee__cotes {
+  display: grid;
+  grid-template-columns: var(--colonnes);
+  column-gap: var(--gouttiere);
+  margin: 0 0 0.25rem;
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gris-mauve);
+}
+
+.allee__cotes span:first-child {
+  grid-column: 1;
+  text-align: right;
+}
+
+.allee__cotes span:last-child {
+  grid-column: 3;
+}
+
+.allee__etapes {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.allee__etape {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--colonnes);
+  align-items: center;
+  column-gap: var(--gouttiere);
+  padding-block: clamp(2.25rem, 5vh, 3rem);
+}
+
+/* Les fils : chaque étape trace sa part, de haut en bas, si bien
+   qu'ils paraissent continus d'une étape à l'autre. */
+.allee__fils {
+  position: absolute;
+  inset-block: 0;
+  left: var(--axe);
+  width: calc(var(--ecart) * 2 + 1px);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.allee__fil {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: color-mix(
+    in srgb,
+    var(--violet) calc(22% + var(--rang) * 7%),
+    var(--filet)
+  );
+}
+
+.allee__fil--centre {
+  left: var(--ecart);
+}
+
+.allee__fil--gauche {
+  left: 0;
+}
+
+.allee__fil--droite {
+  right: 0;
+}
+
+.allee__fil--part {
+  top: var(--depart);
+}
+
+/* Après la dernière étape, les fils s'effacent. */
+.allee__etape:last-child .allee__fils {
+  mask-image: linear-gradient(to bottom, #000 45%, transparent);
+}
+
+/* Le départ d'un fil : un losange plein, le nom de la formule à côté. */
+.allee__depart {
+  position: absolute;
+  top: var(--depart);
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.5625rem;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--violet);
+  transform: translateY(-50%);
+}
+
+.allee__depart::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 0.45rem;
+  height: 0.45rem;
+  background-color: var(--violet);
+}
+
+.allee__depart--centre,
+.allee__depart--droite {
+  padding-left: 0.95rem;
+}
+
+.allee__depart--centre {
+  left: calc(var(--ecart) + 0.5px);
+}
+
+.allee__depart--droite {
+  left: calc(100% - 0.5px);
+}
+
+.allee__depart--centre::before,
+.allee__depart--droite::before {
+  left: 0;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+/* La partielle s'écrit vers la gauche, du côté de son fil. */
+.allee__depart--gauche {
+  right: calc(100% - 0.5px);
+  padding-right: 0.95rem;
+}
+
+.allee__depart--gauche::before {
+  right: 0;
+  transform: translate(50%, -50%) rotate(45deg);
+}
+
+/* Le repère et le titre, au milieu de l'allée. */
+.allee__cartouche {
+  position: relative;
+  z-index: 1;
+  grid-row: 1;
+  grid-column: 2;
+  justify-self: center;
+  padding: 0.85rem 1.1rem;
+  text-align: center;
+  background-color: var(--papier);
+}
+
+.allee__repere {
+  margin: 0 0 0.45rem;
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--gris-mauve);
+}
+
+.allee__numero {
+  margin-right: 0.6rem;
+  color: var(--violet);
+}
+
+.allee__titre {
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.15rem;
+  font-weight: 500;
+  line-height: 1.3;
+  text-wrap: balance;
+  color: var(--encre);
+}
+
+/* Ce que nous faisons, tourné vers l'allée. */
+.allee__nous {
+  grid-row: 1;
+  grid-column: 1;
+  justify-self: end;
+  max-width: 34ch;
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  text-align: right;
+  color: var(--encre);
+}
+
+/* Ce qui reste de votre côté, à l'italique de faire-part. */
+.allee__vous {
+  grid-row: 1;
+  grid-column: 3;
+  justify-self: start;
+  max-width: 26ch;
+  margin: 0;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 1.25rem;
+  line-height: 1.4;
+  color: var(--violet);
+}
+
+/* Sur ordinateur, les côtés sont nommés une fois en tête : ici, les
+   noms restent pour les lecteurs d'écran seulement. */
+.allee__qui {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Le jour J : le seul losange posé sur l'allée, cerclé ; le titre et
+   votre phrase, celle du titre de la page, montent d'un cran. */
+.allee__etape--jour-j .allee__cartouche {
+  padding-top: 1.6rem;
+}
+
+.allee__etape--jour-j .allee__cartouche::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 0.8rem;
+  height: 0.8rem;
+  background-color: var(--violet);
+  box-shadow: 0 0 0 0.35rem color-mix(in srgb, var(--violet) 14%, transparent);
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.allee__etape--jour-j .allee__repere {
+  color: var(--violet);
+}
+
+.allee__etape--jour-j .allee__titre {
+  font-size: 1.4rem;
+}
+
+.allee__etape--jour-j .allee__vous {
+  font-size: 1.55rem;
+  line-height: 1.3;
+}
+
+/* ---- Extrait du bloc Tablette ---- */
+@media (max-width: 1023px) {
+  /* L'allée passe à gauche. Chaque étape s'empile contre elle : le
+     repère et le titre, ce que nous faisons, ce que vous faites, avec
+     les noms des deux côtés à chaque fois. Les départs des formules
+     s'écrivent tous vers la droite. */
+  .allee {
+    --axe: 0.85rem;
+  }
+
+  .allee__cotes {
+    display: none;
+  }
+
+  .allee__etape {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    row-gap: 1rem;
+    padding: 2.25rem 0 1.5rem 2.75rem;
+  }
+
+  .allee__cartouche,
+  .allee__nous,
+  .allee__vous {
+    grid-row: auto;
+    grid-column: 1;
+    justify-self: start;
+    max-width: 38rem;
+    text-align: left;
+  }
+
+  .allee__cartouche {
+    padding: 0;
+    background-color: transparent;
+  }
+
+  .allee__qui {
+    position: static;
+    display: block;
+    width: auto;
+    height: auto;
+    margin-bottom: 0.3rem;
+    overflow: visible;
+    clip-path: none;
+    font-family: 'Azeret Mono', ui-monospace, monospace;
+    font-style: normal;
+    font-size: 0.5625rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gris-mauve);
+  }
+
+  .allee__depart--gauche {
+    right: auto;
+    left: 0.5px;
+    padding-right: 0;
+  }
+
+  .allee__depart--gauche::before {
+    right: auto;
+    left: 0;
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  /* Les noms s'alignent sur le texte des étapes, à 2.75rem du bord. */
+  .allee__depart--centre {
+    padding-left: calc(2.75rem - var(--axe));
+  }
+
+  .allee__depart--gauche {
+    padding-left: calc(2.75rem - var(--axe) + var(--ecart));
+  }
+
+  .allee__depart--droite {
+    padding-left: calc(2.75rem - var(--axe) - var(--ecart));
+  }
+
+  /* Le losange du jour J revient sur l'allée, en face du repère. */
+  .allee__etape--jour-j .allee__cartouche {
+    padding-top: 0;
+  }
+
+  .allee__etape--jour-j .allee__cartouche::before {
+    top: 0.5rem;
+    left: calc(var(--axe) - 2.75rem);
+  }
+}

@@ -1,0 +1,359 @@
+/* ---- S4 · Le déroulé, en frise ----
+   Une frise de gauche à droite faite de trois lignes, une par
+   formule. Chacune part d'un losange à l'étape où sa formule commence
+   (la complète tout à gauche, la partielle à la 3, le jour J à la 5)
+   et court jusqu'au bout : leurs départs sont au prorata de la frise.
+
+   Sur ordinateur, neuf colonnes : chaque étape part de la sienne et
+   en occupe deux, en alternance au-dessus et au-dessous des lignes,
+   reliée à son losange par un filet. Les étapes partagent les rangées
+   de la frise (subgrid) : celles du haut finissent toutes au ras des
+   lignes, celles du bas en partent toutes.
+
+   Sur tablette et téléphone, les trois lignes gardent leurs départs
+   au-dessus d'une échelle de 01 à 08, et les étapes s'empilent.
+   (Versions précédentes : archives/mariage-s4-deroule-v1 et -v2-allee.) */
+
+.frise-mariage {
+  margin-top: clamp(2.75rem, 6vh, 4rem);
+}
+
+/* -- Les trois lignes -- */
+
+.voies {
+  display: grid;
+  row-gap: 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.voie {
+  position: relative;
+  /* Le départ, au prorata des huit étapes. */
+  margin-left: calc((var(--depuis) - 1) / 8 * 100%);
+  padding-bottom: 0.9rem;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--gris-mauve);
+}
+
+/* La ligne, qui s'efface en arrivant au bout. */
+.voie::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-image: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--violet) 70%, var(--papier)) calc(100% - 4rem),
+    transparent
+  );
+}
+
+/* Le losange du départ. */
+.voie::after {
+  content: '';
+  position: absolute;
+  bottom: 0.5px;
+  left: 0;
+  width: 0.55rem;
+  height: 0.55rem;
+  background-color: var(--violet);
+  transform: translate(-50%, 50%) rotate(45deg);
+}
+
+.voie__nom {
+  margin-right: 0.6rem;
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+
+/* L'échelle sous les lignes : huit numéros, un par huitième. */
+.voies__echelle {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  margin: 0.9rem 0 0;
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--gris-mauve);
+}
+
+.voies__echelle span {
+  transform: translateX(-0.35em);
+}
+
+/* -- Les étapes -- */
+
+.frise-mariage__etapes {
+  margin: clamp(2.5rem, 6vh, 3.5rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.frise-mariage__etape {
+  position: relative;
+}
+
+/* Le losange de l'étape, évidé ; plein et cerclé pour le jour J. */
+.frise-mariage__etape::before {
+  content: '';
+  position: absolute;
+  top: 0.45rem;
+  left: 0;
+  z-index: 1;
+  width: 0.55rem;
+  height: 0.55rem;
+  border: 1px solid var(--violet);
+  background-color: var(--papier);
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.frise-mariage__etape--jour-j::before {
+  width: 0.75rem;
+  height: 0.75rem;
+  background-color: var(--violet);
+  box-shadow: 0 0 0 0.35rem color-mix(in srgb, var(--violet) 14%, transparent);
+}
+
+.frise-mariage__bloc {
+  padding: 0 0 2.25rem 1.5rem;
+  border-left: 1px solid var(--filet);
+}
+
+.frise-mariage__etape:last-child .frise-mariage__bloc {
+  padding-bottom: 0;
+  border-left-color: transparent;
+}
+
+.frise-mariage__etape--jour-j .frise-mariage__bloc {
+  border-left-color: var(--violet);
+}
+
+.frise-mariage__repere {
+  margin: 0;
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--gris-mauve);
+}
+
+.frise-mariage__numero {
+  margin-right: 0.55rem;
+  color: var(--violet);
+}
+
+.frise-mariage__etape--jour-j .frise-mariage__repere {
+  color: var(--violet);
+}
+
+.frise-mariage__titre {
+  margin: 0.4rem 0 0.85rem;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 500;
+  line-height: 1.3;
+  text-wrap: balance;
+  color: var(--encre);
+}
+
+.frise-mariage__nous {
+  margin: 0 0 0.85rem;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  text-wrap: pretty;
+  color: var(--encre);
+}
+
+/* La part des mariés, à l'italique de faire-part. */
+.frise-mariage__vous {
+  margin: 0;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 1.15rem;
+  line-height: 1.35;
+  text-wrap: pretty;
+  color: var(--violet);
+}
+
+.frise-mariage__etape--jour-j .frise-mariage__vous {
+  font-size: 1.35rem;
+}
+
+.frise-mariage__qui {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-style: normal;
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gris-mauve);
+}
+
+/* -- La frise, sur ordinateur -- */
+
+@media (min-width: 1100px) {
+  /* La section sert de mesure : 100cqw est la largeur de son contenu,
+     marges --pad déduites, sans la barre de défilement que 100vw
+     compterait. Avec les deux --pad, c'est la largeur de l'écran. */
+  .section--mariage-deroule {
+    container-type: inline-size;
+  }
+
+  /* La frise sort de la colonne du texte et prend toute la largeur de
+     l'écran, moins 3.5rem de chaque côté (50px à l'échelle de 90 %). */
+  .frise-mariage {
+    --ecran: calc(100cqw + 2 * var(--pad));
+
+    display: grid;
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+    grid-template-rows: auto auto auto;
+    column-gap: clamp(1.5rem, 1.6cqw, 2.5rem);
+    width: calc(var(--ecran) - 7rem);
+    margin-left: calc(50% - var(--ecran) / 2 + 3.5rem);
+  }
+
+  /* Les lignes au milieu, calées sur les colonnes des étapes. */
+  .voies {
+    position: relative;
+    z-index: 1;
+    grid-row: 2;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    grid-template-rows: repeat(3, 1.75rem);
+    row-gap: 0;
+    padding-block: 1.5rem;
+  }
+
+  .voie {
+    display: flex;
+    align-items: center;
+    grid-column: var(--depuis) / -1;
+    margin-left: 0;
+    padding: 0;
+    line-height: 1;
+  }
+
+  .voie:nth-child(1) {
+    grid-row: 1;
+  }
+
+  .voie:nth-child(2) {
+    grid-row: 2;
+  }
+
+  .voie:nth-child(3) {
+    grid-row: 3;
+  }
+
+  /* La ligne passe au milieu de sa rangée ; le nom de la formule s'y
+     pose, sur un fond papier qui la coupe. */
+  .voie::before {
+    top: 50%;
+    bottom: auto;
+  }
+
+  .voie::after {
+    top: 50%;
+    bottom: auto;
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  .voie__nom,
+  .voie__texte {
+    position: relative;
+    background-color: var(--papier);
+  }
+
+  .voie__nom {
+    margin: 0 0 0 1rem;
+    padding: 0.2rem 0.6rem 0.2rem 0.5rem;
+  }
+
+  .voie__texte {
+    padding: 0.2rem 0.6rem 0.2rem 0;
+    white-space: nowrap;
+  }
+
+  .voies__echelle {
+    display: none;
+  }
+
+  .frise-mariage__etapes {
+    grid-row: 1 / 4;
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-template-rows: subgrid;
+    margin: 0;
+  }
+
+  .frise-mariage__etape {
+    display: grid;
+    grid-column: var(--col) / span 2;
+    grid-row: 1 / 4;
+    grid-template-rows: subgrid;
+  }
+
+  /* Les impaires au-dessus des lignes, les paires au-dessous. */
+  .frise-mariage__etape:nth-child(odd) .frise-mariage__bloc {
+    grid-row: 1;
+    align-self: end;
+    padding: 0 0 1.75rem 1.1rem;
+  }
+
+  .frise-mariage__etape:nth-child(even) .frise-mariage__bloc {
+    grid-row: 3;
+    align-self: start;
+    padding: 1.75rem 0 0 1.1rem;
+  }
+
+  .frise-mariage__etape:last-child .frise-mariage__bloc {
+    border-left-color: var(--filet);
+  }
+
+  .frise-mariage__etape--jour-j .frise-mariage__bloc,
+  .frise-mariage__etape--jour-j:last-child .frise-mariage__bloc {
+    border-left-color: var(--violet);
+  }
+
+  /* Le filet de chaque étape traverse les lignes en pointillé : la
+     frise se lit comme une règle graduée, et chaque formule part
+     d'une graduation. */
+  .frise-mariage__etape::after {
+    content: '';
+    grid-row: 2;
+    justify-self: start;
+    border-left: 1px dashed var(--filet);
+  }
+
+  /* Le losange, au bord des lignes, au bout du filet de l'étape. */
+  .frise-mariage__etape::before {
+    position: relative;
+    top: auto;
+    grid-row: 2;
+    justify-self: start;
+  }
+
+  .frise-mariage__etape:nth-child(odd)::before {
+    align-self: start;
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  .frise-mariage__etape:nth-child(even)::before {
+    align-self: end;
+    transform: translate(-50%, 50%) rotate(45deg);
+  }
+}
+

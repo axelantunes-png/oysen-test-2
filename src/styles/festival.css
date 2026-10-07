@@ -1,0 +1,1318 @@
+/* ============================================================
+   FESTIVALS ET ÉVÉNEMENTS CULTURELS
+   ------------------------------------------------------------
+   Dans la salle sombre du site, avec sa langue : l'anthracite,
+   le lavande des projecteurs, les losanges, les cartes éclairées
+   par le haut, et ce qu'on pointe qui s'allume.
+
+   Le hero reprend le format de « Événements d'entreprise » : le
+   plateau éteint, deux rampes face à face dont les faisceaux se
+   croisent sur le texte, et en bas la frise du jour J, que la
+   lumière parcourt des balances au premier groupe sur scène.
+
+   Le texte qui suit est court et direct. Le rythme des fonds : le
+   matériel sur une bande plus claire, la panne dans le noir
+   complet, les étapes et les questions en salle, le devis sur la
+   rampe violette de l'accueil.
+   ============================================================ */
+
+.page-festival {
+  --noir: #0d0a11;
+  --salle-claire: #18151d;
+  --mono: 'Azeret Mono', ui-monospace, monospace;
+}
+
+.section--festival .section__inner {
+  max-width: 76rem;
+}
+
+/* ---- La tête des sections ---- */
+
+.fest-tete .section__title {
+  max-width: 30ch;
+}
+
+.fest-tete__texte {
+  max-width: 60ch;
+  margin: clamp(1rem, 2.5vh, 1.4rem) 0 0;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  text-wrap: pretty;
+  color: var(--dusk);
+}
+
+.fest-tete--centree {
+  text-align: center;
+}
+
+.fest-tete--centree .section__title,
+.fest-tete--centree .fest-tete__texte {
+  margin-inline: auto;
+}
+
+/* ---- Le lien lavande et sa flèche ---- */
+
+.fest-lien {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--beam);
+}
+
+.fest-lien__fleche {
+  flex: none;
+  width: 1.1rem;
+  height: 1.1rem;
+  transition: transform 0.25s ease;
+}
+
+.fest-lien:hover,
+.fest-lien:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+
+.fest-lien:hover .fest-lien__fleche,
+.fest-lien:focus-visible .fest-lien__fleche {
+  transform: translateX(0.3rem);
+}
+
+.fest-lien:focus-visible {
+  outline: 2px solid var(--beam);
+  outline-offset: 4px;
+}
+
+/* ============================================================
+   S1 · LE HERO
+   Sur le format du hero « Événements d'entreprise ». Empilement, du
+   fond vers la surface :
+     1  le plateau, éteint                    (.festival-hero__fond, -2)
+     2  le voile, les rampes, les faisceaux   (.festival-hero__salle, -1)
+     3  le texte, la frise du jour J, les preuves
+   Les faisceaux sont ceux de l'accueil (même cône, même dégradé que
+   .hero__lights, app.css). Ici, deux rampes face à face, en haut à
+   gauche et en haut à droite : leurs faisceaux se croisent sur le
+   texte. Ils s'allument une fois, en fondu d'opacité seulement, puis
+   ne bougent plus, ce qui ménage les téléphones.
+   ============================================================ */
+
+.festival-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: 1fr auto auto;
+  min-height: calc(100dvh - var(--nav-h, 0px));
+  padding: clamp(3rem, 9vh, 6rem) var(--pad) clamp(2rem, 5vh, 3rem);
+  background-color: var(--night);
+  --btn-ghost-border: var(--charte-gris);
+}
+
+/* Le plateau, comme ceux de Nos services, mais éteint : la salle attend
+   ses premiers spectateurs. */
+.festival-hero__fond {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 45%;
+  filter: grayscale(0.65) saturate(0.55) brightness(0.3) contrast(1.1);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Le voile : plus dense au centre, derrière le texte ; une lueur violette
+   au-dessus de chaque rampe ; le bas qui retombe dans le noir sous la
+   frise. */
+.festival-hero__salle {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background-image:
+    radial-gradient(
+      60% 55% at 50% 42%,
+      color-mix(in srgb, var(--night) 85%, transparent),
+      color-mix(in srgb, var(--night) 60%, transparent) 55%,
+      color-mix(in srgb, var(--night) 45%, transparent) 100%
+    ),
+    radial-gradient(
+      45% 50% at 10% -8%,
+      color-mix(in srgb, var(--oysen-purple) 45%, transparent),
+      transparent 68%
+    ),
+    radial-gradient(
+      45% 50% at 90% -8%,
+      color-mix(in srgb, var(--oysen-purple) 45%, transparent),
+      transparent 68%
+    ),
+    linear-gradient(to bottom, transparent 55%, var(--night) 96%);
+}
+
+.festival-hero__faisceaux i {
+  position: absolute;
+  top: -10%;
+  width: 32vmax;
+  height: 135%;
+  transform-origin: 50% 0;
+  /* Étroit à la lampe, ouvert au sol. */
+  clip-path: polygon(48.6% 0, 51.4% 0, 100% 100%, 0 100%);
+  background-image: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--beam) 17%, transparent),
+    color-mix(in srgb, var(--beam) 6%, transparent) 42%,
+    transparent 78%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 4%,
+    #000 34%,
+    #000 66%,
+    transparent 96%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 4%,
+    #000 34%,
+    #000 66%,
+    transparent 96%
+  );
+  filter: blur(7px);
+  animation: fest-faisceau-allume 1.2s ease
+    calc(var(--apres-rideau, 0s) + 0.15s + var(--rang, 0) * 0.18s) both;
+}
+
+/* La rampe de gauche : deux lampes qui visent la droite du texte. */
+.festival-hero__faisceaux i:nth-child(1) {
+  --rang: 0;
+  left: 8%;
+  transform: translateX(-50%) rotate(-38deg);
+}
+
+.festival-hero__faisceaux i:nth-child(2) {
+  --rang: 1;
+  left: 22%;
+  transform: translateX(-50%) rotate(-22deg);
+  opacity: 0.7;
+}
+
+/* La rampe de droite, en miroir : les faisceaux se croisent au centre. */
+.festival-hero__faisceaux i:nth-child(3) {
+  --rang: 1;
+  left: 78%;
+  transform: translateX(-50%) rotate(22deg);
+  opacity: 0.7;
+}
+
+.festival-hero__faisceaux i:nth-child(4) {
+  --rang: 0;
+  left: 92%;
+  transform: translateX(-50%) rotate(38deg);
+}
+
+@keyframes fest-faisceau-allume {
+  from {
+    opacity: 0;
+  }
+}
+
+.festival-hero__inner {
+  display: grid;
+  align-items: center;
+  width: 100%;
+  max-width: 76rem;
+  margin-inline: auto;
+}
+
+.festival-hero__texte {
+  max-width: 58rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+/* Deux lignes au plus sur ordinateur, éclairée d'une lueur lavande. */
+.festival-hero__titre {
+  max-width: 34ch;
+  margin: 0 auto;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  font-size: clamp(2rem, 3.2vw, 2.75rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  color: var(--dawn);
+  text-shadow: 0 0 34px color-mix(in srgb, var(--beam) 25%, transparent);
+}
+
+.festival-hero__lede {
+  max-width: 52ch;
+  margin: clamp(1.25rem, 3vh, 1.75rem) auto 0;
+  font-size: clamp(1rem, 1.25vw, 1.0625rem);
+  line-height: 1.65;
+  text-wrap: pretty;
+  color: var(--dusk);
+}
+
+.festival-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem 2rem;
+  margin-top: clamp(2rem, 4.5vh, 2.75rem);
+}
+
+.festival-hero__appel {
+  display: grid;
+  justify-items: center;
+  gap: 0.7rem;
+}
+
+.festival-hero__rassurance {
+  max-width: 48ch;
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--dusk);
+}
+
+/* ---- La frise du jour J ----
+   Un fil horizontal, cinq repères. La lumière le parcourt de gauche à
+   droite : ce qui est fait avant l'ouverture se coche, et le dernier
+   repère, le premier groupe sur scène, s'allume. */
+
+.fest-jour-j {
+  width: 100%;
+  max-width: 76rem;
+  margin: clamp(2.5rem, 7vh, 4.5rem) auto 0;
+  font-family: var(--mono);
+}
+
+.fest-jour-j__tete {
+  margin-bottom: 1.1rem;
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--beam);
+}
+
+.fest-jour-j__fil {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1.25rem;
+  margin: 0;
+  padding: 1.5rem 0 0;
+  list-style: none;
+}
+
+/* Le fil, éteint, puis la lumière qui le parcourt. */
+.fest-jour-j__fil::before,
+.fest-jour-j__fil::after {
+  content: '';
+  position: absolute;
+  top: 0.4rem;
+  left: 0;
+  right: 0;
+  height: 1px;
+}
+
+.fest-jour-j__fil::before {
+  background-color: var(--night-veil);
+}
+
+.fest-jour-j__fil::after {
+  background-image: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--beam) 35%, transparent),
+    var(--beam)
+  );
+  transform-origin: 0 50%;
+  animation: fest-jour-j-fil 2.4s cubic-bezier(0.45, 0, 0.2, 1)
+    calc(var(--apres-rideau, 0s) + 0.6s) both;
+}
+
+@keyframes fest-jour-j-fil {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+.fest-jour-j__repere {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 0.35rem;
+  animation: fest-jour-j-repere 0.5s ease
+    calc(var(--apres-rideau, 0s) + 0.75s + var(--rang) * 0.48s) both;
+}
+
+@keyframes fest-jour-j-repere {
+  from {
+    opacity: 0;
+    transform: translateY(0.4rem);
+  }
+}
+
+/* Le losange du repère, posé sur le fil : évidé, plein une fois fait,
+   cerclé pour le premier groupe. */
+.fest-jour-j__repere::before {
+  content: '';
+  position: absolute;
+  top: calc(-1.5rem + 0.4rem);
+  left: 0;
+  width: 0.55rem;
+  height: 0.55rem;
+  background-color: var(--night);
+  border: 1px solid var(--beam);
+  transform: translate(0, -50%) rotate(45deg);
+}
+
+.fest-jour-j__repere--essai::before,
+.fest-jour-j__repere:last-child::before {
+  animation: fest-jour-j-coche 0.35s ease
+    calc(var(--apres-rideau, 0s) + 1s + var(--rang) * 0.48s) both;
+}
+
+@keyframes fest-jour-j-coche {
+  to {
+    background-color: var(--beam);
+  }
+}
+
+.fest-jour-j__repere:last-child::before {
+  width: 0.75rem;
+  height: 0.75rem;
+  box-shadow: 0 0 0 0.35rem color-mix(in srgb, var(--beam) 16%, transparent);
+}
+
+.fest-jour-j__heure {
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--dusk);
+}
+
+.fest-jour-j__action {
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--dawn);
+}
+
+.fest-jour-j__statut {
+  justify-self: start;
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--beam);
+}
+
+.fest-jour-j__statut::before {
+  content: '✓ ';
+}
+
+/* Le premier groupe sur scène : tout est prêt, et à l'heure. */
+.fest-jour-j__repere:last-child .fest-jour-j__heure,
+.fest-jour-j__repere:last-child .fest-jour-j__action {
+  font-weight: 600;
+  color: var(--beam);
+}
+
+/* ---- Les preuves ---- */
+
+.fest-preuves {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem clamp(1.5rem, 3vw, 2.5rem);
+  width: 100%;
+  max-width: 76rem;
+  margin: clamp(2rem, 5vh, 3rem) auto 0;
+  padding: clamp(1.1rem, 2.5vh, 1.5rem) 0 0;
+  list-style: none;
+  font-size: 0.875rem;
+  color: var(--dusk);
+  border-top: 1px solid var(--night-veil);
+}
+
+.fest-preuves li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.fest-preuves li::before {
+  content: '';
+  flex: none;
+  width: 0.4rem;
+  height: 0.4rem;
+  background-color: var(--beam);
+  transform: rotate(45deg);
+}
+
+/* ---- L'entrée du hero, après le rideau s'il se joue ---- */
+
+.festival-hero__texte > * {
+  animation: hero-monte 0.8s cubic-bezier(0.22, 0.61, 0.36, 1)
+    calc(var(--apres-rideau, 0s) + 0.1s) both;
+}
+
+.festival-hero__texte > :nth-child(2) {
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.22s);
+}
+
+.festival-hero__texte > :nth-child(3) {
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.34s);
+}
+
+.festival-hero__texte > :nth-child(4) {
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.46s);
+}
+
+.fest-preuves {
+  animation: festival-fondu 1s ease calc(var(--apres-rideau, 0s) + 0.6s) both;
+}
+
+@keyframes festival-fondu {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ---- Le hero sur tablette et téléphone ---- */
+
+@media (max-width: 1023px) {
+  .festival-hero {
+    min-height: 0;
+  }
+
+  /* Une lampe par rampe, moins large. */
+  .festival-hero__faisceaux i {
+    width: 44vmax;
+  }
+
+  .festival-hero__faisceaux i:nth-child(2),
+  .festival-hero__faisceaux i:nth-child(3) {
+    display: none;
+  }
+}
+
+@media (max-width: 760px) {
+  /* Sur téléphone, la frise se retire : le hero s'en tient au texte et
+     aux preuves. */
+  .fest-jour-j {
+    display: none;
+  }
+
+  .fest-preuves {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* ============================================================
+   S2 · UN MATÉRIEL CHOISI POUR VOTRE LIEU
+   Les trois critères sont trois projecteurs : le nom en lavande, la
+   lampe dessous, puis trois faisceaux (un SVG, net et sans flou) qui
+   convergent sur la rangée des cinq familles. La rangée s'éclaire
+   donc par le haut : arête lavande, lueur douce au sommet de chaque
+   carte. Au survol, la carte prend la lumière à fond.
+   Sous la rangée, le bandeau du matériel, sur toute la largeur.
+   ============================================================ */
+
+.section.section--festival-choix {
+  background-color: var(--salle-claire);
+  border-block: 1px solid var(--night-veil);
+}
+
+.choix {
+  margin-top: clamp(2.75rem, 6vh, 3.75rem);
+  color: var(--beam);
+}
+
+/* Les trois critères, au-dessus de leurs lampes. */
+.choix__criteres {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--beam);
+}
+
+.choix__criteres li {
+  display: grid;
+  justify-items: center;
+  gap: 0.7rem;
+}
+
+/* La lampe, juste au-dessus de son faisceau. */
+.choix__criteres li::after {
+  content: '';
+  width: 0.6rem;
+  height: 0.6rem;
+  background-color: var(--beam);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0.5rem var(--beam),
+    0 0 1.4rem color-mix(in srgb, var(--beam) 55%, transparent);
+}
+
+.choix__faisceaux {
+  display: block;
+  width: 100%;
+  height: clamp(5rem, 10vw, 8rem);
+  margin-top: -0.3rem;
+}
+
+/* ---- Les cinq familles ---- */
+
+.familles {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(0.75rem, 1.2vw, 1rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.famille {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 0.9rem;
+  padding: clamp(1.25rem, 1.8vw, 1.6rem);
+  background:
+    radial-gradient(
+      90% 55% at 50% 0%,
+      color-mix(in srgb, var(--beam) 12%, transparent),
+      transparent 70%
+    ),
+    var(--night-raised);
+  border: 1px solid var(--night-veil);
+  box-shadow: 0 1.5rem 3rem -2rem rgba(0, 0, 0, 0.7);
+  transition: box-shadow 0.3s ease;
+}
+
+/* L'arête haute, là où tombe la lumière. */
+.famille::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  left: -1px;
+  height: 1px;
+  background-color: var(--beam);
+  box-shadow: 0 0 0.9rem color-mix(in srgb, var(--beam) 60%, transparent);
+  opacity: 0.55;
+  transition: opacity 0.3s ease;
+}
+
+.famille:hover {
+  box-shadow:
+    0 1.5rem 3rem -2rem rgba(0, 0, 0, 0.7),
+    0 0 2.5rem -1rem color-mix(in srgb, var(--beam) 30%, transparent);
+}
+
+.famille:hover::before {
+  opacity: 1;
+}
+
+.famille__nom {
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.3;
+  text-wrap: balance;
+  color: var(--dawn);
+}
+
+.famille__details {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.875rem;
+  color: var(--dusk);
+}
+
+.famille__details li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  line-height: 1.45;
+}
+
+.famille__details li::before {
+  content: '';
+  flex: none;
+  width: 0.4rem;
+  height: 0.4rem;
+  margin-top: calc((1.45em - 0.4rem) / 2);
+  border: 1px solid var(--beam);
+  transform: rotate(45deg);
+}
+
+/* ---- Le bandeau du matériel ----
+   Sur toute la largeur de l'écran : la section a ses marges --pad, le
+   bandeau les reprend en négatif. Six emplacements de logo, hachurés
+   comme des épreuves tant qu'ils sont vides, et sous chacun le nom du
+   matériel, en mono. */
+
+.materiel {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  margin: clamp(3rem, 7vh, 4.5rem) calc(-1 * var(--pad)) 0;
+  padding: clamp(1.75rem, 4vh, 2.5rem) var(--pad);
+  list-style: none;
+  background-color: color-mix(in srgb, var(--night) 55%, var(--salle-claire));
+  border-top: 1px solid var(--night-veil);
+  margin-bottom: calc(-1 * clamp(4.5rem, 11vh, 8rem));
+}
+
+.materiel__item {
+  display: grid;
+  justify-items: center;
+  gap: 0.75rem;
+  padding: 0 clamp(0.5rem, 1.5vw, 1.25rem);
+  text-align: center;
+}
+
+.materiel__item + .materiel__item {
+  border-left: 1px solid var(--night-veil);
+}
+
+/* L'emplacement du logo. */
+.materiel__logo {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  max-width: 9rem;
+  aspect-ratio: 16 / 9;
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.06em;
+  color: var(--dusk);
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent 0 0.6rem,
+    color-mix(in srgb, var(--beam) 5%, transparent) 0.6rem 0.65rem
+  );
+  border: 1px dashed var(--night-veil);
+}
+
+.materiel__nom {
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  color: var(--dawn);
+}
+
+/* ============================================================
+   S3 · LA PANNE
+   Le noir complet, celui des problèmes sur le reste du site. Les
+   quatre précautions, chacune sous sa lampe, accrochées au même
+   pont : le filet du haut, plus clair sous chaque lampe. Le cône
+   part de la lampe et s'ouvre sur la phrase. Pas de flou animé : un
+   dégradé net, adouci par un masque, qui monte au survol.
+   ============================================================ */
+
+.section.section--festival-panne {
+  background-color: var(--noir);
+}
+
+.vigies {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: clamp(2.75rem, 6vh, 3.75rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.vigie {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  min-height: 12rem;
+  padding: 4rem clamp(0.75rem, 1.5vw, 1.25rem) 1.25rem;
+  text-align: center;
+  /* Le pont : un filet continu d'une lampe à l'autre, plus clair sous
+     chacune. */
+  background-image: linear-gradient(
+    to right,
+    var(--night-veil),
+    color-mix(in srgb, var(--beam) 45%, transparent) 50%,
+    var(--night-veil)
+  );
+  background-size: 100% 1px;
+  background-repeat: no-repeat;
+}
+
+/* La lampe, accrochée au milieu de son tronçon de pont. */
+.vigie::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 0.55rem;
+  height: 0.55rem;
+  background-color: var(--beam);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0.5rem var(--beam),
+    0 0 1.4rem color-mix(in srgb, var(--beam) 50%, transparent);
+  transform: translate(-50%, -50%);
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+/* Le cône : étroit à la lampe, ouvert sur la phrase. */
+.vigie::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: -1;
+  width: min(100%, 17rem);
+  height: 100%;
+  clip-path: polygon(47% 0, 53% 0, 100% 100%, 0 100%);
+  background-image: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--beam) 22%, transparent),
+    color-mix(in srgb, var(--beam) 8%, transparent) 55%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 6%,
+    #000 36%,
+    #000 64%,
+    transparent 94%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 6%,
+    #000 36%,
+    #000 64%,
+    transparent 94%
+  );
+  transform: translateX(-50%);
+  opacity: 0.5;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.vigie__texte {
+  max-width: 24ch;
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.0625rem;
+  font-weight: 400;
+  line-height: 1.45;
+  text-wrap: balance;
+  color: var(--dawn);
+  transition: color 0.3s ease;
+}
+
+/* Le mot clé de chaque précaution, au violet de la charte (celui des
+   boutons). */
+.vigie__mot {
+  font-weight: 600;
+  color: var(--charte-violet);
+}
+
+/* Au survol, la lampe monte : le cône s'allume, la phrase passe au
+   blanc. */
+.vigie:hover::before,
+.vigie:hover::after {
+  opacity: 1;
+}
+
+.vigie:hover .vigie__texte {
+  color: #fff;
+}
+
+/* Notre approche, sous les lampes, et le parcours de celui qui la
+   porte. */
+.approche {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  max-width: 58ch;
+  margin: clamp(3rem, 7vh, 4.5rem) auto 0;
+  padding-top: clamp(1.75rem, 4vh, 2.25rem);
+  text-align: center;
+  border-top: 1px solid var(--night-veil);
+}
+
+.approche p {
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  text-wrap: pretty;
+  color: var(--dusk);
+}
+
+/* ============================================================
+   S4 · CINQ ÉTAPES
+   Cinq cartes éclairées, le traitement du dispositif de « Événements
+   d'entreprise » : un projecteur par carte (les cinq lampes forment une
+   rampe, celles des bords visent le centre), la bordure éclairée par
+   le haut, l'arête haute à moitié allumée. Le numéro en grands
+   chiffres légers, le nom, le texte.
+   La carte du jour J est allumée en permanence : arête et cône à fond.
+   Au survol de la rangée, une barre de lumière se pose sur l'arête de
+   la carte pointée et court de l'une à l'autre, dans l'ordre.
+   ============================================================ */
+
+.etapes-p {
+  /* L'écart entre deux cartes, repris par la lumière qui court. */
+  --ecart: clamp(0.85rem, 1.4vw, 1.25rem);
+  /* La carte survolée, de 1 à 5 (voir plus bas). */
+  --actif: 1;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--ecart);
+  margin: clamp(2.75rem, 6vh, 3.75rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.etape-p {
+  --x: 50%;
+  --y: 0%;
+  --dir: 180deg;
+  --ouv: 12deg;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  align-content: start;
+  gap: 0.6rem;
+  padding: clamp(1.35rem, 2vw, 1.75rem);
+  border: 1px solid transparent;
+  background:
+    radial-gradient(
+        70% 80% at var(--x) var(--y),
+        color-mix(in srgb, var(--beam) 13%, transparent),
+        transparent 65%
+      )
+      padding-box,
+    linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--night-raised) 92%, var(--beam)),
+        var(--night-raised) 55%,
+        color-mix(in srgb, var(--night) 60%, var(--night-raised))
+      )
+      padding-box,
+    linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--beam) 50%, transparent),
+        var(--night-veil) 35%,
+        color-mix(in srgb, var(--charte-gris) 55%, transparent)
+      )
+      border-box;
+  box-shadow: 0 1.5rem 3rem -2rem rgba(0, 0, 0, 0.7);
+  transition: box-shadow 0.3s ease;
+}
+
+.etape-p:nth-child(1) {
+  --x: 0%;
+  --dir: 145deg;
+}
+
+.etape-p:nth-child(2) {
+  --x: 25%;
+  --dir: 162deg;
+}
+
+.etape-p:nth-child(3) {
+  --x: 50%;
+  --dir: 180deg;
+  --ouv: 10deg;
+}
+
+.etape-p:nth-child(4) {
+  --x: 75%;
+  --dir: 198deg;
+}
+
+.etape-p:nth-child(5) {
+  --x: 100%;
+  --dir: 215deg;
+}
+
+/* Le faisceau. */
+.etape-p::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    radial-gradient(
+      circle at var(--x) var(--y),
+      color-mix(in srgb, var(--beam) 32%, transparent),
+      transparent 4.5rem
+    ),
+    conic-gradient(
+      from calc(var(--dir) - var(--ouv)) at var(--x) var(--y),
+      transparent 0deg,
+      color-mix(in srgb, var(--beam) 7%, transparent) calc(var(--ouv) * 0.45),
+      color-mix(in srgb, var(--beam) 17%, transparent) var(--ouv),
+      color-mix(in srgb, var(--beam) 7%, transparent) calc(var(--ouv) * 1.55),
+      transparent calc(var(--ouv) * 2),
+      transparent 360deg
+    );
+  -webkit-mask-image: radial-gradient(
+    circle at var(--x) var(--y),
+    #000 10%,
+    transparent 95%
+  );
+  mask-image: radial-gradient(
+    circle at var(--x) var(--y),
+    #000 10%,
+    transparent 95%
+  );
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+/* L'arête haute, allumée à moitié ; à fond au survol. */
+.etape-p::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 1px;
+  background-color: var(--beam);
+  box-shadow: 0 0 0.9rem color-mix(in srgb, var(--beam) 60%, transparent);
+  opacity: 0.35;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.etape-p:hover {
+  box-shadow:
+    0 1.5rem 3rem -2rem rgba(0, 0, 0, 0.7),
+    0 0 2.5rem -1rem color-mix(in srgb, var(--beam) 30%, transparent);
+}
+
+.etape-p:hover::after,
+.etape-p:hover::before {
+  opacity: 1;
+}
+
+/* Le jour J, allumé en permanence. */
+.etape-p--jour-j {
+  box-shadow:
+    0 1.5rem 3rem -2rem rgba(0, 0, 0, 0.7),
+    0 0 2.5rem -1rem color-mix(in srgb, var(--beam) 30%, transparent);
+}
+
+.etape-p--jour-j::before,
+.etape-p--jour-j::after {
+  opacity: 1;
+}
+
+.etape-p__numero {
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 2.5rem;
+  font-weight: 200;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: color-mix(in srgb, var(--beam) 70%, transparent);
+}
+
+.etape-p--jour-j .etape-p__numero {
+  color: var(--beam);
+}
+
+.etape-p__nom {
+  margin: 0.35rem 0 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--dawn);
+}
+
+.etape-p__texte {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  text-wrap: pretty;
+  color: var(--dusk);
+}
+
+/* La méthode et les questions partagent le même fond : l'espace entre
+   les deux est resserré, chacune ne garde qu'une demi-marge. */
+.section.section--festival-etapes {
+  padding-bottom: clamp(2.25rem, 5.5vh, 4rem);
+}
+
+.section.section--festival-questions {
+  padding-top: clamp(2.25rem, 5.5vh, 4rem);
+}
+
+/* La phrase qui referme la méthode, centrée sous les cartes. */
+.etapes-p__conclusion {
+  margin: clamp(2rem, 5vh, 2.75rem) 0 0;
+  font-size: 1.0625rem;
+  font-weight: 500;
+  line-height: 1.6;
+  text-align: center;
+  color: var(--dawn);
+}
+
+/* ---- La lumière qui court de carte en carte ----
+   Sur ordinateur, quand les cinq étapes tiennent sur une rangée, et
+   seulement avec une souris : une barre lumineuse posée sur l'arête
+   rejoint la carte pointée, en glissant par-dessus l'écart. */
+
+@media (min-width: 1101px) and (hover: hover) {
+  .etapes-p::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: calc(
+      (var(--actif) - 1) * ((100% - 4 * var(--ecart)) / 5 + var(--ecart))
+    );
+    z-index: 2;
+    width: calc((100% - 4 * var(--ecart)) / 5);
+    height: 2px;
+    background-color: var(--beam);
+    box-shadow:
+      0 0 0.6rem var(--beam),
+      0 0 1.6rem color-mix(in srgb, var(--beam) 55%, transparent);
+    opacity: 0;
+    transition:
+      left 0.45s cubic-bezier(0.3, 0.7, 0.2, 1),
+      opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .etapes-p:hover::before {
+    opacity: 1;
+  }
+
+  .etapes-p:has(> :nth-child(1):hover) {
+    --actif: 1;
+  }
+
+  .etapes-p:has(> :nth-child(2):hover) {
+    --actif: 2;
+  }
+
+  .etapes-p:has(> :nth-child(3):hover) {
+    --actif: 3;
+  }
+
+  .etapes-p:has(> :nth-child(4):hover) {
+    --actif: 4;
+  }
+
+  .etapes-p:has(> :nth-child(5):hover) {
+    --actif: 5;
+  }
+}
+
+/* ============================================================
+   S6 · LE DEVIS
+   L'appel final de l'accueil (home.css) : les six informations en
+   étiquettes, le bouton et sa mention.
+   ============================================================ */
+
+.informations {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  max-width: 44rem;
+  margin: 1rem auto 0;
+  padding: 0;
+  list-style: none;
+}
+
+.informations li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.45rem 0.9rem;
+  font-size: 0.875rem;
+  color: var(--dawn);
+  background-color: color-mix(in srgb, var(--night-raised) 70%, transparent);
+  border: 1px solid var(--night-veil);
+}
+
+.informations li::before {
+  content: '';
+  flex: none;
+  width: 0.4rem;
+  height: 0.4rem;
+  background-color: var(--beam);
+  transform: rotate(45deg);
+}
+
+.appel__sous-bouton {
+  margin: 0.85rem 0 0;
+  font-size: 0.8125rem;
+  color: var(--dusk);
+}
+
+/* ============================================================
+   MOUVEMENT RÉDUIT
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .festival-hero__texte > *,
+  .festival-hero__faisceaux i,
+  .fest-preuves,
+  .fest-jour-j__fil::after,
+  .fest-jour-j__repere,
+  .fest-jour-j__repere::before {
+    animation: none;
+  }
+
+  /* Sans animation, ce qui est fait est coché d'emblée. */
+  .fest-jour-j__repere--essai::before,
+  .fest-jour-j__repere:last-child::before {
+    background-color: var(--beam);
+  }
+
+  .fest-lien__fleche,
+  .famille,
+  .famille::before,
+  .vigie::before,
+  .vigie::after,
+  .vigie__texte,
+  .etape-p,
+  .etape-p::before,
+  .etape-p::after,
+  .etapes-p::before {
+    transition: none;
+  }
+}
+
+/* ============================================================
+   TABLETTE
+   ============================================================ */
+
+@media (max-width: 1023px) {
+  /* Les lampes sur deux rangées de deux. */
+  .vigies {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 1.5rem;
+  }
+
+  /* Les étapes sur deux rangées : trois, puis deux. */
+  .etapes-p {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .etape-p {
+    grid-column: span 2;
+  }
+
+  .etape-p:nth-child(4) {
+    grid-column: 2 / span 2;
+  }
+
+  /* Les familles sur deux rangées : trois, puis deux. */
+  .familles {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .famille {
+    grid-column: span 2;
+  }
+
+  .famille:nth-child(4) {
+    grid-column: 2 / span 2;
+  }
+
+  /* Le bandeau du matériel sur deux rangées de trois. */
+  .materiel {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    row-gap: 1.75rem;
+  }
+
+  .materiel__item:nth-child(4) {
+    border-left: 0;
+  }
+}
+
+/* ============================================================
+   TÉLÉPHONE
+   ============================================================ */
+
+@media (max-width: 760px) {
+  .materiel {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 1.75rem;
+  }
+
+  .materiel__item:nth-child(odd) {
+    border-left: 0;
+  }
+
+  .materiel__item:nth-child(even) {
+    border-left: 1px solid var(--night-veil);
+  }
+
+  /* Une famille par ligne ; les critères restent sur une rangée. */
+  .familles {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .famille,
+  .famille:nth-child(4) {
+    grid-column: auto;
+  }
+
+  .choix__criteres {
+    font-size: 0.5625rem;
+    letter-spacing: 0.12em;
+  }
+
+  /* Deux lampes par ligne, comme sur tablette : la phrase et son cône
+     se resserrent. */
+  .vigie {
+    min-height: 10rem;
+    padding: 3.25rem 0.5rem 1rem;
+  }
+
+  .vigie__texte {
+    font-size: 0.9375rem;
+  }
+
+  /* Une étape par ligne. */
+  .etapes-p {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .etape-p,
+  .etape-p:nth-child(4) {
+    grid-column: auto;
+  }
+}

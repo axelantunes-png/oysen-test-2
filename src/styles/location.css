@@ -1,0 +1,1219 @@
+/* ============================================================
+   LOCATION DE MATÉRIEL
+   ------------------------------------------------------------
+   Une page courte, pour quelqu'un qui sait ce qu'il veut : un
+   appel, ou le formulaire de disponibilité en bas de page.
+
+   Dans la salle sombre du site, avec sa langue : l'anthracite,
+   le lavande des projecteurs, les losanges, les cartes éclairées
+   par le haut. Les faisceaux, constants d'une page à l'autre,
+   partent ici du sol : deux projecteurs posés aux angles bas du
+   hero se croisent vers le haut, comme des lumières au pied
+   d'une structure. Ils s'allument une fois, en fondu d'opacité,
+   puis ne bougent plus.
+
+   Le rythme des fonds : le hero dans la salle éteinte, le
+   matériel sur une bande plus claire, les étapes en salle, les
+   engagements dans le noir complet, le technicien et les
+   questions en salle, le formulaire dans le noir complet.
+   ============================================================ */
+
+.page-location {
+  --noir: #0d0a11;
+  --salle-claire: #18151d;
+  /* Le rouge doux des erreurs du formulaire de contact. */
+  --erreur: #ffa3a3;
+}
+
+.section--location .section__inner {
+  max-width: 76rem;
+}
+
+/* ---- La tête des sections, centrée ---- */
+
+.loc-tete {
+  text-align: center;
+}
+
+.loc-tete .section__title {
+  max-width: 30ch;
+  margin-inline: auto;
+}
+
+.loc-tete__texte {
+  max-width: 56ch;
+  margin: clamp(1rem, 2.5vh, 1.4rem) auto 0;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  text-wrap: pretty;
+  color: var(--dusk);
+}
+
+/* ---- Le lien lavande et sa flèche ---- */
+
+.loc-lien {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--beam);
+}
+
+.loc-lien__fleche {
+  flex: none;
+  width: 1.1rem;
+  height: 1.1rem;
+  transition: transform 0.25s ease;
+}
+
+.loc-lien:hover,
+.loc-lien:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+
+.loc-lien:hover .loc-lien__fleche,
+.loc-lien:focus-visible .loc-lien__fleche {
+  transform: translateX(0.3rem);
+}
+
+.loc-lien:focus-visible {
+  outline: 2px solid var(--beam);
+  outline-offset: 4px;
+}
+
+/* ============================================================
+   S1 · LE HERO
+   ============================================================ */
+
+.loc-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  align-items: center;
+  min-height: min(88vh, 54rem);
+  padding: clamp(3rem, 9vh, 6rem) var(--pad);
+  background-color: var(--night);
+  --btn-ghost-border: var(--charte-gris);
+}
+
+/* La console en fond, éteinte et désaturée. */
+.loc-hero__fond {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 45%;
+  filter: grayscale(0.65) saturate(0.55) brightness(0.3) contrast(1.1);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Le voile : dense au centre, derrière le texte ; une lueur violette au
+   sol, aux deux angles où sont posés les projecteurs. */
+.loc-hero__salle {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background-image:
+    radial-gradient(
+      60% 55% at 50% 50%,
+      color-mix(in srgb, var(--night) 85%, transparent),
+      color-mix(in srgb, var(--night) 60%, transparent) 55%,
+      color-mix(in srgb, var(--night) 45%, transparent) 100%
+    ),
+    radial-gradient(
+      40% 45% at 8% 108%,
+      color-mix(in srgb, var(--oysen-purple) 50%, transparent),
+      transparent 68%
+    ),
+    radial-gradient(
+      40% 45% at 92% 108%,
+      color-mix(in srgb, var(--oysen-purple) 50%, transparent),
+      transparent 68%
+    );
+}
+
+/* Les deux projecteurs au sol : étroits à la lampe, en bas, ouverts vers
+   le haut. Ils se croisent derrière le texte. */
+.loc-hero__faisceaux i {
+  position: absolute;
+  bottom: -10%;
+  width: 34vmax;
+  height: 130%;
+  transform-origin: 50% 100%;
+  clip-path: polygon(0 0, 100% 0, 51.4% 100%, 48.6% 100%);
+  background-image: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--beam) 18%, transparent),
+    color-mix(in srgb, var(--beam) 6%, transparent) 42%,
+    transparent 80%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 4%,
+    #000 34%,
+    #000 66%,
+    transparent 96%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 4%,
+    #000 34%,
+    #000 66%,
+    transparent 96%
+  );
+  filter: blur(7px);
+  animation: loc-faisceau 1.2s ease calc(var(--apres-rideau, 0s) + 0.15s) both;
+}
+
+.loc-hero__faisceaux i:nth-child(1) {
+  left: 10%;
+  transform: translateX(-50%) rotate(28deg);
+}
+
+.loc-hero__faisceaux i:nth-child(2) {
+  left: 90%;
+  transform: translateX(-50%) rotate(-28deg);
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.33s);
+}
+
+@keyframes loc-faisceau {
+  from {
+    opacity: 0;
+  }
+}
+
+.loc-hero__texte {
+  max-width: 58rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.loc-hero__titre {
+  max-width: 30ch;
+  margin: 0 auto;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  font-size: clamp(2rem, 3.2vw, 2.75rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  color: var(--dawn);
+}
+
+.loc-hero__lede {
+  max-width: 54ch;
+  margin: clamp(1.25rem, 3vh, 1.75rem) auto 0;
+  font-size: clamp(1rem, 1.25vw, 1.0625rem);
+  line-height: 1.65;
+  text-wrap: pretty;
+  color: var(--dusk);
+}
+
+.loc-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: clamp(2rem, 4.5vh, 2.75rem);
+}
+
+/* Le numéro, une fois affiché : chiffres à chasse fixe. */
+.loc-numero {
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* L'entrée, après le rideau s'il se joue. */
+.loc-hero__texte > * {
+  animation: hero-monte 0.8s cubic-bezier(0.22, 0.61, 0.36, 1)
+    calc(var(--apres-rideau, 0s) + 0.1s) both;
+}
+
+.loc-hero__texte > :nth-child(2) {
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.22s);
+}
+
+.loc-hero__texte > :nth-child(3) {
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.34s);
+}
+
+.loc-hero__texte > :nth-child(4) {
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.46s);
+}
+
+/* ============================================================
+   S2 · LE MATÉRIEL
+   Cinq sous-sections, une par corps de métier, en grandes cartes :
+   le son et la lumière en grand sur la première rangée, les
+   structures, la vidéo et les accessoires sur la seconde (comme les
+   cartes d'expertise du fondateur, à l'envers).
+
+   Chaque carte, le traitement des cartes du site : un projecteur
+   (cône net éteint avec la distance, lueur sur la lampe), la
+   bordure éclairée par le haut, l'arête haute à moitié allumée. Les
+   cinq sources sont au bord extérieur de la grille : les faisceaux
+   convergent vers son centre. Au survol, le projecteur monte, le
+   pictogramme brille, l'arête s'allume à fond.
+   ============================================================ */
+
+.section.section--location-materiel {
+  background-color: var(--salle-claire);
+  border-block: 1px solid var(--night-veil);
+}
+
+.corps-grille {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: clamp(1rem, 1.6vw, 1.5rem);
+  margin-top: clamp(2.75rem, 6vh, 3.75rem);
+}
+
+.corps {
+  --x: 0%;
+  --y: 0%;
+  --dir: 135deg;
+  --ouv: 13deg;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  grid-column: span 2;
+  gap: 1.1rem;
+  min-height: 17rem;
+  padding: clamp(1.75rem, 2.6vw, 2.5rem);
+  border: 1px solid transparent;
+  background:
+    radial-gradient(
+        70% 80% at var(--x) var(--y),
+        color-mix(in srgb, var(--beam) 13%, transparent),
+        transparent 65%
+      )
+      padding-box,
+    linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--night-raised) 92%, var(--beam)),
+        var(--night-raised) 55%,
+        color-mix(in srgb, var(--night) 60%, var(--night-raised))
+      )
+      padding-box,
+    linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--beam) 50%, transparent),
+        var(--night-veil) 35%,
+        color-mix(in srgb, var(--charte-gris) 55%, transparent)
+      )
+      border-box;
+  box-shadow: 0 1.5rem 3rem -2rem rgba(0, 0, 0, 0.7);
+  transition: box-shadow 0.3s ease;
+}
+
+/* La première rangée : le son et la lumière, en grand. */
+.corps:nth-child(1),
+.corps:nth-child(2) {
+  grid-column: span 3;
+}
+
+/* Les sources, au bord extérieur de la grille. */
+.corps:nth-child(1) {
+  --x: 0%;
+  --y: 0%;
+  --dir: 128deg;
+}
+
+.corps:nth-child(2) {
+  --x: 100%;
+  --y: 0%;
+  --dir: 232deg;
+}
+
+.corps:nth-child(3) {
+  --x: 0%;
+  --y: 100%;
+  --dir: 52deg;
+}
+
+.corps:nth-child(4) {
+  --x: 50%;
+  --y: 100%;
+  --dir: 0deg;
+  --ouv: 11deg;
+}
+
+.corps:nth-child(5) {
+  --x: 100%;
+  --y: 100%;
+  --dir: 308deg;
+}
+
+/* Le faisceau. */
+.corps::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    radial-gradient(
+      circle at var(--x) var(--y),
+      color-mix(in srgb, var(--beam) 32%, transparent),
+      transparent 4.5rem
+    ),
+    conic-gradient(
+      from calc(var(--dir) - var(--ouv)) at var(--x) var(--y),
+      transparent 0deg,
+      color-mix(in srgb, var(--beam) 7%, transparent) calc(var(--ouv) * 0.45),
+      color-mix(in srgb, var(--beam) 17%, transparent) var(--ouv),
+      color-mix(in srgb, var(--beam) 7%, transparent) calc(var(--ouv) * 1.55),
+      transparent calc(var(--ouv) * 2),
+      transparent 360deg
+    );
+  -webkit-mask-image: radial-gradient(
+    circle at var(--x) var(--y),
+    #000 10%,
+    transparent 95%
+  );
+  mask-image: radial-gradient(
+    circle at var(--x) var(--y),
+    #000 10%,
+    transparent 95%
+  );
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+/* L'arête haute, allumée à moitié ; à fond au survol. */
+.corps::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 1px;
+  background-color: var(--beam);
+  box-shadow: 0 0 0.9rem color-mix(in srgb, var(--beam) 60%, transparent);
+  opacity: 0.35;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.corps:hover {
+  box-shadow:
+    0 1.5rem 3rem -2rem rgba(0, 0, 0, 0.7),
+    0 0 2.5rem -1rem color-mix(in srgb, var(--beam) 30%, transparent);
+}
+
+.corps:hover::after,
+.corps:hover::before {
+  opacity: 1;
+}
+
+/* Le nom, et le pictogramme qui brille en face. */
+.corps__tete {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.corps__nom {
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(1.5rem, 2.2vw, 1.9rem);
+  font-weight: 300;
+  line-height: 1.15;
+  color: var(--dawn);
+}
+
+.corps__picto {
+  flex: none;
+  width: clamp(2.75rem, 3.4vw, 3.5rem);
+  height: clamp(2.75rem, 3.4vw, 3.5rem);
+  color: var(--beam);
+  filter: drop-shadow(0 0 0.45rem color-mix(in srgb, var(--beam) 45%, transparent));
+  opacity: 0.85;
+  transition:
+    opacity 0.3s ease,
+    filter 0.3s ease;
+}
+
+.corps:hover .corps__picto {
+  opacity: 1;
+  filter: drop-shadow(0 0 0.8rem color-mix(in srgb, var(--beam) 70%, transparent));
+}
+
+/* La capacité : une étiquette, sous le nom. */
+.corps__capacite {
+  align-self: flex-start;
+  margin: 0;
+  padding: 0.35rem 0.7rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--beam);
+  border: 1px solid color-mix(in srgb, var(--beam) 40%, transparent);
+}
+
+/* Les équipements, sous un filet court amorcé en lavande. */
+.corps__liste {
+  display: grid;
+  gap: 0.55rem 1.75rem;
+  margin: auto 0 0;
+  padding: 1.25rem 0 0;
+  list-style: none;
+  font-size: 0.9375rem;
+  color: var(--dawn);
+  background-image:
+    linear-gradient(var(--beam), var(--beam)),
+    linear-gradient(var(--night-veil), var(--night-veil));
+  background-repeat: no-repeat;
+  background-size:
+    2.25rem 1px,
+    100% 1px;
+  background-position: 0 0;
+}
+
+/* Le son et la lumière, plus larges : leurs équipements sur deux
+   colonnes. */
+.corps:nth-child(1) .corps__liste,
+.corps:nth-child(2) .corps__liste {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.corps__liste li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  line-height: 1.5;
+}
+
+.corps__liste li::before {
+  content: '';
+  flex: none;
+  width: 0.45rem;
+  height: 0.45rem;
+  margin-top: calc((1.5em - 0.45rem) / 2);
+  border: 1px solid var(--beam);
+  transform: rotate(45deg);
+}
+
+/* ============================================================
+   S3 · COMMENT ÇA MARCHE
+   Cinq étapes reliées par un fil, un losange par étape, le numéro
+   en chiffres légers.
+   ============================================================ */
+
+.loc-etapes {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(1.25rem, 2.5vw, 2.25rem);
+  max-width: 76rem;
+  margin: clamp(2.75rem, 6vh, 3.75rem) auto 0;
+  padding: 2.25rem 0 0;
+  list-style: none;
+}
+
+/* Le fil, du premier losange vers le dernier. */
+.loc-etapes::before {
+  content: '';
+  position: absolute;
+  top: 0.45rem;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-image: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--beam) 55%, transparent),
+    var(--night-veil) 85%,
+    transparent
+  );
+}
+
+.loc-etape {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 0.55rem;
+}
+
+.loc-etape::before {
+  content: '';
+  position: absolute;
+  top: calc(-2.25rem + 0.45rem);
+  left: 0;
+  width: 0.6rem;
+  height: 0.6rem;
+  background-color: var(--beam);
+  transform: translateY(-50%) rotate(45deg);
+  box-shadow: 0 0 0 0.3rem color-mix(in srgb, var(--beam) 14%, transparent);
+}
+
+.loc-etape__numero {
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 2.75rem;
+  font-weight: 200;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: color-mix(in srgb, var(--beam) 70%, transparent);
+}
+
+.loc-etape__titre {
+  max-width: 24ch;
+  margin: 0.35rem 0 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--dawn);
+}
+
+.loc-etape__texte {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--dusk);
+}
+
+.loc-etape__texte a {
+  color: var(--beam);
+  text-underline-offset: 0.25em;
+}
+
+/* ============================================================
+   S4 · LOUEZ SANS MAUVAISE SURPRISE
+   Le noir complet. Trois réponses, chacune sous sa lampe : le pont
+   (filet du haut, plus clair sous chaque lampe), la lampe, et le
+   cône qui tombe sur le texte. Un dégradé net, sans flou animé, qui
+   monte au survol.
+   ============================================================ */
+
+.section.section--location-reassurance {
+  background-color: var(--noir);
+}
+
+.gardes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: clamp(2.75rem, 6vh, 3.75rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.garde {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 0.75rem;
+  min-height: 13rem;
+  padding: 4rem clamp(1rem, 2vw, 1.75rem) 1.5rem;
+  text-align: center;
+  background-image: linear-gradient(
+    to right,
+    var(--night-veil),
+    color-mix(in srgb, var(--beam) 45%, transparent) 50%,
+    var(--night-veil)
+  );
+  background-size: 100% 1px;
+  background-repeat: no-repeat;
+}
+
+/* La lampe, au milieu de son tronçon de pont. */
+.garde::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 0.55rem;
+  height: 0.55rem;
+  background-color: var(--beam);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0.5rem var(--beam),
+    0 0 1.4rem color-mix(in srgb, var(--beam) 50%, transparent);
+  transform: translate(-50%, -50%);
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+/* Le cône : étroit à la lampe, ouvert sur le texte. */
+.garde::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: -1;
+  width: min(100%, 20rem);
+  height: 100%;
+  clip-path: polygon(47% 0, 53% 0, 100% 100%, 0 100%);
+  background-image: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--beam) 20%, transparent),
+    color-mix(in srgb, var(--beam) 7%, transparent) 55%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 6%,
+    #000 36%,
+    #000 64%,
+    transparent 94%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 6%,
+    #000 36%,
+    #000 64%,
+    transparent 94%
+  );
+  transform: translateX(-50%);
+  opacity: 0.5;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.garde:hover::before,
+.garde:hover::after {
+  opacity: 1;
+}
+
+.garde__question {
+  max-width: 24ch;
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.35;
+  text-wrap: balance;
+  color: var(--dawn);
+}
+
+.garde__reponse {
+  max-width: 32ch;
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  text-wrap: pretty;
+  color: var(--dusk);
+}
+
+/* ============================================================
+   S5 · BESOIN D'UN TECHNICIEN ?
+   Une plaque sous un projecteur : l'arête haute allumée, une lueur
+   qui tombe du haut, centrée.
+   ============================================================ */
+
+.section.section--location-technicien {
+  background-color: var(--salle-claire);
+  border-block: 1px solid var(--night-veil);
+}
+
+.plaque {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  max-width: 46rem;
+  margin-inline: auto;
+  padding: clamp(2rem, 4vw, 3rem) clamp(1.5rem, 4vw, 3rem);
+  text-align: center;
+  border: 1px solid transparent;
+  background:
+    radial-gradient(
+        70% 70% at 50% 0%,
+        color-mix(in srgb, var(--beam) 13%, transparent),
+        transparent 70%
+      )
+      padding-box,
+    linear-gradient(var(--night-raised), var(--night-raised)) padding-box,
+    linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--beam) 55%, transparent),
+        var(--night-veil) 40%,
+        color-mix(in srgb, var(--charte-gris) 55%, transparent)
+      )
+      border-box;
+  box-shadow: 0 1.5rem 3rem -2rem rgba(0, 0, 0, 0.7);
+}
+
+/* L'arête haute, allumée. */
+.plaque::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 15%;
+  right: 15%;
+  height: 1px;
+  background-color: var(--beam);
+  box-shadow: 0 0 1rem color-mix(in srgb, var(--beam) 60%, transparent);
+}
+
+.plaque__titre {
+  margin-inline: auto;
+}
+
+.plaque__texte {
+  max-width: 48ch;
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--dusk);
+}
+
+/* ============================================================
+   S7 · VÉRIFIER UNE DISPONIBILITÉ
+   Le noir complet ; le formulaire dans une carte éclairée par le
+   haut, aux champs du formulaire de contact.
+   ============================================================ */
+
+.section.section--location-dispo {
+  background-color: var(--noir);
+}
+
+.section--location-dispo .section__title {
+  scroll-margin-top: calc(var(--nav-h, 4.5rem) + 1.5rem);
+}
+
+.dispo {
+  display: grid;
+  gap: clamp(1.5rem, 3.2vh, 2rem);
+  max-width: 52rem;
+  margin: clamp(2.5rem, 5.5vh, 3.25rem) auto 0;
+  padding: clamp(1.5rem, 3.5vw, 2.5rem);
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--night-raised), var(--night-raised)) padding-box,
+    linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--beam) 50%, transparent),
+        var(--night-veil) 30%,
+        color-mix(in srgb, var(--charte-gris) 55%, transparent)
+      )
+      border-box;
+  box-shadow: 0 1.5rem 3rem -2rem rgba(0, 0, 0, 0.8);
+}
+
+.dispo__grille {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.5rem, 3.2vh, 2rem) 1.5rem;
+  align-items: start;
+}
+
+.dispo__cases {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 2rem;
+}
+
+/* Le bouton centré, la mention des champs obligatoires dessous. */
+.dispo__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  text-align: center;
+}
+
+.dispo .btn:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.dispo__note {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--dusk);
+}
+
+/* ---- Les champs : ceux du formulaire de contact ---- */
+
+.champ {
+  display: grid;
+  gap: 0.55rem;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.champ__label {
+  padding: 0;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--dawn);
+}
+
+legend.champ__label {
+  margin-bottom: 0.8rem;
+}
+
+.champ__requis {
+  color: var(--beam);
+}
+
+.champ__precision {
+  font-weight: 400;
+  color: var(--dusk);
+}
+
+.champ__input,
+.champ__select {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 3.1rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--trait);
+  border-radius: 0;
+  background-color: var(--night);
+  font: inherit;
+  font-size: 1rem;
+  line-height: 1.4;
+  color: var(--dawn);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.champ__input::placeholder {
+  color: color-mix(in srgb, var(--dusk) 72%, transparent);
+}
+
+.champ__input:hover,
+.champ__select:hover {
+  border-color: color-mix(in srgb, var(--beam) 45%, var(--trait));
+}
+
+.champ__input:focus,
+.champ__select:focus {
+  outline: none;
+  border-color: var(--beam);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--beam) 22%, transparent);
+}
+
+.champ__input[aria-invalid='true'],
+.champ__select[aria-invalid='true'] {
+  border-color: var(--erreur);
+}
+
+/* Le déroulant perd sa flèche native pour un chevron au trait du site. */
+.champ__select {
+  appearance: none;
+  padding-right: 2.75rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9.5l6 6 6-6' fill='none' stroke='%23cdb8ff' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.9rem center;
+  background-size: 1.1rem;
+  cursor: pointer;
+}
+
+/* Quatre lignes au départ, puis la zone suit le texte. */
+.champ__zone {
+  min-height: calc(4lh + 1.6rem);
+  line-height: 1.6;
+  resize: vertical;
+  field-sizing: content;
+}
+
+.champ__aide {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: var(--dusk);
+}
+
+/* Sous une case : aligné sur le texte de la case, pas sur la case. */
+.champ__aide--case {
+  padding-left: 1.95rem;
+}
+
+.dispo__lien {
+  color: var(--beam);
+  text-underline-offset: 0.2em;
+}
+
+.dispo__lien:hover,
+.dispo__lien:focus-visible {
+  color: var(--dawn);
+}
+
+.dispo__lien:focus-visible {
+  outline: 2px solid var(--beam);
+  outline-offset: 2px;
+}
+
+.champ__erreur-zone:empty {
+  display: none;
+}
+
+/* Le message dit ce qui ne va pas ; le « ! » le signale sans la couleur. */
+.champ__erreur {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--erreur);
+}
+
+.champ__erreur::before {
+  content: '!';
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 1.05rem;
+  height: 1.05rem;
+  margin-top: 0.1rem;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* ---- Les cases à cocher : celles du formulaire de contact ---- */
+
+.case {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  cursor: pointer;
+}
+
+.case__input {
+  position: absolute;
+  top: 0.1rem;
+  left: 0;
+  width: 1.15rem;
+  height: 1.15rem;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.case__marque {
+  position: relative;
+  flex: none;
+  width: 1.15rem;
+  height: 1.15rem;
+  margin-top: 0.1rem;
+  border: 1px solid var(--trait);
+  background-color: var(--night);
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.case:hover .case__marque {
+  border-color: color-mix(in srgb, var(--beam) 55%, var(--trait));
+}
+
+.case__input:checked + .case__marque {
+  border-color: var(--beam);
+  background-color: var(--charte-violet);
+}
+
+/* La coche : un angle droit, tourné. */
+.case__input:checked + .case__marque::after {
+  content: '';
+  position: absolute;
+  top: 0.12rem;
+  left: 0.36rem;
+  width: 0.3rem;
+  height: 0.6rem;
+  border: solid #fff;
+  border-width: 0 1.5px 1.5px 0;
+  transform: rotate(45deg);
+}
+
+.case__input:focus-visible + .case__marque {
+  outline: 2px solid var(--beam);
+  outline-offset: 3px;
+}
+
+.case__input[aria-invalid='true'] + .case__marque {
+  border-color: var(--erreur);
+}
+
+.case__texte {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--dawn);
+}
+
+/* ============================================================
+   MOUVEMENT RÉDUIT
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .loc-hero__texte > *,
+  .loc-hero__faisceaux i {
+    animation: none;
+  }
+
+  .loc-lien__fleche,
+  .corps,
+  .corps::before,
+  .corps::after,
+  .corps__picto,
+  .garde::before,
+  .garde::after,
+  .champ__input,
+  .champ__select,
+  .case__marque {
+    transition: none;
+  }
+}
+
+/* ============================================================
+   TABLETTE ET TÉLÉPHONE
+   ============================================================ */
+
+@media (max-width: 1023px) {
+  .loc-hero {
+    min-height: 0;
+  }
+
+  .loc-hero__faisceaux i {
+    width: 46vmax;
+  }
+
+  /* Le matériel sur deux colonnes ; les accessoires ferment la grille
+     sur toute la largeur. */
+  .corps-grille {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .corps,
+  .corps:nth-child(1),
+  .corps:nth-child(2) {
+    grid-column: auto;
+  }
+
+  .corps:nth-child(5) {
+    grid-column: 1 / -1;
+  }
+
+  /* Les cinq étapes s'empilent, le fil passe à gauche. */
+  .loc-etapes {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+    max-width: 40rem;
+    padding: 0 0 0 1.75rem;
+  }
+
+  .loc-etapes::before {
+    top: 0.45rem;
+    bottom: 0.45rem;
+    left: 0.3rem;
+    right: auto;
+    width: 1px;
+    height: auto;
+    background-image: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--beam) 55%, transparent),
+      var(--night-veil)
+    );
+  }
+
+  .loc-etape::before {
+    top: 0.45rem;
+    left: calc(-1.75rem + 0.3rem);
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  .loc-etape__titre {
+    max-width: none;
+  }
+}
+
+@media (max-width: 760px) {
+  /* Une carte par ligne, une lampe par ligne. */
+  .corps-grille,
+  .gardes {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .corps:nth-child(5) {
+    grid-column: auto;
+  }
+
+  .corps {
+    min-height: 0;
+  }
+
+  .garde {
+    min-height: 0;
+  }
+
+  .dispo__grille {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /*
+   * Les cinq étapes, en fil compact : le numéro devient le repère, un
+   * badge lavande posé sur le fil, au lieu du losange et du grand chiffre
+   * isolé. Le titre et le texte se rangent à côté.
+   */
+  .loc-etapes {
+    gap: 1.25rem;
+    padding: 0;
+  }
+
+  .loc-etapes::before {
+    top: 1.25rem;
+    bottom: 1.25rem;
+    left: 1.25rem;
+  }
+
+  .loc-etape {
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    column-gap: 1rem;
+    row-gap: 0.2rem;
+  }
+
+  .loc-etape::before {
+    display: none;
+  }
+
+  .loc-etape__numero {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-row: 1 / span 2;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--beam);
+    background-color: var(--night);
+    border: 1px solid color-mix(in srgb, var(--beam) 60%, transparent);
+    box-shadow: 0 0 1rem -0.25rem color-mix(in srgb, var(--beam) 55%, transparent);
+  }
+
+  .loc-etape__titre {
+    grid-column: 2;
+    margin: 0;
+    padding-top: 0.5rem;
+    font-size: 1rem;
+  }
+
+  .loc-etape__texte {
+    grid-column: 2;
+    font-size: 0.875rem;
+  }
+}

@@ -1,0 +1,341 @@
+   S1 · LE HERO
+   ============================================================ */
+
+.festival-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(3rem, 8vh, 5.5rem) var(--pad) clamp(3rem, 7vh, 4.5rem);
+  background-color: var(--night);
+  --btn-ghost-border: var(--charte-gris);
+}
+
+/* Le plateau en fond, traité pour la salle : désaturé, très assombri. */
+.festival-hero__fond {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 45%;
+  filter: grayscale(0.6) saturate(0.6) brightness(0.34) contrast(1.1);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Le voile : la teinte violette, plus dense derrière le texte pour qu'il
+   reste lisible, et deux projecteurs braqués sur la fiche. */
+.festival-hero__voile {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--night) 94%, transparent) 0%,
+      color-mix(in srgb, var(--night) 78%, transparent) 50%,
+      color-mix(in srgb, var(--night) 45%, transparent) 100%
+    ),
+    radial-gradient(
+      90% 70% at 85% -10%,
+      color-mix(in srgb, var(--oysen-purple) 45%, transparent),
+      transparent 65%
+    ),
+    linear-gradient(
+      to bottom,
+      transparent 70%,
+      var(--night)
+    );
+}
+
+.festival-hero__voile i {
+  position: absolute;
+  top: -12%;
+  width: 34vmax;
+  height: 120%;
+  transform-origin: 50% 0;
+  clip-path: polygon(48.6% 0, 51.4% 0, 100% 100%, 0 100%);
+  background-image: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--beam) 16%, transparent),
+    color-mix(in srgb, var(--beam) 5%, transparent) 45%,
+    transparent 80%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 4%,
+    #000 34%,
+    #000 66%,
+    transparent 96%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 4%,
+    #000 34%,
+    #000 66%,
+    transparent 96%
+  );
+  filter: blur(7px);
+}
+
+.festival-hero__voile i:nth-child(1) {
+  left: 62%;
+  transform: translateX(-50%) rotate(14deg);
+}
+
+.festival-hero__voile i:nth-child(2) {
+  left: 88%;
+  transform: translateX(-50%) rotate(-12deg);
+  opacity: 0.7;
+}
+
+.festival-hero__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  align-items: center;
+  gap: clamp(2.5rem, 5vw, 5rem);
+  max-width: 76rem;
+  margin-inline: auto;
+}
+
+.festival-hero__titre {
+  margin: 0;
+  max-width: 22ch;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  color: var(--dawn);
+}
+
+.festival-hero__lede {
+  max-width: 54ch;
+  margin: clamp(1.4rem, 3vh, 2rem) 0 0;
+  font-size: clamp(1rem, 1.25vw, 1.0625rem);
+  line-height: 1.65;
+  text-wrap: pretty;
+  color: var(--dusk);
+}
+
+.festival-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 2rem;
+  margin-top: clamp(2rem, 4.5vh, 2.75rem);
+}
+
+.festival-hero__appel {
+  display: grid;
+  justify-items: start;
+  gap: 0.7rem;
+}
+
+.festival-hero__rassurance {
+  max-width: 44ch;
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--dusk);
+}
+
+/* ---- La fiche technique annotée ---- */
+
+.fiche {
+  margin: 0;
+  padding: 1rem 1.15rem 0.95rem;
+  font-family: var(--mono);
+  background-color: color-mix(in srgb, var(--night-raised) 88%, transparent);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--night-veil);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--beam) 55%, transparent),
+    0 1.75rem 3.5rem -1.5rem rgba(0, 0, 0, 0.85);
+}
+
+.fiche__tete {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.4rem;
+  padding-bottom: 0.65rem;
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--beam);
+  border-bottom: 1px solid var(--night-veil);
+}
+
+.fiche__tete span:last-child {
+  color: var(--dusk);
+}
+
+.fiche__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.6875rem;
+}
+
+.fiche__table th {
+  padding: 0.5rem 0.6rem 0.45rem 0;
+  font-size: 0.5rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-align: left;
+  text-transform: uppercase;
+  color: var(--dusk);
+}
+
+.fiche__table td {
+  padding: 0.6rem 0.6rem 0.6rem 0;
+  line-height: 1.35;
+  vertical-align: baseline;
+  color: var(--dawn);
+  border-top: 1px solid var(--night-veil);
+}
+
+.fiche__table td:first-child {
+  padding-left: 0.3rem;
+}
+
+.fiche__table .fiche__voie {
+  font-variant-numeric: tabular-nums;
+  color: var(--beam);
+}
+
+.fiche__table .fiche__demande {
+  color: var(--dusk);
+}
+
+/* La réponse, avec son signe : ✓ à l'identique, ≈ en équivalence,
+   → avec la tournée. */
+.fiche__reponse {
+  white-space: nowrap;
+}
+
+.fiche__reponse::before {
+  margin-right: 0.4rem;
+  color: var(--beam);
+}
+
+.fiche__ligne--identique .fiche__reponse::before {
+  content: '✓';
+}
+
+.fiche__ligne--equivalence .fiche__reponse::before {
+  content: '≈';
+}
+
+.fiche__table .fiche__ligne--tournee .fiche__reponse {
+  color: var(--dusk);
+}
+
+.fiche__ligne--tournee .fiche__reponse::before {
+  content: '→';
+}
+
+/* La lecture : la barre passe sur chaque ligne, la réponse apparaît. */
+.fiche__ligne {
+  animation: fiche-lecture 0.9s ease
+    calc(var(--apres-rideau, 0s) + 0.8s + var(--rang) * 0.55s) both;
+}
+
+.fiche__reponse {
+  animation: fiche-reponse 0.4s ease
+    calc(var(--apres-rideau, 0s) + 1.15s + var(--rang) * 0.55s) both;
+}
+
+@keyframes fiche-lecture {
+  0% {
+    background-color: transparent;
+  }
+  35% {
+    background-color: color-mix(in srgb, var(--beam) 16%, transparent);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+@keyframes fiche-reponse {
+  from {
+    opacity: 0;
+  }
+}
+
+.fiche__pied {
+  margin: 0.75rem 0 0;
+  font-size: 0.625rem;
+  line-height: 1.5;
+  color: var(--dusk);
+}
+
+/* ---- Les preuves ---- */
+
+.fest-preuves {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem clamp(1.5rem, 3vw, 2.5rem);
+  max-width: 76rem;
+  margin: clamp(2.75rem, 7vh, 4.5rem) auto 0;
+  padding: clamp(1.25rem, 3vh, 1.75rem) 0 0;
+  list-style: none;
+  font-size: 0.875rem;
+  color: var(--dusk);
+  border-top: 1px solid var(--night-veil);
+}
+
+.fest-preuves li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.fest-preuves li::before {
+  content: '';
+  flex: none;
+  width: 0.4rem;
+  height: 0.4rem;
+  background-color: var(--beam);
+  transform: rotate(45deg);
+}
+
+/* ---- L'entrée du hero, après le rideau s'il se joue ---- */
+
+.festival-hero__texte > * {
+  animation: hero-monte 0.8s cubic-bezier(0.22, 0.61, 0.36, 1)
+    calc(var(--apres-rideau, 0s) + 0.1s) both;
+}
+
+.festival-hero__texte > :nth-child(2) {
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.2s);
+}
+
+.festival-hero__texte > :nth-child(3) {
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.3s);
+}
+
+.festival-hero__texte > :nth-child(4) {
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.4s);
+}
+
+.fiche,
+.fest-preuves {
+  animation: festival-fondu 1s ease calc(var(--apres-rideau, 0s) + 0.4s) both;
+}
+
+@keyframes festival-fondu {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ============================================================

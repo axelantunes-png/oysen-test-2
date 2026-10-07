@@ -1,0 +1,140 @@
+/* ---- 4 · Ce que le terrain m'a appris ----
+   Un cran plus clair. La première leçon en grand à gauche, les quatre
+   autres en liste à droite, entre des filets. */
+
+.section.section--fondateur-lecons {
+  background-color: var(--night-raised);
+  border-block: 1px solid var(--trait-doux);
+}
+
+.lecons-grille {
+  display: grid;
+  grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+  align-items: start;
+  gap: 2.5rem clamp(3rem, 7vw, 8rem);
+}
+
+.lecon-une {
+  margin: 0;
+}
+
+.lecon-une p {
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  font-size: clamp(1.35rem, 2vw, 1.85rem);
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+  color: var(--dawn);
+}
+
+.lecons {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--trait);
+}
+
+.lecons li {
+  padding-block: clamp(1.25rem, 3vh, 1.6rem);
+  border-bottom: 1px solid var(--trait);
+}
+
+.lecon {
+  margin: 0;
+}
+
+.lecon p {
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  font-size: clamp(1.15rem, 1.5vw, 1.35rem);
+  line-height: 1.45;
+  text-wrap: pretty;
+  color: var(--dawn);
+}
+
+
+/* ---- (morceau suivant) ---- */
+
+/* ---- Leçons : le moment fort ---- */
+
+.section.section--fondateur-lecons {
+  overflow: hidden;
+  background-color: #181520;
+  border-block: 1px solid var(--night-veil);
+  background-image:
+    radial-gradient(
+      55% 85% at 18% 50%,
+      color-mix(in srgb, var(--oysen-purple) 36%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      120% 100% at 50% 50%,
+      transparent 55%,
+      color-mix(in srgb, #07030b 45%, transparent)
+    );
+}
+
+/* Le grand guillemet, au trait, derrière la première leçon. */
+.section--fondateur-lecons::before {
+  content: '«';
+  top: 50%;
+  left: max(var(--pad), calc((100% - 100rem) / 2));
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  font-size: clamp(16rem, 28vw, 32rem);
+  line-height: 0.8;
+  color: transparent;
+  -webkit-text-stroke: 1px color-mix(in srgb, var(--beam) 24%, transparent);
+  transform: translate(-12%, -46%);
+}
+
+.lecon-une p {
+  text-shadow: 0 0 2.4rem color-mix(in srgb, var(--beam) 22%, transparent);
+}
+
+.lecons,
+.lecons li {
+  border-color: var(--night-veil);
+}
+
+
+/* ---- (morceau suivant) ---- */
+
+/* Sur téléphone, le guillemet se range en haut à gauche, plus petit. */
+@media (max-width: 760px) {
+  .section--fondateur-lecons::before {
+    top: 1rem;
+    font-size: 12rem;
+    transform: translateX(-8%);
+  }
+}
+
+
+/* ---- (morceau suivant) ---- */
+
+/* Téléphone : « Retours de terrain » se centre, tête et leçons, et le
+   grand guillemet de fond disparaît. */
+@media (max-width: 760px) {
+  .section--fondateur-lecons::before {
+    display: none;
+  }
+
+  .section--fondateur-lecons .fondateur-tete,
+  .lecon-une,
+  .lecons {
+    text-align: center;
+  }
+
+  .section--fondateur-lecons .fondateur-tete .section__title {
+    margin-inline: auto;
+  }
+}
+
+
+/* Règles partagées, à rétablir :
+   - .section--fondateur-lecons::before dans la liste
+     « .section--fondateur-parcours::before, … .section--fondateur-marquant::before » ;
+   - .lecons-grille dans la règle tablette « .fondateur-tete, .intro-fondateur ». */

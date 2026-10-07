@@ -738,64 +738,7 @@
   color: var(--dusk);
 }
 
-/* ---- 4 · Ce que le terrain m'a appris ----
-   Un cran plus clair. La première leçon en grand à gauche, les quatre
-   autres en liste à droite, entre des filets. */
-
-.section.section--fondateur-lecons {
-  background-color: var(--night-raised);
-  border-block: 1px solid var(--trait-doux);
-}
-
-.lecons-grille {
-  display: grid;
-  grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
-  align-items: start;
-  gap: 2.5rem clamp(3rem, 7vw, 8rem);
-}
-
-.lecon-une {
-  margin: 0;
-}
-
-.lecon-une p {
-  margin: 0;
-  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
-  font-weight: 300;
-  font-size: clamp(1.35rem, 2vw, 1.85rem);
-  line-height: 1.4;
-  letter-spacing: -0.01em;
-  text-wrap: balance;
-  color: var(--dawn);
-}
-
-.lecons {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border-top: 1px solid var(--trait);
-}
-
-.lecons li {
-  padding-block: clamp(1.25rem, 3vh, 1.6rem);
-  border-bottom: 1px solid var(--trait);
-}
-
-.lecon {
-  margin: 0;
-}
-
-.lecon p {
-  margin: 0;
-  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
-  font-weight: 300;
-  font-size: clamp(1.15rem, 1.5vw, 1.35rem);
-  line-height: 1.45;
-  text-wrap: pretty;
-  color: var(--dawn);
-}
-
-/* ---- 5 · Un événement qui m'a marqué ----
+/* ---- 4 · Un événement qui m'a marqué ----
    La fiche en regard du titre, trois cases côte à côte ; puis le récit
    en trois temps, chacun sous un filet dont l'amorce est lavande. */
 
@@ -1056,9 +999,6 @@
                violette au bout du fil, sur Oysen
    Savoirs     la lueur de la salle par le haut ; les cartes
                éclairées d'en haut, l'arête déjà allumée
-   Leçons      le moment fort : un cran plus clair, la lueur
-               violette derrière la grande leçon, un grand
-               guillemet au trait lavande en fond
    Événement   une poursuite tombe du haut sur le récit
    Blog        un cran plus clair, cartes éclairées d'en haut
    Appel       la rampe violette par le bas, comme l'accueil
@@ -1073,7 +1013,6 @@
 }
 
 .section--fondateur-parcours::before,
-.section--fondateur-lecons::before,
 .section--fondateur-marquant::before {
   position: absolute;
   z-index: -1;
@@ -1141,48 +1080,6 @@
   opacity: 0.35;
 }
 
-/* ---- Leçons : le moment fort ---- */
-
-.section.section--fondateur-lecons {
-  overflow: hidden;
-  background-color: #181520;
-  border-block: 1px solid var(--night-veil);
-  background-image:
-    radial-gradient(
-      55% 85% at 18% 50%,
-      color-mix(in srgb, var(--oysen-purple) 36%, transparent),
-      transparent 70%
-    ),
-    radial-gradient(
-      120% 100% at 50% 50%,
-      transparent 55%,
-      color-mix(in srgb, #07030b 45%, transparent)
-    );
-}
-
-/* Le grand guillemet, au trait, derrière la première leçon. */
-.section--fondateur-lecons::before {
-  content: '«';
-  top: 50%;
-  left: max(var(--pad), calc((100% - 100rem) / 2));
-  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
-  font-weight: 300;
-  font-size: clamp(16rem, 28vw, 32rem);
-  line-height: 0.8;
-  color: transparent;
-  -webkit-text-stroke: 1px color-mix(in srgb, var(--beam) 24%, transparent);
-  transform: translate(-12%, -46%);
-}
-
-.lecon-une p {
-  text-shadow: 0 0 2.4rem color-mix(in srgb, var(--beam) 22%, transparent);
-}
-
-.lecons,
-.lecons li {
-  border-color: var(--night-veil);
-}
-
 /* ---- Événement : une poursuite sur le récit ---- */
 
 .section.section--fondateur-marquant {
@@ -1239,15 +1136,6 @@
   );
 }
 
-/* Sur téléphone, le guillemet se range en haut à gauche, plus petit. */
-@media (max-width: 760px) {
-  .section--fondateur-lecons::before {
-    top: 1rem;
-    font-size: 12rem;
-    transform: translateX(-8%);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .fondateur-hero__texte > *,
   .fondateur-hero__portrait,
@@ -1271,8 +1159,7 @@
 
 @media (max-width: 1023px) {
   .fondateur-tete,
-  .intro-fondateur,
-  .lecons-grille {
+  .intro-fondateur {
     grid-template-columns: minmax(0, 1fr);
   }
 
@@ -1889,24 +1776,6 @@
     );
     opacity: 0.8;
     pointer-events: none;
-  }
-}
-
-/* Téléphone : « Retours de terrain » se centre, tête et leçons, et le
-   grand guillemet de fond disparaît. */
-@media (max-width: 760px) {
-  .section--fondateur-lecons::before {
-    display: none;
-  }
-
-  .section--fondateur-lecons .fondateur-tete,
-  .lecon-une,
-  .lecons {
-    text-align: center;
-  }
-
-  .section--fondateur-lecons .fondateur-tete .section__title {
-    margin-inline: auto;
   }
 }
 

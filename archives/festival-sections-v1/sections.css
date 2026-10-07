@@ -1,0 +1,874 @@
+   S2 · POUR QUI
+   ============================================================ */
+
+.publics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: clamp(2.5rem, 5.5vh, 3.5rem) 0 0;
+  padding: 0;
+  list-style: none;
+  border-block: 1px solid var(--night-veil);
+}
+
+/* Quatre colonnes séparées d'un voile ; celle qu'on pointe s'éclaire. */
+.public {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: clamp(1.5rem, 3vh, 2rem) clamp(1.1rem, 1.8vw, 1.6rem);
+  transition: background-color 0.3s ease;
+}
+
+.public + .public {
+  border-left: 1px solid var(--night-veil);
+}
+
+.public:hover {
+  background-color: color-mix(in srgb, var(--beam) 4%, transparent);
+}
+
+.public__nom {
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.3;
+  text-wrap: balance;
+  color: var(--dawn);
+}
+
+.public__situation {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--dusk);
+}
+
+.public__partage {
+  margin: 0;
+}
+
+.public__partage dt {
+  margin: 0 0 0.45rem;
+  font-family: var(--mono);
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--beam);
+}
+
+.public__partage dd {
+  margin: 0;
+}
+
+.public__partage dd + dt {
+  margin-top: 1rem;
+}
+
+.public__resultat {
+  margin: auto 0 0;
+  padding-top: 1rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--dawn);
+  border-top: 1px solid var(--night-veil);
+}
+
+.public__liens {
+  display: grid;
+  justify-items: start;
+  gap: 0.6rem;
+}
+
+.public__liens .fest-lien {
+  font-size: 0.875rem;
+}
+
+.public__lien-annexe {
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--dusk);
+  text-underline-offset: 0.25em;
+}
+
+.public__lien-annexe:hover {
+  color: var(--beam);
+}
+
+/* ============================================================
+   S3 · LES SIX POSTES
+   ============================================================ */
+
+.section.section--festival-postes {
+  background-color: var(--salle-claire);
+  border-block: 1px solid var(--night-veil);
+}
+
+.postes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1rem, 1.8vw, 1.5rem);
+  margin: clamp(2.5rem, 5.5vh, 3.5rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Les cartes éclairées de la méthode de l'accueil. */
+.poste {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(1.35rem, 2.2vw, 1.85rem);
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--night-raised), var(--night-raised)) padding-box,
+    linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--beam) 50%, transparent),
+        var(--night-veil) 35%,
+        var(--trait)
+      )
+      border-box;
+  box-shadow: 0 1.5rem 3rem -2rem rgba(0, 0, 0, 0.7);
+  transition: box-shadow 0.3s ease;
+}
+
+.poste:hover {
+  box-shadow:
+    0 1.5rem 3rem -2rem rgba(0, 0, 0, 0.7),
+    0 0 2.5rem -1rem color-mix(in srgb, var(--beam) 30%, transparent);
+}
+
+.poste__nom {
+  margin: 0 0 1rem;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--dawn);
+}
+
+.poste__pied {
+  margin: auto 0 0;
+  padding-top: 1.25rem;
+}
+
+.poste__pied dt {
+  margin: 1rem 0 0.3rem;
+  padding-top: 1rem;
+  font-family: var(--mono);
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dusk);
+  border-top: 1px solid var(--night-veil);
+}
+
+.poste__pied dt:first-child {
+  margin-top: 0;
+}
+
+.poste__pied dd {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--dawn);
+}
+
+.poste__pied .poste__change {
+  font-weight: 500;
+  color: var(--beam);
+}
+
+.poste__pied .poste__reste {
+  color: var(--dusk);
+}
+
+/* Les trois façons de travailler, du plus large au plus étroit. */
+.facons {
+  margin-top: clamp(3rem, 7vh, 4.5rem);
+}
+
+.facons__titre {
+  margin: 0 0 1.5rem;
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--beam);
+}
+
+.facons__liste {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.5rem, 3vw, 3rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: facon;
+}
+
+.facon {
+  display: grid;
+  align-content: start;
+  gap: 0.6rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--night-veil);
+  counter-increment: facon;
+}
+
+.facon::before {
+  content: counter(facon);
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 2.25rem;
+  font-weight: 200;
+  line-height: 1;
+  color: color-mix(in srgb, var(--beam) 70%, transparent);
+}
+
+.facon__nom {
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--dawn);
+}
+
+.facon__texte {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--dusk);
+}
+
+.facon .fest-lien {
+  justify-self: start;
+  font-size: 0.875rem;
+}
+
+/* ============================================================
+   S4 · LES CINQ CONTRAINTES
+   ============================================================ */
+
+.contraintes {
+  display: grid;
+  grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(2.5rem, 5vw, 5rem);
+  margin-top: clamp(2.5rem, 5.5vh, 3.5rem);
+}
+
+/* Le sommaire reste en vue pendant qu'on lit. */
+.contraintes__sommaire {
+  position: sticky;
+  top: calc(var(--nav-h, 4.5rem) + 2rem);
+}
+
+.contraintes__sommaire ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-left: 1px solid var(--night-veil);
+}
+
+.contraintes__sommaire a {
+  display: block;
+  margin-left: -1px;
+  padding: 0.55rem 0 0.55rem 1rem;
+  font-size: 0.9375rem;
+  text-decoration: none;
+  color: var(--dusk);
+  border-left: 1px solid transparent;
+  transition:
+    color 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.contraintes__sommaire a:hover,
+.contraintes__sommaire a:focus-visible {
+  color: var(--beam);
+  border-left-color: var(--beam);
+}
+
+.contraintes__sommaire a:focus-visible {
+  outline: 2px solid var(--beam);
+  outline-offset: 2px;
+}
+
+.contrainte {
+  padding-block: clamp(2rem, 4.5vh, 2.75rem);
+  border-top: 1px solid var(--night-veil);
+}
+
+.contrainte:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.contrainte__nom {
+  margin: 0 0 1rem;
+  scroll-margin-top: calc(var(--nav-h, 4.5rem) + 2rem);
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(1.4rem, 2.2vw, 1.75rem);
+  font-weight: 300;
+  line-height: 1.2;
+  color: var(--dawn);
+}
+
+.contrainte__texte {
+  max-width: 66ch;
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--dusk);
+}
+
+.contrainte__texte + .contrainte__texte,
+.contrainte .meteo__plan + .contrainte__texte,
+.contrainte .budget-niveaux + .contrainte__texte {
+  margin-top: 1.25rem;
+}
+
+.contrainte__label {
+  margin: 0 0 0.7rem;
+  font-family: var(--mono);
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--beam);
+}
+
+.contrainte__notes {
+  margin-top: 1.25rem;
+}
+
+/* La phrase à retenir, éclairée. */
+.contrainte__chute {
+  max-width: 66ch;
+  margin: 1.75rem 0 0;
+  padding: 0.9rem 1.15rem;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.55;
+  color: var(--dawn);
+  background-color: color-mix(in srgb, var(--beam) 6%, transparent);
+  border-left: 2px solid var(--beam);
+}
+
+/* Les démarches. */
+.demarches th[scope='row'] {
+  width: 26%;
+  font-size: 0.875rem;
+}
+
+.demarches .demarches__qui {
+  color: var(--dawn);
+}
+
+.demarches .demarches__reference {
+  width: 22%;
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  line-height: 1.5;
+}
+
+/* La sécurité, en trois objets. */
+.securite {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.securite__item {
+  padding: 1.25rem 0;
+  border-top: 1px solid var(--night-veil);
+}
+
+.securite__item:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.securite__objet {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin: 0 0 0.5rem;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--dawn);
+}
+
+.securite__objet::before {
+  content: '';
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: var(--beam);
+  transform: rotate(45deg);
+}
+
+.securite__texte {
+  max-width: 66ch;
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--dusk);
+}
+
+/* Les trois niveaux météo, du plus léger au plus lourd : la barre du
+   haut s'allume d'un cran à chaque niveau. */
+.meteo {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 1.5rem 0;
+  padding: 0;
+  list-style: none;
+}
+
+.meteo__niveau {
+  display: grid;
+  gap: 0.3rem;
+  padding: 1rem 1.1rem;
+  background-color: var(--night-raised);
+  border: 1px solid var(--night-veil);
+  border-top: 2px solid color-mix(in srgb, var(--beam) 30%, transparent);
+}
+
+.meteo__niveau:nth-child(2) {
+  border-top-color: color-mix(in srgb, var(--beam) 65%, transparent);
+}
+
+.meteo__niveau:nth-child(3) {
+  border-top-color: var(--beam);
+}
+
+.meteo__nom {
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--dawn);
+}
+
+.meteo__texte {
+  font-size: 0.875rem;
+  color: var(--dusk);
+}
+
+.meteo__plan {
+  padding: 1.1rem 1.25rem;
+  border: 1px solid var(--night-veil);
+}
+
+/* Les trois niveaux du budget : le premier ne se réduit pas. */
+.budget-niveaux {
+  display: grid;
+  gap: 0.6rem;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.budget-niveau {
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 1.25rem;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid var(--night-veil);
+}
+
+.budget-niveau:first-child {
+  background-color: color-mix(in srgb, var(--beam) 7%, transparent);
+  border-color: color-mix(in srgb, var(--beam) 45%, transparent);
+}
+
+.budget-niveau__nom {
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--dawn);
+}
+
+.budget-niveau__texte {
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--dusk);
+}
+
+.budget-niveau__note {
+  font-family: var(--mono);
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--dusk);
+}
+
+.budget-niveau:first-child .budget-niveau__note {
+  color: var(--beam);
+}
+
+/* Bénévoles et techniciens : la colonne des techniciens, plus claire. */
+.repartition th,
+.repartition td {
+  width: 50%;
+}
+
+.repartition .repartition__technicien {
+  color: var(--dawn);
+}
+
+/* ============================================================
+   S5 · CE QUE VOUS POUVEZ VÉRIFIER
+   ============================================================ */
+
+.section.section--festival-preuves {
+  background-color: var(--noir);
+}
+
+.fest-verifier {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  align-items: start;
+  gap: clamp(2.5rem, 5vw, 5rem);
+}
+
+.fest-verifier .fest-tete {
+  position: sticky;
+  top: calc(var(--nav-h, 4.5rem) + 2rem);
+}
+
+.fest-verifier__liste {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-bottom: 1px solid var(--night-veil);
+}
+
+.fest-verifier__item {
+  display: grid;
+  gap: 0.5rem;
+  padding: clamp(1.25rem, 2.8vh, 1.6rem) 0;
+  border-top: 1px solid var(--night-veil);
+}
+
+.fest-verifier__titre {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--dawn);
+}
+
+.fest-verifier__titre::before {
+  content: '';
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: var(--beam);
+  transform: rotate(45deg);
+}
+
+.fest-verifier__texte {
+  max-width: 62ch;
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--dusk);
+}
+
+.fest-verifier__item .fest-lien {
+  justify-self: start;
+  font-size: 0.875rem;
+}
+
+.fest-cas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+  margin: clamp(3rem, 7vh, 4.5rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fest-cas__item {
+  padding: clamp(1.35rem, 2.2vw, 1.85rem);
+  background-color: var(--night-raised);
+  border: 1px solid var(--trait);
+}
+
+.fest-cas__titre {
+  margin: 0 0 1rem;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--dawn);
+}
+
+.fest-cas__star {
+  margin: 0;
+}
+
+.fest-cas__star dt {
+  margin: 0.9rem 0 0.3rem;
+  font-family: var(--mono);
+  font-size: 0.5625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--beam);
+}
+
+.fest-cas__star dd {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--dusk);
+}
+
+.fest-cas__mention {
+  margin: 1rem 0 0;
+  font-size: 0.8125rem;
+  font-style: italic;
+  color: var(--dusk);
+}
+
+/* ============================================================
+   S6 · LES MOYENS TECHNIQUES
+   ============================================================ */
+
+.section--festival-moyens .section__title {
+  scroll-margin-top: calc(var(--nav-h, 4.5rem) + 2rem);
+}
+
+.moyens th[scope='row'] {
+  width: 18%;
+  font-weight: 600;
+}
+
+.moyens .moyens__propre {
+  width: 41%;
+  color: var(--dawn);
+}
+
+/* Le losange plein pour ce qui nous appartient, évidé pour ce que nous
+   faisons venir : en tête de colonne. */
+.moyens thead .moyens__propre,
+.moyens thead .moyens__partenaires {
+  color: var(--beam);
+}
+
+.moyens thead .moyens__propre::before,
+.moyens thead .moyens__partenaires::before {
+  content: '';
+  display: inline-block;
+  width: 0.45rem;
+  height: 0.45rem;
+  margin-right: 0.6rem;
+  vertical-align: 0.05rem;
+  transform: rotate(45deg);
+}
+
+.moyens thead .moyens__propre::before {
+  background-color: var(--beam);
+}
+
+.moyens thead .moyens__partenaires::before {
+  border: 1px solid var(--beam);
+}
+
+.moyens__notes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.5rem, 3vh, 2rem) clamp(1.5rem, 3vw, 3rem);
+  margin: clamp(2.5rem, 5.5vh, 3.5rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.moyens__note {
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--night-veil);
+}
+
+.moyens__note-titre {
+  margin: 0 0 0.5rem;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--dawn);
+}
+
+.moyens__note p {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--dusk);
+}
+
+/* ============================================================
+   MOUVEMENT RÉDUIT
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .festival-hero__texte > *,
+  .festival-hero__faisceaux i,
+  .fest-preuves,
+  .fest-jour-j__fil::after,
+  .fest-jour-j__repere,
+  .fest-jour-j__repere::before {
+    animation: none;
+  }
+
+  /* Sans animation, ce qui est fait est coché d'emblée. */
+  .fest-jour-j__repere--essai::before,
+  .fest-jour-j__repere:last-child::before {
+    background-color: var(--beam);
+  }
+
+  .fest-lien__fleche,
+  .public,
+  .poste,
+  .contraintes__sommaire a,
+  .fest-tableau tbody tr {
+    transition: none;
+  }
+}
+
+/* ============================================================
+   TABLETTE
+   ============================================================ */
+
+@media (max-width: 1100px) {
+  .publics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .public:nth-child(3) {
+    border-left: 0;
+  }
+
+  .public:nth-child(n + 3) {
+    border-top: 1px solid var(--night-veil);
+  }
+}
+
+@media (max-width: 1023px) {
+  .contraintes,
+  .fest-verifier {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .contraintes__sommaire,
+  .fest-verifier .fest-tete {
+    position: static;
+  }
+
+  /* Le sommaire passe en ligne, au-dessus des contraintes. */
+  .contraintes__sommaire ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.25rem;
+    border-left: 0;
+  }
+
+  .contraintes__sommaire a {
+    margin-left: 0;
+    padding: 0.3rem 0;
+    border-left: 0;
+    color: var(--beam);
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+
+  .postes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ============================================================
+   TÉLÉPHONE
+   ============================================================ */
+
+@media (max-width: 760px) {
+  .publics,
+  .postes,
+  .facons__liste,
+  .meteo,
+  .moyens__notes,
+  .fest-cas {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .public + .public {
+    border-left: 0;
+    border-top: 1px solid var(--night-veil);
+  }
+
+  .fest-preuves {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .budget-niveau {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.35rem;
+  }
+
+  /* Les tableaux longs se lisent ligne par ligne, chaque cellule sous
+     son intitulé. */
+  .demarches thead,
+  .moyens thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .demarches tr,
+  .moyens tr {
+    display: grid;
+    gap: 0.6rem;
+    padding: 1.1rem 0;
+    border-bottom: 1px solid var(--night-veil);
+  }
+
+  .demarches th,
+  .demarches td,
+  .moyens th,
+  .moyens td {
+    padding: 0;
+    border-bottom: 0;
+  }
+
+  .demarches th[scope='row'],
+  .demarches .demarches__reference,
+  .moyens th[scope='row'],
+  .moyens .moyens__propre {
+    width: auto;
+  }
+
+  .demarches td::before,
+  .moyens td::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 0.2rem;
+    font-family: var(--mono);
+    font-size: 0.5625rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--beam);
+  }
+}

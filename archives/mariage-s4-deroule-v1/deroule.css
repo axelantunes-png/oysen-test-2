@@ -1,0 +1,247 @@
+/* ---- S4 · Le déroulé ----
+   Huit étapes en lignes égales, sur un fil vertical à gauche : le
+   repère, puis ce que nous faisons, puis ce qui reste de votre côté, à
+   l'italique. Le jour J a le seul losange plein et une ligne teintée.
+   À droite, trois barres : chaque formule, de l'étape où elle commence
+   jusqu'au bout. Au-dessus, la même chose en toutes lettres. */
+
+.departs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin: clamp(2rem, 5vh, 2.75rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.depart {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding: 0.55rem 1rem;
+  border: 1px solid var(--filet);
+  background-color: var(--carte);
+  font-size: 0.875rem;
+  color: var(--gris-mauve);
+}
+
+.depart__formule {
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+
+.deroule {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: clamp(1.5rem, 3vw, 3rem);
+  margin-top: clamp(2.5rem, 6vh, 3.5rem);
+}
+
+.compte {
+  position: relative;
+  display: grid;
+  /* Des lignes égales : les barres de droite s'y calent au pourcentage. */
+  grid-auto-rows: 1fr;
+  margin: 0;
+  padding: 0 0 0 2.5rem;
+  list-style: none;
+}
+
+/* Le fil, qui passe du sable au violet en allant vers le jour J. */
+.compte::before {
+  content: '';
+  position: absolute;
+  top: 1.6rem;
+  bottom: 1.6rem;
+  left: 0.3rem;
+  width: 1px;
+  background-image: linear-gradient(
+    to bottom,
+    var(--filet),
+    color-mix(in srgb, var(--violet) 60%, var(--filet)) 70%,
+    var(--violet)
+  );
+}
+
+.compte__etape {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 15rem) minmax(0, 1.25fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 0.4rem clamp(1.5rem, 3vw, 3rem);
+  padding: 1.25rem 0;
+  border-top: 1px solid var(--filet);
+}
+
+.compte__etape:last-child {
+  border-bottom: 1px solid var(--filet);
+}
+
+/* Le losange sur le fil, évidé ; plein et cerclé pour le jour J. */
+.compte__etape::before {
+  content: '';
+  position: absolute;
+  top: 1.6rem;
+  left: calc(-2.5rem + 0.3rem);
+  width: 0.65rem;
+  height: 0.65rem;
+  border: 1px solid var(--violet);
+  background-color: var(--papier);
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.compte__etape--jour-j {
+  background-image: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--violet) 7%, transparent),
+    transparent 85%
+  );
+}
+
+.compte__etape--jour-j::before {
+  width: 0.85rem;
+  height: 0.85rem;
+  background-color: var(--violet);
+  box-shadow: 0 0 0 0.35rem color-mix(in srgb, var(--violet) 14%, transparent);
+}
+
+.compte__repere {
+  grid-column: 1;
+  margin: 0;
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--gris-mauve);
+}
+
+.compte__numero {
+  margin-right: 0.6rem;
+  color: var(--violet);
+}
+
+.compte__titre {
+  grid-column: 1;
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.15rem;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--encre);
+}
+
+.compte__nous,
+.compte__vous {
+  grid-row: 1 / span 2;
+  margin: 0;
+  line-height: 1.55;
+}
+
+.compte__nous {
+  grid-column: 2;
+  font-size: 0.9375rem;
+  color: var(--encre);
+}
+
+/* La part des mariés, à l'italique de faire-part. */
+.compte__vous {
+  grid-column: 3;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 1.2rem;
+  line-height: 1.4;
+  color: var(--violet);
+}
+
+.compte__qui {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-style: normal;
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gris-mauve);
+}
+
+/* Les barres des formules. */
+.couverture {
+  display: flex;
+  gap: 0.9rem;
+}
+
+.couverture__barre {
+  --pct: calc((var(--depuis) - 1) / var(--total) * 100%);
+  position: relative;
+  width: 1.5rem;
+  background-image: linear-gradient(
+    to bottom,
+    transparent var(--pct),
+    color-mix(in srgb, var(--violet) 70%, transparent) var(--pct)
+  );
+  background-size: 2px 100%;
+  background-position: 50% 0;
+  background-repeat: no-repeat;
+}
+
+/* Le départ de la barre : un losange, et le nom de la formule dessous,
+   écrit dans la longueur. */
+.couverture__barre::before {
+  content: '';
+  position: absolute;
+  top: var(--pct);
+  left: 50%;
+  width: 0.55rem;
+  height: 0.55rem;
+  background-color: var(--violet);
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.couverture__nom {
+  position: absolute;
+  top: calc(var(--pct) + 1rem);
+  left: 50%;
+  padding: 0.35rem 0;
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--violet);
+  background-color: var(--papier);
+  writing-mode: vertical-rl;
+  transform: translateX(-50%);
+}
+
+/* ---- Extrait du bloc Tablette ----
+   .deroule y était listé avec .mariage-hero__inner et .questions-mariage :
+   grid-template-columns: minmax(0, 1fr); */
+@media (max-width: 1023px) {
+  /* Le déroulé : plus de barres, la légende au-dessus suffit ; chaque
+     étape s'empile, le repère, ce que nous faisons, ce que vous faites. */
+  .couverture {
+    display: none;
+  }
+
+  .compte {
+    grid-auto-rows: auto;
+  }
+
+  .compte__etape {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .compte__nous,
+  .compte__vous {
+    grid-row: auto;
+    grid-column: 1;
+    margin-top: 0.5rem;
+  }
+}
