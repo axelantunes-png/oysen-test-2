@@ -229,15 +229,17 @@
     calc(var(--apres-rideau, 0s) + 0.3s + var(--rang) * 0.15s) both;
 }
 
-/* Le faisceau : étroit à la lentille, ouvert vers le sol. */
+/* Le faisceau : étroit à la lentille, ouvert vers le sol. Il est
+   dans le corps du projecteur, dont il prend l'orientation : il part
+   toujours de la lentille, quel que soit l'angle. */
 .pont__faisceau {
   position: absolute;
-  top: 1.35rem;
+  z-index: -1;
+  top: calc(100% - 0.05rem);
   left: 50%;
   width: 26vmax;
   height: min(100vh, 62rem);
-  transform-origin: 50% 0;
-  transform: translateX(-50%) rotate(var(--angle));
+  transform: translateX(-50%);
   clip-path: polygon(48.6% 0, 51.4% 0, 100% 100%, 0 100%);
   background-image: linear-gradient(
     to bottom,
@@ -293,6 +295,16 @@
   text-wrap: balance;
   color: var(--dawn);
   text-shadow: 0 0 34px color-mix(in srgb, var(--beam) 25%, transparent);
+}
+
+/* Une phrase par ligne. */
+.tech-hero__ligne {
+  display: block;
+}
+
+/* Un peu d'air entre les phrases (environ 10 px). */
+.tech-hero__ligne + .tech-hero__ligne {
+  margin-top: 0.8rem;
 }
 
 .tech-hero__lede {

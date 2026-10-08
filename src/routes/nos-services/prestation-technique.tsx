@@ -164,29 +164,35 @@ function Hero() {
               key={domaine}
               style={{ '--rang': rang } as CSSProperties}
             >
-              <i className="pont__lampe" />
-              <i className="pont__faisceau" />
+              {/* Le faisceau part de la lentille et suit l'orientation
+                  du projecteur. */}
+              <i className="pont__lampe">
+                <i className="pont__faisceau" />
+              </i>
             </span>
           ))}
         </span>
       </div>
 
       <div className="tech-hero__texte">
-        <p className="section__eyebrow">Prestation technique · Toulouse et Occitanie</p>
-        <h1 className="tech-hero__titre" id="technique-title">
-          La technique de votre événement, sans mauvaise surprise.
+        {/* Le h1 est le surtitre, porteur de la requête ; la grande
+            phrase en dessous reste l'accroche, en simple paragraphe. */}
+        <h1 className="section__eyebrow" id="technique-title">
+          Prestation technique événementielle · Toulouse et Occitanie
         </h1>
+        <p className="tech-hero__titre">
+          <span className="tech-hero__ligne">Le bon technicien.</span>{' '}
+          <span className="tech-hero__ligne">Le bon matériel.</span>{' '}
+          <span className="tech-hero__ligne">À la bonne date.</span>
+        </p>
         <p className="tech-hero__lede">
-          Son, lumière, vidéo, structures et régie. Notre matériel et nos
-          techniciens, du montage au démontage.
+          Son, lumière, vidéo, structures et régie. Nos techniciens s’occupent
+          de tout, du montage au démontage, avec le matériel adapté à votre
+          événement.
         </p>
         <div className="tech-hero__actions">
           <a className="btn btn--solid" href={CONTACT}>
-            Demander un devis technique
-          </a>
-          <a className="tech-lien" href="#agences">
-            Vous êtes une agence ? Parlons sous-traitance
-            <Arrow className="tech-lien__fleche" />
+            Connaître les disponibilités
           </a>
         </div>
         <p className="tech-hero__domaines">
@@ -209,7 +215,7 @@ const COMPARAISON = [
   {
     ligne: 'Installation et exploitation',
     prestation: 'Nous livrons, installons, réglons et exploitons',
-    location: 'Selon votre besoin',
+    location: 'Non',
   },
   { ligne: 'Démontage', prestation: 'Nous démontons et reprenons le matériel', location: 'Retour du matériel' },
   {
@@ -312,7 +318,7 @@ const DOMAINES = [
   {
     nom: 'Régie',
     trace: PICTOS.regie,
-    apport: 'Un technicien pilote le son, la lumière et la vidéo pendant l’événement.',
+    apport: 'Des techniciens pilotent le son, la lumière et la vidéo pendant l’événement.',
   },
 ]
 
@@ -325,7 +331,7 @@ function Domaines() {
       <div className="section__inner">
         <Tete
           surtitre="Domaines d’intervention"
-          titre="Ce que nous installons et pilotons"
+          titre="Son, lumière, vidéo : notre expertise technique événementielle"
           id="domaines-title"
         />
 
@@ -376,7 +382,7 @@ function PourQui() {
       aria-labelledby="publics-tech-title"
     >
       <div className="section__inner">
-        <Tete surtitre="Pour qui" titre="Pour qui nous travaillons" id="publics-tech-title" />
+        <Tete surtitre="Pour qui" titre="Des prestations techniques pour les professionnels de l’événementiel" id="publics-tech-title" />
 
         <div className="publics-tech">
           <article className="agences" id="agences" aria-labelledby="agences-title">
@@ -517,7 +523,7 @@ function Questions() {
       <div className="section__inner">
         <Tete
           surtitre="Questions fréquentes"
-          titre="Prestation technique : vos questions"
+          titre="Prestation technique événementielle : vos questions"
           id="tech-questions-title"
         />
 
@@ -557,7 +563,7 @@ function Appel() {
         </p>
         <div className="appel__actions">
           <a className="btn btn--solid" href={CONTACT}>
-            Demander un devis technique
+            Connaître les disponibilités
           </a>
         </div>
       </div>

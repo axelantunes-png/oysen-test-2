@@ -166,7 +166,7 @@ function Hero() {
             Haute-Garonne, Occitanie
           </h1>
           <p className="festival-hero__titre">
-            Toute la technique de votre festival, avec un seul interlocuteur.
+            Toute l’organisation de votre festival, avec un seul interlocuteur.
           </p>
           <p className="festival-hero__lede">
             Son, lumière, vidéo, scène, électricité : installés, réglés et
@@ -376,7 +376,7 @@ function Panne() {
             Amato, ingénieur.
           </p>
           <a className="fest-lien" href="/qui-sommes-nous/le-fondateur">
-            Le parcours de Mathis Amato
+            Le parcours du fondateur
             <Arrow className="fest-lien__fleche" />
           </a>
         </div>
@@ -398,8 +398,8 @@ const ETAPES_P: { nom: string; texte: string; jourJ?: boolean }[] = [
     texte: 'Nous étudions vos contraintes : horaires, accès, voisinage, nombre de scènes, artistes.',
   },
   {
-    nom: 'Solution et devis',
-    texte: 'Nous définissons l’équipe et la solution technique. Vous recevez un devis.',
+    nom: 'Solutions et devis',
+    texte: 'Nous définissons l’équipe et les solutions techniques. Vous recevez un devis.',
   },
   {
     nom: 'Planification',

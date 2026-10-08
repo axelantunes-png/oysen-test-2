@@ -427,6 +427,10 @@ const QUESTIONS = [
     q: 'Et si mon événement dépasse 1 500 personnes ?',
     a: 'Parlez-nous de votre projet. Nous regarderons ensemble ce qui est possible.',
   },
+  {
+    q: 'Une caution est-elle demandée ?',
+    a: 'Oui, une caution est demandée pour chaque location. Elle vous est rendue au retour du matériel, après vérification.',
+  },
 ]
 
 function Questions() {

@@ -523,7 +523,7 @@ const VERIFICATIONS: {
   {
     titre: 'La personne qui pilote',
     texte: 'Mathis Amato, fondateur d’Oysen, ingénieur de formation. Votre interlocuteur du premier échange au démontage.',
-    lien: { href: '/qui-sommes-nous/le-fondateur', libelle: 'Le parcours de Mathis Amato' },
+    lien: { href: '/qui-sommes-nous/le-fondateur', libelle: 'Le parcours du fondateur' },
   },
   {
     titre: 'Les garanties',
