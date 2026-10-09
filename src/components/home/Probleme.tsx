@@ -50,6 +50,18 @@ function Balise({ balise, mobile }: { balise: BaliseType; mobile: boolean }) {
 
   return (
     <li className={`balise${mobile && ouverte ? ' balise--ouverte' : ''}`}>
+      {/* Le petit trait violet sur l'arête du haut. */}
+      <span className="balise__repere" aria-hidden="true" />
+
+      {/* La bordure violette du survol, prête à l'avance : seule son
+          opacité change, l'animation reste fluide. */}
+      <span className="balise__survol" aria-hidden="true" />
+
+      {/* La zone de survol, prolongée sous la carte de la hauteur de la
+          remontée : le pointeur posé tout en bas ne la perd pas quand
+          la carte monte. */}
+      <span className="balise__zone" aria-hidden="true" />
+
       <span className="balise__icone">
         <BaliseIcon name={balise.icon} className="balise__svg" />
       </span>

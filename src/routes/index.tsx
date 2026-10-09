@@ -22,6 +22,41 @@ export const Route = createFileRoute('/')({
   component: Home,
 })
 
+/*
+ * Les pictogrammes des preuves du hero, au trait fin et lavande, sur une
+ * grille de 24 : une étoile, une onde sonore (le matériel), deux
+ * personnes, un écusson.
+ */
+const PICTOS_PREUVES = {
+  note: 'M12 3.8l2.5 5.1 5.6.8-4.05 3.95.95 5.6L12 16.6l-5 2.65.95-5.6L3.9 9.7l5.6-.8z',
+  parc: 'M4 10.5v3M7.2 8v8M10.4 5v14M13.6 7.5v9M16.8 9.5v5M20 11v2',
+  partenaires:
+    'M12 8.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM3.5 19.5c.4-3 2.6-5 5.5-5s5.1 2 5.5 5M16 5.6a3 3 0 0 1 0 5.8M17.5 14.7c1.7.6 2.8 2.4 3 4.8',
+  assurance: 'M12 3.5l7 2.8v5.4c0 4.4-2.9 7.6-7 8.8-4.1-1.2-7-4.4-7-8.8V6.3zM9 12l2.1 2.1 4.1-4.2',
+} as const
+
+function PictoPreuve({ nom }: { nom: keyof typeof PICTOS_PREUVES }) {
+  return (
+    <svg
+      className="hero__proof-picto"
+      viewBox="0 0 24 24"
+      width="20"
+      height="20"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        d={PICTOS_PREUVES[nom]}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
 /**
  * La dernière ligne du titre tourne. « Inoubliables » ouvre toujours la
  * séquence : c'est la promesse principale, les deux autres la nuancent.
@@ -115,7 +150,7 @@ function MotQuiTourne() {
 function Home() {
   return (
     <>
-      <main>
+      <main className="accueil">
         <section className="hero" aria-label="Oysen, architecte d’événements">
           {/*
             Photo d'ambiance, purement décorative : alt vide, les lecteurs
@@ -177,18 +212,31 @@ function Home() {
             </div>
           </div>
 
-          {/* Trois faits vérifiables, disponibles dès le lancement. */}
+          {/* Quatre faits vérifiables, disponibles dès le lancement, chacun
+              sous son pictogramme. */}
           <ul className="hero__proof">
             <li>
-              {NOTE_GOOGLE}
-              <span className="hero__star" aria-hidden="true">
-                ★
+              <PictoPreuve nom="note" />
+              <span>
+                <strong className="hero__proof-fort">
+                  {NOTE_GOOGLE}
+                  <span aria-hidden="true">★</span>
+                </strong>
+                <span className="sr-only"> sur 5</span> sur Google
               </span>
-              <span className="sr-only"> sur 5</span> sur Google
             </li>
-            <li>Parc matériel en propre</li>
-            <li>{NB_PARTENAIRES} prestataires partenaires</li>
-            <li>RC pro {RC_PRO}</li>
+            <li>
+              <PictoPreuve nom="parc" />
+              <span>Parc matériel en propre</span>
+            </li>
+            <li>
+              <PictoPreuve nom="partenaires" />
+              <span>{NB_PARTENAIRES} prestataires partenaires</span>
+            </li>
+            <li>
+              <PictoPreuve nom="assurance" />
+              <span>RC pro {RC_PRO}</span>
+            </li>
           </ul>
         </section>
 

@@ -43,6 +43,28 @@
   }
 }
 
+/*
+ * Accueil, sur ordinateur : tout en haut de la page, avant le moindre
+ * défilement, la barre est posée sur le hero, qui passe dessous, et
+ * devient légèrement transparente, sans flou : la photo et les faisceaux
+ * se devinent derrière. Elle garde ce style en partant, quand on
+ * descend ; elle ne reprend sa vitre floutée qu'en revenant, plus bas
+ * dans la page (Navbar.tsx). Le changement se fait barre escamotée, sans
+ * fondu : il ne se voit pas.
+ * Le hero est rallongé d'autant (home.css) : son contenu ne bouge pas.
+ */
+@media (min-width: 1025px) {
+  html:has(main.accueil) .nav {
+    margin-bottom: calc(-1 * var(--nav-h));
+  }
+
+  html:has(main.accueil) .nav--haut {
+    background-color: color-mix(in srgb, var(--night) 65%, transparent);
+    border-bottom-color: color-mix(in srgb, var(--night-veil) 50%, transparent);
+    backdrop-filter: none;
+  }
+}
+
 .nav__inner {
   display: flex;
   align-items: center;

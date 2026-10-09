@@ -27,7 +27,13 @@ export function Methode() {
 
         <ol className="methode">
           {METHODE.map((etape) => (
-            <li className="methode__carte" key={etape.nom}>
+            <li className="methode__carte dc01" key={etape.nom}>
+              {/* Design cards 01 (app.css) : le trait du haut, la bordure
+                  du survol et la zone de survol prolongée. */}
+              <span className="dc01__repere" aria-hidden="true" />
+              <span className="dc01__survol" aria-hidden="true" />
+              <span className="dc01__zone" aria-hidden="true" />
+
               <h3 className="methode__etape">
                 <span className="methode__num">{etape.numero}</span>
                 <span className="methode__nom">{etape.nom}</span>
@@ -51,6 +57,12 @@ export function Methode() {
             </li>
           ))}
         </ol>
+
+        <div className="methode__action">
+          <a className="btn btn--solid" href="/contact">
+            Imaginer mon événement
+          </a>
+        </div>
       </div>
     </section>
   )

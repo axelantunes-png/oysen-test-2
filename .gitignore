@@ -15,6 +15,7 @@ dist
 # le journal d'avancement du projet.
 A-FAIRE.md
 avancé.md
+RECAP-SESSION-*.md
 
 # Photos et videos d'origine, avant recadrage : 25 Mo qui ne servent pas au
 # site. Ce qu'il sert est dans public/images et public/videos.

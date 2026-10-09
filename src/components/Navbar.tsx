@@ -109,6 +109,8 @@ export function Navbar() {
   const [openSection, setOpenSection] = useState<string | null>(null)
   /* La barre s'efface quand on descend, revient dès qu'on remonte. */
   const [hidden, setHidden] = useState(false)
+  /* Tout en haut de la page, avant le moindre défilement. */
+  const [enHaut, setEnHaut] = useState(true)
   const navRef = useRef<HTMLElement>(null)
   const uid = useId()
   /* Lu dans le routeur : juste dès le rendu serveur, sans attendre le client. */
@@ -135,6 +137,8 @@ export function Navbar() {
 
     let precedent = window.scrollY
     let frame = 0
+    /* La barre est-elle escamotée, d'après la dernière mesure ? */
+    let cachee = false
 
     function onScroll() {
       /* Une mesure par image : le défilement en déclenche bien davantage. */
@@ -142,13 +146,25 @@ export function Navbar() {
       frame = requestAnimationFrame(() => {
         frame = 0
         const y = Math.max(0, window.scrollY)
+        /*
+         * Le style transparent du haut de page tient tant que la barre
+         * n'a pas été escamotée : elle part avec lui, sans s'assombrir.
+         * Elle ne prend la vitre floutée qu'en revenant, plus bas dans la
+         * page, et la quitte de retour tout en haut.
+         */
+        if (y < 2) setEnHaut(true)
         const ecart = y - precedent
         if (Math.abs(ecart) < DELTA) return
         precedent = y
-        setHidden(!lockedRef.current && y > SEUIL && ecart > 0)
+        const cacher = !lockedRef.current && y > SEUIL && ecart > 0
+        if (cachee && !cacher && y >= 2) setEnHaut(false)
+        cachee = cacher
+        setHidden(cacher)
       })
     }
 
+    /* Une page rechargée peut s'ouvrir déjà défilée. */
+    setEnHaut(window.scrollY < 2)
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => {
       window.removeEventListener('scroll', onScroll)
@@ -208,7 +224,7 @@ export function Navbar() {
   return (
     <>
       <header
-        className={`nav${hidden && !lockedRef.current ? ' nav--hidden' : ''}`}
+        className={`nav${hidden && !lockedRef.current ? ' nav--hidden' : ''}${enHaut ? ' nav--haut' : ''}`}
         ref={navRef}
       >
         <div className="nav__inner">

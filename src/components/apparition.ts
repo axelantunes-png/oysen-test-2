@@ -70,9 +70,11 @@ const CASCADE = [
   '.probleme__lede',
   '.balises > li',
   '.probleme__bascule',
-  /* S4, les trois mouvements puis le socle. */
-  '.guide__mouvements > li',
-  '.guide__socle',
+  /* S4, les trois mouvements, les faits, la signature, puis la photo. */
+  '.guide__mouvement',
+  '.guide__fait',
+  '.guide__signature',
+  '.guide__photo',
   /* S6, les étapes de la méthode. */
   '.methode > li',
   /* S7, les témoignages. */
@@ -374,6 +376,22 @@ function observer(racine: HTMLElement, suivis: NodeListOf<HTMLElement>) {
         element.style.transitionDelay = `${rang * PAS_CASCADE}ms`
         element.classList.add('est-vu')
         observateur.unobserve(element)
+
+        /*
+         * Une fois l'élément entré, son retard de cascade est retiré :
+         * resté en place, il retarderait aussi toutes ses autres
+         * transitions, celles du survol comprises.
+         */
+        const finir = (evenement: TransitionEvent) => {
+          if (
+            evenement.target !== element ||
+            evenement.propertyName !== 'opacity'
+          )
+            return
+          element.style.transitionDelay = ''
+          element.removeEventListener('transitionend', finir)
+        }
+        element.addEventListener('transitionend', finir)
       })
     },
     { threshold: [SEUIL_MOBILE, SEUIL] },

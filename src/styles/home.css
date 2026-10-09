@@ -67,12 +67,24 @@
    panneaux déroulants du menu.
 
    Au-delà de 1024px, la section sort de la colonne de texte et
-   ne laisse que 2,5vw de chaque côté de l'écran.
+   laisse au moins 4vw et 2,75rem de chaque côté de l'écran,
+   davantage pour que les cartes du haut restent carrées.
    ----------------------------------------------------------- */
 
 .section--tri {
-  /* Marge par côté. 2,5vw de chaque côté = 5vw au total. */
-  --tri-marge: 2.5vw;
+  --tri-gap: clamp(1rem, 1.6vw, 2rem);
+  /* La hauteur des cartes du haut, sur ordinateur. */
+  --tri-h1: clamp(15rem, 48vh, 40rem);
+  /*
+   * Marge par côté : au moins 4vw plus environ 40 px (2,75rem), et
+   * davantage s'il le faut pour que les trois cartes du haut soient
+   * carrées : leur largeur, (100vw - 2 marges - 2 écarts) / 3, égale
+   * alors leur hauteur.
+   */
+  --tri-marge: max(
+    calc(4vw + 2.75rem),
+    calc((100vw - 2 * var(--tri-gap) - 3 * var(--tri-h1)) / 2)
+  );
 }
 
 /*
@@ -90,15 +102,15 @@
 }
 
 /*
- * En flex plutôt qu'en grille : cinq entrées ne remplissent pas trois
- * colonnes, et c'est le seul moyen de centrer la rangée incomplète sans
- * figer la position de chaque carte.
+ * Un bento sur trois colonnes : trois cartes en première rangée, puis
+ * la quatrième sur deux colonnes et la cinquième à côté. Les cinq cartes
+ * remplissent ainsi les deux rangées, sans trou ni rangée à centrer.
+ * La seconde rangée est un peu moins haute : les cartes y sont en
+ * paysage.
  */
 .tri {
-  --tri-gap: clamp(1rem, 1.6vw, 2rem);
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--tri-gap);
   margin: clamp(2.25rem, 5vh, 3.25rem) 0 0;
   padding: 0;
@@ -107,7 +119,14 @@
 
 .tri > li {
   display: flex;
-  flex: 0 1 calc((100% - 2 * var(--tri-gap)) / 3);
+}
+
+.tri > li:nth-child(4) {
+  grid-column: span 2;
+}
+
+.tri > li:nth-child(n + 4) .tri__link {
+  height: clamp(18rem, 24vw, 28.5rem);
 }
 
 /*
@@ -120,6 +139,17 @@
     width: calc(100vw - 2 * var(--tri-marge));
     max-width: none;
     margin-inline: calc(50% - 50vw + var(--tri-marge));
+  }
+
+  /* Les deux rangées tiennent ensemble dans la hauteur de l'écran,
+     sous la barre de navigation : 48vh, puis les trois quarts pour la
+     seconde rangée (36vh), plus l'écart. */
+  .tri > li .tri__link {
+    height: var(--tri-h1);
+  }
+
+  .tri > li:nth-child(n + 4) .tri__link {
+    height: calc(var(--tri-h1) * 0.75);
   }
 }
 
@@ -169,7 +199,9 @@
   height: 100%;
   object-fit: cover;
   object-position: var(--tri-focus, 50% 50%);
-  filter: saturate(0.5) brightness(0.92) contrast(1.06);
+  /* Plus vives et plus lumineuses (avant : saturate(0.5) brightness(0.92)
+     contrast(1.06), et au survol saturate(0.62) brightness(1.04)). */
+  filter: saturate(0.9) brightness(1.04) contrast(1.05);
   transform: scale(1);
   transition:
     filter 0.45s ease,
@@ -240,7 +272,7 @@
 
 .tri__link:hover .tri__img,
 .tri__link:focus-visible .tri__img {
-  filter: saturate(0.62) brightness(1.04) contrast(1.06);
+  filter: saturate(1) brightness(1.12) contrast(1.05);
   transform: scale(1.03);
 }
 
@@ -255,12 +287,14 @@
 .tri__name {
   display: block;
   font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
-  font-weight: 300;
-  font-size: clamp(1.3rem, 1.95vw, 2.2rem);
-  line-height: 1.16;
-  letter-spacing: -0.015em;
+  /* Semi-gras, en blanc pur : un cran plus petit qu'en graisse légère
+     (avant : 300, clamp(1.3rem, 1.95vw, 2.2rem), var(--dawn)). */
+  font-weight: 600;
+  font-size: clamp(1.2rem, 1.55vw, 1.75rem);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
   text-wrap: balance;
-  color: var(--dawn);
+  color: #ffffff;
 }
 
 /* La ligne qui fait tout le travail de la page : lisible au premier regard. */
@@ -375,7 +409,7 @@
    ----------------------------------------------------------- */
 
 .section--probleme {
-  background-color: #0b090e;
+  background-color: #121015;
   border-block: 1px solid var(--night-veil);
 }
 
@@ -450,7 +484,6 @@
   grid-template-rows: subgrid;
   row-gap: 0;
   padding: clamp(1.75rem, 2.4vw, 2.75rem) clamp(1.5rem, 2.2vw, 2.5rem);
-  background-color: #15111b;
   /*
    * Bordure et séparations portées par la colonne plutôt que par le panneau.
    * En contour, elles ne prennent aucune place et les contours voisins se
@@ -671,8 +704,13 @@
     transition: grid-template-rows 0.32s ease;
   }
 
+  /* La découpe laisse un peu de marge sur les côtés : les losanges des
+     puces, tournés de 45°, débordent de leur ligne et étaient rognés à
+     gauche. La marge négative remet la liste exactement à sa place. */
   .balise__repli-fond {
     overflow: hidden;
+    padding-inline: 0.25rem;
+    margin-inline: -0.25rem;
   }
 
   .balise--ouverte .balise__repli {
@@ -693,287 +731,256 @@
 }
 
 /* ---- S4 · Le guide -----------------------------------------
-   Un seul projecteur, décentré : Oysen entre en scène.
+   Deux colonnes : le texte à gauche, la photo à droite, sur le fond
+   de la page.
 
-   La section occupe 90 % de la hauteur de l'écran, contenu centré
-   verticalement : elle recevra une vidéo en fond.
+   À gauche, le nom en surtitre, le rôle en titre, puis les trois
+   mouvements dans l'ordre où les choses se sont produites : le
+   constat en deux lignes simples, la décision et ses trois métiers
+   dans une bande entre deux filets, la méthode et ses garanties
+   cochées. Les faits et la phrase qui ferme la section suivent.
 
-   Le nom au-dessus du rôle, puis trois cartes de même hauteur,
-   dans l'ordre où les choses se sont produites : le constat, la
-   décision, la méthode. En dessous, une dernière carte : les
-   faits de part et d'autre d'un filet, puis la phrase qui ferme
-   la section.
-
-   Le losange plein ouvre chaque mouvement, celui au trait chaque
-   ligne de liste : ce sont ceux de S3. Le fond des cartes est un
-   voile sombre plutôt qu'un aplat, pour que la vidéo à venir
-   passe derrière sans emporter la lisibilité du texte.
+   À droite, la photo (pour l'instant un emplacement), avec une
+   équerre violette décalée sur son coin haut gauche.
    ----------------------------------------------------------- */
 
-.section--guide {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  overflow: hidden;
-  /* La fusion des couches de traitement ne sort pas de la section. */
-  isolation: isolate;
-  min-height: 90vh;
-  /* Sur mobile, la hauteur réellement visible, barre d'adresse comprise. */
-  min-height: 90svh;
-  background-image: radial-gradient(
-    85% 60% at 22% -12%,
-    color-mix(in srgb, var(--oysen-purple) 30%, transparent),
-    transparent 62%
-  );
+.guide__grille {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  column-gap: clamp(3rem, 7vw, 7rem);
+  align-items: start;
 }
 
-/*
- * La vidéo de fond et son traitement, en trois couches :
- *
- *   0  la vidéo, désaturée et assombrie, recadrée au centre
- *   1  la teinte violette de la charte, en fusion « color » : la vidéo garde
- *      ses valeurs, elle prend notre couleur
- *   2  le voile anthracite, le projecteur violet et la vignette, qui posent
- *      le fond sous le texte et éteignent les bords
- *
- * Le contenu passe au-dessus. L'isolation garde la fusion à l'intérieur de
- * la section : rien de ce qui est au-dessus ou en dessous n'est teinté.
- */
-.guide__video {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: grayscale(0.45) saturate(0.75) brightness(0.62) contrast(1.05);
-  pointer-events: none;
+.guide__texte {
+  max-width: 34rem;
 }
 
-.section--guide::before,
-.section--guide::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.section--guide::before {
-  z-index: 1;
-  background-color: color-mix(in srgb, var(--charte-violet) 58%, transparent);
-  mix-blend-mode: color;
-}
-
-.section--guide::after {
-  z-index: 2;
-  background-color: color-mix(in srgb, var(--night) 45%, transparent);
-  background-image:
-    radial-gradient(
-      85% 60% at 22% -12%,
-      color-mix(in srgb, var(--oysen-purple) 26%, transparent),
-      transparent 62%
-    ),
-    radial-gradient(
-      120% 95% at 50% 50%,
-      transparent 42%,
-      color-mix(in srgb, #07030b 72%, transparent)
-    );
-}
-
-.section--guide .section__inner {
-  position: relative;
-  z-index: 3;
-}
-
-/* Le nom en capitales espacées, le rôle en grand juste dessous, centrés
-   au-dessus des cartes. */
+/* Le nom en petit surtitre violet, centré sur la largeur du rôle, le
+   rôle en grand juste dessous. Le titre prend la largeur du rôle. */
 .guide__title {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: clamp(0.65rem, 1.4vh, 1.1rem);
-  /* Assez large pour que le rôle tienne sur une ligne. */
-  max-width: min(100%, 44ch);
-  /* Sans la marge automatique, la largeur maximale le laisserait calé à
-     gauche malgré le centrage. */
-  margin-inline: auto;
-  text-align: center;
-}
-
-/* Le nom se lit par-dessus la vidéo : en blanc et plus gros que les
-   surtitres des autres sections. */
-.guide__marque {
-  font-size: clamp(0.95rem, 1.15vw, 1.125rem);
-  font-weight: 600;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: var(--dawn);
-}
-
-.guide__role {
-  font-size: clamp(2rem, 4.2vw, 3.25rem);
-  line-height: 1.05;
-  letter-spacing: -0.02em;
-}
-
-/* Sur ordinateur, le rôle tient sur une seule ligne. En dessous, il se
-   replie normalement : la place manque. */
-@media (min-width: 1025px) {
-  .guide__role {
-    white-space: nowrap;
-  }
-}
-
-.guide__mouvements {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(1.25rem, 2.2vw, 2rem);
-  margin: clamp(2.5rem, 5.5vh, 3.75rem) 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-/*
- * Les cartes ont la même hauteur : le contenu reste calé en haut, le vide
- * tombe en bas de celles qui ont moins à dire.
- */
-.guide__carte {
-  padding: clamp(1.5rem, 2.2vw, 2.25rem);
-  background-color: color-mix(in srgb, #0b090e 62%, transparent);
-  border: 1px solid var(--trait);
-}
-
-.guide__label {
-  display: flex;
   align-items: flex-start;
-  gap: 0.7rem;
+  width: fit-content;
+  gap: clamp(0.6rem, 1.2vh, 0.85rem);
   margin: 0;
-  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
-  font-weight: 600;
-  font-size: clamp(1.05rem, 1.25vw, 1.25rem);
-  line-height: 1.3;
-  color: var(--dawn);
+  text-align: left;
 }
 
-/* Le losange plein, calé sur le milieu de la première ligne. */
-.guide__label::before {
-  content: '';
-  flex: none;
-  width: 0.5625rem;
-  height: 0.5625rem;
-  margin-top: calc((1.3em - 0.5625rem) / 2);
-  background-color: var(--beam);
-  transform: rotate(45deg);
-}
-
-.guide__phrase {
-  margin: clamp(0.85rem, 1.2vw, 1.1rem) 0 0;
-  font-size: clamp(0.9375rem, 1.05vw, 1.0625rem);
-  line-height: 1.6;
-  color: color-mix(in srgb, var(--dawn) 70%, var(--dusk));
-}
-
-.guide__liste {
-  display: grid;
-  gap: clamp(0.5rem, 0.8vw, 0.7rem);
-  margin: clamp(1rem, 1.5vw, 1.35rem) 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.guide__puce {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  font-size: clamp(0.9375rem, 0.95vw, 1rem);
-  line-height: 1.4;
-  color: color-mix(in srgb, var(--dawn) 60%, var(--dusk));
-}
-
-.guide__puce::before {
-  content: '';
-  flex: none;
-  width: 0.5rem;
-  height: 0.5rem;
-  margin-top: calc((1.4em - 0.5rem) / 2);
-  border: 1px solid var(--beam);
-  transform: rotate(45deg);
-}
-
-/* Le socle : les faits de part et d'autre d'un filet, puis la phrase qui
-   ferme la section, sous son propre filet. */
-.guide__socle {
-  margin: clamp(1.25rem, 2.2vw, 2rem) 0 0;
-  padding: clamp(1.5rem, 2.4vw, 2.5rem);
-  background-color: color-mix(in srgb, #0b090e 62%, transparent);
-  border: 1px solid var(--trait);
-}
-
-.guide__faits {
-  display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
-  column-gap: clamp(1.75rem, 3vw, 3rem);
-}
-
-.guide__fait {
-  margin: 0;
-  font-size: clamp(0.9375rem, 1vw, 1.0625rem);
-  line-height: 1.7;
-  color: var(--dusk);
-}
-
-.guide__fait + .guide__fait {
-  padding-left: clamp(1.75rem, 3vw, 3rem);
-  border-left: 1px solid var(--trait-doux);
-}
-
-/* La fermeture reprend la composition du titre : les deux métiers en
-   capitales espacées, la phrase en grand juste dessous. */
-.guide__signature {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: clamp(0.6rem, 1.2vh, 0.9rem);
-  margin: clamp(1.5rem, 3vh, 2.25rem) 0 0;
-  padding-top: clamp(1.5rem, 3vh, 2.25rem);
-  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
-  text-align: center;
-  text-wrap: balance;
-  border-top: 1px solid var(--trait-doux);
-}
-
-.guide__duo {
-  font-size: clamp(0.75rem, 0.9vw, 0.8125rem);
-  font-weight: 500;
-  letter-spacing: 0.24em;
+.accueil .guide__title .guide__marque {
+  align-self: center;
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--beam);
 }
 
-.guide__claim {
-  font-weight: 600;
-  font-size: clamp(1.1rem, 1.45vw, 1.45rem);
-  line-height: 1.45;
+/* Le rôle se replie sur deux lignes. */
+.guide__role {
+  max-width: 13ch;
+  letter-spacing: -0.01em;
+}
+
+.guide__mouvement {
+  margin-top: clamp(1.75rem, 3.2vh, 2.25rem);
+}
+
+.guide__label {
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
+  font-size: clamp(0.875rem, 0.95vw, 0.95rem);
+  line-height: 1.3;
+  color: #ffffff;
+}
+
+/* Le constat : deux lignes, sans puce. */
+.guide__constat {
+  display: grid;
+  gap: 0.3rem;
+  margin: clamp(1rem, 1.8vh, 1.3rem) 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: clamp(0.875rem, 0.95vw, 0.95rem);
+  line-height: 1.5;
+  color: var(--dusk);
+}
+
+/* La décision, plus grande, en blanc. */
+.guide__decision {
+  margin: clamp(0.9rem, 1.6vh, 1.15rem) 0 0;
+  font-size: clamp(1.05rem, 1.25vw, 1.25rem);
+  line-height: 1.4;
+  color: #ffffff;
+}
+
+/* Les trois métiers dans une bande, séparés par des filets verticaux. */
+.guide__metiers {
+  display: flex;
+  flex-wrap: wrap;
+  margin: clamp(1.1rem, 2vh, 1.4rem) 0 0;
+  padding: clamp(0.85rem, 1.6vh, 1.05rem) 0;
+  list-style: none;
+  border-top: 1px solid var(--trait-doux);
+  border-bottom: 1px solid var(--trait-doux);
+}
+
+.guide__metiers li {
+  padding: 0 clamp(0.9rem, 1.6vw, 1.4rem);
+  font-size: clamp(0.8125rem, 0.85vw, 0.875rem);
+  line-height: 1.3;
   color: var(--dawn);
 }
 
-/* Mobile : les cartes s'empilent, les faits aussi, leur filet passe à
-   l'horizontale. */
+.guide__metiers li:first-child {
+  padding-left: 0;
+}
+
+.guide__metiers li + li {
+  border-left: 1px solid var(--trait-doux);
+}
+
+.guide__phrase {
+  margin: clamp(0.9rem, 1.6vh, 1.15rem) 0 0;
+  font-size: clamp(0.875rem, 0.95vw, 0.95rem);
+  line-height: 1.7;
+  color: var(--dusk);
+}
+
+/* Les garanties, cochées. */
+.guide__garanties {
+  display: grid;
+  gap: 0.55rem;
+  margin: clamp(0.9rem, 1.6vh, 1.15rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.guide__garanties li {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: clamp(0.875rem, 0.95vw, 0.95rem);
+  line-height: 1.4;
+  color: var(--dusk);
+}
+
+.guide__coche {
+  flex: none;
+  width: 0.95rem;
+  height: 0.95rem;
+  color: color-mix(in srgb, var(--dusk) 80%, transparent);
+}
+
+.guide__fait {
+  margin: clamp(1.4rem, 2.6vh, 1.75rem) 0 0;
+  font-size: clamp(0.875rem, 0.95vw, 0.95rem);
+  line-height: 1.75;
+  color: var(--dusk);
+}
+
+.guide__signature {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: clamp(1.4rem, 2.6vh, 1.75rem) 0 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(0.875rem, 0.95vw, 0.95rem);
+  line-height: 1.4;
+}
+
+.guide__duo {
+  color: var(--dusk);
+}
+
+.guide__claim {
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* L'emplacement de la photo, en portrait, et l'équerre violette
+   décalée sur son coin haut gauche. */
+.guide__photo {
+  position: relative;
+  display: grid;
+  place-items: center;
+  /* Plus bas que le titre et calée à droite de sa colonne. */
+  justify-self: end;
+  width: 88%;
+  aspect-ratio: 4 / 5;
+  margin-top: clamp(5rem, 12vh, 8rem);
+  background-color: #1b1622;
+  border: 1px solid var(--trait-doux);
+}
+
+.guide__photo::before {
+  content: '';
+  position: absolute;
+  top: calc(-1 * clamp(0.75rem, 1.5vh, 1rem));
+  left: calc(-1 * clamp(0.75rem, 1.2vw, 1rem));
+  width: clamp(3.5rem, 6vw, 4.5rem);
+  height: clamp(3.5rem, 6vw, 4.5rem);
+  border-top: 1px solid var(--charte-violet);
+  border-left: 1px solid var(--charte-violet);
+  pointer-events: none;
+}
+
+/* Son pendant, en miroir, sur le coin bas droit. */
+.guide__photo::after {
+  content: '';
+  position: absolute;
+  right: calc(-1 * clamp(0.75rem, 1.2vw, 1rem));
+  bottom: calc(-1 * clamp(0.75rem, 1.5vh, 1rem));
+  width: clamp(3.5rem, 6vw, 4.5rem);
+  height: clamp(3.5rem, 6vw, 4.5rem);
+  border-right: 1px solid var(--charte-violet);
+  border-bottom: 1px solid var(--charte-violet);
+  pointer-events: none;
+}
+
+/* Traitée pour la DA sombre : le rouge du mur est calmé, la chemise
+   bleue ne crie plus face au violet. */
+.guide__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.6) brightness(0.88) contrast(1.05);
+}
+
+/* Tablette et mobile : le texte puis la photo, l'un sous l'autre. */
+@media (max-width: 900px) {
+  .guide__grille {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: clamp(2.5rem, 6vh, 3.5rem);
+  }
+
+  .guide__texte {
+    max-width: none;
+  }
+
+  .guide__photo {
+    justify-self: start;
+    width: 100%;
+    max-width: 30rem;
+    margin-top: 0;
+    margin-left: clamp(0.75rem, 1.2vw, 1rem);
+  }
+}
+
+/* Mobile : le nom et le rôle centrés sur la largeur de l'écran, la
+   photo aussi, entre ses deux équerres. */
 @media (max-width: 760px) {
-  .guide__mouvements {
-    grid-template-columns: minmax(0, 1fr);
+  .guide__title {
+    align-items: center;
+    margin-inline: auto;
+    text-align: center;
   }
 
-  .guide__faits {
-    grid-template-columns: minmax(0, 1fr);
-    row-gap: clamp(1.15rem, 2.5vh, 1.5rem);
-  }
-
-  .guide__fait + .guide__fait {
-    padding-top: clamp(1.15rem, 2.5vh, 1.5rem);
-    padding-left: 0;
-    border-top: 1px solid var(--trait-doux);
-    border-left: 0;
+  .guide__photo {
+    justify-self: center;
+    margin-left: 0;
   }
 }
 
@@ -987,7 +994,7 @@
    ----------------------------------------------------------- */
 
 .reassurance {
-  padding: clamp(1.85rem, 4vh, 2.6rem) var(--pad);
+  padding: clamp(2.3rem, 5vh, 3.2rem) var(--pad);
   background-color: #15111b;
   border-bottom: 1px solid var(--night-veil);
 }
@@ -1001,15 +1008,14 @@
   list-style: none;
 }
 
-/* Chiffre et libellé sur la même ligne, centrés dans leur colonne ; le
-   libellé passe dessous si la colonne est trop étroite. */
+/* Le chiffre sur sa ligne, le libellé centré dessous. */
 .reassurance__point {
   display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  gap: 0.2rem 0.55rem;
-  padding: 0.35rem 1rem;
+  gap: 0.35rem;
+  padding: 0.5rem 1rem;
   text-align: center;
 }
 
@@ -1020,10 +1026,28 @@
 .reassurance__chiffre {
   font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
   font-weight: 600;
-  font-size: clamp(1.15rem, 1.5vw, 1.45rem);
+  font-size: clamp(1.45rem, 2vw, 1.95rem);
   line-height: 1.2;
   white-space: nowrap;
   color: var(--dawn);
+}
+
+/* Le compteur : la valeur finale, invisible, tient la place, le chiffre
+   qui monte se pose dessus, calé à droite contre le « + » ou le « % ».
+   Chiffres à chasse fixe : ils ne dansent pas pendant le comptage. */
+.compteur {
+  display: inline-grid;
+  font-variant-numeric: tabular-nums;
+}
+
+.compteur__place,
+.compteur__valeur {
+  grid-area: 1 / 1;
+  text-align: right;
+}
+
+.compteur__place {
+  visibility: hidden;
 }
 
 .reassurance__etoile {
@@ -1032,7 +1056,7 @@
 }
 
 .reassurance__label {
-  font-size: clamp(0.875rem, 0.95vw, 1rem);
+  font-size: clamp(0.95rem, 1.1vw, 1.15rem);
   line-height: 1.35;
   color: color-mix(in srgb, var(--dawn) 60%, var(--dusk));
 }
@@ -1077,10 +1101,10 @@
   list-style: none;
 }
 
+/* Fond, bordure et survol : design cards 01 (.dc01, app.css). */
 .methode__carte {
+  --dc01-retrait: clamp(1.35rem, 2.2vw, 2rem);
   padding: clamp(1.35rem, 2.2vw, 2rem);
-  background-color: var(--night-raised);
-  border: 1px solid var(--trait);
 }
 
 .methode__etape {
@@ -1171,6 +1195,13 @@
 /* Ce qu'on emporte : d'un ton plus clair que le déroulé. */
 .methode__livrable {
   color: var(--dawn);
+}
+
+/* L'appel sous les quatre cartes, centré comme le titre. */
+.methode__action {
+  display: flex;
+  justify-content: center;
+  margin-top: clamp(2.25rem, 5vh, 3rem);
 }
 
 /* ---- S7 · Les témoignages ----------------------------------
@@ -1699,9 +1730,25 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  /* Deux par rangée : la cinquième carte se centre toute seule. */
-  .tri > li {
-    flex-basis: calc((100% - var(--tri-gap)) / 2);
+  /* Deux par rangée : la cinquième prend toute la largeur. */
+  .tri {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .tri > li:nth-child(4) {
+    grid-column: auto;
+  }
+
+  .tri > li:nth-child(5) {
+    grid-column: 1 / -1;
+  }
+
+  .tri > li:nth-child(n + 4) .tri__link {
+    height: clamp(23rem, 32vw, 38rem);
+  }
+
+  .tri > li:nth-child(5) .tri__link {
+    height: clamp(18rem, 36vw, 24rem);
   }
 }
 
@@ -1717,8 +1764,12 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .tri > li {
-    flex-basis: 100%;
+  .tri {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .tri > li:nth-child(5) {
+    grid-column: auto;
   }
 
   /*
@@ -1727,7 +1778,9 @@
    * paysage, sans descendre plus bas : le bloc de texte, filet et action
    * compris, a besoin de son assise.
    */
-  .tri__link {
+  .tri__link,
+  .tri > li:nth-child(n + 4) .tri__link,
+  .tri > li:nth-child(5) .tri__link {
     height: clamp(20rem, 82vw, 25rem);
   }
 }
@@ -1758,19 +1811,11 @@
   .tri__link:focus-visible .tri__img {
     transform: none;
   }
-
-  /* La vidéo de fond de S5 est du mouvement continu : elle disparaît avec
-     son traitement, et la section retrouve sa lueur violette. */
-  .guide__video,
-  .section--guide::before,
-  .section--guide::after {
-    display: none;
-  }
 }
 
 /* ---- S3 · Les balises, éclairées ----
    Le même traitement que les cartes d'expertise de « Le fondateur »,
-   dans les couleurs d'origine des balises (le fond #15111b, le contour
+   dans les couleurs d'origine des balises (le fond, le contour
    au gris de la charte, le lavande des pictogrammes).
 
    Le contour gris reste en place, les quatre colonnes forment toujours
@@ -1778,8 +1823,8 @@
    descendant : la bordure est éclairée par le haut. Dans chaque balise,
    un petit projecteur, placé à un endroit différent d'une balise à
    l'autre : un cône net (dégradé conique centré sur la source), éteint
-   avec la distance, une lueur sur la lampe et une brillance douce dans
-   le fond autour d'elle. Au survol, le projecteur monte. */
+   avec la distance, et une lueur sur la lampe. Au survol, le
+   projecteur monte. */
 
 .balise {
   /* La source (--x, --y), la direction (--dir, 0deg vers le haut, sens
@@ -1790,11 +1835,6 @@
   --ouv: 13deg;
   position: relative;
   isolation: isolate;
-  background-image: radial-gradient(
-    70% 80% at var(--x) var(--y),
-    color-mix(in srgb, var(--beam) 10%, transparent),
-    transparent 65%
-  );
 }
 
 /* Les prestataires : du coin haut gauche, vers le bas à droite. */
@@ -1901,18 +1941,223 @@
   }
 }
 
-/* ---- S6 · Les cartes de la méthode, éclairées ----
-   Le même traitement que les cartes d'expertise de « Le fondateur »,
-   dans les couleurs d'origine des cartes (le fond --night-raised, le
-   contour au gris de la charte, le lavande des intitulés).
+/* ---- S3 · Les balises en cartes séparées ----
+   Les quatre colonnes deviennent quatre cartes, chacune avec son
+   contour gris, séparées par un écart. Un petit trait violet sur
+   l'arête du haut, au-dessus du pictogramme. Le fond s'éclaircit
+   doucement vers le bas à droite. Les projecteurs restent dans
+   chaque carte. Au survol, le contour passe à 2px au violet de la
+   charte. */
 
-   La bordure est éclairée par le haut et s'éteint en descendant vers
-   le gris d'origine. Dans chaque carte, un petit projecteur placé au
-   coin extérieur de la grille : les quatre faisceaux convergent vers
-   le centre des deux rangées. Un cône net (dégradé conique centré sur
-   la source), éteint avec la distance, une lueur sur la lampe et une
-   brillance douce dans le fond autour d'elle. Au survol, le projecteur
-   monte et la carte prend un halo lavande. */
+.balises {
+  gap: clamp(1rem, 1.5vw, 1.5rem);
+  box-shadow: none;
+}
+
+/* La largeur des cartes, au ratio de la maquette : les quatre cartes
+   occupent 68 % de la largeur de l'écran (1280px sur 1885px), soit 16 %
+   de marge de chaque côté, et 12px d'écart entre elles. Sur les écrans
+   d'ordinateur étroits, la rangée ne descend pas sous 56rem, sans
+   jamais dépasser les marges d'origine. */
+@media (min-width: 1025px) {
+  .section--probleme .balises {
+    width: clamp(
+      min(56rem, 100vw - 2 * var(--probleme-marge)),
+      68vw,
+      100vw - 2 * var(--probleme-marge)
+    );
+    margin-inline: auto;
+    gap: 0.85rem;
+  }
+}
+
+/*
+ * Le fond des cartes, relevé pixel par pixel sur la maquette : un aplat
+ * #17131c, éclairé en biais (lignes de même couleur inclinées à environ
+ * 56° de l'horizontale).
+ *
+ *   1re et 3e cartes : #221b29 dans le coin haut gauche, qui rejoint
+ *   l'aplat au tiers, et une remontée jusqu'à #241c2c dans le coin bas
+ *   droit sur le dernier quart.
+ *   2e et 4e cartes : #221c2a dans le coin haut droit, qui rejoint l'aplat
+ *   à mi-parcours, sans remontée en bas.
+ *
+ * Le projecteur passe par-dessus.
+ */
+.balise {
+  background-color: #17131c;
+  background-image: linear-gradient(
+    124deg,
+    #221b29 0%,
+    #17131c 33%,
+    #17131c 76%,
+    #241c2c 100%
+  );
+  /* Angles très légèrement arrondis. */
+  border-radius: 0.3rem;
+}
+
+.balise:nth-child(even) {
+  background-image: linear-gradient(
+    236deg,
+    #221c2a 0%,
+    #221b28 7%,
+    #17131c 50%
+  );
+}
+
+.balise::before,
+.balise::after {
+  border-radius: inherit;
+}
+
+/*
+ * La bordure et le survol.
+ *
+ * Au repos, la bordure est un anneau de 1px (box-shadow), #574765 comme
+ * sur la maquette. L'arête lavande éclairée par le haut est retirée :
+ * elle éclaircissait le haut de la bordure.
+ *
+ * Au survol, la carte monte de 4px, et dans le même mouvement la
+ * bordure violette apparaît par-dessus la lavande et la remplace : 2px
+ * au violet de la charte, une lueur du même violet et une ombre portée
+ * sous la carte. L'arête lavande du haut s'efface et le projecteur
+ * monte au même rythme.
+ *
+ * Pour que ce soit parfaitement fluide, rien n'est redessiné pendant
+ * l'animation : la bordure violette est dessinée à l'avance sur son
+ * propre calque (.balise__survol), et seules deux propriétés bougent, la
+ * position de la carte et l'opacité des calques. Le navigateur les
+ * anime directement sur la carte graphique, à la fréquence de l'écran.
+ *
+ * Le violet de la charte est sombre : à épaisseur égale, il se lit plus
+ * fin que le lavande. D'où les 2px et la lueur.
+ *
+ * La remontée passe par « translate » et non « transform », que
+ * l'apparition au défilement occupe déjà (app.css). Sa transition est
+ * ajoutée à celles de l'apparition, sinon elle les écraserait.
+ */
+.balise {
+  --balise-survol: 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  outline: none;
+  box-shadow: 0 0 0 1px #574765;
+  transition: translate var(--balise-survol);
+  will-change: translate;
+}
+
+html[data-apparition] .balises > .balise.a-apparaitre {
+  transition:
+    opacity 0.95s ease,
+    transform 0.95s cubic-bezier(0.22, 0.61, 0.36, 1),
+    translate var(--balise-survol);
+}
+
+.balise:hover {
+  translate: 0 -0.278rem;
+}
+
+/* La bordure violette, sous le contenu, au-dessus du fond. */
+.balise__survol {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  box-shadow:
+    0 0 0 2px var(--charte-violet),
+    0 0 1.4rem -0.2rem color-mix(in srgb, var(--charte-violet) 70%, transparent),
+    0 1.4rem 2.2rem -1.4rem rgba(0, 0, 0, 0.85);
+  opacity: 0;
+  transition: opacity var(--balise-survol);
+  will-change: opacity;
+  pointer-events: none;
+}
+
+.balise:hover .balise__survol {
+  opacity: 1;
+}
+
+/* La zone de survol prolongée, invisible. */
+.balise__zone {
+  position: absolute;
+  inset: 0 0 -0.35rem;
+  z-index: -1;
+}
+
+/* L'arête du haut s'efface et le projecteur monte au même rythme. */
+.balise::before,
+.balise::after {
+  transition: opacity var(--balise-survol);
+  will-change: opacity;
+}
+
+.balise:hover::before {
+  opacity: 0;
+}
+
+/* Le trait du haut, calé sur le bord gauche du contenu. Hors de la
+   grille : il ne prend pas de rangée. */
+.balise__repere {
+  position: absolute;
+  top: -1px;
+  left: clamp(1.5rem, 2.2vw, 2.5rem);
+  width: clamp(2.5rem, 3.2vw, 3rem);
+  height: 2px;
+  background-color: color-mix(in srgb, var(--beam) 55%, var(--charte-violet));
+  pointer-events: none;
+}
+
+/* Le cadre du pictogramme, aux mêmes angles que la carte, et son fond
+   relevé sur la maquette. */
+.balise__icone {
+  background-color: #231d2b;
+  border-radius: 0.3rem;
+}
+
+/* L'arête lavande éclairée, retirée : la bordure garde partout la
+   couleur de la maquette. */
+.balise::before {
+  content: none;
+}
+
+.balise__titre {
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.balise__chute {
+  font-size: clamp(0.9375rem, 1vw, 1rem);
+  font-weight: 700;
+  line-height: 1.6;
+  color: #ffffff;
+}
+
+/* La phrase de bascule en gris, la question garde son blanc. */
+.probleme__bascule {
+  color: var(--dusk);
+}
+
+.probleme__bascule-question {
+  color: var(--dawn);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .balise,
+  .balise::before,
+  .balise::after,
+  .balise__survol,
+  html[data-apparition] .balises > .balise.a-apparaitre {
+    transition: none;
+  }
+}
+
+/* ---- S6 · Les projecteurs des cartes de la méthode ----
+   Les cartes suivent le design cards 01 (.dc01, app.css) : fond,
+   bordure, trait du haut et survol de S3. Seuls les projecteurs sont
+   propres à la méthode : un par carte, placé au coin extérieur de la
+   grille, et les quatre faisceaux convergent vers le centre des deux
+   rangées. Un cône net (dégradé conique centré sur la source), éteint
+   avec la distance, et une lueur sur la lampe. Au survol, le
+   projecteur monte. */
 
 .methode__carte {
   /* La source (--x, --y), la direction (--dir, 0deg vers le haut, sens
@@ -1921,26 +2166,6 @@
   --y: 0%;
   --dir: 135deg;
   --ouv: 13deg;
-  position: relative;
-  isolation: isolate;
-  border: 1px solid transparent;
-  background:
-    radial-gradient(
-        70% 80% at var(--x) var(--y),
-        color-mix(in srgb, var(--beam) 10%, transparent),
-        transparent 65%
-      )
-      padding-box,
-    linear-gradient(var(--night-raised), var(--night-raised)) padding-box,
-    linear-gradient(
-        to bottom,
-        color-mix(in srgb, var(--beam) 50%, transparent),
-        var(--night-veil) 35%,
-        var(--trait)
-      )
-      border-box;
-  box-shadow: 0 1.5rem 3rem -2rem rgba(0, 0, 0, 0.7);
-  transition: box-shadow 0.3s ease;
 }
 
 /* 1 · Cadrage : du coin haut gauche. */
@@ -2003,23 +2228,95 @@
     transparent 95%
   );
   opacity: 0.8;
-  transition: opacity 0.3s ease;
   pointer-events: none;
-}
-
-.methode__carte:hover {
-  box-shadow:
-    0 1.5rem 3rem -2rem rgba(0, 0, 0, 0.7),
-    0 0 2.5rem -1rem color-mix(in srgb, var(--beam) 30%, transparent);
 }
 
 .methode__carte:hover::after {
   opacity: 1;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .methode__carte,
-  .methode__carte::after {
-    transition: none;
+/* Le nom de l'étape en gras blanc pur, comme les titres de S3. */
+.methode__etape {
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* ---- Les titres de l'accueil en gras ------------------------
+   Graisse 700 au lieu de 300, sur l'accueil seulement. Chaque titre
+   est réduit du rapport de largeur mesuré entre les deux graisses sur
+   son propre texte (Montserrat, 700 / 300), et son interligne relevé
+   d'autant : le titre occupe la même place qu'avant, en largeur comme
+   en hauteur, sur ordinateur, tablette et téléphone.
+   Avant : 300, clamp(1.65rem, 3.3vw, 2.5rem), interligne 1.16 ; le
+   hero : clamp(1.9rem, 4.5vw, 3.5rem), 1.08 ; le rôle du guide :
+   clamp(2rem, 4.2vw, 3.25rem), 1.05.
+   ----------------------------------------------------------- */
+
+.accueil .hero__title,
+.accueil .section__title {
+  font-weight: 700;
+}
+
+/* Hero : rapport 1,068. */
+.accueil .hero__title {
+  font-size: clamp(1.779rem, 4.213vw, 3.277rem);
+  line-height: 1.153;
+}
+
+/* Les têtes de section (services, méthode, questions) : 1,059. */
+.accueil .section__title {
+  font-size: clamp(1.558rem, 3.116vw, 2.361rem);
+  line-height: 1.228;
+}
+
+/* Le jeu de piste : 1,070. */
+.accueil .probleme__title {
+  font-size: clamp(1.542rem, 3.084vw, 2.336rem);
+  line-height: 1.241;
+}
+
+/* Les témoignages : 1,082. */
+.accueil .preuves__title {
+  font-size: clamp(1.525rem, 3.05vw, 2.311rem);
+  line-height: 1.255;
+}
+
+/* Les trois cas : 1,087. */
+.accueil .section--realisations .section__title {
+  font-size: clamp(1.518rem, 3.036vw, 2.3rem);
+  line-height: 1.261;
+}
+
+/* L'appel final : 1,068. */
+.accueil .appel__title {
+  font-size: clamp(1.545rem, 3.089vw, 2.341rem);
+  line-height: 1.239;
+}
+
+/* Le rôle du guide, sous « Oysen » : 1,078. */
+.accueil .guide__role {
+  font-size: clamp(1.855rem, 3.896vw, 3.015rem);
+  line-height: 1.132;
+}
+
+/* Les titres de l'accueil en blanc pur (avant : var(--dawn), et
+   #cfc7d6 pour la première partie du hero). Les mots qui défilent
+   dans le hero gardent leur lavande : leur couleur leur est propre
+   (.hero__cycle-word, app.css). */
+.accueil .hero__title,
+.accueil .hero__title-payoff,
+.accueil .section__title,
+.accueil .guide__marque {
+  color: #ffffff;
+}
+
+/* Sur ordinateur, le hero passe sous la barre de navigation, posée
+   dessus et transparente tant qu'on n'a pas défilé (navbar.css). Il est
+   rallongé de la hauteur de la barre, et son contenu repoussé d'autant :
+   tout reste à la même place à l'écran. */
+@media (min-width: 1025px) {
+  .accueil .hero {
+    min-height: 100dvh;
+    padding-top: var(--nav-h);
   }
 }
