@@ -2461,6 +2461,11 @@ textarea.cms-champ__input {
     min-height: 0;
   }
 
+  /* Pas de poignées du cadre sur téléphone : sa taille se règle sur ordinateur (ou par Compacte, Standard, Large). */
+  .popup--edition .cadre-poignee {
+    display: none;
+  }
+
   /* Les poignées et les outils, à leur taille réelle malgré la réduction. */
   .popup--edition .grille-edition__poignee,
   .popup--edition .cadre-poignee {

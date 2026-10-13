@@ -259,6 +259,8 @@ l'enregistrement, ou pour choisir une autre date de fin.
   `useTelephone()` dans Constructeur.tsx, règles en fin de cms.css) :
   - l'aperçu garde la grille de l'ordinateur, réduite à la largeur de l'écran
     (échelle `--echelle`) ; les mesures des gestes suivent la réduction ;
+  - pas de poignées du cadre (gauche, droite, bas) : la taille du popup se règle par
+    Compacte, Standard, Large, ou sur ordinateur ;
   - poignées et outils du bloc gardent une taille utilisable au doigt, avec une zone
     de toucher élargie ;
   - au doigt, toucher un bloc le choisit seulement (la page défile sur les autres
