@@ -3,6 +3,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { DELAI_REPONSE_H, RC_PRO } from '../../components/home/content'
 import { Arrow } from '../../components/home/icons'
+import { Lien } from '../../components/Lien'
 
 /*
  * Chemin depuis la racine du projet, et non relatif : sur une route imbriquée,
@@ -170,9 +171,9 @@ function Hero() {
 
           <div className="entreprise-hero__actions">
             <div className="entreprise-hero__appel">
-              <a className="btn btn--solid" href={CONTACT_ENTREPRISE}>
+              <Lien className="btn btn--solid" href={CONTACT_ENTREPRISE}>
                 Recevoir un devis détaillé
-              </a>
+              </Lien>
               <p className="entreprise-hero__rassurance">
                 Premier échange sans engagement · réponse sous{' '}
                 {DELAI_REPONSE_H}&nbsp;h
@@ -183,10 +184,10 @@ function Hero() {
               client aura ses partenaires) : vérifier son adresse, puis
               retirer le commentaire.
 
-            <a className="lien-clair" href="/nos-partenaires">
+            <Lien className="lien-clair" href="/nos-partenaires">
               Découvrir nos partenaires
               <Arrow className="lien-clair__fleche" />
-            </a>
+            </Lien>
             */}
           </div>
         </div>
@@ -312,7 +313,10 @@ function Formats() {
 
         <ul className="formats">
           {FORMATS.map((format) => (
-            <li className="format" key={format.nom}>
+            <li className="format dc01" key={format.nom}>
+              <span className="dc01__repere" aria-hidden="true" />
+              <span className="dc01__survol" aria-hidden="true" />
+              <span className="dc01__zone" aria-hidden="true" />
               <h3 className="format__nom">
                 {format.nom}
                 {format.avalider ? (
@@ -405,7 +409,10 @@ function Dispositif() {
 
         <ol className="dispositif">
           {ETAPES.map((etape, index) => (
-            <li className="dispositif__carte" key={etape.nom}>
+            <li className="dispositif__carte dc01" key={etape.nom}>
+              <span className="dc01__repere" aria-hidden="true" />
+              <span className="dc01__survol" aria-hidden="true" />
+              <span className="dc01__zone" aria-hidden="true" />
               <p className="dispositif__top">Top {String(index + 1).padStart(2, '0')}</p>
               <h3 className="dispositif__nom">{etape.nom}</h3>
               <dl className="dispositif__details">
@@ -444,9 +451,9 @@ function Dispositif() {
         </div>
 
         <p className="entreprise-action">
-          <a className="btn btn--solid" href={CONTACT_ENTREPRISE}>
+          <Lien className="btn btn--solid" href={CONTACT_ENTREPRISE}>
             Recevoir un devis détaillé
-          </a>
+          </Lien>
         </p>
       </div>
     </section>
@@ -567,10 +574,10 @@ function Preuves() {
                 <h3 className="verifier__titre">{item.titre}</h3>
                 <p className="verifier__texte">{item.texte}</p>
                 {item.lien ? (
-                  <a className="lien-clair" href={item.lien.href}>
+                  <Lien className="lien-clair" href={item.lien.href}>
                     {item.lien.libelle}
                     <Arrow className="lien-clair__fleche" />
-                  </a>
+                  </Lien>
                 ) : null}
               </li>
             ))}
@@ -686,9 +693,9 @@ function Appel() {
           participants, ce qui est déjà décidé.
         </p>
         <div className="appel__actions">
-          <a className="btn btn--solid" href={CONTACT_ENTREPRISE}>
+          <Lien className="btn btn--solid" href={CONTACT_ENTREPRISE}>
             Présenter votre projet
-          </a>
+          </Lien>
         </div>
         <ul className="appel__garanties">
           <li className="appel__garantie">

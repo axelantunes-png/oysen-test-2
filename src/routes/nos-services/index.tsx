@@ -3,6 +3,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { TRI, ZONE } from '../../components/home/content'
 import { Tri } from '../../components/home/Tri'
+import { Lien } from '../../components/Lien'
 
 /*
  * Chemin depuis la racine du projet, et non relatif : sur une route imbriquée,
@@ -145,9 +146,9 @@ function Services() {
               >
                 Choisir mon événement
               </a>
-              <a className="btn btn--ghost" href="/contact">
+              <Lien className="btn btn--ghost" href="/contact">
                 Imaginer mon événement
-              </a>
+              </Lien>
             </div>
           </div>
         </div>

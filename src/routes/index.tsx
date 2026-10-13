@@ -17,6 +17,7 @@ import {
   ZONE,
 } from '../components/home/content'
 import { rideauJoue } from '../components/Rideau'
+import { Lien } from '../components/Lien'
 
 export const Route = createFileRoute('/')({
   component: Home,
@@ -203,12 +204,12 @@ function Home() {
             </p>
 
             <div className="hero__actions">
-              <a className="btn btn--solid" href="/contact">
+              <Lien className="btn btn--solid" href="/contact">
                 Imaginer mon événement
-              </a>
-              <a className="btn btn--ghost" href="/nos-souvenirs">
+              </Lien>
+              <Lien className="btn btn--ghost" href="/nos-souvenirs">
                 Voir nos souvenirs
-              </a>
+              </Lien>
             </div>
           </div>
 

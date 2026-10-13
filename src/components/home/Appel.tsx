@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 import { DELAI_REPONSE_H, PHONE_DISPLAY, PHONE_TEL } from './content'
+import { Lien } from '../Lien'
 
 /**
  * S10. L'appel final.
@@ -32,9 +33,9 @@ export function Appel() {
         </p>
 
         <div className="appel__actions">
-          <a className="btn btn--solid" href="/contact">
+          <Lien className="btn btn--solid" href="/contact">
             Imaginer mon événement
-          </a>
+          </Lien>
 
           {/* aria-live : le lecteur d'écran annonce le numéro qui se substitue au bouton. */}
           <span aria-live="polite">

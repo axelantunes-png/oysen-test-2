@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { DELAI_REPONSE_H } from '../../components/contact/content'
 import { Arrow } from '../../components/home/icons'
+import { Lien } from '../../components/Lien'
 
 /* Même raison que sur la page Contact : chemin depuis la racine. */
 import contactCss from '/src/styles/contact.css?url'
@@ -39,16 +40,16 @@ function Merci() {
 
         <ul className="merci__liens">
           <li>
-            <a className="merci__lien" href="/nos-souvenirs">
+            <Lien className="merci__lien" href="/nos-souvenirs">
               Voir nos événements
               <Arrow className="merci__fleche" />
-            </a>
+            </Lien>
           </li>
           <li>
-            <a className="merci__lien" href="/qui-sommes-nous/l-agence">
+            <Lien className="merci__lien" href="/qui-sommes-nous/l-agence">
               Découvrir Oysen
               <Arrow className="merci__fleche" />
-            </a>
+            </Lien>
           </li>
         </ul>
       </div>

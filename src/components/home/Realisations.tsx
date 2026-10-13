@@ -1,5 +1,6 @@
 import { REALISATIONS } from './content'
 import { Arrow } from './icons'
+import { Lien } from '../Lien'
 
 /**
  * S8. Trois réalisations, format « résultat d'abord ».
@@ -27,7 +28,7 @@ export function Realisations() {
         <ul className="cas">
           {REALISATIONS.map((item) => (
             <li className="cas__item" key={item.type}>
-              <a className="cas__link" href={item.href}>
+              <Lien className="cas__link" href={item.href}>
                 <span className="cas__frame">
                   <span className="cas__slot">Photo à fournir</span>
                 </span>
@@ -46,7 +47,7 @@ export function Realisations() {
                   Voir la fiche
                   <Arrow className="cas__arrow" />
                 </span>
-              </a>
+              </Lien>
             </li>
           ))}
         </ul>

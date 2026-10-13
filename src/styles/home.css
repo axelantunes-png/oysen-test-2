@@ -263,17 +263,28 @@
   transition: opacity 0.24s ease;
 }
 
-.tri__link:hover::before,
 .tri__link:focus-visible::before,
-.tri__link:hover::after,
 .tri__link:focus-visible::after {
   opacity: 1;
 }
 
-.tri__link:hover .tri__img,
+@media (hover: hover) and (pointer: fine) {
+  .tri__link:hover::before,
+  .tri__link:hover::after {
+    opacity: 1;
+  }
+}
+
 .tri__link:focus-visible .tri__img {
   filter: saturate(1) brightness(1.12) contrast(1.05);
   transform: scale(1.03);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tri__link:hover .tri__img {
+    filter: saturate(1) brightness(1.12) contrast(1.05);
+    transform: scale(1.03);
+  }
 }
 
 .tri__body {
@@ -329,9 +340,14 @@
   transition: opacity 0.22s ease;
 }
 
-.tri__link:hover .tri__more,
 .tri__link:focus-visible .tri__more {
   opacity: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tri__link:hover .tri__more {
+    opacity: 1;
+  }
 }
 
 .tri__arrow {
@@ -342,9 +358,14 @@
   transition: transform 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-.tri__link:hover .tri__arrow,
 .tri__link:focus-visible .tri__arrow {
   transform: translateX(0);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tri__link:hover .tri__arrow {
+    transform: translateX(0);
+  }
 }
 
 /*
@@ -1483,19 +1504,34 @@
   transition: transform 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-.cas__link:hover .cas__more,
 .cas__link:focus-visible .cas__more {
   color: var(--beam);
 }
 
-.cas__link:hover .cas__arrow,
+@media (hover: hover) and (pointer: fine) {
+  .cas__link:hover .cas__more {
+    color: var(--beam);
+  }
+}
+
 .cas__link:focus-visible .cas__arrow {
   transform: translateX(4px);
 }
 
-.cas__link:hover .cas__frame,
+@media (hover: hover) and (pointer: fine) {
+  .cas__link:hover .cas__arrow {
+    transform: translateX(4px);
+  }
+}
+
 .cas__link:focus-visible .cas__frame {
   border-color: color-mix(in srgb, var(--beam) 35%, transparent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cas__link:hover .cas__frame {
+    border-color: color-mix(in srgb, var(--beam) 35%, transparent);
+  }
 }
 
 /* ---- S9 · FAQ ----------------------------------------------
@@ -1553,9 +1589,14 @@
   content: '';
 }
 
-.faq__q:hover,
 .faq__item[open] .faq__q {
   color: var(--beam);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .faq__q:hover {
+    color: var(--beam);
+  }
 }
 
 .faq__q:focus-visible {
@@ -1807,9 +1848,14 @@
   }
 
   /* Le rapprochement de l'image au survol disparaît : seule la lumière reste. */
-  .tri__link:hover .tri__img,
   .tri__link:focus-visible .tri__img {
     transform: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .tri__link:hover .tri__img {
+      transform: none;
+    }
   }
 }
 
@@ -1926,8 +1972,10 @@
   pointer-events: none;
 }
 
-.balise:hover::after {
-  opacity: 1;
+@media (hover: hover) and (pointer: fine) {
+  .balise:hover::after {
+    opacity: 1;
+  }
 }
 
 /* Le panneau se détache du fond noir de la section. */
@@ -2052,8 +2100,10 @@ html[data-apparition] .balises > .balise.a-apparaitre {
     translate var(--balise-survol);
 }
 
-.balise:hover {
-  translate: 0 -0.278rem;
+@media (hover: hover) and (pointer: fine) {
+  .balise:hover {
+    translate: 0 -0.278rem;
+  }
 }
 
 /* La bordure violette, sous le contenu, au-dessus du fond. */
@@ -2072,8 +2122,10 @@ html[data-apparition] .balises > .balise.a-apparaitre {
   pointer-events: none;
 }
 
-.balise:hover .balise__survol {
-  opacity: 1;
+@media (hover: hover) and (pointer: fine) {
+  .balise:hover .balise__survol {
+    opacity: 1;
+  }
 }
 
 /* La zone de survol prolongée, invisible. */
@@ -2090,8 +2142,10 @@ html[data-apparition] .balises > .balise.a-apparaitre {
   will-change: opacity;
 }
 
-.balise:hover::before {
-  opacity: 0;
+@media (hover: hover) and (pointer: fine) {
+  .balise:hover::before {
+    opacity: 0;
+  }
 }
 
 /* Le trait du haut, calé sur le bord gauche du contenu. Hors de la
@@ -2231,8 +2285,10 @@ html[data-apparition] .balises > .balise.a-apparaitre {
   pointer-events: none;
 }
 
-.methode__carte:hover::after {
-  opacity: 1;
+@media (hover: hover) and (pointer: fine) {
+  .methode__carte:hover::after {
+    opacity: 1;
+  }
 }
 
 /* Le nom de l'étape en gras blanc pur, comme les titres de S3. */
@@ -2319,4 +2375,31 @@ html[data-apparition] .balises > .balise.a-apparaitre {
     min-height: 100dvh;
     padding-top: var(--nav-h);
   }
+}
+
+/* ---- Quatre couleurs de texte sur l'accueil ------------------
+   Blanc pur, --dawn (#f2eff5), gris (--dusk) et lavande (--beam),
+   rien d'autre. Les teintes intermédiaires rejoignent la plus
+   proche des quatre, selon leur rôle. Sur l'accueil seulement :
+   les mêmes classes servent parfois ailleurs.
+   ----------------------------------------------------------- */
+
+/* Les lignes de qualification des affiches de services (avant :
+   #d8d2e2) : en --dawn. */
+.accueil .tri__qualif {
+  color: var(--dawn);
+}
+
+/* Les démarches des balises et les libellés de la réassurance
+   (avant : mélange de blanc et de gris) : textes secondaires, en gris. */
+.accueil .balise__puce,
+.accueil .reassurance__label {
+  color: var(--dusk);
+}
+
+/* Le sous-titre du jeu de piste et le point médian de la méthode
+   (avant : lavande mêlée de gris, ou lavande à 60 %) : en lavande. */
+.accueil .probleme__lede,
+.accueil .methode__num::after {
+  color: var(--beam);
 }

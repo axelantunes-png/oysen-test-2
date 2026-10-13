@@ -148,9 +148,14 @@
   transition: color 0.2s ease;
 }
 
-.footer__link:hover,
 .footer__link:focus-visible {
   color: var(--dawn);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .footer__link:hover {
+    color: var(--dawn);
+  }
 }
 
 /*
@@ -173,9 +178,14 @@ nav.footer__col .footer__link::after {
   transition: width 0.28s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-nav.footer__col .footer__link:hover::after,
 nav.footer__col .footer__link:focus-visible::after {
   width: 50%;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  nav.footer__col .footer__link:hover::after {
+    width: 50%;
+  }
 }
 
 .footer__link:focus-visible {
@@ -231,12 +241,20 @@ nav.footer__col .footer__link:focus-visible::after {
 }
 
 /* Le relief ne répond qu'aux boutons qui mènent quelque part. */
-a.footer__reseau:hover,
 a.footer__reseau:focus-visible {
   color: var(--dawn);
   box-shadow:
     inset -0.2rem -0.2rem 0.5rem color-mix(in srgb, var(--beam) 7%, transparent),
     inset 0.25rem 0.25rem 0.6rem rgba(0, 0, 0, 0.85);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  a.footer__reseau:hover {
+    color: var(--dawn);
+    box-shadow:
+      inset -0.2rem -0.2rem 0.5rem color-mix(in srgb, var(--beam) 7%, transparent),
+      inset 0.25rem 0.25rem 0.6rem rgba(0, 0, 0, 0.85);
+  }
 }
 
 a.footer__reseau:focus-visible {

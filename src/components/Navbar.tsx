@@ -1,14 +1,14 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { useRouterState } from '@tanstack/react-router'
 
+import { Lien } from './Lien'
+
 type SubItem = { label: string; href: string }
 type NavItem = { label: string; href: string; children?: SubItem[] }
 
 /**
- * Les routes n'existent pas encore : les `href` décrivent l'arborescence
- * visée. Quand les pages seront créées, il suffira de remplacer les balises
- * <a> par des <Link to> de TanStack Router — la structure ci-dessous ne
- * bouge pas.
+ * L'arborescence du site. Les liens passent par <Lien> (le <Link> de
+ * TanStack Router) : on change de page sans recharger le document.
  */
 export const NAV: NavItem[] = [
   { label: 'Accueil', href: '/' },
@@ -126,6 +126,17 @@ export function Navbar() {
   const lockedRef = useRef(false)
   lockedRef.current = drawerOpen || openMenu !== null
 
+  /*
+   * Changer de page ne recharge plus le document : ce qui était ouvert se
+   * referme, et la barre revient pour la nouvelle page.
+   */
+  useEffect(() => {
+    setOpenMenu(null)
+    setDrawerOpen(false)
+    setOpenSection(null)
+    setHidden(false)
+  }, [chemin])
+
   const closeIfOpen = (label: string) =>
     setOpenMenu((current) => (current === label ? null : current))
 
@@ -228,7 +239,7 @@ export function Navbar() {
         ref={navRef}
       >
         <div className="nav__inner">
-          <a className="nav__brand" href="/">
+          <Lien className="nav__brand" href="/">
             {/*
               Le logo définitif, recadré sur le mot et son Y : la mention
               « Créateur d'événements » serait illisible à cette hauteur.
@@ -242,7 +253,7 @@ export function Navbar() {
               height={80}
               alt="Oysen, accueil"
             />
-          </a>
+          </Lien>
 
           <nav className="nav__nav" aria-label="Navigation principale">
             <ul className="nav__list">
@@ -250,13 +261,13 @@ export function Navbar() {
                 if (!item.children) {
                   return (
                     <li className="nav__item" key={item.label}>
-                      <a
+                      <Lien
                         className={`nav__link${estActif(item, chemin) ? ' nav__link--actif' : ''}`}
                         href={item.href}
                         aria-current={mene(item.href, chemin) ? 'page' : undefined}
                       >
                         {item.label}
-                      </a>
+                      </Lien>
                     </li>
                   )
                 }
@@ -295,7 +306,7 @@ export function Navbar() {
                     >
                       {item.children.map((child) => (
                         <li key={child.href}>
-                          <a
+                          <Lien
                             className="nav__sublink"
                             href={child.href}
                             aria-current={
@@ -303,7 +314,7 @@ export function Navbar() {
                             }
                           >
                             {child.label}
-                          </a>
+                          </Lien>
                         </li>
                       ))}
                     </ul>
@@ -348,14 +359,14 @@ export function Navbar() {
               if (!item.children) {
                 return (
                   <li className="nav__mobile-item" key={item.label}>
-                    <a
+                    <Lien
                       className={`nav__mobile-link${estActif(item, chemin) ? ' nav__mobile-link--actif' : ''}`}
                       href={item.href}
                       aria-current={mene(item.href, chemin) ? 'page' : undefined}
                       onClick={() => setDrawerOpen(false)}
                     >
                       {item.label}
-                    </a>
+                    </Lien>
                   </li>
                 )
               }
@@ -383,7 +394,7 @@ export function Navbar() {
                     <ul>
                       {item.children.map((child) => (
                         <li key={child.href}>
-                          <a
+                          <Lien
                             className="nav__mobile-sublink"
                             href={child.href}
                             aria-current={
@@ -392,7 +403,7 @@ export function Navbar() {
                             onClick={() => setDrawerOpen(false)}
                           >
                             {child.label}
-                          </a>
+                          </Lien>
                         </li>
                       ))}
                     </ul>

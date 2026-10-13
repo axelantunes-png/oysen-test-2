@@ -1,0 +1,1338 @@
+/* ============================================================
+   COLLECTIVITÉS ET INSTITUTIONS
+   ------------------------------------------------------------
+   Dans la salle sombre du site, avec sa langue : l'anthracite,
+   le lavande des projecteurs, les losanges, les cartes éclairées
+   par le haut, et ce qu'on pointe qui s'allume.
+
+   La tenue est plus institutionnelle : le hero est centré,
+   symétrique comme un fronton, la photo en bandeau large sous le
+   texte. Son signe est le bordereau des pièces, posé sur la
+   photo : chaque pièce reçoit son tampon « Jointe », l'une après
+   l'autre. C'est la seule animation de la page.
+
+   Le vocabulaire du bordereau revient ensuite : les engagements
+   sont des pièces numérotées (S2), chaque étape de la méthode
+   remet la sienne, dessinée comme un feuillet au coin plié (S5).
+   Les références et les numéros de pièce sont en mono (Azeret
+   Mono, comme sur L'agence).
+
+   Le rythme des fonds : le hero sous sa lueur, les pièces en
+   salle, ce que l'on sous-estime dans le noir complet, les
+   interventions en salle, la méthode sur une bande plus claire,
+   les références en salle, la sortie sur la rampe violette.
+   ============================================================ */
+
+.page-collectivite {
+  --noir: #0d0a11;
+  --salle-claire: #18151d;
+  --mono: 'Azeret Mono', ui-monospace, monospace;
+}
+
+.section--collectivite .section__inner {
+  max-width: 76rem;
+}
+
+/* ---- La tête des sections ---- */
+
+.coll-tete .section__title {
+  max-width: 30ch;
+}
+
+.coll-tete__texte {
+  max-width: 60ch;
+  margin: clamp(1rem, 2.5vh, 1.4rem) 0 0;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  text-wrap: pretty;
+  color: var(--dusk);
+}
+
+.coll-tete--centree {
+  text-align: center;
+}
+
+.coll-tete--centree .section__title,
+.coll-tete--centree .coll-tete__texte {
+  margin-inline: auto;
+}
+
+.coll-action {
+  margin: clamp(2.5rem, 5.5vh, 3.5rem) 0 0;
+  text-align: center;
+}
+
+/* ---- Le lien lavande et sa flèche ---- */
+
+.coll-lien {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--beam);
+}
+
+.coll-lien__fleche {
+  flex: none;
+  width: 1.1rem;
+  height: 1.1rem;
+  transition: transform 0.25s ease;
+}
+
+.coll-lien:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .coll-lien:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+  }
+}
+
+.coll-lien:focus-visible .coll-lien__fleche {
+  transform: translateX(0.3rem);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .coll-lien:hover .coll-lien__fleche {
+    transform: translateX(0.3rem);
+  }
+}
+
+.coll-lien:focus-visible {
+  outline: 2px solid var(--beam);
+  outline-offset: 4px;
+}
+
+/* ---- Les puces à losange ---- */
+
+.coll-puces {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.9375rem;
+  color: var(--dusk);
+}
+
+.coll-puces li,
+.coll-sorties li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  line-height: 1.55;
+}
+
+.coll-puces li::before,
+.coll-sorties li::before {
+  content: '';
+  flex: none;
+  width: 0.45rem;
+  height: 0.45rem;
+  margin-top: calc((1.55em - 0.45rem) / 2);
+  border: 1px solid var(--beam);
+  transform: rotate(45deg);
+}
+
+/* La référence d'une règle, comme dans un dossier. */
+.coll-source {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  color: var(--dusk);
+}
+
+.coll-source::before {
+  content: 'Réf. · ';
+  color: var(--beam);
+}
+
+.coll-sorties {
+  display: grid;
+  gap: 0.6rem;
+  margin: clamp(1.75rem, 4vh, 2.5rem) 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.9375rem;
+  color: var(--dusk);
+}
+
+.coll-sorties a {
+  color: var(--beam);
+  text-underline-offset: 0.25em;
+}
+
+/* ---- Les tableaux ---- */
+
+.coll-tableau table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.coll-tableau caption {
+  caption-side: top;
+  margin-bottom: 0.85rem;
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-align: left;
+  text-transform: uppercase;
+  color: var(--beam);
+}
+
+.coll-tableau th,
+.coll-tableau td {
+  padding: 0.9rem 1.25rem 0.9rem 0;
+  text-align: left;
+  vertical-align: baseline;
+  line-height: 1.55;
+  border-bottom: 1px solid var(--night-veil);
+}
+
+.coll-tableau thead th {
+  padding-block: 0 0.75rem;
+  font-family: var(--mono);
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dusk);
+}
+
+.coll-tableau tbody th {
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 500;
+  color: var(--dawn);
+}
+
+.coll-tableau td {
+  color: var(--dusk);
+}
+
+/* ============================================================
+   S1 · LE HERO
+   ============================================================ */
+
+.coll-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(3rem, 8vh, 5.5rem) var(--pad) clamp(3rem, 7vh, 4.5rem);
+  background-color: var(--night);
+  --btn-ghost-border: var(--charte-gris);
+}
+
+/* La lueur, centrée et haute : la symétrie d'un fronton éclairé. */
+.coll-hero__lueur {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(
+      70% 55% at 50% -12%,
+      color-mix(in srgb, var(--oysen-purple) 42%, transparent),
+      transparent 68%
+    ),
+    radial-gradient(
+      50% 40% at 50% 70%,
+      color-mix(in srgb, var(--beam) 6%, transparent),
+      transparent 70%
+    );
+}
+
+.coll-hero__texte {
+  max-width: 58rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.coll-hero__titre {
+  max-width: 24ch;
+  margin: 0 auto;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  font-size: clamp(2rem, 3.8vw, 3.2rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  color: var(--dawn);
+}
+
+.coll-hero__lede {
+  max-width: 62ch;
+  margin: clamp(1.4rem, 3vh, 2rem) auto 0;
+  font-size: clamp(1rem, 1.25vw, 1.0625rem);
+  line-height: 1.65;
+  text-wrap: pretty;
+  color: var(--dusk);
+}
+
+/* La ligne d'autorité, entre deux filets courts. */
+.coll-hero__autorite {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1.25rem auto 0;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--dawn);
+}
+
+.coll-hero__autorite::before,
+.coll-hero__autorite::after {
+  content: '';
+  flex: none;
+  width: 2rem;
+  height: 1px;
+  background-color: var(--beam);
+}
+
+.coll-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem 2rem;
+  margin-top: clamp(2rem, 4.5vh, 2.75rem);
+}
+
+.coll-hero__rassurance {
+  margin: 0.85rem 0 0;
+  font-size: 0.8125rem;
+  color: var(--dusk);
+}
+
+/* ---- La photo en bandeau, et le bordereau posé dessus ---- */
+
+.coll-hero__scene {
+  position: relative;
+  max-width: 76rem;
+  margin: clamp(3rem, 7vh, 4.5rem) auto 0;
+}
+
+.coll-hero__photo {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--night-veil);
+  box-shadow: 0 2.5rem 5rem -3rem rgba(0, 0, 0, 0.8);
+}
+
+.coll-hero__photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 21 / 9;
+  object-fit: cover;
+  object-position: 50% 35%;
+  filter: grayscale(0.55) saturate(0.7) brightness(0.48) contrast(1.05);
+}
+
+/* La teinte violette de la charte, et une ombre à droite, sous le
+   bordereau. */
+.coll-hero__photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+    to right,
+    transparent 40%,
+    color-mix(in srgb, var(--night) 55%, transparent)
+  );
+  pointer-events: none;
+}
+
+.coll-hero__photo::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-color: color-mix(in srgb, var(--charte-violet) 55%, transparent);
+  mix-blend-mode: color;
+  pointer-events: none;
+}
+
+.bordereau {
+  position: absolute;
+  right: clamp(1rem, 3vw, 2.5rem);
+  bottom: clamp(1rem, 3vw, 2.5rem);
+  z-index: 2;
+  width: min(25rem, 46%);
+  padding: 1rem 1.15rem 0.85rem;
+  font-family: var(--mono);
+  text-align: left;
+  background-color: color-mix(in srgb, var(--night-raised) 90%, transparent);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--night-veil);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--beam) 55%, transparent),
+    0 1.75rem 3.5rem -1.5rem rgba(0, 0, 0, 0.85);
+}
+
+.bordereau__tete {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0 0 0.3rem;
+  padding-bottom: 0.65rem;
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--beam);
+  border-bottom: 1px solid var(--night-veil);
+}
+
+.bordereau__tete span:last-child {
+  color: var(--dusk);
+}
+
+.bordereau__liste {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bordereau__piece {
+  display: grid;
+  grid-template-columns: 4.25rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px dashed var(--night-veil);
+}
+
+.bordereau__piece:last-child {
+  border-bottom: 0;
+}
+
+.bordereau__numero {
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dusk);
+}
+
+.bordereau__nom {
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.875rem;
+  color: var(--dawn);
+}
+
+/* Le tampon : un cartouche lavande, légèrement de travers, qui tombe sur
+   sa ligne. */
+.bordereau__tampon {
+  padding: 0.2rem 0.45rem;
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--beam);
+  border: 1.5px solid var(--beam);
+  border-radius: 2px;
+  transform: rotate(-6deg);
+  animation: bordereau-tampon 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.2)
+    calc(var(--apres-rideau, 0s) + 0.9s + var(--rang) * 0.45s) both;
+}
+
+@keyframes bordereau-tampon {
+  from {
+    opacity: 0;
+    transform: rotate(-14deg) scale(1.8);
+  }
+}
+
+/* ---- Les preuves ---- */
+
+.coll-preuves {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem clamp(1.5rem, 3vw, 2.5rem);
+  max-width: 76rem;
+  margin: clamp(2.5rem, 6vh, 3.75rem) auto 0;
+  padding: clamp(1.25rem, 3vh, 1.75rem) 0 0;
+  list-style: none;
+  font-size: 0.875rem;
+  color: var(--dusk);
+  border-top: 1px solid var(--night-veil);
+}
+
+.coll-preuves li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.coll-preuves li::before {
+  content: '';
+  flex: none;
+  width: 0.4rem;
+  height: 0.4rem;
+  background-color: var(--beam);
+  transform: rotate(45deg);
+}
+
+/* ---- L'entrée du hero, après le rideau s'il se joue ---- */
+
+.coll-hero__texte > * {
+  animation: hero-monte 0.8s cubic-bezier(0.22, 0.61, 0.36, 1)
+    calc(var(--apres-rideau, 0s) + 0.1s) both;
+}
+
+.coll-hero__texte > :nth-child(2) {
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.2s);
+}
+
+.coll-hero__texte > :nth-child(3) {
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.3s);
+}
+
+.coll-hero__texte > :nth-child(4) {
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.4s);
+}
+
+.coll-hero__texte > :nth-child(5),
+.coll-hero__texte > :nth-child(6) {
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.5s);
+}
+
+.coll-hero__scene,
+.coll-preuves {
+  animation: collectivite-fondu 1.1s ease calc(var(--apres-rideau, 0s) + 0.4s)
+    both;
+}
+
+@keyframes collectivite-fondu {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ============================================================
+   S2 · LES PIÈCES
+   ============================================================ */
+
+.pieces {
+  margin: clamp(2.5rem, 5.5vh, 3.5rem) 0 0;
+  padding: 0;
+  list-style: none;
+  border-bottom: 1px solid var(--night-veil);
+}
+
+/* Une ligne par pièce : son numéro et son nom, ce que nous remettons, ce
+   que cela change. La ligne qu'on pointe s'éclaire. */
+.piece {
+  display: grid;
+  grid-template-columns: minmax(0, 15rem) minmax(0, 1.4fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 1rem clamp(1.5rem, 3.5vw, 3rem);
+  padding: clamp(1.4rem, 3vh, 1.85rem) clamp(0.75rem, 1.5vw, 1.25rem);
+  border-top: 1px solid var(--night-veil);
+  transition: background-color 0.3s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .piece:hover {
+    background-color: color-mix(in srgb, var(--beam) 4%, transparent);
+  }
+}
+
+.piece__numero {
+  display: block;
+  margin-bottom: 0.45rem;
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--beam);
+}
+
+.piece__nom {
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.3;
+  text-wrap: balance;
+  color: var(--dawn);
+}
+
+.piece__label {
+  margin: 0 0 0.6rem;
+  font-family: var(--mono);
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dusk);
+}
+
+.piece__remise .coll-puces {
+  font-size: 0.875rem;
+}
+
+.piece__change-texte {
+  margin: 0;
+  padding-left: 0.9rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.55;
+  color: var(--dawn);
+  border-left: 2px solid var(--beam);
+}
+
+.pieces__reunies {
+  margin: clamp(2rem, 4.5vh, 2.75rem) 0 0;
+  font-size: 0.9375rem;
+  text-align: center;
+  color: var(--dusk);
+}
+
+.pieces__reunies + .coll-action {
+  margin-top: 1.25rem;
+}
+
+/* ============================================================
+   S3 · CE QUE L'ON SOUS-ESTIME
+   ============================================================ */
+
+.section.section--collectivite-exigences {
+  background-color: var(--noir);
+}
+
+.exigences {
+  margin-top: clamp(2.5rem, 5.5vh, 3.5rem);
+}
+
+/* Chaque point en dossier : à gauche, le point et ce qu'il garantit ; à
+   droite, comment nous le traitons. */
+.exigence {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  align-items: start;
+  gap: 1.5rem clamp(2rem, 5vw, 4.5rem);
+  padding-block: clamp(2rem, 4.5vh, 2.75rem);
+  border-top: 1px solid var(--night-veil);
+}
+
+.exigence__tete {
+  position: sticky;
+  top: calc(var(--nav-h, 4.5rem) + 2rem);
+}
+
+.exigence__nom {
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(1.3rem, 2vw, 1.6rem);
+  font-weight: 300;
+  line-height: 1.25;
+  text-wrap: balance;
+  color: var(--dawn);
+}
+
+/* Ce que le point garantit : la phrase à retenir, éclairée. */
+.exigence__garantie {
+  margin: 1.1rem 0 0;
+  padding: 0.85rem 1.05rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.55;
+  color: var(--dawn);
+  background-color: color-mix(in srgb, var(--beam) 6%, transparent);
+  border-left: 2px solid var(--beam);
+}
+
+.exigence__corps {
+  display: grid;
+  gap: 1.1rem;
+}
+
+.exigence__texte {
+  max-width: 64ch;
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--dusk);
+}
+
+.exigence__note {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--dusk);
+}
+
+.exigence__encadre {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1.1rem 1.25rem;
+  background-color: var(--night-raised);
+  border: 1px solid var(--night-veil);
+}
+
+/* Les deux repères d'accessibilité, en chiffres. */
+.mesures {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.mesure {
+  padding: 0.85rem 1.15rem;
+  border: 1px solid var(--night-veil);
+  border-top: 2px solid var(--beam);
+}
+
+.mesure dt {
+  font-family: var(--mono);
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dusk);
+}
+
+.mesure dd {
+  margin: 0.35rem 0 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.85rem;
+  font-weight: 200;
+  line-height: 1;
+  color: var(--dawn);
+}
+
+/* Les interlocuteurs, chacun dans sa case, tous sur le même document. */
+.interlocuteurs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.interlocuteurs li {
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--night-veil);
+}
+
+.interlocuteurs__qui {
+  display: block;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--dawn);
+}
+
+.interlocuteurs__role {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--dusk);
+}
+
+.delais th[scope='row'] {
+  width: 34%;
+}
+
+.delais .delais__reference {
+  width: 26%;
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  line-height: 1.5;
+}
+
+/* ============================================================
+   S4 · LES INTERVENTIONS
+   ============================================================ */
+
+.interventions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1rem, 1.8vw, 1.5rem);
+  margin: clamp(2.5rem, 5.5vh, 3.5rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Une carte éclairée par le haut ; au survol, un halo, et son appel
+   s'allume. */
+.intervention {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: clamp(1.35rem, 2.2vw, 1.85rem);
+  border: 1px solid transparent;
+  background:
+    radial-gradient(
+        80% 60% at 0% 0%,
+        color-mix(in srgb, var(--beam) 8%, transparent),
+        transparent 70%
+      )
+      padding-box,
+    linear-gradient(var(--night-raised), var(--night-raised)) padding-box,
+    linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--beam) 45%, transparent),
+        var(--night-veil) 35%,
+        var(--trait)
+      )
+      border-box;
+  box-shadow: 0 1.5rem 3rem -2rem rgba(0, 0, 0, 0.7);
+  transition: box-shadow 0.3s ease;
+}
+
+.intervention:has(.intervention__lien:focus-visible) {
+  box-shadow:
+    0 1.5rem 3rem -2rem rgba(0, 0, 0, 0.7),
+    0 0 2.5rem -1rem color-mix(in srgb, var(--beam) 30%, transparent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .intervention:hover {
+    box-shadow:
+      0 1.5rem 3rem -2rem rgba(0, 0, 0, 0.7),
+      0 0 2.5rem -1rem color-mix(in srgb, var(--beam) 30%, transparent);
+  }
+}
+
+.intervention:has(.intervention__lien:focus-visible) {
+  outline: 2px solid var(--beam);
+  outline-offset: 3px;
+}
+
+.intervention__nom {
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--dawn);
+}
+
+.intervention__lien {
+  color: inherit;
+  text-decoration: none;
+}
+
+.intervention__lien:focus-visible {
+  outline: none;
+}
+
+.intervention__lien::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.intervention__occasions {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  line-height: 1.55;
+  letter-spacing: 0.02em;
+  color: var(--beam);
+}
+
+.intervention__enjeu {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--dusk);
+}
+
+.intervention .coll-puces {
+  font-size: 0.875rem;
+}
+
+.intervention__resultat {
+  margin: 0;
+  padding-top: 0.85rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--dawn);
+  border-top: 1px solid var(--night-veil);
+}
+
+.intervention__appel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 0.25rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--beam) 70%, var(--dusk));
+  transition: color 0.25s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .intervention:hover .intervention__appel {
+    color: var(--beam);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .intervention:hover .coll-lien__fleche {
+    transform: translateX(0.3rem);
+  }
+}
+
+/* Notre capacité : la limite, dite avant qu'on la demande. */
+.capacite {
+  max-width: 62rem;
+  margin: clamp(2.25rem, 5vh, 3rem) 0 0;
+  padding: 1.1rem 1.25rem;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--dusk);
+  border: 1px solid var(--night-veil);
+  border-left: 2px solid var(--beam);
+}
+
+.capacite__label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-family: var(--mono);
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--beam);
+}
+
+/* ============================================================
+   S5 · LA MÉTHODE ET LES PIÈCES
+   ============================================================ */
+
+.section.section--collectivite-methode {
+  background-color: var(--salle-claire);
+  border-block: 1px solid var(--night-veil);
+}
+
+.etapes-coll {
+  margin: clamp(2.5rem, 5.5vh, 3.5rem) 0 0;
+  padding: 0;
+  list-style: none;
+  border-bottom: 1px solid var(--night-veil);
+}
+
+/* Le rang, ce que nous faisons, et la pièce remise. */
+.etape-coll {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr) minmax(0, 22rem);
+  align-items: start;
+  gap: 1rem clamp(1.5rem, 3vw, 2.75rem);
+  padding: clamp(1.35rem, 3vh, 1.75rem) 0;
+  border-top: 1px solid var(--night-veil);
+}
+
+.etape-coll__numero {
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 2.5rem;
+  font-weight: 200;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: color-mix(in srgb, var(--beam) 70%, transparent);
+}
+
+.etape-coll__nom {
+  margin: 0 0 0.45rem;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--dawn);
+}
+
+.etape-coll__faisons p {
+  max-width: 58ch;
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--dusk);
+}
+
+/* La pièce remise, dessinée comme un feuillet au coin plié. */
+.etape-coll__piece {
+  position: relative;
+  margin: 0;
+  padding: 0.85rem 1.4rem 0.9rem 1.1rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--dawn);
+  background-color: var(--night-raised);
+  box-shadow: inset 2px 0 0 var(--beam);
+  clip-path: polygon(0 0, calc(100% - 0.8rem) 0, 100% 0.8rem, 100% 100%, 0 100%);
+}
+
+.etape-coll__piece::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0.8rem;
+  height: 0.8rem;
+  background-image: linear-gradient(
+    to bottom left,
+    transparent 50%,
+    color-mix(in srgb, var(--beam) 40%, var(--night-raised)) 50%
+  );
+}
+
+.etape-coll__piece-label {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-family: var(--mono);
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--beam);
+}
+
+.methode-coll__notes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.5rem, 3vw, 2.75rem);
+  margin-top: clamp(2.5rem, 5.5vh, 3.5rem);
+}
+
+.methode-coll__note {
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--night-veil);
+}
+
+.methode-coll__note-titre {
+  margin: 0 0 0.5rem;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--dawn);
+}
+
+.methode-coll__note p {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--dusk);
+}
+
+/* ============================================================
+   S6 · LES RÉFÉRENCES
+   ============================================================ */
+
+.coll-verifier {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  align-items: start;
+  gap: clamp(2.5rem, 5vw, 5rem);
+}
+
+.coll-verifier .coll-tete {
+  position: sticky;
+  top: calc(var(--nav-h, 4.5rem) + 2rem);
+}
+
+.coll-verifier__liste {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-bottom: 1px solid var(--night-veil);
+}
+
+.coll-verifier__item {
+  display: grid;
+  gap: 0.5rem;
+  padding: clamp(1.25rem, 2.8vh, 1.6rem) 0;
+  border-top: 1px solid var(--night-veil);
+}
+
+.coll-verifier__titre {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--dawn);
+}
+
+.coll-verifier__titre::before {
+  content: '';
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: var(--beam);
+  transform: rotate(45deg);
+}
+
+.coll-verifier__texte {
+  max-width: 62ch;
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--dusk);
+}
+
+.coll-verifier__item .coll-lien {
+  justify-self: start;
+  font-size: 0.875rem;
+}
+
+.coll-cas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+  margin: clamp(3rem, 7vh, 4.5rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.coll-cas__item {
+  padding: clamp(1.35rem, 2.2vw, 1.85rem);
+  background-color: var(--night-raised);
+  border: 1px solid var(--trait);
+}
+
+.coll-cas__titre {
+  margin: 0 0 1rem;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--dawn);
+}
+
+.coll-cas__star {
+  margin: 0;
+}
+
+.coll-cas__star dt {
+  margin: 0.9rem 0 0.3rem;
+  font-family: var(--mono);
+  font-size: 0.5625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--beam);
+}
+
+.coll-cas__star dd {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--dusk);
+}
+
+.coll-cas__mention {
+  margin: 1rem 0 0;
+  font-size: 0.8125rem;
+  font-style: italic;
+  color: var(--dusk);
+}
+
+/* ============================================================
+   S7 · LES QUESTIONS
+   Les dépliants de l'accueil (home.css) ; la réponse sur les
+   procédures porte son tableau des seuils.
+   ============================================================ */
+
+.seuils {
+  max-width: 62ch;
+  margin: 0 0 1.25rem;
+}
+
+.seuils th[scope='row'] {
+  width: 36%;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.faq__a.seuils__apres {
+  padding-top: 0;
+  font-size: 0.8125rem;
+}
+
+/* ============================================================
+   MOUVEMENT RÉDUIT
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .coll-hero__texte > *,
+  .coll-hero__scene,
+  .coll-preuves,
+  .bordereau__tampon {
+    animation: none;
+  }
+
+  .coll-lien__fleche,
+  .piece,
+  .intervention,
+  .intervention__appel {
+    transition: none;
+  }
+}
+
+/* ============================================================
+   TABLETTE
+   ============================================================ */
+
+@media (max-width: 1023px) {
+  .exigence,
+  .coll-verifier {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .exigence__tete,
+  .coll-verifier .coll-tete {
+    position: static;
+  }
+
+  .piece {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .piece__tete {
+    grid-column: 1 / -1;
+  }
+
+  .interventions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .etape-coll {
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+  }
+
+  .etape-coll__piece {
+    grid-column: 2;
+  }
+
+  .methode-coll__notes {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Le bordereau passe sous la photo, en chevauchant son bas. */
+  .bordereau {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    width: auto;
+    max-width: 30rem;
+    margin: -3rem 1rem 0 auto;
+  }
+
+  .coll-hero__photo img {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+/* ============================================================
+   TÉLÉPHONE
+   ============================================================ */
+
+@media (max-width: 760px) {
+  .piece,
+  .interventions,
+  .interlocuteurs,
+  .coll-cas {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .piece {
+    padding-inline: 0;
+  }
+
+  .coll-hero__photo img {
+    aspect-ratio: 4 / 3;
+  }
+
+  .bordereau {
+    margin: -2.5rem 0.75rem 0;
+  }
+
+  .coll-preuves {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .coll-hero__autorite::before,
+  .coll-hero__autorite::after {
+    display: none;
+  }
+
+  /* Le tableau des délais se lit ligne par ligne, chaque cellule sous son
+     intitulé. */
+  .delais thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .delais tr {
+    display: grid;
+    gap: 0.6rem;
+    padding: 1.1rem 0;
+    border-bottom: 1px solid var(--night-veil);
+  }
+
+  .delais th,
+  .delais td {
+    padding: 0;
+    border-bottom: 0;
+  }
+
+  .delais th[scope='row'],
+  .delais .delais__reference {
+    width: auto;
+  }
+
+  .delais td::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 0.2rem;
+    font-family: var(--mono);
+    font-size: 0.5625rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--beam);
+  }
+
+  .seuils th[scope='row'] {
+    width: 40%;
+  }
+}
+
+/* ---- La barre posée sur le hero ----
+   Sur ordinateur, la barre de navigation est posée sur le hero, comme
+   sur l'accueil (navbar.css) : le hero passe dessous et gagne la
+   hauteur de la barre, son contenu est repoussé d'autant. Rien ne
+   bouge à l'écran. */
+@media (min-width: 1025px) {
+  .coll-hero {
+    padding-top: calc(var(--nav-h) + clamp(3rem, 8vh, 5.5rem));
+  }
+}

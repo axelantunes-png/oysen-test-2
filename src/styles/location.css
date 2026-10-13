@@ -40,6 +40,16 @@
   margin-inline: auto;
 }
 
+/* ---- Les titres en gras et en blanc pur, comme l'accueil ----
+   Les mêmes valeurs que L'agence et Événements d'entreprise. Avant :
+   300, clamp(1.65rem, 3.3vw, 2.5rem), interligne 1.16, --dawn. */
+.page-location .section__title {
+  font-weight: 700;
+  font-size: clamp(1.545rem, 3.09vw, 2.34rem);
+  line-height: 1.24;
+  color: #ffffff;
+}
+
 .loc-tete__texte {
   max-width: 56ch;
   margin: clamp(1rem, 2.5vh, 1.4rem) auto 0;
@@ -68,15 +78,26 @@
   transition: transform 0.25s ease;
 }
 
-.loc-lien:hover,
 .loc-lien:focus-visible {
   text-decoration: underline;
   text-underline-offset: 0.3em;
 }
 
-.loc-lien:hover .loc-lien__fleche,
+@media (hover: hover) and (pointer: fine) {
+  .loc-lien:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+  }
+}
+
 .loc-lien:focus-visible .loc-lien__fleche {
   transform: translateX(0.3rem);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .loc-lien:hover .loc-lien__fleche {
+    transform: translateX(0.3rem);
+  }
 }
 
 .loc-lien:focus-visible {
@@ -94,7 +115,9 @@
   overflow: hidden;
   display: grid;
   align-items: center;
-  min-height: min(88vh, 54rem);
+  /* Un écran entier, barre déduite (avant : min(88vh, 54rem), et
+     aucune hauteur minimale sous 1024px). */
+  min-height: calc(100dvh - var(--nav-h, 0px));
   padding: clamp(3rem, 9vh, 6rem) var(--pad);
   background-color: var(--night);
   --btn-ghost-border: var(--charte-gris);
@@ -109,13 +132,17 @@
   height: 100%;
   object-fit: cover;
   object-position: 50% 45%;
-  filter: grayscale(0.65) saturate(0.55) brightness(0.3) contrast(1.1);
+  /* Aussi lumineuse que celles de l'accueil et de L'agence (avant :
+     grayscale(0.65) saturate(0.55) brightness(0.3) contrast(1.1)). */
+  opacity: 0.42;
+  filter: saturate(0.85) brightness(1.15);
   pointer-events: none;
   user-select: none;
 }
 
-/* Le voile : dense au centre, derrière le texte ; une lueur violette au
-   sol, aux deux angles où sont posés les projecteurs. */
+/* Le voile central, allégé au niveau de celui de l'accueil (avant :
+   85 %, 60 % et 45 % de --night, 60% 55% at 50% 50%) ; une lueur
+   violette au sol, aux deux angles où sont posés les projecteurs. */
 .loc-hero__salle {
   position: absolute;
   inset: 0;
@@ -124,37 +151,43 @@
   pointer-events: none;
   background-image:
     radial-gradient(
-      60% 55% at 50% 50%,
-      color-mix(in srgb, var(--night) 85%, transparent),
-      color-mix(in srgb, var(--night) 60%, transparent) 55%,
-      color-mix(in srgb, var(--night) 45%, transparent) 100%
+      70% 58% at 50% 42%,
+      color-mix(in srgb, var(--night) 62%, transparent),
+      color-mix(in srgb, var(--night) 40%, transparent) 45%,
+      transparent 100%
     ),
     radial-gradient(
-      40% 45% at 8% 108%,
-      color-mix(in srgb, var(--oysen-purple) 50%, transparent),
-      transparent 68%
-    ),
-    radial-gradient(
-      40% 45% at 92% 108%,
-      color-mix(in srgb, var(--oysen-purple) 50%, transparent),
+      70% 55% at 50% -12%,
+      color-mix(in srgb, var(--oysen-purple) 42%, transparent),
       transparent 68%
     );
 }
 
-/* Les deux projecteurs au sol : étroits à la lampe, en bas, ouverts vers
-   le haut. Ils se croisent derrière le texte. */
+/* Les faisceaux de l'accueil (.hero__lights, app.css), calculés sur la
+   hauteur de son hero : ils tombent exactement comme sur l'accueil.
+   Avant : deux projecteurs posés au sol, aux angles bas, qui se
+   croisaient vers le haut. */
+.loc-hero__faisceaux {
+  position: absolute;
+  inset: 0 0 auto;
+  height: calc(100dvh - var(--nav-h, 0px));
+  overflow: hidden;
+}
+
+/* Étroits à la lampe, en haut au centre, ouverts au sol. */
 .loc-hero__faisceaux i {
   position: absolute;
-  bottom: -10%;
-  width: 34vmax;
-  height: 130%;
-  transform-origin: 50% 100%;
-  clip-path: polygon(0 0, 100% 0, 51.4% 100%, 48.6% 100%);
+  top: -14%;
+  left: 50%;
+  width: 42vmax;
+  height: 125%;
+  transform-origin: 50% 0;
+  clip-path: polygon(48.6% 0, 51.4% 0, 100% 100%, 0 100%);
   background-image: linear-gradient(
-    to top,
-    color-mix(in srgb, var(--beam) 18%, transparent),
-    color-mix(in srgb, var(--beam) 6%, transparent) 42%,
-    transparent 80%
+    to bottom,
+    color-mix(in srgb, var(--beam) 17%, transparent),
+    color-mix(in srgb, var(--beam) 6%, transparent) 40%,
+    transparent 78%
   );
   -webkit-mask-image: linear-gradient(
     to right,
@@ -171,24 +204,20 @@
     transparent 96%
   );
   filter: blur(7px);
-  animation: loc-faisceau 1.2s ease calc(var(--apres-rideau, 0s) + 0.15s) both;
 }
 
+/* Les trois angles de l'accueil : deux obliques, une verticale. */
 .loc-hero__faisceaux i:nth-child(1) {
-  left: 10%;
-  transform: translateX(-50%) rotate(28deg);
+  transform: translateX(-50%) rotate(-27deg);
 }
 
 .loc-hero__faisceaux i:nth-child(2) {
-  left: 90%;
-  transform: translateX(-50%) rotate(-28deg);
-  animation-delay: calc(var(--apres-rideau, 0s) + 0.33s);
+  transform: translateX(-50%) rotate(1deg);
+  opacity: 0.75;
 }
 
-@keyframes loc-faisceau {
-  from {
-    opacity: 0;
-  }
+.loc-hero__faisceaux i:nth-child(3) {
+  transform: translateX(-50%) rotate(25deg);
 }
 
 .loc-hero__texte {
@@ -201,19 +230,21 @@
   max-width: 30ch;
   margin: 0 auto;
   font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
-  font-weight: 300;
-  font-size: clamp(2rem, 3.2vw, 2.75rem);
-  line-height: 1.12;
+  /* En gras et en blanc pur, aux tailles du hero de l'accueil (avant :
+     300, clamp(2rem, 3.2vw, 2.75rem), interligne 1.12, --dawn). */
+  font-weight: 700;
+  font-size: clamp(1.779rem, 4.213vw, 3.277rem);
+  line-height: 1.153;
   letter-spacing: -0.02em;
   text-wrap: balance;
-  color: var(--dawn);
+  color: #ffffff;
 }
 
 .loc-hero__lede {
   max-width: 54ch;
   margin: clamp(1.25rem, 3vh, 1.75rem) auto 0;
-  font-size: clamp(1rem, 1.25vw, 1.0625rem);
-  line-height: 1.65;
+  font-size: clamp(1rem, 1.35vw, 1.125rem);
+  line-height: 1.7;
   text-wrap: pretty;
   color: var(--dusk);
 }
@@ -277,44 +308,21 @@
   margin-top: clamp(2.75rem, 6vh, 3.75rem);
 }
 
+/* Design cards 01 (.dc01, app.css) : fond, bordure, trait du haut et
+   survol viennent de là. Les projecteurs (::after) restent ceux de la
+   page, à leur place. */
 .corps {
   --x: 0%;
   --y: 0%;
   --dir: 135deg;
   --ouv: 13deg;
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
+  --dc01-retrait: clamp(1.75rem, 2.6vw, 2.5rem);
   display: flex;
   flex-direction: column;
   grid-column: span 2;
   gap: 1.1rem;
   min-height: 17rem;
   padding: clamp(1.75rem, 2.6vw, 2.5rem);
-  border: 1px solid transparent;
-  background:
-    radial-gradient(
-        70% 80% at var(--x) var(--y),
-        color-mix(in srgb, var(--beam) 13%, transparent),
-        transparent 65%
-      )
-      padding-box,
-    linear-gradient(
-        to bottom,
-        color-mix(in srgb, var(--night-raised) 92%, var(--beam)),
-        var(--night-raised) 55%,
-        color-mix(in srgb, var(--night) 60%, var(--night-raised))
-      )
-      padding-box,
-    linear-gradient(
-        to bottom,
-        color-mix(in srgb, var(--beam) 50%, transparent),
-        var(--night-veil) 35%,
-        color-mix(in srgb, var(--charte-gris) 55%, transparent)
-      )
-      border-box;
-  box-shadow: 0 1.5rem 3rem -2rem rgba(0, 0, 0, 0.7);
-  transition: box-shadow 0.3s ease;
 }
 
 /* La première rangée : le son et la lumière, en grand. */
@@ -387,34 +395,13 @@
     transparent 95%
   );
   opacity: 0.8;
-  transition: opacity 0.3s ease;
   pointer-events: none;
 }
 
-/* L'arête haute, allumée à moitié ; à fond au survol. */
-.corps::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  height: 1px;
-  background-color: var(--beam);
-  box-shadow: 0 0 0.9rem color-mix(in srgb, var(--beam) 60%, transparent);
-  opacity: 0.35;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-}
-
-.corps:hover {
-  box-shadow:
-    0 1.5rem 3rem -2rem rgba(0, 0, 0, 0.7),
-    0 0 2.5rem -1rem color-mix(in srgb, var(--beam) 30%, transparent);
-}
-
-.corps:hover::after,
-.corps:hover::before {
-  opacity: 1;
+@media (hover: hover) and (pointer: fine) {
+  .corps:hover::after {
+    opacity: 1;
+  }
 }
 
 /* Le nom, et le pictogramme qui brille en face. */
@@ -425,13 +412,15 @@
   gap: 1rem;
 }
 
+/* En gras et en blanc pur, réduit du rapport de largeur entre les
+   graisses (avant : 300, clamp(1.5rem, 2.2vw, 1.9rem), 1.15, --dawn). */
 .corps__nom {
   margin: 0;
   font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
-  font-size: clamp(1.5rem, 2.2vw, 1.9rem);
-  font-weight: 300;
-  line-height: 1.15;
-  color: var(--dawn);
+  font-size: clamp(1.4rem, 2.06vw, 1.775rem);
+  font-weight: 700;
+  line-height: 1.23;
+  color: #ffffff;
 }
 
 .corps__picto {
@@ -441,14 +430,14 @@
   color: var(--beam);
   filter: drop-shadow(0 0 0.45rem color-mix(in srgb, var(--beam) 45%, transparent));
   opacity: 0.85;
-  transition:
-    opacity 0.3s ease,
-    filter 0.3s ease;
+  transition: opacity var(--dc01-survol);
 }
 
-.corps:hover .corps__picto {
-  opacity: 1;
-  filter: drop-shadow(0 0 0.8rem color-mix(in srgb, var(--beam) 70%, transparent));
+/* Le pictogramme s'allume au survol, en opacité seulement. */
+@media (hover: hover) and (pointer: fine) {
+  .corps:hover .corps__picto {
+    opacity: 1;
+  }
 }
 
 /* La capacité : une étiquette, sous le nom. */
@@ -571,9 +560,9 @@
   margin: 0.35rem 0 0;
   font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
   font-size: 1.125rem;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.35;
-  color: var(--dawn);
+  color: #ffffff;
 }
 
 .loc-etape__texte {
@@ -682,9 +671,11 @@
   pointer-events: none;
 }
 
-.garde:hover::before,
-.garde:hover::after {
-  opacity: 1;
+@media (hover: hover) and (pointer: fine) {
+  .garde:hover::before,
+  .garde:hover::after {
+    opacity: 1;
+  }
 }
 
 .garde__question {
@@ -692,10 +683,10 @@
   margin: 0;
   font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
   font-size: 1.1rem;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.35;
   text-wrap: balance;
-  color: var(--dawn);
+  color: #ffffff;
 }
 
 .garde__reponse {
@@ -838,7 +829,7 @@
 
 /* ---- Les champs : ceux du formulaire de contact ---- */
 
-.champ {
+:where(.dispo) .champ {
   display: grid;
   gap: 0.55rem;
   min-width: 0;
@@ -847,7 +838,7 @@
   border: 0;
 }
 
-.champ__label {
+:where(.dispo) .champ__label {
   padding: 0;
   font-size: 0.9375rem;
   font-weight: 500;
@@ -859,17 +850,17 @@ legend.champ__label {
   margin-bottom: 0.8rem;
 }
 
-.champ__requis {
+:where(.dispo) .champ__requis {
   color: var(--beam);
 }
 
-.champ__precision {
+:where(.dispo) .champ__precision {
   font-weight: 400;
   color: var(--dusk);
 }
 
-.champ__input,
-.champ__select {
+:where(.dispo) .champ__input,
+:where(.dispo) .champ__select {
   box-sizing: border-box;
   width: 100%;
   min-height: 3.1rem;
@@ -886,29 +877,31 @@ legend.champ__label {
     box-shadow 0.2s ease;
 }
 
-.champ__input::placeholder {
+:where(.dispo) .champ__input::placeholder {
   color: color-mix(in srgb, var(--dusk) 72%, transparent);
 }
 
-.champ__input:hover,
-.champ__select:hover {
-  border-color: color-mix(in srgb, var(--beam) 45%, var(--trait));
+@media (hover: hover) and (pointer: fine) {
+  :where(.dispo) .champ__input:hover,
+  :where(.dispo) .champ__select:hover {
+    border-color: color-mix(in srgb, var(--beam) 45%, var(--trait));
+  }
 }
 
-.champ__input:focus,
-.champ__select:focus {
+:where(.dispo) .champ__input:focus,
+:where(.dispo) .champ__select:focus {
   outline: none;
   border-color: var(--beam);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--beam) 22%, transparent);
 }
 
-.champ__input[aria-invalid='true'],
-.champ__select[aria-invalid='true'] {
+:where(.dispo) .champ__input[aria-invalid='true'],
+:where(.dispo) .champ__select[aria-invalid='true'] {
   border-color: var(--erreur);
 }
 
 /* Le déroulant perd sa flèche native pour un chevron au trait du site. */
-.champ__select {
+:where(.dispo) .champ__select {
   appearance: none;
   padding-right: 2.75rem;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9.5l6 6 6-6' fill='none' stroke='%23cdb8ff' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
@@ -919,14 +912,14 @@ legend.champ__label {
 }
 
 /* Quatre lignes au départ, puis la zone suit le texte. */
-.champ__zone {
+:where(.dispo) .champ__zone {
   min-height: calc(4lh + 1.6rem);
   line-height: 1.6;
   resize: vertical;
   field-sizing: content;
 }
 
-.champ__aide {
+:where(.dispo) .champ__aide {
   margin: 0;
   font-size: 0.8125rem;
   line-height: 1.55;
@@ -934,7 +927,7 @@ legend.champ__label {
 }
 
 /* Sous une case : aligné sur le texte de la case, pas sur la case. */
-.champ__aide--case {
+:where(.dispo) .champ__aide--case {
   padding-left: 1.95rem;
 }
 
@@ -943,9 +936,14 @@ legend.champ__label {
   text-underline-offset: 0.2em;
 }
 
-.dispo__lien:hover,
 .dispo__lien:focus-visible {
   color: var(--dawn);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .dispo__lien:hover {
+    color: var(--dawn);
+  }
 }
 
 .dispo__lien:focus-visible {
@@ -953,12 +951,12 @@ legend.champ__label {
   outline-offset: 2px;
 }
 
-.champ__erreur-zone:empty {
+:where(.dispo) .champ__erreur-zone:empty {
   display: none;
 }
 
 /* Le message dit ce qui ne va pas ; le « ! » le signale sans la couleur. */
-.champ__erreur {
+:where(.dispo) .champ__erreur {
   display: flex;
   align-items: flex-start;
   gap: 0.55rem;
@@ -968,7 +966,7 @@ legend.champ__label {
   color: var(--erreur);
 }
 
-.champ__erreur::before {
+:where(.dispo) .champ__erreur::before {
   content: '!';
   display: grid;
   flex: none;
@@ -985,7 +983,7 @@ legend.champ__label {
 
 /* ---- Les cases à cocher : celles du formulaire de contact ---- */
 
-.case {
+:where(.dispo) .case {
   position: relative;
   display: flex;
   align-items: flex-start;
@@ -993,7 +991,7 @@ legend.champ__label {
   cursor: pointer;
 }
 
-.case__input {
+:where(.dispo) .case__input {
   position: absolute;
   top: 0.1rem;
   left: 0;
@@ -1004,7 +1002,7 @@ legend.champ__label {
   cursor: pointer;
 }
 
-.case__marque {
+:where(.dispo) .case__marque {
   position: relative;
   flex: none;
   width: 1.15rem;
@@ -1017,17 +1015,19 @@ legend.champ__label {
     border-color 0.2s ease;
 }
 
-.case:hover .case__marque {
-  border-color: color-mix(in srgb, var(--beam) 55%, var(--trait));
+@media (hover: hover) and (pointer: fine) {
+  :where(.dispo) .case:hover .case__marque {
+    border-color: color-mix(in srgb, var(--beam) 55%, var(--trait));
+  }
 }
 
-.case__input:checked + .case__marque {
+:where(.dispo) .case__input:checked + .case__marque {
   border-color: var(--beam);
   background-color: var(--charte-violet);
 }
 
 /* La coche : un angle droit, tourné. */
-.case__input:checked + .case__marque::after {
+:where(.dispo) .case__input:checked + .case__marque::after {
   content: '';
   position: absolute;
   top: 0.12rem;
@@ -1039,16 +1039,16 @@ legend.champ__label {
   transform: rotate(45deg);
 }
 
-.case__input:focus-visible + .case__marque {
+:where(.dispo) .case__input:focus-visible + .case__marque {
   outline: 2px solid var(--beam);
   outline-offset: 3px;
 }
 
-.case__input[aria-invalid='true'] + .case__marque {
+:where(.dispo) .case__input[aria-invalid='true'] + .case__marque {
   border-color: var(--erreur);
 }
 
-.case__texte {
+:where(.dispo) .case__texte {
   font-size: 0.9375rem;
   line-height: 1.5;
   color: var(--dawn);
@@ -1059,21 +1059,17 @@ legend.champ__label {
    ============================================================ */
 
 @media (prefers-reduced-motion: reduce) {
-  .loc-hero__texte > *,
-  .loc-hero__faisceaux i {
+  .loc-hero__texte > * {
     animation: none;
   }
 
   .loc-lien__fleche,
-  .corps,
-  .corps::before,
-  .corps::after,
   .corps__picto,
   .garde::before,
   .garde::after,
-  .champ__input,
-  .champ__select,
-  .case__marque {
+  :where(.dispo) .champ__input,
+  :where(.dispo) .champ__select,
+  :where(.dispo) .case__marque {
     transition: none;
   }
 }
@@ -1083,13 +1079,6 @@ legend.champ__label {
    ============================================================ */
 
 @media (max-width: 1023px) {
-  .loc-hero {
-    min-height: 0;
-  }
-
-  .loc-hero__faisceaux i {
-    width: 46vmax;
-  }
 
   /* Le matériel sur deux colonnes ; les accessoires ferment la grille
      sur toute la largeur. */
@@ -1215,5 +1204,22 @@ legend.champ__label {
   .loc-etape__texte {
     grid-column: 2;
     font-size: 0.875rem;
+  }
+}
+
+/* ---- La barre posée sur le hero ----
+   Sur ordinateur, la barre de navigation est posée sur le hero, comme
+   sur l'accueil (navbar.css) : le hero passe dessous et gagne la
+   hauteur de la barre, son contenu est repoussé d'autant. Rien ne
+   bouge à l'écran. */
+@media (min-width: 1025px) {
+  .loc-hero {
+    min-height: 100dvh;
+    padding-top: calc(var(--nav-h) + clamp(3rem, 9vh, 6rem));
+  }
+
+  /* Les faisceaux : un écran entier, comme le hero de l'accueil. */
+  .loc-hero__faisceaux {
+    height: 100dvh;
   }
 }

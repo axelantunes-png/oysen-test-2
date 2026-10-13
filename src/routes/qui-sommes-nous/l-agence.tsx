@@ -11,8 +11,8 @@ import {
 } from '../../components/agence/content'
 import { Plan } from '../../components/agence/Plan'
 import { Trajet } from '../../components/agence/Trajet'
-import { Triangle } from '../../components/agence/Triangle'
 import { Arrow } from '../../components/home/icons'
+import { Lien } from '../../components/Lien'
 
 /*
  * Chemin depuis la racine du projet, et non relatif : sur une route imbriquée,
@@ -49,7 +49,7 @@ export const Route = createFileRoute('/qui-sommes-nous/l-agence')({
  *
  * Six temps : l'ouverture (une planche d'architecte), l'histoire (le rail
  * de la scène et du chantier), les valeurs (une scène sous trois
- * projecteurs), l'approche (un triangle de structure), le fondateur (un
+ * projecteurs), l'approche (ce que le travail concilie), le fondateur (un
  * visage, et la porte vers sa page), puis la sortie, qui reprend la rampe
  * violette de l'accueil.
  *
@@ -59,8 +59,9 @@ export const Route = createFileRoute('/qui-sommes-nous/l-agence')({
  */
 function Agence() {
   return (
-    <main>
+    <main className="page-agence">
       <Ouverture />
+      <Implantation />
       <Histoire />
       <Valeurs />
       <Approche />
@@ -71,21 +72,30 @@ function Agence() {
 }
 
 /*
- * S1. L'ouverture : une planche d'architecte.
+ * S1. L'ouverture.
  *
  * Oysen se dit architecte d'événements et entreprise générale, deux mots du
- * bâtiment : le hero les prend au pied de la lettre. À gauche le discours, à
- * droite le plan d'implantation d'une salle dont chaque poste rejoint la
- * régie, et en pied de feuille le cartouche, qui signe la planche et porte
- * les trois faits de l'encart « En bref ».
- *
- * Aucune photo : le dessin est le sujet. La page se dessine au chargement,
- * trait par trait, et se referme sur le losange de la régie.
+ * bâtiment. Le discours, sous les faisceaux de l'accueil, sur une photo de
+ * salle très atténuée. Le plan d'implantation a sa propre section, juste
+ * sous la bande « En bref ».
  */
 function Ouverture() {
   return (
     <section className="ouverture" aria-labelledby="ouverture-title">
       <div className="ouverture__feuille">
+        {/* La photo de fond, une salle de mariage éclairée en violet.
+            Décorative : la page se lit sans elle. */}
+        <img
+          className="ouverture__photo"
+          src="/images/agence-fond-1179.webp"
+          srcSet="/images/agence-fond-800.webp 800w, /images/agence-fond-1179.webp 1179w"
+          sizes="100vw"
+          width={1179}
+          height={852}
+          alt=""
+          decoding="async"
+        />
+
         {/* Les faisceaux de l'accueil, tirés de l'angle haut gauche. */}
         <span className="ouverture__faisceaux" aria-hidden="true">
           <i />
@@ -110,9 +120,9 @@ function Ouverture() {
             </p>
 
             <div className="ouverture__actions">
-              <a className="btn btn--solid" href="/nos-services">
+              <Lien className="btn btn--solid" href="/nos-services">
                 Voir nos services
-              </a>
+              </Lien>
 
               <a className="agence__more" href="#notre-histoire">
                 Découvrir notre histoire
@@ -120,49 +130,132 @@ function Ouverture() {
               </a>
             </div>
           </div>
-
-          <figure className="plan">
-            <Plan />
-
-            <figcaption className="plan__legende">
-              <p className="plan__intitule">Plan d’implantation type</p>
-
-              <dl className="legende">
-                {[...LEGENDE, LEGENDE_REGIE].map((poste) => (
-                  <div
-                    className={
-                      poste === LEGENDE_REGIE
-                        ? 'legende__item legende__item--regie'
-                        : 'legende__item'
-                    }
-                    key={poste.repere}
-                  >
-                    <dt className="legende__repere">{poste.repere}</dt>
-                    <dd className="legende__poste">
-                      <span className="legende__nom">{poste.nom}</span>
-                      <span className="legende__source">{poste.source}</span>
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            </figcaption>
-          </figure>
         </div>
 
-        {/*
-          Le cartouche : qui signe la planche, puis les trois faits. Chaque
-          case se lit seule, comme sur un plan.
-        */}
-        <dl className="cartouche" aria-label="Oysen en bref">
-          <div className="cartouche__case cartouche__case--signature">
-            <dt className="cartouche__label">Maître d’œuvre</dt>
-            <dd className="cartouche__signature">Oysen</dd>
-          </div>
+        {/* La bande « En bref », posée au pied du hero sur ordinateur,
+            sous lui sur tablette et téléphone (agence.css). */}
+        <EnBref />
+      </div>
+    </section>
+  )
+}
 
-          {EN_BREF.map((fait) => (
-            <div className="cartouche__case" key={fait.nom}>
-              <dt className="cartouche__label">{fait.nom}</dt>
-              <dd className="cartouche__valeur">{fait.texte}</dd>
+/** Les pictogrammes de la bande, au trait, dans l'ordre de EN_BREF. */
+function PictoBref({ rang }: { rang: number }) {
+  return (
+    <svg
+      className="bref__picto"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      focusable="false"
+    >
+      {rang === 0 && (
+        /* Une boussole : la zone desservie. */
+        <>
+          <circle cx="12" cy="12" r="9" />
+          <path d="M15.5 8.5l-2 5-5 2 2-5z" />
+        </>
+      )}
+      {rang === 1 && (
+        /* Une onde sonore : le parc matériel. */
+        <path d="M4 10.5v3M7.5 8v8M11 5.5v13M14.5 8v8M18 10v4M21 11.2v1.6" />
+      )}
+      {rang === 2 && (
+        /* Un écusson coché : l'assurance. */
+        <>
+          <path d="M12 3l7 2.8v5.4c0 4.5-3 8-7 9.8-4-1.8-7-5.3-7-9.8V5.8z" />
+          <path d="M9 12l2.2 2.2L15.3 10" />
+        </>
+      )}
+    </svg>
+  )
+}
+
+/*
+ * La bande « En bref », dans le hero, sur toute la largeur : qui
+ * signe, puis les trois faits, chacun avec son pictogramme. Chaque case se
+ * lit seule.
+ */
+function EnBref() {
+  return (
+    <div className="bref" role="region" aria-label="Oysen en bref">
+      <dl className="bref__grille">
+        <div className="bref__case bref__case--signature">
+          <dt className="bref__label">Maître d’œuvre</dt>
+          <dd className="bref__signature">Oysen</dd>
+        </div>
+
+        {EN_BREF.map((fait, rang) => (
+          <div className="bref__case" key={fait.nom}>
+            <dt className="bref__nom">
+              <PictoBref rang={rang} />
+              {fait.nom}
+            </dt>
+            <dd className="bref__texte">{fait.texte}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  )
+}
+
+/** La boussole sous le plan, qui l'oriente. */
+function Boussole() {
+  return (
+    <svg
+      className="implantation__boussole"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <circle cx="12" cy="12" r="9" />
+      <path d="M15.5 8.5l-2 5-5 2 2-5z" />
+    </svg>
+  )
+}
+
+/*
+ * S3. Le plan d'implantation type : une salle dont chaque poste rejoint la
+ * régie. Le plan à gauche, sa légende à droite, poste par poste, et la
+ * régie qui la ferme.
+ */
+function Implantation() {
+  return (
+    <section className="implantation" aria-label="Plan d’implantation type">
+      <div className="implantation__inner">
+        <figure className="implantation__plan">
+          <Plan />
+
+          <figcaption className="implantation__intitule">
+            Plan d’implantation type
+            <Boussole />
+          </figcaption>
+        </figure>
+
+        <dl className="implantation__legende">
+          {[...LEGENDE, LEGENDE_REGIE].map((poste) => (
+            <div
+              className={
+                poste === LEGENDE_REGIE
+                  ? 'implantation__poste implantation__poste--regie'
+                  : 'implantation__poste'
+              }
+              key={poste.repere}
+            >
+              <dt className="implantation__repere">
+                {poste === LEGENDE_REGIE ? (
+                  <>
+                    <span className="implantation__losange" aria-hidden="true" />
+                    <span className="sr-only">Point central</span>
+                  </>
+                ) : (
+                  poste.repere
+                )}
+              </dt>
+              <dd className="implantation__texte">
+                <span className="implantation__nom">{poste.nom}</span>
+                <span className="implantation__source">{poste.source}</span>
+              </dd>
             </div>
           ))}
         </dl>
@@ -170,6 +263,7 @@ function Ouverture() {
     </section>
   )
 }
+
 
 /*
  * S2. Notre histoire. Quatre étapes dans l'ordre du temps, la seule
@@ -261,7 +355,7 @@ function Valeurs() {
         </h2>
 
         <ul className="valeurs">
-          {VALEURS.map((valeur) => (
+          {VALEURS.map((valeur, rang) => (
             <li className="valeur" key={valeur.nom}>
               {/* La lampe accrochée au pont, et son faisceau : décor. */}
               <span className="valeur__lampe" aria-hidden="true" />
@@ -269,15 +363,25 @@ function Valeurs() {
 
               <h3 className="valeur__nom">{valeur.nom}</h3>
 
-              {/* La plaque posée sous le projecteur : son arête prend la
-                  lumière qui tombe sur le mot. */}
-              <ul className="valeur__points">
-                {valeur.points.map((point) => (
-                  <li className="valeur__point" key={point}>
-                    {point}
-                  </li>
-                ))}
-              </ul>
+              {/* La plaque posée sous le projecteur, en design cards 01
+                  (app.css) : le trait du haut, la bordure du survol et la
+                  zone de survol prolongée. Le sens de l'éclairage alterne
+                  d'une plaque à l'autre. */}
+              <div
+                className={`valeur__points dc01 ${rang % 2 ? 'dc01--paire' : 'dc01--impaire'}`}
+              >
+                <span className="dc01__repere" aria-hidden="true" />
+                <span className="dc01__survol" aria-hidden="true" />
+                <span className="dc01__zone" aria-hidden="true" />
+
+                <ul className="valeur__liste">
+                  {valeur.points.map((point) => (
+                    <li className="valeur__point" key={point}>
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </li>
           ))}
         </ul>
@@ -286,14 +390,54 @@ function Valeurs() {
   )
 }
 
+/** Les pictogrammes au trait de « Notre approche ». */
+function PictoApproche({ nom }: { nom: 'boussole' | 'onde' | 'eclat' }) {
+  return (
+    <svg
+      className="approche__picto"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      focusable="false"
+    >
+      {nom === 'boussole' && (
+        <>
+          <circle cx="12" cy="12" r="9" />
+          <path d="M15.5 8.5l-2 5-5 2 2-5z" />
+        </>
+      )}
+      {nom === 'onde' && (
+        <path d="M4 10.5v3M7.5 8v8M11 5.5v13M14.5 8v8M18 10v4M21 11.2v1.6" />
+      )}
+      {nom === 'eclat' && (
+        /* Deux étincelles : l'une grande, l'autre petite. */
+        <path d="M10 3.5l1.6 4.4 4.4 1.6-4.4 1.6L10 15.5l-1.6-4.4L4 9.5l4.4-1.6zM17.5 13.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z" />
+      )}
+    </svg>
+  )
+}
+
+/** Les trois choses que le travail concilie. */
+const CONCILIER = [
+  { picto: 'boussole', label: 'Vos attentes', texte: 'ce dont vous avez besoin ;' },
+  {
+    picto: 'onde',
+    label: 'La technique',
+    texte: 'ce que la technique permet ;',
+  },
+  {
+    picto: 'eclat',
+    label: 'L’émotion',
+    texte: 'l’émotion que la journée doit produire.',
+  },
+] as const
+
 /*
- * S6. Notre approche. Trois temps, du schéma à la phrase.
+ * S6. Notre approche. Trois temps.
  *
- * D'abord ce que le travail tient ensemble : le triangle de structure, la
- * seule forme qui ne se déforme pas. Puis d'où vient la méthode : les cinq
- * réflexes du chantier, posés sur une chaîne de cotes comme sur un plan.
- * Enfin ce qu'elle produit : la maxime, et la signature, les deux métiers
- * reliés par le losange.
+ * D'abord ce que le travail concilie : trois colonnes, vos attentes, la
+ * technique, l'émotion. Puis d'où
+ * vient la méthode : les cinq réflexes du chantier. Enfin ce qu'elle
+ * produit : la maxime, et la signature des deux métiers.
  */
 function Approche() {
   return (
@@ -309,79 +453,79 @@ function Approche() {
           <span className="approche__titre-chute">un projet entier.</span>
         </h2>
 
-        <div className="approche__tenir">
-          <figure className="approche__schema">
-            <Triangle />
-          </figure>
+        <p className="approche__intro-phrase">
+          Notre travail, c’est de concilier&nbsp;:
+        </p>
 
-          <div className="approche__intro">
-            <p className="approche__intro-phrase">
-              Notre travail, c’est de concilier&nbsp;:
-            </p>
-
-            <ul className="approche__puces">
-              <li className="approche__puce">ce que vous attendez&nbsp;;</li>
-              <li className="approche__puce">ce que la technique permet&nbsp;;</li>
-              <li className="approche__puce">
-                l’émotion que la journée doit produire.
-              </li>
-            </ul>
-          </div>
-        </div>
+        <ul className="concilier">
+          {CONCILIER.map((pole) => (
+            <li className="concilier__pole" key={pole.label}>
+              <PictoApproche nom={pole.picto} />
+              <span className="concilier__label">{pole.label}</span>
+              <span className="concilier__texte">{pole.texte}</span>
+            </li>
+          ))}
+        </ul>
 
         <div className="approche__methode">
-          <h3 className="approche__sous-titre">
-            Une méthode transposée
-          </h3>
+          <div className="approche__methode-texte">
+            <h3 className="approche__sous-titre">Une méthode transposée</h3>
 
-          <p className="approche__texte">
-            Notre fondateur est ingénieur. Sur un chantier, on apprend cinq
-            réflexes&nbsp;:
-          </p>
+            <p className="approche__texte">
+              Notre fondateur est ingénieur. Sur un chantier, on apprend cinq
+              réflexes&nbsp;:
+            </p>
 
-          {/* La chaîne de cotes : une mesure, cinq segments. */}
+            <p className="approche__applique">
+              Nous les appliquons à vos événements.
+            </p>
+          </div>
+
           <ul className="reflexes">
             {REFLEXES.map((reflexe) => (
               <li className="reflexe" key={reflexe.verbe}>
+                <svg
+                  className="reflexe__fleche"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path d="M7 17L17 7M9 7h8v8" />
+                </svg>
                 <span className="reflexe__verbe">{reflexe.verbe}</span>{' '}
                 <span className="reflexe__suite">{reflexe.suite}</span>
               </li>
             ))}
           </ul>
-
-          <p className="approche__texte">
-            Nous les appliquons à vos événements.
-          </p>
         </div>
 
-        <p className="approche__maxime">
-          La rigueur n’est pas l’inverse de l’émotion.{' '}
-          <span className="approche__maxime-chute">
-            Elle en est la condition.
-          </span>
-        </p>
+        <div className="approche__conclusion">
+          <div className="approche__maxime-bloc">
+            <PictoApproche nom="eclat" />
 
-        <p className="approche__marque">
-          Un événement qui marque, c’est un événement où tout se passe
-          comme prévu.
-        </p>
+            <p className="approche__maxime">
+              La rigueur n’est pas l’inverse de l’émotion.{' '}
+              <span className="approche__maxime-chute">
+                Elle en est la condition.
+              </span>
+            </p>
 
-        {/*
-          La signature : les deux métiers, reliés par un trait et le losange
-          plutôt que par un tiret. Les lecteurs d'écran lisent la phrase.
-        */}
-        <p className="approche__signature">
-          <span className="approche__metiers">
-            <span className="approche__metier">Conception</span>
-            <span className="sr-only">, </span>
-            <span className="approche__lien" aria-hidden="true" />
-            <span className="approche__metier">Réalisation</span>
-            <span className="sr-only">. </span>
-          </span>
-          <span className="approche__devise">
-            Deux métiers, une expertise.
-          </span>
-        </p>
+            <p className="approche__marque">
+              Un événement qui marque, c’est un événement où tout se passe
+              comme prévu.
+            </p>
+          </div>
+
+          <p className="approche__signature">
+            <span className="approche__metier">Conception,</span>{' '}
+            <span className="approche__metier approche__metier--chute">
+              Réalisation.
+            </span>{' '}
+            <span className="approche__devise">
+              Deux métiers, une expertise.
+            </span>
+          </p>
+        </div>
       </div>
     </section>
   )
@@ -441,12 +585,12 @@ function Fondateur() {
             qui a donné à Oysen sa méthode.
           </p>
 
-          <a
+          <Lien
             className="btn btn--ghost fondateur__lien"
             href="/qui-sommes-nous/le-fondateur"
           >
             En savoir plus sur notre fondateur
-          </a>
+          </Lien>
         </div>
       </div>
     </section>
@@ -474,17 +618,17 @@ function Sortie() {
         </p>
 
         <div className="agence__actions">
-          <a className="btn btn--solid" href="/nos-services">
+          <Lien className="btn btn--solid" href="/nos-services">
             Voir nos services
-          </a>
+          </Lien>
         </div>
 
         <div className="agence__direct">
           <p className="agence__direct-texte">Ou contactez-nous directement</p>
 
-          <a className="btn btn--ghost" href="/contact">
+          <Lien className="btn btn--ghost" href="/contact">
             Imaginer mon événement
-          </a>
+          </Lien>
         </div>
       </div>
     </section>

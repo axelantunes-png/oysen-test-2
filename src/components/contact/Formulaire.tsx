@@ -15,6 +15,7 @@ import {
 } from './content'
 import type { Besoin, Profil, Question } from './content'
 import { Depot } from './Depot'
+import { Lien } from '../Lien'
 
 /*
  * Le formulaire de contact, en trois étapes.
@@ -623,9 +624,9 @@ export function Formulaire() {
             <p className="champ__aide champ__aide--case" id="cf-consentement-aide">
               Vos informations ne sont ni revendues ni utilisées pour de la
               prospection.{' '}
-              <a className="formulaire__lien" href="/confidentialite">
+              <Lien className="formulaire__lien" href="/confidentialite">
                 Politique de confidentialité
-              </a>
+              </Lien>
             </p>
             <ZoneErreur cle="consentement" erreur={erreurs.consentement} />
           </div>

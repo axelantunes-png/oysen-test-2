@@ -1,15 +1,26 @@
-import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
+import {
+  HeadContent,
+  Scripts,
+  createRootRoute,
+  useRouterState,
+} from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 
 import { useApparition } from '../components/apparition'
 import { Footer } from '../components/Footer'
 import { Navbar } from '../components/Navbar'
-import { IntroCurtain, RIDEAU_SCRIPT } from '../components/Rideau'
+import { Popups } from '../components/popup/Popups'
+import {
+  IntroCurtain,
+  RIDEAU_SCRIPT,
+  useRideauApresNavigation,
+} from '../components/Rideau'
 
 import appCss from '../styles/app.css?url'
 import footerCss from '../styles/footer.css?url'
 import homeCss from '../styles/home.css?url'
 import navbarCss from '../styles/navbar.css?url'
+import popupCss from '../styles/popup.css?url'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -26,6 +37,8 @@ export const Route = createRootRoute({
       { rel: 'stylesheet', href: navbarCss },
       { rel: 'stylesheet', href: homeCss },
       { rel: 'stylesheet', href: footerCss },
+      /* Les popups du CMS : sur toutes les pages, et dans l'aperçu du CMS. */
+      { rel: 'stylesheet', href: popupCss },
       { rel: 'icon', href: '/logo-oysen-provisoire.jpeg' },
       // Montserrat, hébergée avec le site (déclarée dans app.css) : la
       // police de toutes les pages, préchargée pour arriver avec le HTML.
@@ -44,8 +57,21 @@ export const Route = createRootRoute({
 })
 
 function RootDocument({ children }: { children: ReactNode }) {
-  /* Les blocs montent d'un souffle en entrant dans l'écran, sur tout le site. */
-  useApparition()
+  /*
+   * Les blocs montent d'un souffle en entrant dans l'écran, sur tout le site.
+   * La page affichée, une fois chargée : l'apparition reprend à chacune.
+   */
+  useApparition(
+    useRouterState({ select: (state) => state.resolvedLocation?.pathname }),
+  )
+
+  /* Le rideau ne se joue qu'à l'arrivée : les pages suivantes n'attendent rien. */
+  useRideauApresNavigation()
+
+  /* L'administration se tient hors du site : ni menu, ni pied de page, ni rideau. */
+  const admin = useRouterState({
+    select: (state) => state.location.pathname.startsWith('/admin-prive'),
+  })
 
   return (
     /*
@@ -60,11 +86,13 @@ function RootDocument({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <Navbar />
+        {admin ? null : <Navbar />}
         {children}
-        <Footer />
+        {admin ? null : <Footer />}
         {/* Sur toutes les pages, joué seulement à l'arrivée sur le site. */}
-        <IntroCurtain />
+        {admin ? null : <IntroCurtain />}
+        {/* Les popups promotionnels, gérés dans le CMS. */}
+        {admin ? null : <Popups />}
         <Scripts />
       </body>
     </html>

@@ -2,6 +2,7 @@ import type { CSSProperties } from 'react'
 
 import { TRI } from './content'
 import { Arrow } from './icons'
+import { Lien } from '../Lien'
 
 /**
  * S2 — La barre de tri, cœur de la page.
@@ -46,7 +47,7 @@ export function Tri() {
         <ul className="tri">
           {TRI.map((entry, rang) => (
             <li key={entry.href}>
-              <a className="tri__link" href={entry.href}>
+              <Lien className="tri__link" href={entry.href}>
                 {entry.photo ? (
                   <span
                     className="tri__media"
@@ -86,7 +87,7 @@ export function Tri() {
                     <Arrow className="tri__arrow" />
                   </span>
                 </span>
-              </a>
+              </Lien>
             </li>
           ))}
         </ul>

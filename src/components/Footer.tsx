@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 import { NAV } from './Navbar'
+import { Lien } from './Lien'
 import {
   DEPARTEMENTS,
   PHONE_DISPLAY,
@@ -25,6 +26,8 @@ const AGENCE = [
 const LEGAL = [
   { label: 'Mentions légales', href: '/mentions-legales' },
   { label: 'Politique de confidentialité', href: '/confidentialite' },
+  /* PROVISOIRE : à retirer, l'administration ne doit s'ouvrir que par son adresse. */
+  { label: 'Admin', href: '/admin-prive' },
 ]
 
 const INSTAGRAM = 'https://www.instagram.com/oysen.events/'
@@ -150,9 +153,9 @@ export function Footer() {
           <ul className="footer__list footer__list--deux">
             {SERVICES.map((item) => (
               <li key={item.href}>
-                <a className="footer__link" href={item.href}>
+                <Lien className="footer__link" href={item.href}>
                   {item.label}
-                </a>
+                </Lien>
               </li>
             ))}
           </ul>
@@ -163,9 +166,9 @@ export function Footer() {
           <ul className="footer__list">
             {AGENCE.map((item) => (
               <li key={item.href}>
-                <a className="footer__link" href={item.href}>
+                <Lien className="footer__link" href={item.href}>
                   {item.label}
-                </a>
+                </Lien>
               </li>
             ))}
           </ul>
@@ -175,9 +178,9 @@ export function Footer() {
           <h2 className="footer__title">Contact</h2>
           <ul className="footer__list">
             <li>
-              <a className="footer__link" href="/contact">
+              <Lien className="footer__link" href="/contact">
                 Nous écrire
-              </a>
+              </Lien>
             </li>
             <li>
               {/* aria-live : le lecteur d'écran annonce le numéro qui remplace le bouton. */}
@@ -256,9 +259,9 @@ export function Footer() {
         <ul className="footer__legal">
           {LEGAL.map((item) => (
             <li key={item.href}>
-              <a className="footer__link" href={item.href}>
+              <Lien className="footer__link" href={item.href}>
                 {item.label}
-              </a>
+              </Lien>
             </li>
           ))}
         </ul>

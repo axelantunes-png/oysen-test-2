@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import type { CSSProperties, ReactNode } from 'react'
 
 import { Arrow } from '../../components/home/icons'
+import { Lien } from '../../components/Lien'
 
 /*
  * Chemin depuis la racine du projet, et non relatif : sur une route imbriquée,
@@ -28,14 +29,16 @@ export const Route = createFileRoute('/qui-sommes-nous/le-fondateur')({
 })
 
 /*
- * Le portrait détouré : la tête et le buste seuls, sur fond transparent
- * (PNG ou WebP avec transparence), coupé net sous les épaules. Tant qu'il
- * vaut null, une silhouette tient sa place, éclairée de la même façon.
+ * Le portrait détouré, sur fond transparent (WebP avec transparence),
+ * coupé à mi-cuisses. Tant qu'il vaut null, une silhouette tient sa place.
  *
- * Pour le poser : déposer le fichier dans public/images/ et indiquer son
- * chemin ici, par exemple '/images/fondateur-detoure.webp'.
+ * EXEMPLE, À REMPLACER par le vrai portrait du fondateur : exporter le
+ * nouveau fichier aux mêmes noms (600 et 900 px de large) dans
+ * public/images/fondateur/, rien d'autre à changer.
  */
-const PORTRAIT: string | null = null
+const PORTRAIT: string | null = '/images/fondateur/fondateur-portrait-900.webp'
+const PORTRAIT_SRCSET =
+  '/images/fondateur/fondateur-portrait-600.webp 600w, /images/fondateur/fondateur-portrait-900.webp 900w'
 
 /**
  * La page « Le fondateur ».
@@ -70,16 +73,19 @@ function Fondateur() {
 function Ouverture() {
   return (
     <section className="fondateur-hero" aria-labelledby="fondateur-title">
-      {/* Les deux mondes, en fond : la trame du plan, les projecteurs. */}
+      {/* La salle en fond, la scène éclairée à droite, derrière le
+          fondateur ; la gauche reste dans l'ombre, sous le texte. */}
       <div className="fondateur-hero__decor" aria-hidden="true">
-        <span className="fondateur-hero__plan" />
-        {/* Trois projecteurs depuis le haut droit sur ordinateur ; ceux de
-            l'accueil sur téléphone ; deux seulement sur tablette. */}
-        <span className="fondateur-hero__projecteurs">
-          <i />
-          <i />
-          <i />
-        </span>
+        <img
+          className="fondateur-hero__fond"
+          src="/images/fondateur/fondateur-fond-1536.webp"
+          srcSet="/images/fondateur/fondateur-fond-960.webp 960w, /images/fondateur/fondateur-fond-1536.webp 1536w"
+          sizes="100vw"
+          width={1536}
+          height={1024}
+          alt=""
+          decoding="async"
+        />
       </div>
 
       <div className="fondateur-hero__scene">
@@ -110,6 +116,10 @@ function Ouverture() {
             <img
               className="fondateur-hero__corps"
               src={PORTRAIT}
+              srcSet={PORTRAIT_SRCSET}
+              sizes="(max-width: 760px) 72vw, 34rem"
+              width={900}
+              height={1350}
               alt="Portrait de Mathis Amato"
               decoding="async"
             />
@@ -161,14 +171,25 @@ function Tete({
   titre,
   id,
   children,
+  carte = false,
 }: {
   surtitre: string
   titre: string
   id: string
   children?: ReactNode
+  /* Les calques du design cards 01, pour une tête posée en carte sur
+     téléphone (fondateur.css) ; masqués ailleurs. */
+  carte?: boolean
 }) {
   return (
     <div className="fondateur-tete">
+      {carte ? (
+        <>
+          <span className="dc01__repere" aria-hidden="true" />
+          <span className="dc01__survol" aria-hidden="true" />
+          <span className="dc01__zone" aria-hidden="true" />
+        </>
+      ) : null}
       <div className="fondateur-tete__titres">
         <p className="section__eyebrow">{surtitre}</p>
         <h2 className="section__title" id={id}>
@@ -206,14 +227,17 @@ function Introduction() {
             10&nbsp;ans.
           </p>
 
-          <p className="intro-fondateur__texte">
-            Aujourd’hui, je suis ingénieur travaux dans le bâtiment et
-            fondateur d’Oysen.
-            <br />
-            J’utilise mon expérience en organisation événementielle et mon
-            expertise en tant qu’ingénieur comme moteur pour faire d’Oysen
-            une référence en matière d’agence événementielle.
-          </p>
+          <div className="intro-fondateur__texte">
+            <p className="intro-fondateur__chapeau">
+              Aujourd’hui, je suis ingénieur travaux dans le bâtiment et
+              fondateur d’Oysen.
+            </p>
+            <p>
+              J’utilise mon expérience en organisation événementielle et mon
+              expertise en tant qu’ingénieur comme moteur pour faire d’Oysen
+              une référence en matière d’agence événementielle.
+            </p>
+          </div>
         </div>
 
         <ul className="reperes">
@@ -287,7 +311,7 @@ function Parcours() {
       aria-labelledby="parcours-title"
     >
       <div className="section__inner">
-        <Tete surtitre="Parcours" titre="Formation et parcours" id="parcours-title" />
+        <Tete surtitre="Parcours" titre="Formation et parcours" id="parcours-title" carte />
 
         <ol className="frise">
           {ETAPES.map((etape, index) => (
@@ -368,7 +392,13 @@ function Savoirs() {
 
         <ul className="savoirs">
           {SAVOIRS.map((savoir) => (
-            <li className="savoir" key={savoir.titre}>
+            <li className="savoir dc01" key={savoir.titre}>
+              {/* Design cards 01 (app.css) : le trait du haut, la bordure
+                  du survol et la zone de survol prolongée. */}
+              <span className="dc01__repere" aria-hidden="true" />
+              <span className="dc01__survol" aria-hidden="true" />
+              <span className="dc01__zone" aria-hidden="true" />
+
               <div className="savoir__tete">
                 <span className="savoir__poste">{savoir.poste}</span>
                 <svg
@@ -438,14 +468,22 @@ function Marquant() {
           titre="Un événement qui m’a marqué"
           id="marquant-title"
         >
-          <dl className="fiche">
-            {FICHE.map((ligne) => (
-              <div className="fiche__case" key={ligne.label}>
-                <dt>{ligne.label}</dt>
-                <dd>{ligne.valeur}</dd>
-              </div>
-            ))}
-          </dl>
+          {/* La fiche, en design cards 01 (app.css) : la carte porte les
+              calques, la liste de définitions reste à l'intérieur. */}
+          <div className="fiche dc01 dc01--impaire">
+            <span className="dc01__repere" aria-hidden="true" />
+            <span className="dc01__survol" aria-hidden="true" />
+            <span className="dc01__zone" aria-hidden="true" />
+
+            <dl className="fiche__grille">
+              {FICHE.map((ligne) => (
+                <div className="fiche__case" key={ligne.label}>
+                  <dt>{ligne.label}</dt>
+                  <dd>{ligne.valeur}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
         </Tete>
 
         <div className="temps">
@@ -457,10 +495,10 @@ function Marquant() {
           ))}
         </div>
 
-        <a className="lien-fleche marquant__lien" href="/nos-souvenirs">
+        <Lien className="lien-fleche marquant__lien" href="/nos-souvenirs">
           D’autres événements dans Nos souvenirs
           <Arrow className="lien-fleche__icone" />
-        </a>
+        </Lien>
       </div>
     </section>
   )
@@ -503,7 +541,7 @@ function Articles() {
         <ul className="articles">
           {ARTICLES.map((article) => (
             <li key={article.titre}>
-              <a className="article" href="/blog">
+              <Lien className="article" href="/blog">
                 <span className="article__date">{article.date}</span>
                 <span className="article__titre">{article.titre}</span>
                 <span className="article__extrait">{article.extrait}</span>
@@ -511,17 +549,17 @@ function Articles() {
                   Lire l’article
                   <Arrow className="article__fleche" />
                 </span>
-              </a>
+              </Lien>
             </li>
           ))}
         </ul>
 
         {/* Le lien vers tout le blog, centré sous les cartes. */}
         <p className="articles__tous">
-          <a className="lien-fleche" href="/blog">
+          <Lien className="lien-fleche" href="/blog">
             Tous les articles
             <Arrow className="lien-fleche__icone" />
-          </a>
+          </Lien>
         </p>
       </div>
     </section>
@@ -549,9 +587,9 @@ function Appel() {
         </p>
 
         <div className="fondateur-sortie__actions">
-          <a className="btn btn--solid" href="/nos-services">
+          <Lien className="btn btn--solid" href="/nos-services">
             Voir nos services
-          </a>
+          </Lien>
         </div>
 
         <div className="fondateur-sortie__direct">
@@ -559,9 +597,9 @@ function Appel() {
             Ou contactez-nous directement
           </p>
 
-          <a className="btn btn--ghost" href="/contact">
+          <Lien className="btn btn--ghost" href="/contact">
             Imaginer mon événement
-          </a>
+          </Lien>
         </div>
       </div>
     </section>

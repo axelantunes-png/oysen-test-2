@@ -1,0 +1,2458 @@
+/* ============================================================
+   CMS : le cadre, la liste des popups, l'éditeur et son
+   constructeur de grille. Les champs de connexion sont dans
+   admin.css, le rendu des popups dans popup.css.
+   ============================================================ */
+
+/* ---- Le cadre ---- */
+
+.cms {
+  min-height: 100vh;
+  background-color: var(--night);
+}
+
+.cms__barre {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 0.85rem 1.5rem;
+  background-color: #121015;
+  border-bottom: 1px solid var(--night-veil);
+}
+
+.cms__logo {
+  width: 5.5rem;
+  height: auto;
+}
+
+.cms__nav {
+  display: flex;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.cms__lien {
+  padding: 0.55rem 0.9rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--dusk);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+}
+
+.cms__lien:focus-visible {
+  color: #ffffff;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cms__lien:hover {
+    color: #ffffff;
+  }
+}
+
+.cms__lien--actif {
+  color: #ffffff;
+  border-bottom-color: var(--beam);
+}
+
+.cms__sortie {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.5rem;
+  padding: 0 1rem;
+  box-sizing: border-box;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--dawn);
+  background-color: var(--night);
+  border: 1px solid color-mix(in srgb, var(--beam) 18%, transparent);
+  border-radius: 0.6rem;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.cms__sortie:focus-visible {
+  color: #ffffff;
+  border-color: color-mix(in srgb, var(--beam) 50%, transparent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cms__sortie:hover {
+    color: #ffffff;
+    border-color: color-mix(in srgb, var(--beam) 50%, transparent);
+  }
+}
+
+/* « Retour au site », un lien vêtu en bouton, collé à « Se déconnecter ». */
+.cms__site {
+  margin-right: -1.25rem;
+  text-decoration: none;
+}
+
+.cms__lien:focus-visible,
+.cms__sortie:focus-visible {
+  outline: 2px solid var(--beam);
+  outline-offset: 2px;
+}
+
+.cms__contenu {
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* L'accueil : le grand titre au centre de l'écran. */
+.cms-accueil {
+  display: grid;
+  place-items: center;
+  min-height: calc(100vh - 12rem);
+}
+
+/* ---- Une page du CMS ---- */
+
+.cms-page {
+  max-width: 90rem;
+  margin: 0 auto;
+}
+
+.cms-page__tete {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  margin-bottom: 1.75rem;
+}
+
+.cms-page__titre {
+  margin: 0;
+  font-size: clamp(1.75rem, 3vw, 2.4rem);
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.cms-page__intro {
+  margin: 0.4rem 0 0;
+  color: var(--dusk);
+}
+
+.cms-page__actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.cms-retour {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--beam);
+  text-decoration: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cms-retour:hover {
+    color: #ffffff;
+  }
+}
+
+.cms-etat {
+  font-size: 0.875rem;
+  color: var(--dusk);
+}
+
+.cms-texte {
+  color: var(--dusk);
+}
+
+.cms-aide {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--dusk);
+}
+
+/* ---- Les alertes : erreur (violet) ou information (lavande) ---- */
+
+.cms-alerte {
+  margin: 0 0 1.5rem;
+  padding: 0.9rem 1.1rem;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--dawn);
+  border-left: 2px solid var(--oysen-purple-lit);
+  background-color: color-mix(in srgb, var(--oysen-purple) 22%, transparent);
+}
+
+.cms-alerte--info {
+  border-left-color: var(--beam);
+  background-color: color-mix(in srgb, var(--beam) 8%, transparent);
+}
+
+.cms-alerte__titre {
+  margin: 0 0 0.35rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.cms-alerte ul {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+/* ---- Les boutons secondaires ---- */
+
+.cms-bouton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.55rem 1rem;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--dawn);
+  text-decoration: none;
+  background: none;
+  border: 1px solid var(--night-veil);
+  cursor: pointer;
+}
+
+.cms-bouton:focus-visible {
+  color: #ffffff;
+  border-color: var(--beam);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cms-bouton:hover {
+    color: #ffffff;
+    border-color: var(--beam);
+  }
+}
+
+.cms-bouton:focus-visible {
+  outline: 2px solid var(--beam);
+  outline-offset: 2px;
+}
+
+.cms-bouton--discret {
+  justify-self: start;
+  color: var(--dusk);
+  border-color: transparent;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+/* Supprimer : le violet de la charte, pour l'action sans retour. */
+.cms-bouton--danger {
+  border-color: var(--oysen-purple-lit);
+}
+
+.cms-bouton--danger:focus-visible {
+  background-color: color-mix(in srgb, var(--oysen-purple) 35%, transparent);
+  border-color: var(--beam);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cms-bouton--danger:hover {
+    background-color: color-mix(in srgb, var(--oysen-purple) 35%, transparent);
+    border-color: var(--beam);
+  }
+}
+
+/* ---- L'interrupteur actif / inactif ---- */
+
+.interrupteur {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.25rem;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--dusk);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.interrupteur__piste {
+  position: relative;
+  width: 2.6rem;
+  height: 1.4rem;
+  background-color: var(--night);
+  border: 1px solid var(--night-veil);
+  border-radius: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.interrupteur__curseur {
+  position: absolute;
+  top: 0.15rem;
+  left: 0.15rem;
+  width: 1rem;
+  height: 1rem;
+  background-color: var(--dusk);
+  border-radius: 50%;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.interrupteur--actif {
+  color: var(--beam);
+}
+
+.interrupteur--actif .interrupteur__piste {
+  background-color: var(--charte-violet);
+  border-color: var(--beam);
+}
+
+.interrupteur--actif .interrupteur__curseur {
+  background-color: #ffffff;
+  transform: translateX(1.2rem);
+}
+
+.interrupteur:focus-visible {
+  outline: 2px solid var(--beam);
+  outline-offset: 2px;
+}
+
+/* ---- La liste des popups ---- */
+
+.icone {
+  flex: none;
+  width: 1em;
+  height: 1em;
+}
+
+/* Le bouton « Nouveau popup » : arrondi, comme le reste du CMS. */
+.btn.liste-nouveau {
+  gap: 0.55rem;
+  padding: 0.8rem 1.4rem;
+  border-radius: 0.6rem;
+}
+
+.liste-nouveau .icone {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+/* Les filtres : Tous, En ligne, Programmés, Brouillons, Terminés. */
+.filtres {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  max-width: 100%;
+  margin-bottom: 1.5rem;
+  padding: 0.3rem;
+  background-color: color-mix(in srgb, var(--beam) 3%, var(--night));
+  border: 1px solid color-mix(in srgb, var(--beam) 12%, transparent);
+  border-radius: 0.75rem;
+}
+
+.filtres__bouton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.65rem 0.95rem;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--dusk);
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 0.55rem;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .filtres__bouton:not(.filtres__bouton--actif):hover {
+    color: var(--dawn);
+  }
+}
+
+.filtres__bouton:focus-visible {
+  outline: 2px solid var(--beam);
+  outline-offset: 1px;
+}
+
+.filtres__bouton--actif {
+  color: #ffffff;
+  background-color: color-mix(in srgb, var(--beam) 10%, var(--night-raised));
+  border-color: color-mix(in srgb, var(--beam) 18%, transparent);
+}
+
+.filtres__nombre {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.55rem;
+  height: 1.55rem;
+  padding: 0 0.4rem;
+  box-sizing: border-box;
+  font-size: 0.857rem;
+  font-weight: 700;
+  color: var(--dawn);
+  background-color: color-mix(in srgb, var(--beam) 12%, transparent);
+  border-radius: 999px;
+}
+
+/* Une fiche par popup. */
+.fiches {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fiche {
+  display: grid;
+  gap: 1rem;
+  padding: 1.1rem 1.25rem;
+  background-color: var(--night-raised);
+  border: 1px solid color-mix(in srgb, var(--beam) 12%, transparent);
+  border-radius: 1rem;
+}
+
+.fiche__ligne {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 1.5rem;
+}
+
+.fiche__principal {
+  display: grid;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.fiche__nom {
+  font-size: 1.214rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .fiche__nom:hover {
+    color: var(--beam);
+  }
+}
+
+.fiche__nom:focus-visible {
+  outline: 2px solid var(--beam);
+  outline-offset: 2px;
+}
+
+/* Un popup terminé s'efface d'un cran. */
+.fiche--termine .fiche__nom {
+  color: var(--dusk);
+}
+
+.fiche__infos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fiche__infos li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.929rem;
+  color: var(--dusk);
+}
+
+.fiche__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.6rem;
+}
+
+.fiche__bouton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.95rem;
+  padding: 0 1.15rem;
+  box-sizing: border-box;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-decoration: none;
+  background-color: var(--night);
+  border: 1px solid color-mix(in srgb, var(--beam) 18%, transparent);
+  border-radius: 0.6rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .fiche__bouton:hover {
+    border-color: color-mix(in srgb, var(--beam) 50%, transparent);
+  }
+}
+
+.fiche__bouton:focus-visible {
+  outline: 2px solid var(--beam);
+  outline-offset: 2px;
+}
+
+.fiche__bouton--icone {
+  width: 2.95rem;
+  padding: 0;
+  color: var(--dawn);
+}
+
+.fiche__bouton--icone .icone {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+/* L'interrupteur d'une fiche, à la même échelle que ses voisins. */
+.fiche .interrupteur {
+  font-size: 1rem;
+}
+
+/* Les puces de statut : le point porte la couleur, le texte reste dans la DA. */
+.puce {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-width: 7.15rem;
+  justify-content: center;
+  padding: 0.45rem 0.95rem;
+  box-sizing: border-box;
+  font-size: 0.857rem;
+  font-weight: 700;
+  color: var(--dusk);
+  background-color: color-mix(in srgb, var(--dusk) 12%, transparent);
+  border-radius: 999px;
+}
+
+.puce::before {
+  content: '';
+  width: 0.45rem;
+  height: 0.45rem;
+  background-color: currentColor;
+  border-radius: 50%;
+}
+
+.puce--en-ligne {
+  color: var(--dawn);
+  background-color: rgba(74, 222, 128, 0.12);
+}
+
+.puce--en-ligne::before {
+  background-color: #4ade80;
+}
+
+.puce--programme {
+  color: var(--beam);
+  background-color: color-mix(in srgb, var(--beam) 14%, transparent);
+}
+
+/* Le bandeau des popups qui s'afficheront ensemble. */
+.bandeau {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  padding: 0.75rem 1rem;
+  background-color: rgba(245, 180, 60, 0.08);
+  border: 1px solid rgba(245, 180, 60, 0.35);
+  border-radius: 0.6rem;
+}
+
+.bandeau .icone {
+  width: 1.05rem;
+  height: 1.05rem;
+  color: #f5b43c;
+}
+
+.bandeau__texte {
+  flex: 1 1 20rem;
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--dawn);
+}
+
+.bandeau__lien {
+  padding: 0;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--beam);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .bandeau__lien:hover {
+    color: #ffffff;
+  }
+}
+
+.bandeau__lien:focus-visible {
+  outline: 2px solid var(--beam);
+  outline-offset: 2px;
+}
+
+/* ---- Le tableau de bord sur téléphone ----
+   Sous 40 rem seulement : la barre du CMS, la liste des popups et ses
+   fiches, resserrées à l'échelle d'un écran de téléphone. L'ordinateur ne
+   change pas. */
+
+@media (max-width: 40rem) {
+  /* La barre : logo et boutons de sortie en haut, les rubriques dessous. */
+  .cms__barre {
+    flex-wrap: wrap;
+    gap: 0.5rem 0.75rem;
+    padding: 0.6rem 1rem 0.3rem;
+  }
+
+  .cms__logo {
+    width: 4.25rem;
+    margin-right: auto;
+  }
+
+  .cms__nav {
+    order: 3;
+    flex: 1 1 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .cms__lien {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8125rem;
+    white-space: nowrap;
+  }
+
+  .cms__sortie {
+    min-height: 2rem;
+    padding: 0 0.65rem;
+    font-size: 0.75rem;
+  }
+
+  .cms__site {
+    margin-right: -0.35rem;
+  }
+
+  .cms__contenu {
+    padding: 1.25rem 1rem 3rem;
+  }
+
+  /* L'en-tête de la page. */
+  .cms-page__tete {
+    align-items: flex-start;
+    gap: 0.85rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .cms-page__titre {
+    font-size: 1.5rem;
+  }
+
+  .cms-page__intro {
+    margin-top: 0.25rem;
+    font-size: 0.8125rem;
+    line-height: 1.45;
+  }
+
+  .btn.liste-nouveau {
+    gap: 0.4rem;
+    min-height: 0;
+    padding: 0.6rem 0.95rem;
+    font-size: 0.8125rem;
+  }
+
+  .liste-nouveau .icone {
+    width: 0.9rem;
+    height: 0.9rem;
+  }
+
+  /* Les filtres sur une seule ligne, qui défile sur le côté (barre de défilement visible). */
+  .filtres {
+    display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 1rem;
+    padding: 0.2rem 0.2rem 0.45rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x pan-y;
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--beam) 45%, transparent) transparent;
+    border-radius: 0.65rem;
+  }
+
+  .filtres::-webkit-scrollbar {
+    height: 0.25rem;
+  }
+
+  .filtres::-webkit-scrollbar-thumb {
+    background-color: color-mix(in srgb, var(--beam) 45%, transparent);
+    border-radius: 999px;
+  }
+
+  .filtres::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .cms__nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filtres__bouton {
+    flex: none;
+    gap: 0.35rem;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8125rem;
+    border-radius: 0.45rem;
+  }
+
+  .filtres__nombre {
+    min-width: 1.2rem;
+    height: 1.2rem;
+    padding: 0 0.3rem;
+    font-size: 0.6875rem;
+  }
+
+  /* Les fiches. */
+  .fiches {
+    gap: 0.6rem;
+  }
+
+  .fiche {
+    gap: 0.7rem;
+    padding: 0.85rem 0.9rem;
+    border-radius: 0.85rem;
+  }
+
+  .fiche__ligne {
+    gap: 0.7rem;
+  }
+
+  .fiche__principal {
+    gap: 0.35rem;
+  }
+
+  .fiche__nom {
+    font-size: 1rem;
+    line-height: 1.3;
+  }
+
+  .fiche__infos {
+    gap: 0.2rem 0.9rem;
+  }
+
+  .fiche__infos li {
+    gap: 0.35rem;
+    font-size: 0.75rem;
+  }
+
+  /* Le statut à gauche, les actions à droite, sur toute la largeur. */
+  .fiche__actions {
+    flex: 1 1 100%;
+    justify-content: flex-start;
+    gap: 0.4rem;
+  }
+
+  .fiche__actions .puce {
+    margin-right: auto;
+  }
+
+  .puce {
+    min-width: 0;
+    gap: 0.35rem;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.6875rem;
+  }
+
+  .puce::before {
+    width: 0.375rem;
+    height: 0.375rem;
+  }
+
+  .fiche .interrupteur {
+    gap: 0.4rem;
+    font-size: 0.75rem;
+  }
+
+  .fiche .interrupteur__piste {
+    width: 2.2rem;
+    height: 1.2rem;
+  }
+
+  .fiche .interrupteur__curseur {
+    width: 0.85rem;
+    height: 0.85rem;
+  }
+
+  .fiche .interrupteur--actif .interrupteur__curseur {
+    transform: translateX(1rem);
+  }
+
+  .fiche__bouton {
+    min-height: 2.25rem;
+    padding: 0 0.75rem;
+    font-size: 0.8125rem;
+    border-radius: 0.5rem;
+  }
+
+  .fiche__bouton--icone {
+    width: 2.25rem;
+    padding: 0;
+  }
+
+  .fiche__bouton--icone .icone {
+    width: 0.95rem;
+    height: 0.95rem;
+  }
+
+  /* Le bandeau des popups qui s'afficheront ensemble. */
+  .bandeau {
+    gap: 0.4rem 0.5rem;
+    padding: 0.6rem 0.75rem;
+    border-radius: 0.5rem;
+  }
+
+  .bandeau .icone {
+    width: 0.9rem;
+    height: 0.9rem;
+  }
+
+  .bandeau__texte {
+    flex-basis: calc(100% - 1.5rem);
+    font-size: 0.75rem;
+  }
+
+  .bandeau__lien {
+    font-size: 0.75rem;
+  }
+}
+
+/* ---- L'éditeur : réglages à gauche, aperçu au centre, bloc choisi à droite ---- */
+
+/* L'éditeur prend la largeur qu'il faut à ses trois colonnes. */
+.cms-page--large {
+  max-width: 125rem;
+}
+
+.editeur {
+  display: grid;
+  grid-template-columns: minmax(20rem, 25rem) minmax(0, 1fr) minmax(18rem, 22rem);
+  grid-template-areas: 'reglages apercu inspecteur';
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.editeur__reglages {
+  grid-area: reglages;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.editeur__apercu {
+  grid-area: apercu;
+  position: sticky;
+  top: 5.5rem;
+  min-width: 0;
+}
+
+.editeur__inspecteur {
+  grid-area: inspecteur;
+  position: sticky;
+  top: 5.5rem;
+  max-height: calc(100vh - 7rem);
+  overflow-y: auto;
+}
+
+.editeur__apercu-tete {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.editeur__apercu-titre {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dusk);
+}
+
+/* Les outils de l'aperçu : le rendu sans la grille, et Tout vider. */
+.editeur__apercu-outils {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+/* Retirer tous les blocs, en gardant la taille de l'encart. */
+.editeur__vider {
+  min-height: 2.2rem;
+  padding: 0 0.9rem;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--dawn);
+  background-color: var(--night);
+  border: 1px solid color-mix(in srgb, var(--beam) 18%, transparent);
+  border-radius: 0.6rem;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .editeur__vider:hover {
+    color: #ffffff;
+    border-color: color-mix(in srgb, var(--beam) 50%, transparent);
+  }
+}
+
+.editeur__vider[aria-pressed='true'] {
+  color: #ffffff;
+  background-color: color-mix(in srgb, var(--beam) 22%, var(--night));
+  border-color: var(--beam);
+}
+
+.editeur__vider:focus-visible {
+  outline: 2px solid var(--beam);
+  outline-offset: 2px;
+}
+
+/* Le popup sur le voile du site, comme le verra le visiteur. */
+.apercu {
+  display: flex;
+  justify-content: center;
+  max-height: calc(100vh - 9rem);
+  overflow: auto;
+  padding: 2rem 1rem;
+  background-color: rgba(7, 3, 11, 0.72);
+  border: 1px solid var(--night-veil);
+}
+
+/* Avec la grille : de la place au-dessus des blocs pour leurs outils. */
+.apercu--edition {
+  align-items: flex-start;
+  min-height: 28rem;
+  padding: 3rem 1.75rem;
+  border-color: color-mix(in srgb, var(--beam) 12%, transparent);
+  border-radius: 1rem;
+}
+
+.editeur__danger {
+  padding-top: 0.5rem;
+}
+
+/* ---- Les deux onglets : Contenu, puis Diffusion ---- */
+
+.editeur__onglets {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background-color: var(--night-raised);
+  border: 1px solid var(--night-veil);
+  border-radius: 1rem;
+}
+
+.editeur__onglet {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: 0.65rem;
+  row-gap: 0.3rem;
+  padding: 0.85rem 1rem;
+  font: inherit;
+  text-align: left;
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .editeur__onglet:not(.editeur__onglet--actif):hover {
+    background-color: color-mix(in srgb, var(--beam) 5%, transparent);
+  }
+}
+
+.editeur__onglet:focus-visible {
+  outline: 2px solid var(--beam);
+  outline-offset: 2px;
+}
+
+.editeur__onglet--actif {
+  background-color: color-mix(in srgb, var(--beam) 9%, var(--night-raised));
+  border-color: color-mix(in srgb, var(--beam) 22%, transparent);
+}
+
+.editeur__onglet-numero {
+  display: grid;
+  place-items: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--dusk);
+  background-color: color-mix(in srgb, var(--beam) 14%, transparent);
+  border-radius: 50%;
+}
+
+.editeur__onglet--actif .editeur__onglet-numero {
+  color: #ffffff;
+  background-color: color-mix(in srgb, var(--beam) 40%, var(--oysen-purple-lit));
+}
+
+.editeur__onglet-nom {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--dawn);
+}
+
+.editeur__onglet--actif .editeur__onglet-nom {
+  color: #ffffff;
+}
+
+.editeur__onglet-description {
+  grid-column: 2;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--dusk);
+}
+
+.editeur__volet {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.editeur__volet[hidden] {
+  display: none;
+}
+
+@media (max-width: 30rem) {
+  .editeur__onglet {
+    padding: 0.75rem;
+  }
+}
+
+/* Moins large : les réglages du bloc passent sous l'aperçu. */
+@media (max-width: 95rem) {
+  .editeur {
+    grid-template-columns: minmax(20rem, 24rem) minmax(0, 1fr);
+    grid-template-areas:
+      'reglages apercu'
+      'reglages inspecteur';
+  }
+
+  .editeur__inspecteur {
+    position: static;
+    max-height: none;
+    overflow: visible;
+  }
+}
+
+@media (max-width: 64rem) {
+  .editeur {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'apercu'
+      'inspecteur'
+      'reglages';
+  }
+
+  .editeur__apercu {
+    position: static;
+  }
+}
+
+/* ---- Les panneaux ---- */
+
+.panneau {
+  padding: 1.4rem;
+  background-color: var(--night-raised);
+  border: 1px solid var(--night-veil);
+  scroll-margin-top: 6rem;
+}
+
+.panneau__titre {
+  margin: 0 0 1.1rem;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.panneau__corps {
+  display: grid;
+  gap: 1.1rem;
+}
+
+/* ---- Les champs ---- */
+
+.cms-champ {
+  display: grid;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.cms-champ--etroit {
+  max-width: 14rem;
+  margin-top: 0.5rem;
+}
+
+.cms-champ__label {
+  padding: 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--dawn);
+}
+
+.cms-champ__input {
+  width: 100%;
+  padding: 0.65rem 0.8rem;
+  box-sizing: border-box;
+  font: inherit;
+  font-size: 0.9375rem;
+  color: #ffffff;
+  background-color: var(--night);
+  border: 1px solid var(--night-veil);
+  border-radius: 0;
+}
+
+textarea.cms-champ__input {
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.cms-champ__input--compact {
+  width: auto;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.8125rem;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cms-champ__input:hover {
+    border-color: color-mix(in srgb, var(--beam) 40%, transparent);
+  }
+}
+
+.cms-champ__input:focus-visible {
+  border-color: var(--beam);
+  outline: 2px solid var(--beam);
+  outline-offset: 1px;
+}
+
+.cms-champ__fichier {
+  font: inherit;
+  font-size: 0.875rem;
+  color: var(--dusk);
+}
+
+.cms-grille-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.cms-groupe {
+  display: grid;
+  gap: 0.55rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.cms-groupe legend {
+  margin-bottom: 0.55rem;
+}
+
+.cms-cases {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  gap: 0.45rem 1rem;
+  padding-left: 1.6rem;
+}
+
+.cms-cases__consigne {
+  padding-left: 1.6rem;
+}
+
+.cms-case,
+.cms-radio {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.9rem;
+  color: var(--dawn);
+  cursor: pointer;
+}
+
+.cms-case--fort {
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.cms-case input,
+.cms-radio input {
+  width: 1rem;
+  height: 1rem;
+  margin: 0;
+  accent-color: var(--beam);
+}
+
+.cms-choix-ligne {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1.25rem;
+}
+
+/* ---- Mise en page : les trois modèles, puis la taille ---- */
+
+.panneau--arrondi {
+  border-radius: 1rem;
+}
+
+.mise-en-page {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.mise-en-page__carte {
+  display: grid;
+  align-content: start;
+  gap: 0.35rem;
+  padding: 0.65rem 0.65rem 0.9rem;
+  font: inherit;
+  text-align: left;
+  background-color: color-mix(in srgb, var(--beam) 4%, var(--night-raised));
+  border: 1px solid color-mix(in srgb, var(--beam) 12%, transparent);
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .mise-en-page__carte:hover {
+    border-color: color-mix(in srgb, var(--beam) 35%, transparent);
+  }
+}
+
+.mise-en-page__carte:focus-visible {
+  outline: 2px solid var(--beam);
+  outline-offset: 2px;
+}
+
+.mise-en-page__carte--choisie {
+  background-color: color-mix(in srgb, var(--oysen-purple-lit) 22%, var(--night-raised));
+  border-color: color-mix(in srgb, var(--beam) 70%, var(--oysen-purple-lit));
+  box-shadow: 0 0 1.25rem color-mix(in srgb, var(--oysen-purple-lit) 45%, transparent);
+}
+
+.mise-en-page__nom {
+  margin-top: 0.4rem;
+  padding: 0 0.25rem;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.mise-en-page__description {
+  padding: 0 0.25rem;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--dusk);
+}
+
+/* La miniature du modèle : une photo ou l'offre à gauche, le texte et le bouton. */
+.miniature {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 4.25rem;
+  padding: 0.6rem;
+  background-color: var(--night);
+  border: 1px solid color-mix(in srgb, var(--beam) 10%, transparent);
+  border-radius: 0.5rem;
+}
+
+.miniature__cote {
+  flex: none;
+  width: 32%;
+  height: 100%;
+  border-radius: 0.3rem;
+}
+
+.miniature__texte {
+  display: grid;
+  flex: 1;
+  gap: 0.28rem;
+  justify-items: start;
+}
+
+.miniature__trait {
+  width: 85%;
+  height: 0.22rem;
+  background-color: color-mix(in srgb, var(--dusk) 55%, transparent);
+  border-radius: 0.2rem;
+}
+
+.miniature__trait--court {
+  width: 60%;
+}
+
+.miniature__trait--accent {
+  display: none;
+}
+
+.miniature__bouton {
+  width: 40%;
+  height: 0.45rem;
+  margin-top: 0.15rem;
+  background-color: color-mix(in srgb, var(--beam) 40%, var(--oysen-purple-lit));
+  border-radius: 0.15rem;
+}
+
+/* Centré : pas de côté, le texte centré sous un trait de couleur. */
+.miniature--annonce .miniature__cote {
+  display: none;
+}
+
+.miniature--annonce .miniature__texte {
+  justify-items: center;
+  flex: 0 1 60%;
+}
+
+.miniature--annonce .miniature__trait--accent {
+  display: block;
+  width: 35%;
+  background-color: color-mix(in srgb, var(--beam) 40%, var(--oysen-purple-lit));
+}
+
+/* Offre + texte : l'offre dans une tuile violette. */
+.miniature--deux-colonnes .miniature__cote {
+  position: relative;
+  background-color: color-mix(in srgb, var(--oysen-purple-lit) 35%, var(--night-raised));
+}
+
+.miniature--deux-colonnes .miniature__cote::after {
+  content: '';
+  position: absolute;
+  inset: 42% 22%;
+  background-color: color-mix(in srgb, var(--beam) 40%, var(--oysen-purple-lit));
+  border-radius: 0.15rem;
+}
+
+/* Photo + texte : la photo en hachures. */
+.miniature--photo .miniature__cote {
+  background-color: color-mix(in srgb, var(--dusk) 12%, transparent);
+  background-image: repeating-linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--dusk) 28%, transparent) 0 0.12rem,
+    transparent 0.12rem 0.4rem
+  );
+}
+
+/* La taille de l'encart, en trois segments. */
+.taille {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-top: 0.4rem;
+}
+
+.taille__label {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.taille__choix {
+  display: grid;
+  flex: 1;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.25rem;
+  padding: 0.3rem;
+  background-color: var(--night);
+  border: 1px solid color-mix(in srgb, var(--beam) 10%, transparent);
+  border-radius: 0.75rem;
+}
+
+.taille__option {
+  position: relative;
+  padding: 0.65rem 0.5rem;
+  font-size: 0.875rem;
+  text-align: center;
+  color: var(--dusk);
+  border: 1px solid transparent;
+  border-radius: 0.55rem;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .taille__option:not(.taille__option--choisie):hover {
+    color: var(--dawn);
+  }
+}
+
+.taille__option:has(:focus-visible) {
+  outline: 2px solid var(--beam);
+  outline-offset: 1px;
+}
+
+.taille__option--choisie {
+  font-weight: 700;
+  color: #ffffff;
+  background-color: color-mix(in srgb, var(--beam) 10%, var(--night-raised));
+  border-color: color-mix(in srgb, var(--beam) 18%, transparent);
+}
+
+.taille__radio {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 40rem) {
+  .mise-en-page,
+  .cms-grille-2 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .taille {
+    flex-wrap: wrap;
+  }
+
+  .taille__choix {
+    flex-basis: 100%;
+  }
+}
+
+/* ---- Le constructeur : palette, grille de l'aperçu, réglages du bloc ---- */
+
+/* La palette des blocs, à glisser sur l'aperçu. */
+.palette {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.palette__blocs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.palette__bloc {
+  display: grid;
+  align-content: start;
+  gap: 0.2rem;
+  padding: 0.7rem 0.8rem;
+  font: inherit;
+  text-align: left;
+  background-color: color-mix(in srgb, var(--beam) 4%, var(--night-raised));
+  border: 1px solid color-mix(in srgb, var(--beam) 12%, transparent);
+  border-radius: 0.65rem;
+  cursor: grab;
+  touch-action: none;
+  transition: border-color 0.2s ease;
+}
+
+.palette__bloc:active {
+  cursor: grabbing;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .palette__bloc:hover {
+    border-color: color-mix(in srgb, var(--beam) 40%, transparent);
+  }
+}
+
+.palette__bloc:focus-visible {
+  outline: 2px solid var(--beam);
+  outline-offset: 2px;
+}
+
+.palette__nom {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.palette__description {
+  font-size: 0.75rem;
+  line-height: 1.35;
+  color: var(--dusk);
+}
+
+/*
+ * Le cadre du popup dans l'éditeur : toujours à la largeur de sa taille.
+ * Sa hauteur est celle de la grille de travail (les blocs, puis des lignes
+ * libres en dessous pour poser la suite).
+ */
+.apercu--edition > .popup--edition {
+  flex: 0 0 auto;
+  width: 100%;
+}
+
+/* Les poignées du cadre : ses deux côtés (largeur) et son bas (hauteur). */
+.cadre-poignee {
+  position: absolute;
+  z-index: 70;
+  background-color: var(--beam);
+  border: 1px solid var(--night);
+  border-radius: 999px;
+  opacity: 0.6;
+  touch-action: none;
+  transition: opacity 0.15s ease;
+}
+
+.cadre-poignee:hover,
+.etirer-en-cours .cadre-poignee {
+  opacity: 1;
+}
+
+.cadre-poignee--o,
+.cadre-poignee--e {
+  top: 50%;
+  width: 0.55rem;
+  height: 3rem;
+  margin-top: -1.5rem;
+  cursor: ew-resize;
+}
+
+.cadre-poignee--o {
+  left: -0.3rem;
+}
+
+.cadre-poignee--e {
+  right: -0.3rem;
+}
+
+.cadre-poignee--s {
+  bottom: -0.3rem;
+  left: 50%;
+  width: 3rem;
+  height: 0.55rem;
+  margin-left: -1.5rem;
+  cursor: ns-resize;
+}
+
+/* La taille du cadre, affichée pendant qu'on la change. */
+.cadre-mesure {
+  position: absolute;
+  top: calc(100% + 0.6rem);
+  left: 50%;
+  z-index: 70;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+  color: #ffffff;
+  background-color: var(--night);
+  border: 1px solid var(--beam);
+  border-radius: 0.4rem;
+  transform: translateX(-50%);
+}
+
+/* La grille de travail : un papier millimétré, derrière les blocs. */
+.grille-edition {
+  --trait-fin: color-mix(in srgb, var(--beam) 7%, transparent);
+  --trait-fort: color-mix(in srgb, var(--beam) 15%, transparent);
+  position: relative;
+  background-image:
+    linear-gradient(to right, var(--trait-fort) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--trait-fort) 1px, transparent 1px),
+    linear-gradient(to right, var(--trait-fin) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--trait-fin) 1px, transparent 1px);
+  /* Un carreau par colonne et par ligne ; un trait plus marqué tous les quatre. */
+  background-size:
+    calc(100% / 12) calc(var(--pas-ligne) * 4),
+    calc(100% / 12) calc(var(--pas-ligne) * 4),
+    calc(100% / 48) var(--pas-ligne),
+    calc(100% / 48) var(--pas-ligne);
+  outline: 1px solid var(--trait-fort);
+}
+
+/*
+ * La hauteur du cadre ne dépend que de ses lignes : aucune ligne
+ * supplémentaire ne peut s'y ajouter, et un texte trop long est coupé au
+ * bas de son bloc (il est alors signalé).
+ */
+.popup--edition .popup__grille {
+  grid-auto-rows: 0;
+}
+
+.grille-edition__bloc {
+  min-height: 0;
+}
+
+.grille-edition__bloc > .popup__contenu {
+  max-height: 100%;
+  overflow: hidden;
+}
+
+.grille-edition__vide {
+  z-index: 1;
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
+  align-self: center;
+  margin: 0;
+  font-size: 0.875rem;
+  text-align: center;
+  color: var(--dusk);
+  pointer-events: none;
+}
+
+.grille-edition__bloc {
+  position: relative;
+  z-index: 1;
+  outline: 1px dashed transparent;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  transition: outline-color 0.15s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .grille-edition__bloc:hover {
+    outline-color: color-mix(in srgb, var(--beam) 45%, transparent);
+  }
+}
+
+.grille-edition__bloc:focus-visible {
+  outline: 2px solid var(--beam);
+}
+
+.grille-edition__bloc--choisi,
+.grille-edition__bloc--choisi:hover {
+  z-index: 40;
+  outline: 2px solid var(--beam);
+}
+
+/* Le bloc qui suit le pointeur, au-dessus de tout. */
+.grille-edition__bloc--deplace {
+  z-index: 60;
+  cursor: grabbing;
+  opacity: 0.9;
+  box-shadow: 0 1rem 2rem -0.75rem rgba(0, 0, 0, 0.7);
+  transition: none;
+}
+
+/* Un texte trop long pour tenir dans le cadre : signalé, à raccourcir ou à déplacer. */
+.grille-edition__bloc--deborde {
+  outline: 2px dashed #f5b43c;
+}
+
+.grille-edition__bloc--deborde::after {
+  content: 'Le texte dépasse du cadre';
+  position: absolute;
+  bottom: 0.3rem;
+  left: 0.3rem;
+  z-index: 6;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  white-space: nowrap;
+  color: #ffffff;
+  background-color: rgba(120, 80, 10, 0.9);
+  border-radius: 0.3rem;
+}
+
+/* Un bloc pas encore rempli : sa place, et son nom. */
+.grille-edition__a-remplir {
+  margin: 0;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.875rem;
+  font-style: italic;
+  color: var(--dusk);
+  border: 1px dashed color-mix(in srgb, var(--beam) 30%, transparent);
+  border-radius: 0.3rem;
+}
+
+/* Les outils du bloc choisi, au-dessus de lui. */
+.grille-edition__outils {
+  position: absolute;
+  right: -0.3rem;
+  bottom: calc(100% + 0.55rem);
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0.2rem;
+  font-size: 0.75rem;
+  text-align: left;
+  white-space: nowrap;
+  background-color: var(--night);
+  border: 1px solid color-mix(in srgb, var(--beam) 30%, transparent);
+  border-radius: 0.5rem;
+  cursor: default;
+}
+
+.grille-edition__type {
+  padding: 0 0.45rem;
+  font-weight: 600;
+  color: var(--dusk);
+}
+
+.grille-edition__outil {
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--dawn);
+  background: none;
+  border: 0;
+  border-radius: 0.35rem;
+  cursor: pointer;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .grille-edition__outil:hover {
+    color: #ffffff;
+    background-color: color-mix(in srgb, var(--beam) 14%, transparent);
+  }
+}
+
+.grille-edition__outil:focus-visible {
+  outline: 2px solid var(--beam);
+}
+
+.grille-edition__outil .icone {
+  width: 0.95rem;
+  height: 0.95rem;
+}
+
+/* Les huit poignées du bloc choisi : quatre côtés, quatre coins. */
+.grille-edition__poignee {
+  position: absolute;
+  z-index: 5;
+  width: 0.65rem;
+  height: 0.65rem;
+  background-color: var(--beam);
+  border: 1px solid var(--night);
+  border-radius: 0.15rem;
+  touch-action: none;
+}
+
+.grille-edition__poignee--n,
+.grille-edition__poignee--s {
+  left: 50%;
+  width: 1.4rem;
+  height: 0.5rem;
+  margin-left: -0.7rem;
+  border-radius: 999px;
+  cursor: ns-resize;
+}
+
+.grille-edition__poignee--e,
+.grille-edition__poignee--o {
+  top: 50%;
+  width: 0.5rem;
+  height: 1.4rem;
+  margin-top: -0.7rem;
+  border-radius: 999px;
+  cursor: ew-resize;
+}
+
+.grille-edition__poignee--n {
+  top: -0.3rem;
+}
+
+.grille-edition__poignee--s {
+  bottom: -0.3rem;
+}
+
+.grille-edition__poignee--e {
+  right: -0.3rem;
+}
+
+.grille-edition__poignee--o {
+  left: -0.3rem;
+}
+
+.grille-edition__poignee--ne,
+.grille-edition__poignee--no {
+  top: -0.35rem;
+}
+
+.grille-edition__poignee--se,
+.grille-edition__poignee--so {
+  bottom: -0.35rem;
+}
+
+.grille-edition__poignee--ne,
+.grille-edition__poignee--se {
+  right: -0.35rem;
+}
+
+.grille-edition__poignee--no,
+.grille-edition__poignee--so {
+  left: -0.35rem;
+}
+
+.grille-edition__poignee--ne,
+.grille-edition__poignee--so {
+  cursor: nesw-resize;
+}
+
+.grille-edition__poignee--no,
+.grille-edition__poignee--se {
+  cursor: nwse-resize;
+}
+
+/* Où le bloc se calera au lâcher. */
+.grille-edition__depot {
+  z-index: 50;
+  pointer-events: none;
+  background-color: color-mix(in srgb, var(--beam) 14%, transparent);
+  border: 2px dashed var(--beam);
+  border-radius: 0.2rem;
+}
+
+/* Le nom du bloc saisi dans la palette, qui suit le pointeur. */
+.fantome {
+  position: fixed;
+  z-index: 2000;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #ffffff;
+  pointer-events: none;
+  background-color: color-mix(in srgb, var(--beam) 25%, var(--night-raised));
+  border: 1px solid var(--beam);
+  border-radius: 0.5rem;
+  box-shadow: 0 0.75rem 1.5rem -0.5rem rgba(0, 0, 0, 0.6);
+  transform: translate(0.75rem, 0.75rem);
+}
+
+/* Pendant un geste : ni sélection de texte, ni autre curseur que le sien. */
+.glisser-en-cours,
+.glisser-en-cours *,
+.etirer-en-cours,
+.etirer-en-cours * {
+  user-select: none;
+}
+
+.glisser-en-cours * {
+  cursor: grabbing !important;
+}
+
+.etirer-n *,
+.etirer-s * {
+  cursor: ns-resize !important;
+}
+
+.etirer-e *,
+.etirer-o * {
+  cursor: ew-resize !important;
+}
+
+.etirer-ne *,
+.etirer-so * {
+  cursor: nesw-resize !important;
+}
+
+.etirer-no *,
+.etirer-se * {
+  cursor: nwse-resize !important;
+}
+
+/* Les réglages du bloc choisi. */
+.inspecteur {
+  display: grid;
+  gap: 1.1rem;
+  padding: 1.25rem;
+  background-color: var(--night-raised);
+  border: 1px solid color-mix(in srgb, var(--beam) 12%, transparent);
+  border-radius: 1rem;
+}
+
+.inspecteur--vide {
+  gap: 0.5rem;
+}
+
+.inspecteur__tete {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.inspecteur__titre {
+  margin: 0 auto 0 0;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.inspecteur__outil,
+.croix__bouton {
+  display: grid;
+  place-items: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  padding: 0;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--dawn);
+  background-color: var(--night);
+  border: 1px solid color-mix(in srgb, var(--beam) 18%, transparent);
+  border-radius: 0.55rem;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .inspecteur__outil:hover,
+  .croix__bouton:not(:disabled):hover {
+    color: #ffffff;
+    border-color: color-mix(in srgb, var(--beam) 50%, transparent);
+  }
+}
+
+.inspecteur__outil:focus-visible,
+.croix__bouton:focus-visible {
+  outline: 2px solid var(--beam);
+  outline-offset: 2px;
+}
+
+.croix__bouton:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.inspecteur__outil--actif {
+  color: #ffffff;
+  background-color: color-mix(in srgb, var(--beam) 12%, var(--night-raised));
+  border-color: var(--beam);
+}
+
+.inspecteur__outil .icone {
+  width: 1rem;
+  height: 1rem;
+}
+
+.inspecteur__section {
+  display: grid;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid color-mix(in srgb, var(--beam) 10%, transparent);
+}
+
+.inspecteur__sous-titre {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dusk);
+}
+
+.inspecteur__bouton {
+  min-height: 2.4rem;
+  padding: 0 1rem;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: var(--night);
+  border: 1px solid color-mix(in srgb, var(--beam) 18%, transparent);
+  border-radius: 0.6rem;
+  cursor: pointer;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .inspecteur__bouton:not(:disabled):hover {
+    border-color: color-mix(in srgb, var(--beam) 50%, transparent);
+  }
+}
+
+.inspecteur__bouton:focus-visible {
+  outline: 2px solid var(--beam);
+  outline-offset: 2px;
+}
+
+.inspecteur__bouton[aria-pressed='true'],
+.grille-edition__outil[aria-pressed='true'] {
+  color: #ffffff;
+  border-color: var(--beam);
+  background-color: color-mix(in srgb, var(--beam) 22%, var(--night));
+}
+
+.inspecteur__bouton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.inspecteur__marges {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.inspecteur__boutons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.segments__libelle {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--dawn);
+}
+
+/* Trois choix côte à côte. */
+.segments {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.segments__choix {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.2rem;
+  padding: 0.25rem;
+  background-color: var(--night);
+  border: 1px solid color-mix(in srgb, var(--beam) 10%, transparent);
+  border-radius: 0.6rem;
+}
+
+.segments__option {
+  padding: 0.45rem 0.3rem;
+  font: inherit;
+  font-size: 0.8125rem;
+  color: var(--dusk);
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 0.45rem;
+  cursor: pointer;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .segments__option:not(.segments__option--choisie):hover {
+    color: var(--dawn);
+  }
+}
+
+.segments__option:focus-visible {
+  outline: 2px solid var(--beam);
+  outline-offset: 1px;
+}
+
+.segments__option--choisie {
+  font-weight: 700;
+  color: #ffffff;
+  background-color: color-mix(in srgb, var(--beam) 10%, var(--night-raised));
+  border-color: color-mix(in srgb, var(--beam) 18%, transparent);
+}
+
+/* Les quatre flèches de décalage, en croix. */
+.croix {
+  display: grid;
+  grid-template-columns: repeat(3, 2.2rem);
+  grid-template-rows: repeat(3, 2.2rem);
+  gap: 0.3rem;
+  justify-content: center;
+}
+
+.croix__bouton--haut {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.croix__bouton--gauche {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.croix__bouton--droite {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+.croix__bouton--bas {
+  grid-column: 2;
+  grid-row: 3;
+}
+
+/* Les liens d'un bloc « Liens ». */
+.bloc-edition__liens {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.bloc-edition__lien {
+  display: grid;
+  gap: 0.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--night-veil);
+}
+
+/* ---- Le dialogue ---- */
+
+.dialogue {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background-color: rgba(7, 3, 11, 0.72);
+}
+
+.dialogue__boite {
+  width: 100%;
+  max-width: 32rem;
+  padding: 1.75rem;
+  box-sizing: border-box;
+  background-color: var(--night-raised);
+  border: 1px solid color-mix(in srgb, var(--beam) 14%, transparent);
+  border-radius: 1rem;
+  box-shadow: 0 1.5rem 3rem -1rem rgba(0, 0, 0, 0.6);
+}
+
+.dialogue__titre {
+  margin: 0 0 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.dialogue__texte {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--dusk);
+}
+
+.dialogue__texte {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.dialogue__texte p {
+  margin: 0;
+}
+
+/* L'avertissement d'une action sans retour. */
+.dialogue__attention {
+  padding: 0.6rem 0.9rem;
+  font-weight: 600;
+  color: #ffffff;
+  border-left: 2px solid var(--oysen-purple-lit);
+  background-color: color-mix(in srgb, var(--oysen-purple) 22%, transparent);
+}
+
+.dialogue__actions {
+  display: grid;
+  gap: 0.6rem;
+  margin-top: 1.5rem;
+}
+
+.btn.dialogue__bouton {
+  width: 100%;
+  padding: 0.85rem 1.25rem;
+  border-radius: 0.6rem;
+}
+
+/* Le bouton secondaire, vêtu comme ceux de la liste. */
+.btn--ghost.dialogue__bouton {
+  color: #ffffff;
+  background-color: var(--night);
+  border: 1px solid color-mix(in srgb, var(--beam) 18%, transparent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn--ghost.dialogue__bouton:hover {
+    border-color: color-mix(in srgb, var(--beam) 50%, transparent);
+  }
+}
+
+.dialogue__annuler {
+  justify-self: center;
+  padding: 0.4rem;
+  font: inherit;
+  font-size: 0.875rem;
+  color: var(--dusk);
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+.dialogue__annuler:focus-visible {
+  color: #ffffff;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .dialogue__annuler:hover {
+    color: #ffffff;
+  }
+}
+
+/* ---- L'éditeur sur téléphone ----
+   Tout ce qui suit ne vaut que sous 40 rem de large : l'ordinateur ne
+   change pas. L'aperçu garde la grille de l'ordinateur, réduite pour tenir
+   dans l'écran (échelle --echelle, calculée par Constructeur.tsx) ; les
+   poignées et les outils gardent leur taille au doigt ; une barre d'actions
+   reste en bas de l'écran. */
+
+@media (max-width: 40rem) {
+  /* De la place sous la page pour la barre d'actions. */
+  .cms-page--large {
+    padding-bottom: 5.5rem;
+  }
+
+  .apercu--edition {
+    justify-content: flex-start;
+    max-height: none;
+    min-height: 0;
+    padding: 3rem 0.75rem 2rem;
+    /* Coupé sur les côtés seulement : les outils du bloc dépassent en haut. */
+    overflow: visible;
+    overflow-x: clip;
+  }
+
+  /* Le popup à la largeur de son cadre, comme sur ordinateur, puis réduit. */
+  .apercu--edition > .popup--edition {
+    width: var(--cadre-largeur);
+    padding: 2.25rem;
+  }
+
+  /* La grille de l'ordinateur, et non les blocs empilés du site sur téléphone. */
+  .popup--edition .popup__grille {
+    display: grid;
+  }
+
+  .popup--edition .popup__bloc--centre {
+    width: calc(100% * var(--largeur) / 48);
+  }
+
+  .popup--edition .popup__bloc--image .popup__contenu {
+    min-height: 0;
+  }
+
+  /* Les poignées et les outils, à leur taille réelle malgré la réduction. */
+  .popup--edition .grille-edition__poignee,
+  .popup--edition .cadre-poignee {
+    scale: calc(1.6 / var(--echelle, 1));
+  }
+
+  .popup--edition .grille-edition__poignee::before,
+  .popup--edition .cadre-poignee::before {
+    content: '';
+    position: absolute;
+    inset: -0.6rem;
+  }
+
+  .popup--edition .grille-edition__outils {
+    transform-origin: bottom right;
+    scale: calc(1.25 / var(--echelle, 1));
+  }
+
+  .popup--edition .grille-edition__bloc--deborde::after,
+  .popup--edition .cadre-mesure {
+    scale: calc(1 / var(--echelle, 1));
+  }
+
+  .popup--edition .grille-edition__bloc--deborde::after {
+    transform-origin: bottom left;
+  }
+
+  /* Au doigt : seul le bloc choisi se glisse ; sur les autres, la page défile. */
+  .popup--edition .grille-edition__bloc {
+    touch-action: pan-x pan-y;
+    -webkit-touch-callout: none;
+  }
+
+  .popup--edition .grille-edition__bloc--choisi {
+    touch-action: none;
+  }
+
+  /* Les palettes défilent au doigt ; un bloc s'ajoute en le touchant. */
+  .palette__bloc {
+    touch-action: manipulation;
+  }
+
+  /* 16 px au moins : le téléphone ne zoome plus sur un champ touché. */
+  .cms-champ__input,
+  .cms-page select,
+  .cms-page textarea {
+    font-size: 1rem;
+  }
+
+  /* La taille du bloc choisi, aux boutons. */
+  .taille-bloc {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .taille-bloc__ligne {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .taille-bloc__nom {
+    flex: 1;
+    font-size: 0.875rem;
+    color: var(--dawn);
+  }
+
+  .taille-bloc .croix__bouton {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+
+  /* La barre d'actions, en bas de l'écran. */
+  .barre-mobile {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 900;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.4rem;
+    padding: 0.6rem 0.75rem calc(0.6rem + env(safe-area-inset-bottom));
+    background-color: var(--night-raised);
+    border-top: 1px solid color-mix(in srgb, var(--beam) 18%, transparent);
+    box-shadow: 0 -1rem 2rem -1rem rgba(0, 0, 0, 0.7);
+  }
+
+  .barre-mobile__bouton {
+    min-height: 2.9rem;
+    padding: 0 0.3rem;
+    font: inherit;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--dawn);
+    background-color: var(--night);
+    border: 1px solid color-mix(in srgb, var(--beam) 20%, transparent);
+    border-radius: 0.7rem;
+    touch-action: manipulation;
+  }
+
+  .barre-mobile__bouton--plein {
+    color: #ffffff;
+    background-color: var(--charte-violet);
+    border-color: color-mix(in srgb, var(--beam) 26%, transparent);
+  }
+
+  .barre-mobile__bouton:disabled {
+    opacity: 0.4;
+  }
+
+  .barre-mobile__bouton:focus-visible {
+    outline: 2px solid var(--beam);
+    outline-offset: 2px;
+  }
+
+  /* La feuille « Ajouter un bloc », qui monte du bas de l'écran. */
+  .feuille {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  .feuille__voile {
+    position: absolute;
+    inset: 0;
+    padding: 0;
+    background-color: rgba(7, 3, 11, 0.7);
+    border: 0;
+  }
+
+  .feuille__corps {
+    position: relative;
+    max-height: 80dvh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 1rem 1rem calc(1.25rem + env(safe-area-inset-bottom));
+    background-color: var(--night-raised);
+    border-top: 1px solid color-mix(in srgb, var(--beam) 18%, transparent);
+    border-radius: 1.25rem 1.25rem 0 0;
+    animation: feuille-monte 0.2s ease-out;
+  }
+
+  .feuille__tete {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+  }
+
+  .feuille__titre {
+    margin: 0;
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: #ffffff;
+  }
+}
+
+@keyframes feuille-monte {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+@media (max-width: 40rem) and (prefers-reduced-motion: reduce) {
+  .feuille__corps {
+    animation: none;
+  }
+}

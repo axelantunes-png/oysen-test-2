@@ -44,21 +44,23 @@
 }
 
 /*
- * Accueil, sur ordinateur : tout en haut de la page, avant le moindre
+ * Toutes les pages, sur ordinateur : tout en haut de la page, avant le moindre
  * défilement, la barre est posée sur le hero, qui passe dessous, et
  * devient légèrement transparente, sans flou : la photo et les faisceaux
  * se devinent derrière. Elle garde ce style en partant, quand on
  * descend ; elle ne reprend sa vitre floutée qu'en revenant, plus bas
  * dans la page (Navbar.tsx). Le changement se fait barre escamotée, sans
  * fondu : il ne se voit pas.
- * Le hero est rallongé d'autant (home.css) : son contenu ne bouge pas.
+ * Le hero de chaque page est rallongé d'autant (dans la feuille de la
+ * page, bloc « La barre posée sur le hero ») : son contenu ne bouge pas.
+ * Avant : l'accueil et L'agence seulement.
  */
 @media (min-width: 1025px) {
-  html:has(main.accueil) .nav {
+  .nav {
     margin-bottom: calc(-1 * var(--nav-h));
   }
 
-  html:has(main.accueil) .nav--haut {
+  .nav--haut {
     background-color: color-mix(in srgb, var(--night) 65%, transparent);
     border-bottom-color: color-mix(in srgb, var(--night-veil) 50%, transparent);
     backdrop-filter: none;
@@ -190,23 +192,39 @@
     opacity 0.22s ease;
 }
 
-.nav__link:hover,
 .nav__link:focus-visible,
 .nav__item--open > .nav__link {
   color: var(--beam);
 }
 
-.nav__link:hover::before,
+@media (hover: hover) and (pointer: fine) {
+  .nav__link:hover {
+    color: var(--beam);
+  }
+}
+
 .nav__link:focus-visible::before,
 .nav__item--open > .nav__link::before {
   opacity: 1;
 }
 
-.nav__link:hover::after,
+@media (hover: hover) and (pointer: fine) {
+  .nav__link:hover::before {
+    opacity: 1;
+  }
+}
+
 .nav__link:focus-visible::after,
 .nav__item--open > .nav__link::after {
   opacity: 1;
   transform: translate(-50%, 50%) scaleX(1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nav__link:hover::after {
+    opacity: 1;
+    transform: translate(-50%, 50%) scaleX(1);
+  }
 }
 
 /*
@@ -310,14 +328,24 @@
   transition: height 0.22s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-.nav__sublink:hover,
 .nav__sublink:focus-visible {
   color: var(--dawn);
 }
 
-.nav__sublink:hover::before,
+@media (hover: hover) and (pointer: fine) {
+  .nav__sublink:hover {
+    color: var(--dawn);
+  }
+}
+
 .nav__sublink:focus-visible::before {
   height: 1.15rem;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nav__sublink:hover::before {
+    height: 1.15rem;
+  }
 }
 
 /* Dans le déroulant, la sous-page affichée garde son trait allumé. */

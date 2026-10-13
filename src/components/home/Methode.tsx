@@ -1,4 +1,5 @@
 import { METHODE } from './content'
+import { Lien } from '../Lien'
 
 /**
  * S6. La méthode en quatre étapes.
@@ -59,9 +60,9 @@ export function Methode() {
         </ol>
 
         <div className="methode__action">
-          <a className="btn btn--solid" href="/contact">
+          <Lien className="btn btn--solid" href="/contact">
             Imaginer mon événement
-          </a>
+          </Lien>
         </div>
       </div>
     </section>

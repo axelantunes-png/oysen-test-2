@@ -61,7 +61,10 @@
   height: 100%;
   object-fit: cover;
   object-position: var(--focus);
-  filter: grayscale(0.55) saturate(0.7) brightness(0.45) contrast(1.05);
+  /* Aussi lumineuses que les photos de l'accueil et de L'agence (avant :
+     grayscale(0.55) saturate(0.7) brightness(0.45) contrast(1.05)). */
+  opacity: 0.42;
+  filter: saturate(0.85) brightness(1.15);
 }
 
 /* La teinte violette de la charte, en fusion « color » : la photo garde
@@ -167,11 +170,12 @@
   z-index: -1;
   pointer-events: none;
   background-image:
-    /* L'ombre derrière le texte : les plateaux restent vivants autour. */
+    /* L'ombre derrière le texte, au réglage du voile de l'accueil
+       (avant : 70 % et 30 % de --night, 52% 58% at 50% 46%). */
     radial-gradient(
-      52% 58% at 50% 46%,
-      color-mix(in srgb, var(--night) 70%, transparent),
-      color-mix(in srgb, var(--night) 30%, transparent) 62%,
+      70% 58% at 50% 42%,
+      color-mix(in srgb, var(--night) 62%, transparent),
+      color-mix(in srgb, var(--night) 40%, transparent) 45%,
       transparent 100%
     ),
     /* La bouffée violette, tombée du haut. */
@@ -229,12 +233,14 @@
 .services-hero__titre {
   margin: 0;
   font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
-  font-weight: 300;
-  font-size: clamp(2.1rem, 4.2vw, 3.7rem);
-  line-height: 1.08;
+  /* En gras et en blanc pur, aux tailles du hero de l'accueil (avant :
+     300, clamp(2.1rem, 4.2vw, 3.7rem), interligne 1.08, --dawn). */
+  font-weight: 700;
+  font-size: clamp(1.779rem, 4.213vw, 3.277rem);
+  line-height: 1.153;
   letter-spacing: -0.025em;
   text-wrap: balance;
-  color: var(--dawn);
+  color: #ffffff;
 }
 
 .services-hero__titre-suite {
@@ -251,10 +257,12 @@
   max-width: 46ch;
   margin: clamp(1.4rem, 3vh, 1.9rem) auto 0;
   padding-top: clamp(1.4rem, 3vh, 1.9rem);
-  font-size: clamp(1rem, 1.25vw, 1.125rem);
+  font-size: clamp(1rem, 1.35vw, 1.125rem);
   line-height: 1.7;
   text-wrap: pretty;
-  color: color-mix(in srgb, var(--dawn) 80%, var(--dusk));
+  /* Une des quatre couleurs de texte (avant : un mélange de --dawn et
+     --dusk). */
+  color: var(--dusk);
   background-image: linear-gradient(
     to right,
     transparent,
@@ -360,4 +368,16 @@
    la barre de navigation collante, pas derrière. */
 #tri-title {
   scroll-margin-top: calc(var(--nav-h, 0px) + 2.5rem);
+}
+
+/* ---- La barre posée sur le hero ----
+   Sur ordinateur, la barre de navigation est posée sur le hero, comme
+   sur l'accueil (navbar.css) : le hero passe dessous et gagne la
+   hauteur de la barre, son contenu est repoussé d'autant. Rien ne
+   bouge à l'écran. */
+@media (min-width: 1025px) {
+  .services-hero {
+    min-height: calc(min(88vh, 62rem) + var(--nav-h));
+    padding-top: calc(var(--nav-h) + clamp(3rem, 9vh, 6rem));
+  }
 }

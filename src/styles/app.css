@@ -656,6 +656,27 @@ html[data-apparition] .a-apparaitre.est-vu {
   );
 }
 
+/* Quand la carte n'est pas l'enfant direct de sa liste, son rang ne dit
+   pas sa place : le sens de l'éclairage se force par une classe. */
+.dc01.dc01--impaire {
+  background-image: linear-gradient(
+    124deg,
+    #221b29 0%,
+    #17131c 33%,
+    #17131c 76%,
+    #241c2c 100%
+  );
+}
+
+.dc01.dc01--paire {
+  background-image: linear-gradient(
+    236deg,
+    #221c2a 0%,
+    #221b28 7%,
+    #17131c 50%
+  );
+}
+
 /* « translate » s'ajoute aux transitions de l'apparition au défilement,
    sinon elles l'écraseraient. */
 html[data-apparition] .dc01.a-apparaitre {
@@ -665,8 +686,10 @@ html[data-apparition] .dc01.a-apparaitre {
     translate var(--dc01-survol);
 }
 
-.dc01:hover {
-  translate: 0 -0.278rem;
+@media (hover: hover) and (pointer: fine) {
+  .dc01:hover {
+    translate: 0 -0.278rem;
+  }
 }
 
 .dc01::after {
@@ -691,8 +714,10 @@ html[data-apparition] .dc01.a-apparaitre {
   pointer-events: none;
 }
 
-.dc01:hover .dc01__survol {
-  opacity: 1;
+@media (hover: hover) and (pointer: fine) {
+  .dc01:hover .dc01__survol {
+    opacity: 1;
+  }
 }
 
 /* La zone de survol prolongée, invisible. */
@@ -803,13 +828,22 @@ html[data-apparition] .dc01.a-apparaitre {
 }
 
 /* Au survol, le même violet éclairci d'un cran, et l'ombre qui s'étend. */
-.btn--solid:hover,
 .btn--solid:focus-visible {
   background-color: color-mix(in srgb, var(--charte-violet) 86%, #fff);
   border-color: color-mix(in srgb, var(--beam) 46%, transparent);
   box-shadow:
     inset 0 1px 0 color-mix(in srgb, var(--beam) 34%, transparent),
     0 20px 42px -18px color-mix(in srgb, var(--charte-violet) 80%, #fff);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn--solid:hover {
+    background-color: color-mix(in srgb, var(--charte-violet) 86%, #fff);
+    border-color: color-mix(in srgb, var(--beam) 46%, transparent);
+    box-shadow:
+      inset 0 1px 0 color-mix(in srgb, var(--beam) 34%, transparent),
+      0 20px 42px -18px color-mix(in srgb, var(--charte-violet) 80%, #fff);
+  }
 }
 
 .btn--ghost {
@@ -819,11 +853,18 @@ html[data-apparition] .dc01.a-apparaitre {
   color: var(--dusk);
 }
 
-.btn--ghost:hover,
 .btn--ghost:focus-visible {
   border-color: color-mix(in srgb, var(--beam) 42%, transparent);
   color: var(--dawn);
   box-shadow: 0 0 24px -6px color-mix(in srgb, var(--beam) 22%, transparent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn--ghost:hover {
+    border-color: color-mix(in srgb, var(--beam) 42%, transparent);
+    color: var(--dawn);
+    box-shadow: 0 0 24px -6px color-mix(in srgb, var(--beam) 22%, transparent);
+  }
 }
 
 /* Le changement de couleur seul ne suffit pas à signaler la prise au clavier. */
@@ -1264,4 +1305,12 @@ html[data-apparition] .dc01.a-apparaitre {
   .curtain {
     opacity: 1;
   }
+}
+
+/* ---- Hero d'attente ----
+   Le hero noir, plein écran, des pages encore sans contenu
+   (Nos souvenirs, Blog). */
+.hero-vide {
+  min-height: 100vh;
+  background: #121015;
 }

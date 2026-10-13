@@ -106,7 +106,7 @@ export const TRI: TriEntry[] = [
     qualif: 'Son, lumière, structure',
     photo: {
       name: 'prestation-technique',
-      alt: 'Console lumière en régie, écran de programmation allumé au-dessus des rangées de faders.',
+      alt: 'Console de mixage en régie, faders et vumètres allumés, la scène éclairée en violet à l’arrière-plan.',
       focus: '50% 45%',
     },
   },

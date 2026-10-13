@@ -1,0 +1,205 @@
+/* ============================================================
+   S5 · LES BÉNÉFICES
+   Six phrases, chacune sous sa lampe. Le filet du haut est le pont
+   où la lampe est accrochée ; le cône part de la lampe et s'ouvre
+   sur la phrase. Pas de flou animé : un dégradé net, adouci par un
+   masque, qui monte en intensité au survol. La phrase prend alors
+   la lumière.
+   ============================================================ */
+
+.section.section--entreprise-benefices {
+  background-color: var(--salle-claire);
+  border-block: 1px solid var(--night-veil);
+}
+
+.benefices {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(2.5rem, 5vh, 3.25rem) clamp(1.25rem, 2.5vw, 2rem);
+  margin: clamp(2.5rem, 5.5vh, 3.5rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.benefice {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  place-items: center;
+  min-height: 9.5rem;
+  padding: 3.25rem 1rem 1.25rem;
+  text-align: center;
+  /* Le pont : un filet, plus clair au milieu, sous la lampe. */
+  background-image: linear-gradient(
+    to right,
+    transparent,
+    var(--night-veil) 20%,
+    color-mix(in srgb, var(--beam) 45%, transparent) 50%,
+    var(--night-veil) 80%,
+    transparent
+  );
+  background-size: 100% 1px;
+  background-repeat: no-repeat;
+}
+
+/* La lampe, accrochée au milieu du pont. */
+.benefice::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 0.55rem;
+  height: 0.55rem;
+  background-color: var(--beam);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0.5rem var(--beam),
+    0 0 1.4rem color-mix(in srgb, var(--beam) 50%, transparent);
+  transform: translate(-50%, -50%);
+  opacity: 0.75;
+  transition: opacity 0.3s ease;
+}
+
+/* Le cône : étroit à la lampe, ouvert sur la phrase. */
+.benefice::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: -1;
+  width: min(100%, 18rem);
+  height: 100%;
+  clip-path: polygon(47% 0, 53% 0, 100% 100%, 0 100%);
+  background-image: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--beam) 22%, transparent),
+    color-mix(in srgb, var(--beam) 8%, transparent) 55%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 6%,
+    #000 36%,
+    #000 64%,
+    transparent 94%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 6%,
+    #000 36%,
+    #000 64%,
+    transparent 94%
+  );
+  transform: translateX(-50%);
+  opacity: 0.45;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.benefice__titre {
+  max-width: 18ch;
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(1.1rem, 1.5vw, 1.3rem);
+  font-weight: 400;
+  line-height: 1.35;
+  text-wrap: balance;
+  color: var(--dawn);
+  transition:
+    color 0.3s ease,
+    text-shadow 0.3s ease;
+}
+
+/* Au survol, la lampe monte : le cône s'allume, la phrase prend la
+   lumière. */
+@media (hover: hover) and (pointer: fine) {
+  .benefice:hover::before,
+  .benefice:hover::after {
+    opacity: 1;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .benefice:hover .benefice__titre {
+    color: #fff;
+    text-shadow: 0 0 1.5rem color-mix(in srgb, var(--beam) 45%, transparent);
+  }
+}
+
+.benefices__assurance {
+  margin: clamp(2.5rem, 5.5vh, 3.5rem) 0 0;
+  font-size: 0.875rem;
+  text-align: center;
+  color: var(--dusk);
+}
+
+/* ---- ESSAI · Notes de violet (à valider) ----
+   Le violet de la charte, celui des boutons (--charte-violet), posé
+   comme une gélatine devant chaque lampe : le cône part lavande et
+   vire au violet en descendant, puis laisse une flaque violette au sol,
+   sous la phrase. La lampe prend un anneau violet, et la section une
+   lueur basse. Trop sombre pour du texte, le violet n'est ici que de la
+   lumière.
+   Pour revenir en arrière : supprimer ce bloc, rien d'autre. */
+
+.section.section--entreprise-benefices {
+  background-image: radial-gradient(
+    70% 60% at 50% 115%,
+    color-mix(in srgb, var(--charte-violet) 45%, transparent),
+    transparent 70%
+  );
+}
+
+.benefice::before {
+  box-shadow:
+    0 0 0.5rem var(--beam),
+    0 0 0 0.3rem color-mix(in srgb, var(--charte-violet) 70%, transparent),
+    0 0 1.6rem 0.4rem color-mix(in srgb, var(--charte-violet) 80%, transparent);
+}
+
+.benefice::after {
+  background-image:
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--beam) 22%, transparent),
+      color-mix(in srgb, var(--charte-violet) 38%, transparent) 55%,
+      color-mix(in srgb, var(--charte-violet) 10%, transparent) 100%
+    );
+}
+
+/* La flaque de lumière violette, au sol sous la phrase. */
+.benefice__titre {
+  position: relative;
+}
+
+.benefice__titre::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -1.1rem;
+  z-index: -1;
+  width: 14rem;
+  height: 2.6rem;
+  background-image: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--charte-violet) 75%, transparent),
+    transparent
+  );
+  transform: translateX(-50%);
+  opacity: 0.55;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .benefice:hover .benefice__titre::after {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .benefice__titre::after {
+    transition: none;
+  }
+}
+

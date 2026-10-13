@@ -3,6 +3,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { DELAI_REPONSE_H } from '../../components/home/content'
 import { Arrow } from '../../components/home/icons'
+import { Lien } from '../../components/Lien'
 
 /*
  * Chemin depuis la racine du projet, et non relatif : sur une route imbriquée,
@@ -144,9 +145,9 @@ function Hero() {
 
           <div className="mariage-hero__actions">
             <div className="mariage-hero__appel">
-              <a className="btn btn--solid" href={CONTACT_MARIAGE}>
+              <Lien className="btn btn--solid" href={CONTACT_MARIAGE}>
                 Organisons votre mariage
-              </a>
+              </Lien>
               <p className="mariage-hero__rassurance">
                 Premier échange sans engagement · réponse sous{' '}
                 {DELAI_REPONSE_H}&nbsp;h
@@ -368,10 +369,10 @@ function Formules() {
                 })}
               </ul>
 
-              <a className="lien-doux formule__lien" href={CONTACT_MARIAGE}>
+              <Lien className="lien-doux formule__lien" href={CONTACT_MARIAGE}>
                 {formule.bouton}
                 <Arrow className="lien-doux__fleche" />
-              </a>
+              </Lien>
             </li>
           ))}
         </ul>
@@ -582,10 +583,10 @@ function Galerie() {
         </ul>
 
         <p className="galerie__suite">
-          <a className="lien-doux" href="/nos-souvenirs">
+          <Lien className="lien-doux" href="/nos-souvenirs">
             Voir toutes nos réalisations
             <Arrow className="lien-doux__fleche" />
-          </a>
+          </Lien>
         </p>
       </div>
     </section>
@@ -736,9 +737,9 @@ function Budget() {
         </div>
 
         <p className="budget__action">
-          <a className="btn btn--solid" href={CONTACT_MARIAGE}>
+          <Lien className="btn btn--solid" href={CONTACT_MARIAGE}>
             Recevoir une proposition détaillée
-          </a>
+          </Lien>
         </p>
       </div>
     </section>
@@ -789,10 +790,10 @@ function Questions() {
           <p className="mariage-tete__texte">
             Une autre question&nbsp;? Posez-la-nous directement.
           </p>
-          <a className="lien-doux" href={CONTACT_MARIAGE}>
+          <Lien className="lien-doux" href={CONTACT_MARIAGE}>
             Nous écrire
             <Arrow className="lien-doux__fleche" />
-          </a>
+          </Lien>
         </div>
 
         <div className="faq">
@@ -850,13 +851,13 @@ function Invitation() {
           </ol>
 
           <div className="invitation__actions">
-            <a className="btn btn--solid" href={CONTACT_MARIAGE}>
+            <Lien className="btn btn--solid" href={CONTACT_MARIAGE}>
               Parlons de votre mariage
-            </a>
-            <a className="lien-doux" href="/qui-sommes-nous/le-fondateur">
+            </Lien>
+            <Lien className="lien-doux" href="/qui-sommes-nous/le-fondateur">
               Découvrir qui prépare votre mariage
               <Arrow className="lien-doux__fleche" />
-            </a>
+            </Lien>
           </div>
 
           <p className="invitation__note">

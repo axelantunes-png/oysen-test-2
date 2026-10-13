@@ -1,0 +1,192 @@
+/* ============================================================
+   ADMINISTRATION : connexion, nouveau mot de passe, CMS
+
+   Hors du site public : ni barre de navigation, ni pied de page,
+   ni rideau (__root.tsx). Une carte au centre de la salle, sous
+   la lueur de l'accueil.
+   ============================================================ */
+
+.admin {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: 3rem 1rem;
+  box-sizing: border-box;
+  background-color: var(--night);
+  /* La lueur de l'accueil, tombée du haut. */
+  background-image: radial-gradient(
+    60% 55% at 50% 0%,
+    color-mix(in srgb, var(--oysen-purple) 30%, transparent),
+    transparent 70%
+  );
+}
+
+/* ---- La carte ---- */
+
+.admin__carte {
+  width: 100%;
+  max-width: 26rem;
+  padding: clamp(2rem, 5vw, 2.75rem);
+  box-sizing: border-box;
+  background-color: var(--night-raised);
+  border: 1px solid var(--night-veil);
+}
+
+.admin__logo {
+  display: block;
+  width: 9rem;
+  height: auto;
+  margin: 0 auto 1.5rem;
+}
+
+.admin__titre {
+  margin: 0 0 1.75rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  color: #ffffff;
+}
+
+.admin__texte {
+  margin: 0 0 1.5rem;
+  line-height: 1.6;
+  text-align: center;
+  color: var(--dusk);
+}
+
+/* ---- Les champs ---- */
+
+.admin__formulaire {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.admin__champ {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.admin__label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--dawn);
+}
+
+.admin__input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  box-sizing: border-box;
+  font: inherit;
+  color: #ffffff;
+  background-color: var(--night);
+  border: 1px solid var(--night-veil);
+  border-radius: 0;
+  transition: border-color 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .admin__input:hover {
+    border-color: color-mix(in srgb, var(--beam) 40%, transparent);
+  }
+}
+
+.admin__input:focus-visible {
+  border-color: var(--beam);
+  outline: 2px solid var(--beam);
+  outline-offset: 2px;
+}
+
+.admin__aide {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--dusk);
+}
+
+/* ---- Les messages : erreur ou information, marqués par leur filet ---- */
+
+.admin__message {
+  margin: 0;
+}
+
+.admin__message:empty {
+  display: none;
+}
+
+.admin__note {
+  display: block;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--dawn);
+  border-left: 2px solid var(--beam);
+  background-color: color-mix(in srgb, var(--beam) 8%, transparent);
+}
+
+.admin__note--erreur {
+  border-left-color: var(--oysen-purple-lit);
+  background-color: color-mix(in srgb, var(--oysen-purple) 22%, transparent);
+}
+
+/* ---- Les actions ---- */
+
+.admin__bouton {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.admin__bouton:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+/* Un bouton présenté en lien : l'action secondaire. */
+.admin__lien {
+  justify-self: center;
+  padding: 0.25rem;
+  font: inherit;
+  font-size: 0.875rem;
+  color: var(--beam);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.admin__lien:focus-visible {
+  color: var(--dawn);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .admin__lien:hover {
+    color: var(--dawn);
+  }
+}
+
+.admin__lien:focus-visible {
+  outline: 2px solid var(--beam);
+  outline-offset: 2px;
+}
+
+.admin__lien:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+/* ---- Le CMS ---- */
+
+.admin__bienvenue {
+  margin: 0;
+  font-size: clamp(2.5rem, 7vw, 5.5rem);
+  font-weight: 600;
+  line-height: 1.05;
+  text-align: center;
+  text-wrap: balance;
+  color: #ffffff;
+}
+
+/* Le mot mis en avant : même police, même taille, italique et lavande. */
+.admin__bienvenue em {
+  font-style: italic;
+  color: var(--beam);
+}

@@ -38,6 +38,12 @@ site). Il comprend :
    <span className="dc01__zone" aria-hidden="true" />
    ```
 
+   Si la carte n'est pas l'enfant direct de sa liste (son rang dans le
+   parent ne dit pas sa place), forcer le sens de l'éclairage avec
+   `dc01--impaire` ou `dc01--paire`, selon son rang. Si la carte est un
+   `<ul>`, l'envelopper dans un `<div>` qui porte `dc01` et les calques :
+   un `<ul>` ne peut contenir que des `<li>`.
+
 3. Dans le CSS de la carte, retirer ce qui contredit le design : fond,
    `border`, `box-shadow`, `border-radius`, halos et `transition` de survol,
    brillances de fond. Régler `--dc01-retrait` sur le padding gauche de la

@@ -33,6 +33,8 @@ const SECTIONS_CASCADE = [
   '.section--location',
   /* Les sections de la page « Prestation technique ». */
   '.section--technique',
+  /* Les catalogues « Nos souvenirs » et « Blog », et leurs fiches. */
+  '.section--hub',
 ]
 
 /**
@@ -89,19 +91,22 @@ const CASCADE = [
   '.appel__garanties',
   /*
    * « L'agence » : les blocs de chaque section. L'ouverture n'y est pas, elle
-   * a sa propre entrée, le plan qui se dessine (agence.css).
+   * a sa propre entrée, le discours qui monte à la levée du rideau (agence.css).
    */
   '.agence__lede',
+  /* Le plan et sa légende (la bande « En bref » a sa propre entrée). */
+  '.implantation__plan',
+  '.implantation__legende > div',
   /* Les étapes de l'histoire, que le tracé relie de l'une à l'autre. */
   '.histoire > li',
   '.valeurs > li',
-  /* L'approche : le schéma se trace, puis la méthode, puis la phrase. */
-  '.approche__schema',
-  '.approche__intro',
-  '.approche__methode',
+  /* L'approche : la phrase, les trois colonnes, la méthode et ses
+     réflexes, puis la maxime. */
+  '.approche__intro-phrase',
+  '.concilier__pole',
+  '.approche__methode-texte',
   '.reflexes > li',
-  '.approche__maxime',
-  '.approche__marque',
+  '.approche__maxime-bloc',
   '.approche__signature',
   /* Le fondateur : son nom, le portrait, puis son texte. */
   '.fondateur__tete',
@@ -178,22 +183,18 @@ const CASCADE = [
   '.section--festival-questions .faq__item',
   /*
    * « Collectivités et institutions » : le texte sous chaque tête, les
-   * cinq pièces, chaque point exigé, les interventions, la capacité et
-   * les sorties, les étapes et leurs notes, ce qui se vérifie, les
-   * questions, les boutons.
+   * six événements et la sortie vers la technique seule, les engagements
+   * de sécurité et la personne qui dirige, les cinq étapes, les questions.
    */
   '.coll-tete__texte',
-  '.pieces > li',
-  '.pieces__reunies',
-  '.exigence',
-  '.interventions > li',
-  '.capacite',
-  '.coll-sorties',
-  '.etape-coll',
-  '.methode-coll__notes',
-  '.coll-verifier__item',
-  '.section--collectivite-questions .faq__item',
+  '.coll-types > li',
+  '.coll-sortie',
+  '.coll-dossiers > li',
   '.coll-action',
+  '.securite__item',
+  '.securite__pilote',
+  '.coll-etape',
+  '.section--collectivite-questions .faq__item',
   /*
    * « Location de matériel » : le texte sous chaque tête, les cinq
    * corps du matériel, les cinq étapes, les engagements sous leurs lampes, la
@@ -211,6 +212,9 @@ const CASCADE = [
    * sa suite, les domaines, les agences et les autres publics, les
    * engagements et les marques, l'encart, les questions.
    */
+  /* « Nos souvenirs » et « Blog » : chaque carte, puis le corps d'une fiche. */
+  '.hub-cartes > li',
+  '.fiche > *',
   '.tech-tete__texte',
   '.comparaison',
   '.comparaison__suite',
@@ -265,7 +269,7 @@ const MAX_ATTENTE = 120
  * début du chargement. Sans rideau (arrivée depuis une autre page du site),
  * il n'a pas d'animation : la promesse est tenue tout de suite.
  */
-function leveeDuRideau() {
+export function leveeDuRideau() {
   const rideau = document.querySelector('.stage')
   const animations = rideau ? rideau.getAnimations() : []
 
@@ -301,8 +305,11 @@ function assezVisible(entree: IntersectionObserverEntry, seuil: number) {
  * la page s'affiche telle quelle plutôt que de rester blanche. Les visiteurs
  * qui demandent moins d'animations ne voient rien bouger, la règle CSS ne
  * s'applique pas à eux.
+ *
+ * Rejoué à chaque page (`chemin`) : changer de page ne recharge plus le
+ * document, il faut suivre les blocs de la nouvelle.
  */
-export function useApparition() {
+export function useApparition(chemin: string | undefined) {
   useEffect(() => {
     const doux = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (doux || !('IntersectionObserver' in window)) return
@@ -345,7 +352,7 @@ export function useApparition() {
         element.style.transitionDelay = ''
       }
     }
-  }, [])
+  }, [chemin])
 }
 
 /** Pose l'état de départ et suit chaque élément jusqu'à son entrée. */

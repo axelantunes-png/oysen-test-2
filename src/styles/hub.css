@@ -1,0 +1,470 @@
+/* ============================================================
+   CATALOGUES : NOS SOUVENIRS ET BLOG
+   ------------------------------------------------------------
+   Deux pages-catalogues et leurs fiches, sur la même trame
+   (components/hub/Hub.tsx) :
+     - un hero court, centré, sous la lueur violette et les trois
+       faisceaux de l'accueil, sans photo ;
+     - une grille de cartes en design cards 01 (.dc01, app.css),
+       chacune avec sa photo, qui mène à sa page.
+   Les titres en gras et en blanc pur, comme l'accueil.
+   ============================================================ */
+
+.section--hub .section__inner {
+  max-width: 76rem;
+}
+
+/* La grille suit le hero de près : le hero a déjà son air. */
+.section.section--hub {
+  padding-top: clamp(1rem, 3vh, 2rem);
+}
+
+/* ---- Le lien lavande et sa flèche ---- */
+
+.hub-lien {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--beam);
+}
+
+.hub-lien__fleche,
+.hub-carte__fleche {
+  flex: none;
+  width: 1.1rem;
+  height: 1.1rem;
+  transition: transform 0.25s ease;
+}
+
+.hub-lien:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+  outline: 2px solid var(--beam);
+  outline-offset: 4px;
+}
+
+.hub-lien:focus-visible .hub-lien__fleche {
+  transform: translateX(0.3rem);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hub-lien:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+  }
+
+  .hub-lien:hover .hub-lien__fleche {
+    transform: translateX(0.3rem);
+  }
+}
+
+/* ============================================================
+   LE HERO
+   ============================================================ */
+
+.hub-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(4rem, 12vh, 7rem) var(--pad) clamp(3rem, 7vh, 4.5rem);
+  background-color: var(--night);
+}
+
+/* La lueur violette en haut au centre, sous la lampe des faisceaux. */
+.hub-hero__salle {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background-image: radial-gradient(
+    70% 80% at 50% -20%,
+    color-mix(in srgb, var(--oysen-purple) 42%, transparent),
+    transparent 68%
+  );
+}
+
+/* Les faisceaux de l'accueil (.hero__lights, app.css), calculés sur la
+   hauteur de son hero : ils tombent comme sur l'accueil, coupés au pied
+   de ce hero plus court. */
+.hub-hero__faisceaux {
+  position: absolute;
+  inset: 0 0 auto;
+  height: calc(100dvh - var(--nav-h, 0px));
+  overflow: hidden;
+}
+
+.hub-hero__faisceaux i {
+  position: absolute;
+  top: -14%;
+  left: 50%;
+  width: 42vmax;
+  height: 125%;
+  transform-origin: 50% 0;
+  /* Étroit à la lampe, ouvert au sol. */
+  clip-path: polygon(48.6% 0, 51.4% 0, 100% 100%, 0 100%);
+  background-image: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--beam) 17%, transparent),
+    color-mix(in srgb, var(--beam) 6%, transparent) 40%,
+    transparent 78%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 4%,
+    #000 34%,
+    #000 66%,
+    transparent 96%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 4%,
+    #000 34%,
+    #000 66%,
+    transparent 96%
+  );
+  filter: blur(7px);
+}
+
+.hub-hero__faisceaux i:nth-child(1) {
+  transform: translateX(-50%) rotate(-27deg);
+}
+
+.hub-hero__faisceaux i:nth-child(2) {
+  transform: translateX(-50%) rotate(1deg);
+  opacity: 0.75;
+}
+
+.hub-hero__faisceaux i:nth-child(3) {
+  transform: translateX(-50%) rotate(25deg);
+}
+
+.hub-hero__texte {
+  max-width: 58rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+/* En gras et en blanc pur, aux tailles du hero de l'accueil. */
+.hub-hero__titre {
+  max-width: 30ch;
+  margin: 0 auto;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.779rem, 4.213vw, 3.277rem);
+  line-height: 1.153;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  color: #ffffff;
+  text-shadow: 0 0 34px color-mix(in srgb, var(--beam) 25%, transparent);
+}
+
+.hub-hero__lede {
+  max-width: 56ch;
+  margin: clamp(1.25rem, 3vh, 1.75rem) auto 0;
+  font-size: clamp(1rem, 1.35vw, 1.125rem);
+  line-height: 1.7;
+  text-wrap: pretty;
+  color: var(--dusk);
+}
+
+/* Les repères d'une fiche (lieu, public, date), séparés par un losange. */
+.hub-hero__reperes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1rem;
+  margin: clamp(1.25rem, 3vh, 1.75rem) 0 0;
+  font-size: 0.9375rem;
+  color: var(--dusk);
+}
+
+.hub-hero__reperes span {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.hub-hero__reperes span + span::before {
+  content: '';
+  width: 0.35rem;
+  height: 0.35rem;
+  background-color: var(--beam);
+  transform: rotate(45deg);
+}
+
+/* L'entrée, après le rideau s'il se joue. */
+.hub-hero__texte > * {
+  animation: hero-monte 0.8s cubic-bezier(0.22, 0.61, 0.36, 1)
+    calc(var(--apres-rideau, 0s) + 0.1s) both;
+}
+
+.hub-hero__texte > :nth-child(2) {
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.22s);
+}
+
+.hub-hero__texte > :nth-child(3) {
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.34s);
+}
+
+/* ============================================================
+   LES CARTES
+   Trois par rangée sur ordinateur, deux sur tablette, une sur
+   téléphone. La photo en tête, traitée pour la salle sombre, puis
+   l'étiquette, le titre, les repères, le résumé et l'appel. Le
+   lien du titre couvre toute la carte.
+   ============================================================ */
+
+.hub-cartes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1rem, 1.8vw, 1.5rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hub-carte {
+  --dc01-retrait: clamp(1.25rem, 2vw, 1.6rem);
+  display: flex;
+  flex-direction: column;
+}
+
+/* La photo : coins hauts de la carte, voile sombre au pied. */
+.hub-carte__photo {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  border-radius: 0.3rem 0.3rem 0 0;
+}
+
+.hub-carte__photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.8;
+  filter: saturate(0.85);
+}
+
+.hub-carte__photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+    to bottom,
+    transparent 45%,
+    color-mix(in srgb, #17131c 85%, transparent)
+  );
+  pointer-events: none;
+}
+
+.hub-carte__corps {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding: clamp(1.1rem, 1.8vw, 1.4rem) var(--dc01-retrait)
+    clamp(1.25rem, 2vw, 1.6rem);
+}
+
+.hub-carte__etiquette {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--beam);
+}
+
+.hub-carte__etiquette::before {
+  content: '';
+  flex: none;
+  width: 0.45rem;
+  height: 0.45rem;
+  background-color: var(--beam);
+  transform: rotate(45deg);
+}
+
+.hub-carte__titre {
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.3;
+  text-wrap: balance;
+  color: #ffffff;
+}
+
+.hub-carte__lien {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Le lien couvre toute la carte. */
+.hub-carte__lien::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: 0.3rem;
+}
+
+.hub-carte__lien:focus-visible {
+  outline: none;
+}
+
+.hub-carte:has(.hub-carte__lien:focus-visible) {
+  outline: 2px solid var(--beam);
+  outline-offset: 3px;
+}
+
+.hub-carte__reperes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.75rem;
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--dusk);
+}
+
+.hub-carte__reperes span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.hub-carte__reperes span + span::before {
+  content: '';
+  width: 0.3rem;
+  height: 0.3rem;
+  background-color: color-mix(in srgb, var(--beam) 70%, transparent);
+  transform: rotate(45deg);
+}
+
+.hub-carte__resume {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  text-wrap: pretty;
+  color: var(--dusk);
+}
+
+.hub-carte__appel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--beam);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hub-carte:hover .hub-carte__fleche {
+    transform: translateX(0.3rem);
+  }
+}
+
+/* ============================================================
+   LA FICHE EN ATTENTE
+   ============================================================ */
+
+.fiche {
+  display: grid;
+  justify-items: center;
+  gap: clamp(1.25rem, 3vh, 1.75rem);
+  max-width: 56rem;
+  text-align: center;
+}
+
+.fiche__photo {
+  width: 100%;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  border-radius: 0.3rem;
+  box-shadow: 0 0 0 1px #574765;
+}
+
+.fiche__photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.8;
+  filter: saturate(0.85);
+}
+
+.fiche__resume {
+  max-width: 52ch;
+  margin: 0;
+  font-size: clamp(1.05rem, 1.4vw, 1.2rem);
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--dawn);
+}
+
+.fiche__attente {
+  max-width: 56ch;
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--dusk);
+}
+
+.fiche__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem 2rem;
+  margin-top: 0.5rem;
+}
+
+/* ============================================================
+   MOUVEMENT RÉDUIT, TABLETTE, TÉLÉPHONE
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .hub-hero__texte > * {
+    animation: none;
+  }
+
+  .hub-lien__fleche,
+  .hub-carte__fleche {
+    transition: none;
+  }
+}
+
+@media (max-width: 1023px) {
+  .hub-cartes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .hub-cartes {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---- La barre posée sur le hero ----
+   Sur ordinateur, la barre de navigation est posée sur le hero, comme
+   sur l'accueil (navbar.css) : le contenu du hero est repoussé de sa
+   hauteur. Les faisceaux prennent un écran entier, comme sur l'accueil. */
+@media (min-width: 1025px) {
+  .hub-hero {
+    padding-top: calc(var(--nav-h) + clamp(4rem, 12vh, 7rem));
+  }
+
+  .hub-hero__faisceaux {
+    height: 100dvh;
+  }
+}

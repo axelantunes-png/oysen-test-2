@@ -3,6 +3,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { DELAI_REPONSE_H } from '../../components/home/content'
 import { Arrow } from '../../components/home/icons'
+import { Lien } from '../../components/Lien'
 
 /*
  * Chemin depuis la racine du projet, et non relatif : sur une route imbriquée,
@@ -175,9 +176,9 @@ function Hero() {
 
           <div className="festival-hero__actions">
             <div className="festival-hero__appel">
-              <a className="btn btn--solid" href={CONTACT_FESTIVAL}>
+              <Lien className="btn btn--solid" href={CONTACT_FESTIVAL}>
                 Recevoir un devis détaillé
-              </a>
+              </Lien>
               <p className="festival-hero__rassurance">
                 Fiche technique ou cahier des charges à joindre, si vous en avez
                 un · sans engagement · réponse sous {DELAI_REPONSE_H}&nbsp;h
@@ -300,7 +301,10 @@ function Choix() {
 
           <ul className="familles">
             {FAMILLES.map((famille) => (
-              <li className="famille" key={famille.nom}>
+              <li className="famille dc01" key={famille.nom}>
+                <span className="dc01__repere" aria-hidden="true" />
+                <span className="dc01__survol" aria-hidden="true" />
+                <span className="dc01__zone" aria-hidden="true" />
                 <h3 className="famille__nom">{famille.nom}</h3>
                 <ul className="famille__details">
                   {famille.details.map((detail) => (
@@ -375,10 +379,10 @@ function Panne() {
             préparé et coordonné dans le détail. Oysen est dirigée par Mathis
             Amato, ingénieur.
           </p>
-          <a className="fest-lien" href="/qui-sommes-nous/le-fondateur">
+          <Lien className="fest-lien" href="/qui-sommes-nous/le-fondateur">
             Le parcours du fondateur
             <Arrow className="fest-lien__fleche" />
-          </a>
+          </Lien>
         </div>
       </div>
     </section>
@@ -433,9 +437,12 @@ function Etapes() {
         <ol className="etapes-p">
           {ETAPES_P.map((etape, index) => (
             <li
-              className={`etape-p${etape.jourJ ? ' etape-p--jour-j' : ''}`}
+              className={`etape-p dc01${etape.jourJ ? ' etape-p--jour-j' : ''}`}
               key={etape.nom}
             >
+              <span className="dc01__repere" aria-hidden="true" />
+              <span className="dc01__survol" aria-hidden="true" />
+              <span className="dc01__zone" aria-hidden="true" />
               <span className="etape-p__numero" aria-hidden="true">
                 {String(index + 1).padStart(2, '0')}
               </span>
@@ -543,9 +550,9 @@ function Appel() {
           ))}
         </ul>
         <div className="appel__actions">
-          <a className="btn btn--solid" href={CONTACT_FESTIVAL}>
+          <Lien className="btn btn--solid" href={CONTACT_FESTIVAL}>
             Recevoir un devis détaillé
-          </a>
+          </Lien>
         </div>
         <p className="appel__sous-bouton">Sans engagement</p>
       </div>

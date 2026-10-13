@@ -40,6 +40,16 @@
   margin-inline: auto;
 }
 
+/* ---- Les titres en gras et en blanc pur, comme l'accueil ----
+   Les mêmes valeurs que L'agence et Événements d'entreprise. Avant :
+   300, clamp(1.65rem, 3.3vw, 2.5rem), interligne 1.16, --dawn. */
+.page-technique .section__title {
+  font-weight: 700;
+  font-size: clamp(1.545rem, 3.09vw, 2.34rem);
+  line-height: 1.24;
+  color: #ffffff;
+}
+
 .tech-tete__texte {
   max-width: 56ch;
   margin: clamp(1rem, 2.5vh, 1.4rem) auto 0;
@@ -68,15 +78,26 @@
   transition: transform 0.25s ease;
 }
 
-.tech-lien:hover,
 .tech-lien:focus-visible {
   text-decoration: underline;
   text-underline-offset: 0.3em;
 }
 
-.tech-lien:hover .tech-lien__fleche,
+@media (hover: hover) and (pointer: fine) {
+  .tech-lien:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+  }
+}
+
 .tech-lien:focus-visible .tech-lien__fleche {
   transform: translateX(0.3rem);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tech-lien:hover .tech-lien__fleche {
+    transform: translateX(0.3rem);
+  }
 }
 
 .tech-lien:focus-visible {
@@ -109,12 +130,17 @@
   height: 100%;
   object-fit: cover;
   object-position: 50% 45%;
-  filter: grayscale(0.65) saturate(0.55) brightness(0.28) contrast(1.1);
+  /* Aussi lumineuse que celles de l'accueil et de L'agence (avant :
+     grayscale(0.65) saturate(0.55) brightness(0.28) contrast(1.1)). */
+  opacity: 0.42;
+  filter: saturate(0.85) brightness(1.15);
   pointer-events: none;
   user-select: none;
 }
 
-/* Le voile, dense derrière le texte ; une lueur violette sous le pont. */
+/* Le voile central, allégé au niveau de celui de l'accueil (avant :
+   82 %, 55 % et 40 % de --night, 60% 50% at 50% 58%) ; une lueur
+   violette sous le pont. */
 .tech-hero__salle {
   position: absolute;
   inset: 0;
@@ -123,10 +149,10 @@
   pointer-events: none;
   background-image:
     radial-gradient(
-      60% 50% at 50% 58%,
-      color-mix(in srgb, var(--night) 82%, transparent),
-      color-mix(in srgb, var(--night) 55%, transparent) 60%,
-      color-mix(in srgb, var(--night) 40%, transparent) 100%
+      70% 58% at 50% 42%,
+      color-mix(in srgb, var(--night) 62%, transparent),
+      color-mix(in srgb, var(--night) 40%, transparent) 45%,
+      transparent 100%
     ),
     radial-gradient(
       80% 40% at 50% 0%,
@@ -288,12 +314,14 @@
   max-width: 24ch;
   margin: 0 auto;
   font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
-  font-weight: 300;
-  font-size: clamp(2rem, 3.4vw, 2.9rem);
-  line-height: 1.12;
+  /* En gras et en blanc pur, aux tailles du hero de l'accueil (avant :
+     300, clamp(2rem, 3.4vw, 2.9rem), interligne 1.12, --dawn). */
+  font-weight: 700;
+  font-size: clamp(1.779rem, 4.213vw, 3.277rem);
+  line-height: 1.153;
   letter-spacing: -0.02em;
   text-wrap: balance;
-  color: var(--dawn);
+  color: #ffffff;
   text-shadow: 0 0 34px color-mix(in srgb, var(--beam) 25%, transparent);
 }
 
@@ -310,8 +338,8 @@
 .tech-hero__lede {
   max-width: 52ch;
   margin: clamp(1.25rem, 3vh, 1.75rem) auto 0;
-  font-size: clamp(1rem, 1.25vw, 1.0625rem);
-  line-height: 1.65;
+  font-size: clamp(1rem, 1.35vw, 1.125rem);
+  line-height: 1.7;
   text-wrap: pretty;
   color: var(--dusk);
 }
@@ -507,44 +535,21 @@
   list-style: none;
 }
 
+/* Design cards 01 (.dc01, app.css) : fond, bordure, trait du haut et
+   survol viennent de là. Les projecteurs (::after) restent ceux de la
+   page, à leur place. */
 .domaine {
   --x: 50%;
   --y: 0%;
   --dir: 180deg;
   --ouv: 12deg;
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
+  --dc01-retrait: clamp(1.5rem, 2.2vw, 2rem);
   display: flex;
   flex-direction: column;
   grid-column: span 3;
   gap: 0.75rem;
   min-height: 14rem;
   padding: clamp(1.5rem, 2.2vw, 2rem);
-  border: 1px solid transparent;
-  background:
-    radial-gradient(
-        70% 80% at var(--x) var(--y),
-        color-mix(in srgb, var(--beam) 13%, transparent),
-        transparent 65%
-      )
-      padding-box,
-    linear-gradient(
-        to bottom,
-        color-mix(in srgb, var(--night-raised) 92%, var(--beam)),
-        var(--night-raised) 55%,
-        color-mix(in srgb, var(--night) 60%, var(--night-raised))
-      )
-      padding-box,
-    linear-gradient(
-        to bottom,
-        color-mix(in srgb, var(--beam) 50%, transparent),
-        var(--night-veil) 35%,
-        color-mix(in srgb, var(--charte-gris) 55%, transparent)
-      )
-      border-box;
-  box-shadow: 0 1.5rem 3rem -2rem rgba(0, 0, 0, 0.7);
-  transition: box-shadow 0.3s ease;
 }
 
 /* La seconde rangée, trois cartes plus larges. */
@@ -624,34 +629,13 @@
     transparent 95%
   );
   opacity: 0.8;
-  transition: opacity 0.3s ease;
   pointer-events: none;
 }
 
-/* L'arête haute, allumée à moitié ; à fond au survol. */
-.domaine::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  height: 1px;
-  background-color: var(--beam);
-  box-shadow: 0 0 0.9rem color-mix(in srgb, var(--beam) 60%, transparent);
-  opacity: 0.35;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-}
-
-.domaine:hover {
-  box-shadow:
-    0 1.5rem 3rem -2rem rgba(0, 0, 0, 0.7),
-    0 0 2.5rem -1rem color-mix(in srgb, var(--beam) 30%, transparent);
-}
-
-.domaine:hover::after,
-.domaine:hover::before {
-  opacity: 1;
+@media (hover: hover) and (pointer: fine) {
+  .domaine:hover::after {
+    opacity: 1;
+  }
 }
 
 .domaine__picto {
@@ -661,23 +645,23 @@
   color: var(--beam);
   filter: drop-shadow(0 0 0.45rem color-mix(in srgb, var(--beam) 45%, transparent));
   opacity: 0.85;
-  transition:
-    opacity 0.3s ease,
-    filter 0.3s ease;
+  transition: opacity var(--dc01-survol);
 }
 
-.domaine:hover .domaine__picto {
-  opacity: 1;
-  filter: drop-shadow(0 0 0.8rem color-mix(in srgb, var(--beam) 70%, transparent));
+/* Le pictogramme s'allume au survol, en opacité seulement. */
+@media (hover: hover) and (pointer: fine) {
+  .domaine:hover .domaine__picto {
+    opacity: 1;
+  }
 }
 
 .domaine__nom {
   margin: 0;
   font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
   font-size: 1.1rem;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.3;
-  color: var(--dawn);
+  color: #ffffff;
 }
 
 .domaine__apport {
@@ -767,11 +751,13 @@
   max-width: 22ch;
   margin: 0.25rem 0 0;
   font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
-  font-size: clamp(1.5rem, 2.3vw, 2rem);
-  font-weight: 300;
-  line-height: 1.2;
+  /* En gras et en blanc pur, réduit du rapport de largeur entre les
+     graisses (avant : 300, clamp(1.5rem, 2.3vw, 2rem), 1.2, --dawn). */
+  font-size: clamp(1.4rem, 2.15vw, 1.87rem);
+  font-weight: 700;
+  line-height: 1.28;
   text-wrap: balance;
-  color: var(--dawn);
+  color: #ffffff;
 }
 
 .agences__texte {
@@ -810,8 +796,8 @@
   margin: 0 0 0.5rem;
   font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
   font-size: 1.0625rem;
-  font-weight: 600;
-  color: var(--dawn);
+  font-weight: 700;
+  color: #ffffff;
 }
 
 .public-tech__nom::before {
@@ -942,8 +928,8 @@
   margin: 0;
   font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
   font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--dawn);
+  font-weight: 700;
+  color: #ffffff;
 }
 
 .plus-grand__texte {
@@ -966,9 +952,6 @@
   }
 
   .tech-lien__fleche,
-  .domaine,
-  .domaine::before,
-  .domaine::after,
   .domaine__picto {
     transition: none;
   }
@@ -1120,5 +1103,26 @@
 
   .comparaison__lien {
     text-align: left;
+  }
+}
+
+/* ---- La barre posée sur le hero ----
+   Sur ordinateur, la barre de navigation est posée sur le hero, comme
+   sur l'accueil (navbar.css) : le hero passe dessous et gagne la
+   hauteur de la barre, son contenu est repoussé d'autant. Rien ne
+   bouge à l'écran. */
+@media (min-width: 1025px) {
+  .tech-hero {
+    min-height: calc(min(92vh, 58rem) + var(--nav-h));
+    padding-top: calc(var(--nav-h) + clamp(7rem, 17vh, 10rem));
+  }
+
+  /* Le pont et ses projecteurs, collés juste sous la barre. */
+  .pont {
+    top: var(--nav-h);
+  }
+
+  .pont__projecteurs {
+    top: calc(var(--nav-h) + 1.6rem);
   }
 }

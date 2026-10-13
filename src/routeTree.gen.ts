@@ -10,6 +10,11 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminPriveIndexRouteImport } from './routes/admin-prive/index'
+import { Route as AdminPriveCmsRouteRouteImport } from './routes/admin-prive/cms/route'
+import { Route as AdminPriveNouveauMotDePasseRouteImport } from './routes/admin-prive/nouveau-mot-de-passe'
+import { Route as BlogIndexRouteImport } from './routes/blog/index'
+import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
 import { Route as ContactIndexRouteImport } from './routes/contact/index'
 import { Route as ContactMerciRouteImport } from './routes/contact/merci'
 import { Route as NosServicesIndexRouteImport } from './routes/nos-services/index'
@@ -19,12 +24,43 @@ import { Route as NosServicesFestivalsEvenementsCulturelsRouteImport } from './r
 import { Route as NosServicesLocationDeMaterielRouteImport } from './routes/nos-services/location-de-materiel'
 import { Route as NosServicesMariagesEvenementsPrivesRouteImport } from './routes/nos-services/mariages-evenements-prives'
 import { Route as NosServicesPrestationTechniqueRouteImport } from './routes/nos-services/prestation-technique'
+import { Route as NosSouvenirsIndexRouteImport } from './routes/nos-souvenirs/index'
+import { Route as NosSouvenirsSlugRouteImport } from './routes/nos-souvenirs/$slug'
 import { Route as QuiSommesNousLAgenceRouteImport } from './routes/qui-sommes-nous/l-agence'
 import { Route as QuiSommesNousLeFondateurRouteImport } from './routes/qui-sommes-nous/le-fondateur'
+import { Route as AdminPriveCmsIndexRouteImport } from './routes/admin-prive/cms/index'
+import { Route as AdminPriveCmsPromotionIndexRouteImport } from './routes/admin-prive/cms/promotion/index'
+import { Route as AdminPriveCmsPromotionIdRouteImport } from './routes/admin-prive/cms/promotion/$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminPriveIndexRoute = AdminPriveIndexRouteImport.update({
+  id: '/admin-prive/',
+  path: '/admin-prive/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminPriveCmsRouteRoute = AdminPriveCmsRouteRouteImport.update({
+  id: '/admin-prive/cms',
+  path: '/admin-prive/cms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminPriveNouveauMotDePasseRoute =
+  AdminPriveNouveauMotDePasseRouteImport.update({
+    id: '/admin-prive/nouveau-mot-de-passe',
+    path: '/admin-prive/nouveau-mot-de-passe',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/blog/$slug',
+  path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactIndexRoute = ContactIndexRouteImport.update({
@@ -78,6 +114,16 @@ const NosServicesPrestationTechniqueRoute =
     path: '/nos-services/prestation-technique',
     getParentRoute: () => rootRouteImport,
   } as any)
+const NosSouvenirsIndexRoute = NosSouvenirsIndexRouteImport.update({
+  id: '/nos-souvenirs/',
+  path: '/nos-souvenirs/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NosSouvenirsSlugRoute = NosSouvenirsSlugRouteImport.update({
+  id: '/nos-souvenirs/$slug',
+  path: '/nos-souvenirs/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const QuiSommesNousLAgenceRoute = QuiSommesNousLAgenceRouteImport.update({
   id: '/qui-sommes-nous/l-agence',
   path: '/qui-sommes-nous/l-agence',
@@ -89,9 +135,29 @@ const QuiSommesNousLeFondateurRoute =
     path: '/qui-sommes-nous/le-fondateur',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AdminPriveCmsIndexRoute = AdminPriveCmsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminPriveCmsRouteRoute,
+} as any)
+const AdminPriveCmsPromotionIndexRoute =
+  AdminPriveCmsPromotionIndexRouteImport.update({
+    id: '/promotion/',
+    path: '/promotion/',
+    getParentRoute: () => AdminPriveCmsRouteRoute,
+  } as any)
+const AdminPriveCmsPromotionIdRoute =
+  AdminPriveCmsPromotionIdRouteImport.update({
+    id: '/promotion/$id',
+    path: '/promotion/$id',
+    getParentRoute: () => AdminPriveCmsRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin-prive/cms': typeof AdminPriveCmsRouteRouteWithChildren
+  '/admin-prive/nouveau-mot-de-passe': typeof AdminPriveNouveauMotDePasseRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/contact/merci': typeof ContactMerciRoute
   '/nos-services/collectivites-institutionnels': typeof NosServicesCollectivitesInstitutionnelsRoute
   '/nos-services/evenements-entreprise': typeof NosServicesEvenementsEntrepriseRoute
@@ -99,13 +165,22 @@ export interface FileRoutesByFullPath {
   '/nos-services/location-de-materiel': typeof NosServicesLocationDeMaterielRoute
   '/nos-services/mariages-evenements-prives': typeof NosServicesMariagesEvenementsPrivesRoute
   '/nos-services/prestation-technique': typeof NosServicesPrestationTechniqueRoute
+  '/nos-souvenirs/$slug': typeof NosSouvenirsSlugRoute
   '/qui-sommes-nous/l-agence': typeof QuiSommesNousLAgenceRoute
   '/qui-sommes-nous/le-fondateur': typeof QuiSommesNousLeFondateurRoute
+  '/admin-prive/': typeof AdminPriveIndexRoute
+  '/blog/': typeof BlogIndexRoute
   '/contact/': typeof ContactIndexRoute
   '/nos-services/': typeof NosServicesIndexRoute
+  '/nos-souvenirs/': typeof NosSouvenirsIndexRoute
+  '/admin-prive/cms/': typeof AdminPriveCmsIndexRoute
+  '/admin-prive/cms/promotion/$id': typeof AdminPriveCmsPromotionIdRoute
+  '/admin-prive/cms/promotion/': typeof AdminPriveCmsPromotionIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin-prive/nouveau-mot-de-passe': typeof AdminPriveNouveauMotDePasseRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/contact/merci': typeof ContactMerciRoute
   '/nos-services/collectivites-institutionnels': typeof NosServicesCollectivitesInstitutionnelsRoute
   '/nos-services/evenements-entreprise': typeof NosServicesEvenementsEntrepriseRoute
@@ -113,14 +188,24 @@ export interface FileRoutesByTo {
   '/nos-services/location-de-materiel': typeof NosServicesLocationDeMaterielRoute
   '/nos-services/mariages-evenements-prives': typeof NosServicesMariagesEvenementsPrivesRoute
   '/nos-services/prestation-technique': typeof NosServicesPrestationTechniqueRoute
+  '/nos-souvenirs/$slug': typeof NosSouvenirsSlugRoute
   '/qui-sommes-nous/l-agence': typeof QuiSommesNousLAgenceRoute
   '/qui-sommes-nous/le-fondateur': typeof QuiSommesNousLeFondateurRoute
+  '/admin-prive': typeof AdminPriveIndexRoute
+  '/blog': typeof BlogIndexRoute
   '/contact': typeof ContactIndexRoute
   '/nos-services': typeof NosServicesIndexRoute
+  '/nos-souvenirs': typeof NosSouvenirsIndexRoute
+  '/admin-prive/cms': typeof AdminPriveCmsIndexRoute
+  '/admin-prive/cms/promotion/$id': typeof AdminPriveCmsPromotionIdRoute
+  '/admin-prive/cms/promotion': typeof AdminPriveCmsPromotionIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin-prive/cms': typeof AdminPriveCmsRouteRouteWithChildren
+  '/admin-prive/nouveau-mot-de-passe': typeof AdminPriveNouveauMotDePasseRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/contact/merci': typeof ContactMerciRoute
   '/nos-services/collectivites-institutionnels': typeof NosServicesCollectivitesInstitutionnelsRoute
   '/nos-services/evenements-entreprise': typeof NosServicesEvenementsEntrepriseRoute
@@ -128,15 +213,25 @@ export interface FileRoutesById {
   '/nos-services/location-de-materiel': typeof NosServicesLocationDeMaterielRoute
   '/nos-services/mariages-evenements-prives': typeof NosServicesMariagesEvenementsPrivesRoute
   '/nos-services/prestation-technique': typeof NosServicesPrestationTechniqueRoute
+  '/nos-souvenirs/$slug': typeof NosSouvenirsSlugRoute
   '/qui-sommes-nous/l-agence': typeof QuiSommesNousLAgenceRoute
   '/qui-sommes-nous/le-fondateur': typeof QuiSommesNousLeFondateurRoute
+  '/admin-prive/': typeof AdminPriveIndexRoute
+  '/blog/': typeof BlogIndexRoute
   '/contact/': typeof ContactIndexRoute
   '/nos-services/': typeof NosServicesIndexRoute
+  '/nos-souvenirs/': typeof NosSouvenirsIndexRoute
+  '/admin-prive/cms/': typeof AdminPriveCmsIndexRoute
+  '/admin-prive/cms/promotion/$id': typeof AdminPriveCmsPromotionIdRoute
+  '/admin-prive/cms/promotion/': typeof AdminPriveCmsPromotionIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin-prive/cms'
+    | '/admin-prive/nouveau-mot-de-passe'
+    | '/blog/$slug'
     | '/contact/merci'
     | '/nos-services/collectivites-institutionnels'
     | '/nos-services/evenements-entreprise'
@@ -144,13 +239,22 @@ export interface FileRouteTypes {
     | '/nos-services/location-de-materiel'
     | '/nos-services/mariages-evenements-prives'
     | '/nos-services/prestation-technique'
+    | '/nos-souvenirs/$slug'
     | '/qui-sommes-nous/l-agence'
     | '/qui-sommes-nous/le-fondateur'
+    | '/admin-prive/'
+    | '/blog/'
     | '/contact/'
     | '/nos-services/'
+    | '/nos-souvenirs/'
+    | '/admin-prive/cms/'
+    | '/admin-prive/cms/promotion/$id'
+    | '/admin-prive/cms/promotion/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin-prive/nouveau-mot-de-passe'
+    | '/blog/$slug'
     | '/contact/merci'
     | '/nos-services/collectivites-institutionnels'
     | '/nos-services/evenements-entreprise'
@@ -158,13 +262,23 @@ export interface FileRouteTypes {
     | '/nos-services/location-de-materiel'
     | '/nos-services/mariages-evenements-prives'
     | '/nos-services/prestation-technique'
+    | '/nos-souvenirs/$slug'
     | '/qui-sommes-nous/l-agence'
     | '/qui-sommes-nous/le-fondateur'
+    | '/admin-prive'
+    | '/blog'
     | '/contact'
     | '/nos-services'
+    | '/nos-souvenirs'
+    | '/admin-prive/cms'
+    | '/admin-prive/cms/promotion/$id'
+    | '/admin-prive/cms/promotion'
   id:
     | '__root__'
     | '/'
+    | '/admin-prive/cms'
+    | '/admin-prive/nouveau-mot-de-passe'
+    | '/blog/$slug'
     | '/contact/merci'
     | '/nos-services/collectivites-institutionnels'
     | '/nos-services/evenements-entreprise'
@@ -172,14 +286,24 @@ export interface FileRouteTypes {
     | '/nos-services/location-de-materiel'
     | '/nos-services/mariages-evenements-prives'
     | '/nos-services/prestation-technique'
+    | '/nos-souvenirs/$slug'
     | '/qui-sommes-nous/l-agence'
     | '/qui-sommes-nous/le-fondateur'
+    | '/admin-prive/'
+    | '/blog/'
     | '/contact/'
     | '/nos-services/'
+    | '/nos-souvenirs/'
+    | '/admin-prive/cms/'
+    | '/admin-prive/cms/promotion/$id'
+    | '/admin-prive/cms/promotion/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminPriveCmsRouteRoute: typeof AdminPriveCmsRouteRouteWithChildren
+  AdminPriveNouveauMotDePasseRoute: typeof AdminPriveNouveauMotDePasseRoute
+  BlogSlugRoute: typeof BlogSlugRoute
   ContactMerciRoute: typeof ContactMerciRoute
   NosServicesCollectivitesInstitutionnelsRoute: typeof NosServicesCollectivitesInstitutionnelsRoute
   NosServicesEvenementsEntrepriseRoute: typeof NosServicesEvenementsEntrepriseRoute
@@ -187,10 +311,14 @@ export interface RootRouteChildren {
   NosServicesLocationDeMaterielRoute: typeof NosServicesLocationDeMaterielRoute
   NosServicesMariagesEvenementsPrivesRoute: typeof NosServicesMariagesEvenementsPrivesRoute
   NosServicesPrestationTechniqueRoute: typeof NosServicesPrestationTechniqueRoute
+  NosSouvenirsSlugRoute: typeof NosSouvenirsSlugRoute
   QuiSommesNousLAgenceRoute: typeof QuiSommesNousLAgenceRoute
   QuiSommesNousLeFondateurRoute: typeof QuiSommesNousLeFondateurRoute
+  AdminPriveIndexRoute: typeof AdminPriveIndexRoute
+  BlogIndexRoute: typeof BlogIndexRoute
   ContactIndexRoute: typeof ContactIndexRoute
   NosServicesIndexRoute: typeof NosServicesIndexRoute
+  NosSouvenirsIndexRoute: typeof NosSouvenirsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -200,6 +328,41 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin-prive/': {
+      id: '/admin-prive/'
+      path: '/admin-prive'
+      fullPath: '/admin-prive/'
+      preLoaderRoute: typeof AdminPriveIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin-prive/cms': {
+      id: '/admin-prive/cms'
+      path: '/admin-prive/cms'
+      fullPath: '/admin-prive/cms'
+      preLoaderRoute: typeof AdminPriveCmsRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin-prive/nouveau-mot-de-passe': {
+      id: '/admin-prive/nouveau-mot-de-passe'
+      path: '/admin-prive/nouveau-mot-de-passe'
+      fullPath: '/admin-prive/nouveau-mot-de-passe'
+      preLoaderRoute: typeof AdminPriveNouveauMotDePasseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/blog/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact/': {
@@ -265,6 +428,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NosServicesPrestationTechniqueRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/nos-souvenirs/': {
+      id: '/nos-souvenirs/'
+      path: '/nos-souvenirs'
+      fullPath: '/nos-souvenirs/'
+      preLoaderRoute: typeof NosSouvenirsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/nos-souvenirs/$slug': {
+      id: '/nos-souvenirs/$slug'
+      path: '/nos-souvenirs/$slug'
+      fullPath: '/nos-souvenirs/$slug'
+      preLoaderRoute: typeof NosSouvenirsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/qui-sommes-nous/l-agence': {
       id: '/qui-sommes-nous/l-agence'
       path: '/qui-sommes-nous/l-agence'
@@ -279,11 +456,50 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof QuiSommesNousLeFondateurRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin-prive/cms/': {
+      id: '/admin-prive/cms/'
+      path: '/'
+      fullPath: '/admin-prive/cms/'
+      preLoaderRoute: typeof AdminPriveCmsIndexRouteImport
+      parentRoute: typeof AdminPriveCmsRouteRoute
+    }
+    '/admin-prive/cms/promotion/': {
+      id: '/admin-prive/cms/promotion/'
+      path: '/promotion'
+      fullPath: '/admin-prive/cms/promotion/'
+      preLoaderRoute: typeof AdminPriveCmsPromotionIndexRouteImport
+      parentRoute: typeof AdminPriveCmsRouteRoute
+    }
+    '/admin-prive/cms/promotion/$id': {
+      id: '/admin-prive/cms/promotion/$id'
+      path: '/promotion/$id'
+      fullPath: '/admin-prive/cms/promotion/$id'
+      preLoaderRoute: typeof AdminPriveCmsPromotionIdRouteImport
+      parentRoute: typeof AdminPriveCmsRouteRoute
+    }
   }
 }
 
+interface AdminPriveCmsRouteRouteChildren {
+  AdminPriveCmsIndexRoute: typeof AdminPriveCmsIndexRoute
+  AdminPriveCmsPromotionIdRoute: typeof AdminPriveCmsPromotionIdRoute
+  AdminPriveCmsPromotionIndexRoute: typeof AdminPriveCmsPromotionIndexRoute
+}
+
+const AdminPriveCmsRouteRouteChildren: AdminPriveCmsRouteRouteChildren = {
+  AdminPriveCmsIndexRoute: AdminPriveCmsIndexRoute,
+  AdminPriveCmsPromotionIdRoute: AdminPriveCmsPromotionIdRoute,
+  AdminPriveCmsPromotionIndexRoute: AdminPriveCmsPromotionIndexRoute,
+}
+
+const AdminPriveCmsRouteRouteWithChildren =
+  AdminPriveCmsRouteRoute._addFileChildren(AdminPriveCmsRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminPriveCmsRouteRoute: AdminPriveCmsRouteRouteWithChildren,
+  AdminPriveNouveauMotDePasseRoute: AdminPriveNouveauMotDePasseRoute,
+  BlogSlugRoute: BlogSlugRoute,
   ContactMerciRoute: ContactMerciRoute,
   NosServicesCollectivitesInstitutionnelsRoute:
     NosServicesCollectivitesInstitutionnelsRoute,
@@ -294,10 +510,14 @@ const rootRouteChildren: RootRouteChildren = {
   NosServicesMariagesEvenementsPrivesRoute:
     NosServicesMariagesEvenementsPrivesRoute,
   NosServicesPrestationTechniqueRoute: NosServicesPrestationTechniqueRoute,
+  NosSouvenirsSlugRoute: NosSouvenirsSlugRoute,
   QuiSommesNousLAgenceRoute: QuiSommesNousLAgenceRoute,
   QuiSommesNousLeFondateurRoute: QuiSommesNousLeFondateurRoute,
+  AdminPriveIndexRoute: AdminPriveIndexRoute,
+  BlogIndexRoute: BlogIndexRoute,
   ContactIndexRoute: ContactIndexRoute,
   NosServicesIndexRoute: NosServicesIndexRoute,
+  NosSouvenirsIndexRoute: NosSouvenirsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

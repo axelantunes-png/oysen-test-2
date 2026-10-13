@@ -1,31 +1,24 @@
 /* ============================================================
    COLLECTIVITÉS ET INSTITUTIONS
    ------------------------------------------------------------
-   Dans la salle sombre du site, avec sa langue : l'anthracite,
-   le lavande des projecteurs, les losanges, les cartes éclairées
-   par le haut, et ce qu'on pointe qui s'allume.
+   Dans la salle sombre du site, sur le modèle d'Événements
+   d'entreprise : la photo en fond du hero, au réglage de
+   l'accueil et de L'agence, les trois faisceaux de l'accueil, et
+   en bas la frise du jour J, que la lumière parcourt en cochant
+   chaque essai jusqu'au début de la cérémonie.
 
-   La tenue est plus institutionnelle : le hero est centré,
-   symétrique comme un fronton, la photo en bandeau large sous le
-   texte. Son signe est le bordereau des pièces, posé sur la
-   photo : chaque pièce reçoit son tampon « Jointe », l'une après
-   l'autre. C'est la seule animation de la page.
+   Les cartes (événements, méthode) sont en design cards 01
+   (.dc01, app.css), chacune sous son projecteur. Les titres sont
+   en gras et en blanc pur, comme l'accueil et L'agence.
 
-   Le vocabulaire du bordereau revient ensuite : les engagements
-   sont des pièces numérotées (S2), chaque étape de la méthode
-   remet la sienne, dessinée comme un feuillet au coin plié (S5).
-   Les références et les numéros de pièce sont en mono (Azeret
-   Mono, comme sur L'agence).
-
-   Le rythme des fonds : le hero sous sa lueur, les pièces en
-   salle, ce que l'on sous-estime dans le noir complet, les
-   interventions en salle, la méthode sur une bande plus claire,
-   les références en salle, la sortie sur la rampe violette.
+   Le rythme des fonds : le hero dans la salle, les événements en
+   salle, les dossiers mis en avant sur le
+   dégradé « En bref », la sécurité sur #121015, la méthode et les questions en
+   salle, la sortie sur la rampe violette de l'accueil.
+   (Version précédente : archives/collectivite-v1.)
    ============================================================ */
 
 .page-collectivite {
-  --noir: #0d0a11;
-  --salle-claire: #18151d;
   --mono: 'Azeret Mono', ui-monospace, monospace;
 }
 
@@ -39,8 +32,16 @@
   max-width: 30ch;
 }
 
+/* Les titres en gras et en blanc pur, aux valeurs de L'agence. */
+.page-collectivite .section__title {
+  font-weight: 700;
+  font-size: clamp(1.545rem, 3.09vw, 2.34rem);
+  line-height: 1.24;
+  color: #ffffff;
+}
+
 .coll-tete__texte {
-  max-width: 60ch;
+  max-width: 58ch;
   margin: clamp(1rem, 2.5vh, 1.4rem) 0 0;
   font-size: 1.0625rem;
   line-height: 1.7;
@@ -55,11 +56,6 @@
 .coll-tete--centree .section__title,
 .coll-tete--centree .coll-tete__texte {
   margin-inline: auto;
-}
-
-.coll-action {
-  margin: clamp(2.5rem, 5.5vh, 3.5rem) 0 0;
-  text-align: center;
 }
 
 /* ---- Le lien lavande et sa flèche ---- */
@@ -81,162 +77,145 @@
   transition: transform 0.25s ease;
 }
 
-.coll-lien:hover,
 .coll-lien:focus-visible {
   text-decoration: underline;
   text-underline-offset: 0.3em;
-}
-
-.coll-lien:hover .coll-lien__fleche,
-.coll-lien:focus-visible .coll-lien__fleche {
-  transform: translateX(0.3rem);
-}
-
-.coll-lien:focus-visible {
   outline: 2px solid var(--beam);
   outline-offset: 4px;
 }
 
-/* ---- Les puces à losange ---- */
-
-.coll-puces {
-  display: grid;
-  gap: 0.45rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  font-size: 0.9375rem;
-  color: var(--dusk);
+.coll-lien:focus-visible .coll-lien__fleche {
+  transform: translateX(0.3rem);
 }
 
-.coll-puces li,
-.coll-sorties li {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.7rem;
-  line-height: 1.55;
-}
+@media (hover: hover) and (pointer: fine) {
+  .coll-lien:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+  }
 
-.coll-puces li::before,
-.coll-sorties li::before {
-  content: '';
-  flex: none;
-  width: 0.45rem;
-  height: 0.45rem;
-  margin-top: calc((1.55em - 0.45rem) / 2);
-  border: 1px solid var(--beam);
-  transform: rotate(45deg);
-}
-
-/* La référence d'une règle, comme dans un dossier. */
-.coll-source {
-  margin: 0;
-  font-family: var(--mono);
-  font-size: 0.625rem;
-  letter-spacing: 0.04em;
-  line-height: 1.5;
-  color: var(--dusk);
-}
-
-.coll-source::before {
-  content: 'Réf. · ';
-  color: var(--beam);
-}
-
-.coll-sorties {
-  display: grid;
-  gap: 0.6rem;
-  margin: clamp(1.75rem, 4vh, 2.5rem) 0 0;
-  padding: 0;
-  list-style: none;
-  font-size: 0.9375rem;
-  color: var(--dusk);
-}
-
-.coll-sorties a {
-  color: var(--beam);
-  text-underline-offset: 0.25em;
-}
-
-/* ---- Les tableaux ---- */
-
-.coll-tableau table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.875rem;
-}
-
-.coll-tableau caption {
-  caption-side: top;
-  margin-bottom: 0.85rem;
-  font-family: var(--mono);
-  font-size: 0.625rem;
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  text-align: left;
-  text-transform: uppercase;
-  color: var(--beam);
-}
-
-.coll-tableau th,
-.coll-tableau td {
-  padding: 0.9rem 1.25rem 0.9rem 0;
-  text-align: left;
-  vertical-align: baseline;
-  line-height: 1.55;
-  border-bottom: 1px solid var(--night-veil);
-}
-
-.coll-tableau thead th {
-  padding-block: 0 0.75rem;
-  font-family: var(--mono);
-  font-size: 0.5625rem;
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--dusk);
-}
-
-.coll-tableau tbody th {
-  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
-  font-weight: 500;
-  color: var(--dawn);
-}
-
-.coll-tableau td {
-  color: var(--dusk);
+  .coll-lien:hover .coll-lien__fleche {
+    transform: translateX(0.3rem);
+  }
 }
 
 /* ============================================================
    S1 · LE HERO
+   Empilement, du fond vers la surface :
+     1  la photo                   (.coll-hero__fond, -2)
+     2  le voile et les faisceaux  (.coll-hero__salle, -1)
+     3  le texte, la frise du jour J
    ============================================================ */
 
 .coll-hero {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  padding: clamp(3rem, 8vh, 5.5rem) var(--pad) clamp(3rem, 7vh, 4.5rem);
+  display: grid;
+  grid-template-rows: 1fr auto;
+  min-height: calc(100dvh - var(--nav-h, 0px));
+  padding: clamp(3rem, 9vh, 6rem) var(--pad) clamp(2rem, 5vh, 3rem);
   background-color: var(--night);
-  --btn-ghost-border: var(--charte-gris);
 }
 
-/* La lueur, centrée et haute : la symétrie d'un fronton éclairé. */
-.coll-hero__lueur {
+/* La photo, aussi lumineuse que celles de l'accueil et de L'agence. */
+.coll-hero__fond {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 40%;
+  opacity: 0.42;
+  filter: saturate(0.85) brightness(1.15);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Le voile central de l'accueil, derrière le texte, la lueur violette
+   en haut au centre, et le bas qui retombe dans le noir sous la frise. */
+.coll-hero__salle {
   position: absolute;
   inset: 0;
   z-index: -1;
+  overflow: hidden;
   pointer-events: none;
   background-image:
+    radial-gradient(
+      70% 58% at 50% 42%,
+      color-mix(in srgb, var(--night) 62%, transparent),
+      color-mix(in srgb, var(--night) 40%, transparent) 45%,
+      transparent 100%
+    ),
     radial-gradient(
       70% 55% at 50% -12%,
       color-mix(in srgb, var(--oysen-purple) 42%, transparent),
       transparent 68%
     ),
-    radial-gradient(
-      50% 40% at 50% 70%,
-      color-mix(in srgb, var(--beam) 6%, transparent),
-      transparent 70%
-    );
+    linear-gradient(to bottom, transparent 55%, var(--night) 96%);
+}
+
+/* Les faisceaux de l'accueil (.hero__lights, app.css), calculés sur la
+   hauteur de son hero : ils tombent exactement comme sur l'accueil. */
+.coll-hero__faisceaux {
+  position: absolute;
+  inset: 0 0 auto;
+  height: calc(100dvh - var(--nav-h, 0px));
+  overflow: hidden;
+}
+
+.coll-hero__faisceaux i {
+  position: absolute;
+  top: -14%;
+  left: 50%;
+  width: 42vmax;
+  height: 125%;
+  transform-origin: 50% 0;
+  /* Étroit à la lampe, ouvert au sol. */
+  clip-path: polygon(48.6% 0, 51.4% 0, 100% 100%, 0 100%);
+  background-image: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--beam) 17%, transparent),
+    color-mix(in srgb, var(--beam) 6%, transparent) 40%,
+    transparent 78%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 4%,
+    #000 34%,
+    #000 66%,
+    transparent 96%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 4%,
+    #000 34%,
+    #000 66%,
+    transparent 96%
+  );
+  filter: blur(7px);
+}
+
+.coll-hero__faisceaux i:nth-child(1) {
+  transform: translateX(-50%) rotate(-27deg);
+}
+
+.coll-hero__faisceaux i:nth-child(2) {
+  transform: translateX(-50%) rotate(1deg);
+  opacity: 0.75;
+}
+
+.coll-hero__faisceaux i:nth-child(3) {
+  transform: translateX(-50%) rotate(25deg);
+}
+
+.coll-hero__inner {
+  display: grid;
+  align-items: center;
+  width: 100%;
+  max-width: 76rem;
+  margin-inline: auto;
 }
 
 .coll-hero__texte {
@@ -245,233 +224,181 @@
   text-align: center;
 }
 
+/* En gras et en blanc pur, aux tailles du hero de l'accueil. */
 .coll-hero__titre {
-  max-width: 24ch;
+  max-width: 30ch;
   margin: 0 auto;
   font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
-  font-weight: 300;
-  font-size: clamp(2rem, 3.8vw, 3.2rem);
-  line-height: 1.1;
+  font-weight: 700;
+  font-size: clamp(1.779rem, 4.213vw, 3.277rem);
+  line-height: 1.153;
   letter-spacing: -0.02em;
   text-wrap: balance;
-  color: var(--dawn);
+  color: #ffffff;
+  text-shadow: 0 0 34px color-mix(in srgb, var(--beam) 25%, transparent);
 }
 
 .coll-hero__lede {
-  max-width: 62ch;
-  margin: clamp(1.4rem, 3vh, 2rem) auto 0;
-  font-size: clamp(1rem, 1.25vw, 1.0625rem);
-  line-height: 1.65;
+  max-width: 52ch;
+  margin: clamp(1.25rem, 3vh, 1.75rem) auto 0;
+  font-size: clamp(1rem, 1.35vw, 1.125rem);
+  line-height: 1.7;
   text-wrap: pretty;
   color: var(--dusk);
 }
 
-/* La ligne d'autorité, entre deux filets courts. */
-.coll-hero__autorite {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  margin: 1.25rem auto 0;
-  font-size: 0.9375rem;
+/* La promesse, en tête du sous-titre : sur sa propre ligne, plus
+   claire et un peu plus appuyée que la phrase qui suit. */
+.coll-hero__promesse {
+  display: block;
+  margin-bottom: 0.35rem;
   font-weight: 500;
   color: var(--dawn);
 }
 
-.coll-hero__autorite::before,
-.coll-hero__autorite::after {
-  content: '';
-  flex: none;
-  width: 2rem;
-  height: 1px;
-  background-color: var(--beam);
-}
-
-.coll-hero__actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem 2rem;
+.coll-hero__appel {
+  display: grid;
+  justify-items: center;
+  gap: 0.7rem;
   margin-top: clamp(2rem, 4.5vh, 2.75rem);
 }
 
 .coll-hero__rassurance {
-  margin: 0.85rem 0 0;
+  margin: 0;
   font-size: 0.8125rem;
+  text-wrap: balance;
   color: var(--dusk);
 }
 
-/* ---- La photo en bandeau, et le bordereau posé dessus ---- */
+/* ---- La frise du jour J ----
+   Un fil horizontal, cinq repères. La lumière le parcourt de gauche à
+   droite : chaque essai se coche, et le dernier repère, le début de la
+   cérémonie, s'allume. */
 
-.coll-hero__scene {
-  position: relative;
-  max-width: 76rem;
-  margin: clamp(3rem, 7vh, 4.5rem) auto 0;
-}
-
-.coll-hero__photo {
-  position: relative;
-  overflow: hidden;
-  border: 1px solid var(--night-veil);
-  box-shadow: 0 2.5rem 5rem -3rem rgba(0, 0, 0, 0.8);
-}
-
-.coll-hero__photo img {
-  display: block;
+.coll-jour {
   width: 100%;
-  height: auto;
-  aspect-ratio: 21 / 9;
-  object-fit: cover;
-  object-position: 50% 35%;
-  filter: grayscale(0.55) saturate(0.7) brightness(0.48) contrast(1.05);
-}
-
-/* La teinte violette de la charte, et une ombre à droite, sous le
-   bordereau. */
-.coll-hero__photo::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: linear-gradient(
-    to right,
-    transparent 40%,
-    color-mix(in srgb, var(--night) 55%, transparent)
-  );
-  pointer-events: none;
-}
-
-.coll-hero__photo::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background-color: color-mix(in srgb, var(--charte-violet) 55%, transparent);
-  mix-blend-mode: color;
-  pointer-events: none;
-}
-
-.bordereau {
-  position: absolute;
-  right: clamp(1rem, 3vw, 2.5rem);
-  bottom: clamp(1rem, 3vw, 2.5rem);
-  z-index: 2;
-  width: min(25rem, 46%);
-  padding: 1rem 1.15rem 0.85rem;
+  max-width: 76rem;
+  margin: clamp(2.5rem, 7vh, 4.5rem) auto 0;
   font-family: var(--mono);
-  text-align: left;
-  background-color: color-mix(in srgb, var(--night-raised) 90%, transparent);
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
-  border: 1px solid var(--night-veil);
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--beam) 55%, transparent),
-    0 1.75rem 3.5rem -1.5rem rgba(0, 0, 0, 0.85);
 }
 
-.bordereau__tete {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  margin: 0 0 0.3rem;
-  padding-bottom: 0.65rem;
+.coll-jour__tete {
+  margin-bottom: 1.1rem;
   font-size: 0.5625rem;
   font-weight: 500;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--beam);
-  border-bottom: 1px solid var(--night-veil);
 }
 
-.bordereau__tete span:last-child {
-  color: var(--dusk);
-}
-
-.bordereau__liste {
+.coll-jour__fil {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1.25rem;
   margin: 0;
-  padding: 0;
+  padding: 1.5rem 0 0;
   list-style: none;
 }
 
-.bordereau__piece {
-  display: grid;
-  grid-template-columns: 4.25rem minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.6rem 0;
-  border-bottom: 1px dashed var(--night-veil);
+/* Le fil, éteint, puis la lumière qui le parcourt. */
+.coll-jour__fil::before,
+.coll-jour__fil::after {
+  content: '';
+  position: absolute;
+  top: 0.4rem;
+  left: 0;
+  right: 0;
+  height: 1px;
 }
 
-.bordereau__piece:last-child {
-  border-bottom: 0;
+.coll-jour__fil::before {
+  background-color: var(--night-veil);
 }
 
-.bordereau__numero {
-  font-size: 0.5625rem;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--dusk);
+.coll-jour__fil::after {
+  background-image: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--beam) 35%, transparent),
+    var(--beam)
+  );
+  transform-origin: 0 50%;
+  animation: coll-jour-fil 2.4s cubic-bezier(0.45, 0, 0.2, 1)
+    calc(var(--apres-rideau, 0s) + 0.6s) both;
 }
 
-.bordereau__nom {
-  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.875rem;
-  color: var(--dawn);
-}
-
-/* Le tampon : un cartouche lavande, légèrement de travers, qui tombe sur
-   sa ligne. */
-.bordereau__tampon {
-  padding: 0.2rem 0.45rem;
-  font-size: 0.5625rem;
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--beam);
-  border: 1.5px solid var(--beam);
-  border-radius: 2px;
-  transform: rotate(-6deg);
-  animation: bordereau-tampon 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.2)
-    calc(var(--apres-rideau, 0s) + 0.9s + var(--rang) * 0.45s) both;
-}
-
-@keyframes bordereau-tampon {
+@keyframes coll-jour-fil {
   from {
-    opacity: 0;
-    transform: rotate(-14deg) scale(1.8);
+    transform: scaleX(0);
   }
 }
 
-/* ---- Les preuves ---- */
-
-.coll-preuves {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.75rem clamp(1.5rem, 3vw, 2.5rem);
-  max-width: 76rem;
-  margin: clamp(2.5rem, 6vh, 3.75rem) auto 0;
-  padding: clamp(1.25rem, 3vh, 1.75rem) 0 0;
-  list-style: none;
-  font-size: 0.875rem;
-  color: var(--dusk);
-  border-top: 1px solid var(--night-veil);
+.coll-jour__repere {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 0.35rem;
+  animation: coll-jour-repere 0.5s ease
+    calc(var(--apres-rideau, 0s) + 0.75s + var(--rang) * 0.48s) both;
 }
 
-.coll-preuves li {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
+@keyframes coll-jour-repere {
+  from {
+    opacity: 0;
+    transform: translateY(0.4rem);
+  }
 }
 
-.coll-preuves li::before {
+/* Le losange du repère, posé sur le fil : évidé, plein une fois l'essai
+   fait, cerclé pour le début de la cérémonie. */
+.coll-jour__repere::before {
   content: '';
-  flex: none;
-  width: 0.4rem;
-  height: 0.4rem;
-  background-color: var(--beam);
-  transform: rotate(45deg);
+  position: absolute;
+  top: calc(-1.5rem + 0.4rem);
+  left: 0;
+  width: 0.55rem;
+  height: 0.55rem;
+  background-color: var(--night);
+  border: 1px solid var(--beam);
+  transform: translate(0, -50%) rotate(45deg);
+}
+
+.coll-jour__repere--essai::before,
+.coll-jour__repere:last-child::before {
+  animation: coll-jour-coche 0.35s ease
+    calc(var(--apres-rideau, 0s) + 1s + var(--rang) * 0.48s) both;
+}
+
+@keyframes coll-jour-coche {
+  to {
+    background-color: var(--beam);
+  }
+}
+
+.coll-jour__repere:last-child::before {
+  width: 0.75rem;
+  height: 0.75rem;
+  box-shadow: 0 0 0 0.35rem color-mix(in srgb, var(--beam) 16%, transparent);
+}
+
+.coll-jour__heure {
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--dusk);
+}
+
+.coll-jour__action {
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--dawn);
+}
+
+/* Le début de la cérémonie : tout est prêt. */
+.coll-jour__repere:last-child .coll-jour__heure,
+.coll-jour__repere:last-child .coll-jour__action {
+  font-weight: 600;
+  color: var(--beam);
 }
 
 /* ---- L'entrée du hero, après le rideau s'il se joue ---- */
@@ -482,275 +409,27 @@
 }
 
 .coll-hero__texte > :nth-child(2) {
-  animation-delay: calc(var(--apres-rideau, 0s) + 0.2s);
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.22s);
 }
 
 .coll-hero__texte > :nth-child(3) {
-  animation-delay: calc(var(--apres-rideau, 0s) + 0.3s);
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.34s);
 }
 
 .coll-hero__texte > :nth-child(4) {
-  animation-delay: calc(var(--apres-rideau, 0s) + 0.4s);
-}
-
-.coll-hero__texte > :nth-child(5),
-.coll-hero__texte > :nth-child(6) {
-  animation-delay: calc(var(--apres-rideau, 0s) + 0.5s);
-}
-
-.coll-hero__scene,
-.coll-preuves {
-  animation: collectivite-fondu 1.1s ease calc(var(--apres-rideau, 0s) + 0.4s)
-    both;
-}
-
-@keyframes collectivite-fondu {
-  from {
-    opacity: 0;
-  }
+  animation-delay: calc(var(--apres-rideau, 0s) + 0.46s);
 }
 
 /* ============================================================
-   S2 · LES PIÈCES
+   S2 · LES ÉVÉNEMENTS
+   Six cartes en design cards 01, chacune sous son projecteur.
+   Les sources sont au bord extérieur de la grille : les faisceaux
+   convergent vers le centre des deux rangées. Chaque carte a sa
+   source (--x, --y), sa direction (--dir, 0deg vers le haut, sens
+   horaire) et la demi-ouverture de son cône (--ouv).
    ============================================================ */
 
-.pieces {
-  margin: clamp(2.5rem, 5.5vh, 3.5rem) 0 0;
-  padding: 0;
-  list-style: none;
-  border-bottom: 1px solid var(--night-veil);
-}
-
-/* Une ligne par pièce : son numéro et son nom, ce que nous remettons, ce
-   que cela change. La ligne qu'on pointe s'éclaire. */
-.piece {
-  display: grid;
-  grid-template-columns: minmax(0, 15rem) minmax(0, 1.4fr) minmax(0, 1fr);
-  align-items: start;
-  gap: 1rem clamp(1.5rem, 3.5vw, 3rem);
-  padding: clamp(1.4rem, 3vh, 1.85rem) clamp(0.75rem, 1.5vw, 1.25rem);
-  border-top: 1px solid var(--night-veil);
-  transition: background-color 0.3s ease;
-}
-
-.piece:hover {
-  background-color: color-mix(in srgb, var(--beam) 4%, transparent);
-}
-
-.piece__numero {
-  display: block;
-  margin-bottom: 0.45rem;
-  font-family: var(--mono);
-  font-size: 0.625rem;
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--beam);
-}
-
-.piece__nom {
-  margin: 0;
-  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
-  font-size: 1.1rem;
-  font-weight: 600;
-  line-height: 1.3;
-  text-wrap: balance;
-  color: var(--dawn);
-}
-
-.piece__label {
-  margin: 0 0 0.6rem;
-  font-family: var(--mono);
-  font-size: 0.5625rem;
-  font-weight: 500;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--dusk);
-}
-
-.piece__remise .coll-puces {
-  font-size: 0.875rem;
-}
-
-.piece__change-texte {
-  margin: 0;
-  padding-left: 0.9rem;
-  font-size: 0.9375rem;
-  font-weight: 500;
-  line-height: 1.55;
-  color: var(--dawn);
-  border-left: 2px solid var(--beam);
-}
-
-.pieces__reunies {
-  margin: clamp(2rem, 4.5vh, 2.75rem) 0 0;
-  font-size: 0.9375rem;
-  text-align: center;
-  color: var(--dusk);
-}
-
-.pieces__reunies + .coll-action {
-  margin-top: 1.25rem;
-}
-
-/* ============================================================
-   S3 · CE QUE L'ON SOUS-ESTIME
-   ============================================================ */
-
-.section.section--collectivite-exigences {
-  background-color: var(--noir);
-}
-
-.exigences {
-  margin-top: clamp(2.5rem, 5.5vh, 3.5rem);
-}
-
-/* Chaque point en dossier : à gauche, le point et ce qu'il garantit ; à
-   droite, comment nous le traitons. */
-.exigence {
-  display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-  align-items: start;
-  gap: 1.5rem clamp(2rem, 5vw, 4.5rem);
-  padding-block: clamp(2rem, 4.5vh, 2.75rem);
-  border-top: 1px solid var(--night-veil);
-}
-
-.exigence__tete {
-  position: sticky;
-  top: calc(var(--nav-h, 4.5rem) + 2rem);
-}
-
-.exigence__nom {
-  margin: 0;
-  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
-  font-size: clamp(1.3rem, 2vw, 1.6rem);
-  font-weight: 300;
-  line-height: 1.25;
-  text-wrap: balance;
-  color: var(--dawn);
-}
-
-/* Ce que le point garantit : la phrase à retenir, éclairée. */
-.exigence__garantie {
-  margin: 1.1rem 0 0;
-  padding: 0.85rem 1.05rem;
-  font-size: 0.9375rem;
-  font-weight: 500;
-  line-height: 1.55;
-  color: var(--dawn);
-  background-color: color-mix(in srgb, var(--beam) 6%, transparent);
-  border-left: 2px solid var(--beam);
-}
-
-.exigence__corps {
-  display: grid;
-  gap: 1.1rem;
-}
-
-.exigence__texte {
-  max-width: 64ch;
-  margin: 0;
-  font-size: 1rem;
-  line-height: 1.7;
-  color: var(--dusk);
-}
-
-.exigence__note {
-  margin: 0;
-  font-size: 0.875rem;
-  line-height: 1.6;
-  color: var(--dusk);
-}
-
-.exigence__encadre {
-  display: grid;
-  gap: 0.75rem;
-  padding: 1.1rem 1.25rem;
-  background-color: var(--night-raised);
-  border: 1px solid var(--night-veil);
-}
-
-/* Les deux repères d'accessibilité, en chiffres. */
-.mesures {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin: 0;
-}
-
-.mesure {
-  padding: 0.85rem 1.15rem;
-  border: 1px solid var(--night-veil);
-  border-top: 2px solid var(--beam);
-}
-
-.mesure dt {
-  font-family: var(--mono);
-  font-size: 0.5625rem;
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--dusk);
-}
-
-.mesure dd {
-  margin: 0.35rem 0 0;
-  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
-  font-size: 1.85rem;
-  font-weight: 200;
-  line-height: 1;
-  color: var(--dawn);
-}
-
-/* Les interlocuteurs, chacun dans sa case, tous sur le même document. */
-.interlocuteurs {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.6rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.interlocuteurs li {
-  padding: 0.75rem 0.9rem;
-  border: 1px solid var(--night-veil);
-}
-
-.interlocuteurs__qui {
-  display: block;
-  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.875rem;
-  font-weight: 600;
-  line-height: 1.35;
-  color: var(--dawn);
-}
-
-.interlocuteurs__role {
-  display: block;
-  margin-top: 0.2rem;
-  font-size: 0.8125rem;
-  line-height: 1.45;
-  color: var(--dusk);
-}
-
-.delais th[scope='row'] {
-  width: 34%;
-}
-
-.delais .delais__reference {
-  width: 26%;
-  font-family: var(--mono);
-  font-size: 0.6875rem;
-  line-height: 1.5;
-}
-
-/* ============================================================
-   S4 · LES INTERVENTIONS
-   ============================================================ */
-
-.interventions {
+.coll-types {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: clamp(1rem, 1.8vw, 1.5rem);
@@ -759,395 +438,399 @@
   list-style: none;
 }
 
-/* Une carte éclairée par le haut ; au survol, un halo, et son appel
-   s'allume. */
-.intervention {
-  position: relative;
+.coll-type {
+  --x: 0%;
+  --y: 0%;
+  --dir: 135deg;
+  --ouv: 13deg;
+  --dc01-retrait: clamp(1.35rem, 2.2vw, 1.85rem);
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
+  gap: 0.75rem;
   padding: clamp(1.35rem, 2.2vw, 1.85rem);
-  border: 1px solid transparent;
-  background:
-    radial-gradient(
-        80% 60% at 0% 0%,
-        color-mix(in srgb, var(--beam) 8%, transparent),
-        transparent 70%
-      )
-      padding-box,
-    linear-gradient(var(--night-raised), var(--night-raised)) padding-box,
-    linear-gradient(
-        to bottom,
-        color-mix(in srgb, var(--beam) 45%, transparent),
-        var(--night-veil) 35%,
-        var(--trait)
-      )
-      border-box;
-  box-shadow: 0 1.5rem 3rem -2rem rgba(0, 0, 0, 0.7);
-  transition: box-shadow 0.3s ease;
 }
 
-.intervention:hover,
-.intervention:has(.intervention__lien:focus-visible) {
-  box-shadow:
-    0 1.5rem 3rem -2rem rgba(0, 0, 0, 0.7),
-    0 0 2.5rem -1rem color-mix(in srgb, var(--beam) 30%, transparent);
+/* Rangée du haut : les coins hauts et le milieu du haut, vers le bas. */
+.coll-type:nth-child(2) {
+  --x: 50%;
+  --dir: 180deg;
+  --ouv: 11deg;
 }
 
-.intervention:has(.intervention__lien:focus-visible) {
-  outline: 2px solid var(--beam);
-  outline-offset: 3px;
+.coll-type:nth-child(3) {
+  --x: 100%;
+  --dir: 225deg;
 }
 
-.intervention__nom {
-  margin: 0;
-  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
-  font-size: 1.15rem;
-  font-weight: 600;
-  line-height: 1.3;
-  color: var(--dawn);
+/* Rangée du bas : les coins bas et le milieu du bas, vers le haut. */
+.coll-type:nth-child(4) {
+  --y: 100%;
+  --dir: 45deg;
 }
 
-.intervention__lien {
-  color: inherit;
-  text-decoration: none;
+.coll-type:nth-child(5) {
+  --x: 50%;
+  --y: 100%;
+  --dir: 0deg;
+  --ouv: 11deg;
 }
 
-.intervention__lien:focus-visible {
-  outline: none;
+.coll-type:nth-child(6) {
+  --x: 100%;
+  --y: 100%;
+  --dir: 315deg;
 }
 
-.intervention__lien::after {
+/* Le faisceau, commun aux cartes des événements et de la méthode. */
+.coll-type::after,
+.coll-dossier::after,
+.coll-etape::after {
   content: '';
   position: absolute;
   inset: 0;
-  z-index: 1;
+  z-index: -1;
+  background-image:
+    radial-gradient(
+      circle at var(--x) var(--y),
+      color-mix(in srgb, var(--beam) 32%, transparent),
+      transparent 4.5rem
+    ),
+    conic-gradient(
+      from calc(var(--dir) - var(--ouv)) at var(--x) var(--y),
+      transparent 0deg,
+      color-mix(in srgb, var(--beam) 7%, transparent) calc(var(--ouv) * 0.45),
+      color-mix(in srgb, var(--beam) 17%, transparent) var(--ouv),
+      color-mix(in srgb, var(--beam) 7%, transparent) calc(var(--ouv) * 1.55),
+      transparent calc(var(--ouv) * 2),
+      transparent 360deg
+    );
+  -webkit-mask-image: radial-gradient(
+    circle at var(--x) var(--y),
+    #000 10%,
+    transparent 95%
+  );
+  mask-image: radial-gradient(
+    circle at var(--x) var(--y),
+    #000 10%,
+    transparent 95%
+  );
+  opacity: 0.8;
+  pointer-events: none;
 }
 
-.intervention__occasions {
+@media (hover: hover) and (pointer: fine) {
+  .coll-type:hover::after,
+  .coll-dossier:hover::after,
+  .coll-etape:hover::after {
+    opacity: 1;
+  }
+}
+
+.coll-type__nom {
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.3;
+  text-align: center;
+  color: #ffffff;
+}
+
+.coll-type__texte {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  text-align: center;
+  text-wrap: pretty;
+  color: var(--dusk);
+}
+
+/* La technique seule : une phrase et son lien, sous les cartes. */
+.coll-sortie {
+  margin: clamp(2.25rem, 5vh, 3rem) auto 0;
+  max-width: 62ch;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  text-align: center;
+  color: var(--dusk);
+}
+
+.coll-sortie .coll-lien {
+  margin-left: 0.35rem;
+  vertical-align: baseline;
+}
+
+/* ============================================================
+   S3 · LES DOSSIERS
+   La section mise en avant : le dégradé de la bande « En bref »
+   de L'agence, ses filets haut et bas, et quatre grandes cartes
+   en design cards 01, deux par rangée. Les quatre projecteurs
+   sont aux coins extérieurs de la grille et visent son centre.
+   ============================================================ */
+
+.section.section--collectivite-dossiers {
+  background-image: linear-gradient(to right, #24202b, #1a1621);
+  border-block: 1px solid #463f50;
+}
+
+/* Deux lignes, coupées à la main : chacune tient sur la sienne. */
+.section--collectivite-dossiers .coll-tete .section__title {
+  max-width: none;
+}
+
+.coll-dossiers {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1rem, 1.8vw, 1.5rem);
+  max-width: 62rem;
+  margin: clamp(2.5rem, 5.5vh, 3.5rem) auto 0;
+  padding: 0;
+  list-style: none;
+}
+
+.coll-dossier {
+  --x: 0%;
+  --y: 0%;
+  --dir: 135deg;
+  --ouv: 14deg;
+  --dc01-retrait: clamp(1.5rem, 2.6vw, 2.25rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  padding: clamp(1.5rem, 2.6vw, 2.25rem);
+}
+
+.coll-dossier:nth-child(2) {
+  --x: 100%;
+  --dir: 225deg;
+}
+
+.coll-dossier:nth-child(3) {
+  --y: 100%;
+  --dir: 45deg;
+}
+
+.coll-dossier:nth-child(4) {
+  --x: 100%;
+  --y: 100%;
+  --dir: 315deg;
+}
+
+/* Le numéro du dossier, ouvert par le losange plein du site. */
+.coll-dossier__numero {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
   margin: 0;
   font-family: var(--mono);
   font-size: 0.6875rem;
-  line-height: 1.55;
-  letter-spacing: 0.02em;
-  color: var(--beam);
-}
-
-.intervention__enjeu {
-  margin: 0;
-  font-size: 0.9375rem;
-  line-height: 1.55;
-  color: var(--dusk);
-}
-
-.intervention .coll-puces {
-  font-size: 0.875rem;
-}
-
-.intervention__resultat {
-  margin: 0;
-  padding-top: 0.85rem;
-  font-size: 0.9375rem;
   font-weight: 500;
-  line-height: 1.5;
-  color: var(--dawn);
-  border-top: 1px solid var(--night-veil);
-}
-
-.intervention__appel {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: auto;
-  padding-top: 0.25rem;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: color-mix(in srgb, var(--beam) 70%, var(--dusk));
-  transition: color 0.25s ease;
-}
-
-.intervention:hover .intervention__appel {
-  color: var(--beam);
-}
-
-.intervention:hover .coll-lien__fleche {
-  transform: translateX(0.3rem);
-}
-
-/* Notre capacité : la limite, dite avant qu'on la demande. */
-.capacite {
-  max-width: 62rem;
-  margin: clamp(2.25rem, 5vh, 3rem) 0 0;
-  padding: 1.1rem 1.25rem;
-  font-size: 0.9375rem;
-  line-height: 1.65;
-  color: var(--dusk);
-  border: 1px solid var(--night-veil);
-  border-left: 2px solid var(--beam);
-}
-
-.capacite__label {
-  display: block;
-  margin-bottom: 0.35rem;
-  font-family: var(--mono);
-  font-size: 0.5625rem;
-  font-weight: 500;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--beam);
 }
 
-/* ============================================================
-   S5 · LA MÉTHODE ET LES PIÈCES
-   ============================================================ */
-
-.section.section--collectivite-methode {
-  background-color: var(--salle-claire);
-  border-block: 1px solid var(--night-veil);
-}
-
-.etapes-coll {
-  margin: clamp(2.5rem, 5.5vh, 3.5rem) 0 0;
-  padding: 0;
-  list-style: none;
-  border-bottom: 1px solid var(--night-veil);
-}
-
-/* Le rang, ce que nous faisons, et la pièce remise. */
-.etape-coll {
-  display: grid;
-  grid-template-columns: 4.5rem minmax(0, 1fr) minmax(0, 22rem);
-  align-items: start;
-  gap: 1rem clamp(1.5rem, 3vw, 2.75rem);
-  padding: clamp(1.35rem, 3vh, 1.75rem) 0;
-  border-top: 1px solid var(--night-veil);
-}
-
-.etape-coll__numero {
-  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
-  font-size: 2.5rem;
-  font-weight: 200;
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-  color: color-mix(in srgb, var(--beam) 70%, transparent);
-}
-
-.etape-coll__nom {
-  margin: 0 0 0.45rem;
-  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
-  font-size: 1.0625rem;
-  font-weight: 600;
-  color: var(--dawn);
-}
-
-.etape-coll__faisons p {
-  max-width: 58ch;
-  margin: 0;
-  font-size: 0.9375rem;
-  line-height: 1.65;
-  color: var(--dusk);
-}
-
-/* La pièce remise, dessinée comme un feuillet au coin plié. */
-.etape-coll__piece {
-  position: relative;
-  margin: 0;
-  padding: 0.85rem 1.4rem 0.9rem 1.1rem;
-  font-size: 0.875rem;
-  line-height: 1.5;
-  color: var(--dawn);
-  background-color: var(--night-raised);
-  box-shadow: inset 2px 0 0 var(--beam);
-  clip-path: polygon(0 0, calc(100% - 0.8rem) 0, 100% 0.8rem, 100% 100%, 0 100%);
-}
-
-.etape-coll__piece::after {
+.coll-dossier__numero::before {
   content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 0.8rem;
-  height: 0.8rem;
-  background-image: linear-gradient(
-    to bottom left,
-    transparent 50%,
-    color-mix(in srgb, var(--beam) 40%, var(--night-raised)) 50%
-  );
-}
-
-.etape-coll__piece-label {
-  display: block;
-  margin-bottom: 0.3rem;
-  font-family: var(--mono);
-  font-size: 0.5625rem;
-  font-weight: 500;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--beam);
-}
-
-.methode-coll__notes {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(1.5rem, 3vw, 2.75rem);
-  margin-top: clamp(2.5rem, 5.5vh, 3.5rem);
-}
-
-.methode-coll__note {
-  padding-top: 1.1rem;
-  border-top: 1px solid var(--night-veil);
-}
-
-.methode-coll__note-titre {
-  margin: 0 0 0.5rem;
-  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--dawn);
-}
-
-.methode-coll__note p {
-  margin: 0;
-  font-size: 0.9375rem;
-  line-height: 1.65;
-  color: var(--dusk);
-}
-
-/* ============================================================
-   S6 · LES RÉFÉRENCES
-   ============================================================ */
-
-.coll-verifier {
-  display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-  align-items: start;
-  gap: clamp(2.5rem, 5vw, 5rem);
-}
-
-.coll-verifier .coll-tete {
-  position: sticky;
-  top: calc(var(--nav-h, 4.5rem) + 2rem);
-}
-
-.coll-verifier__liste {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border-bottom: 1px solid var(--night-veil);
-}
-
-.coll-verifier__item {
-  display: grid;
-  gap: 0.5rem;
-  padding: clamp(1.25rem, 2.8vh, 1.6rem) 0;
-  border-top: 1px solid var(--night-veil);
-}
-
-.coll-verifier__titre {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  margin: 0;
-  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
-  font-size: 1.0625rem;
-  font-weight: 600;
-  color: var(--dawn);
-}
-
-.coll-verifier__titre::before {
-  content: '';
-  flex: none;
   width: 0.5rem;
   height: 0.5rem;
   background-color: var(--beam);
   transform: rotate(45deg);
 }
 
-.coll-verifier__texte {
-  max-width: 62ch;
+.coll-dossier__nom {
   margin: 0;
-  font-size: 0.9375rem;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(1.2rem, 1.6vw, 1.4rem);
+  font-weight: 700;
+  line-height: 1.3;
+  text-wrap: balance;
+  color: #ffffff;
+}
+
+.coll-dossier__texte {
+  max-width: 44ch;
+  margin: 0;
+  font-size: 1rem;
   line-height: 1.65;
+  text-wrap: pretty;
   color: var(--dusk);
 }
 
-.coll-verifier__item .coll-lien {
-  justify-self: start;
-  font-size: 0.875rem;
+/* Le bouton qui clôt la section, centré. */
+.coll-action {
+  margin: clamp(2.5rem, 5.5vh, 3.5rem) 0 0;
+  text-align: center;
 }
 
-.coll-cas {
+/* ============================================================
+   S4 · LA SÉCURITÉ ET L'ACCESSIBILITÉ
+   À gauche la tête, à droite les quatre engagements, puis la
+   personne qui dirige Oysen.
+   ============================================================ */
+
+.section.section--collectivite-securite {
+  background-color: #121015;
+}
+
+.securite {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.5rem;
-  margin: clamp(3rem, 7vh, 4.5rem) 0 0;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  align-items: start;
+  gap: clamp(2.5rem, 5vw, 5rem);
+}
+
+.securite .coll-tete {
+  position: sticky;
+  top: calc(var(--nav-h, 4.5rem) + 2rem);
+}
+
+.securite__corps {
+  display: grid;
+  gap: clamp(1.75rem, 4vh, 2.5rem);
+}
+
+.securite__liste {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-bottom: 1px solid var(--night-veil);
+}
+
+.securite__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  padding: clamp(1.1rem, 2.6vh, 1.45rem) 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--dawn);
+  border-top: 1px solid var(--night-veil);
+}
+
+.securite__item::before {
+  content: '';
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-top: calc((1.6em - 0.5rem) / 2);
+  background-color: var(--beam);
+  transform: rotate(45deg);
+}
+
+/* La personne qui dirige : une phrase sous un court trait lavande. */
+.securite__pilote {
+  display: grid;
+  justify-items: start;
+  gap: 0.75rem;
+}
+
+.securite__pilote::before {
+  content: '';
+  width: 2rem;
+  height: 2px;
+  background-color: var(--beam);
+}
+
+.securite__pilote p {
+  max-width: 58ch;
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--dusk);
+}
+
+/* ============================================================
+   S5 · LA MÉTHODE
+   Cinq cartes en design cards 01, sous une rampe de cinq
+   projecteurs accrochés en haut : ceux des bords visent le
+   centre, celui du milieu tombe droit.
+   ============================================================ */
+
+.coll-etapes {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(0.85rem, 1.4vw, 1.25rem);
+  margin: clamp(2.5rem, 5.5vh, 3.5rem) 0 0;
   padding: 0;
   list-style: none;
 }
 
-.coll-cas__item {
-  padding: clamp(1.35rem, 2.2vw, 1.85rem);
-  background-color: var(--night-raised);
-  border: 1px solid var(--trait);
+.coll-etape {
+  --x: 50%;
+  --y: 0%;
+  --dir: 180deg;
+  --ouv: 12deg;
+  --dc01-retrait: clamp(1.2rem, 1.8vw, 1.6rem);
+  padding: clamp(1.2rem, 1.8vw, 1.6rem);
 }
 
-.coll-cas__titre {
-  margin: 0 0 1rem;
-  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
-  font-size: 1.0625rem;
-  font-weight: 600;
-  color: var(--dawn);
+.coll-etape:nth-child(1) {
+  --x: 0%;
+  --dir: 145deg;
 }
 
-.coll-cas__star {
-  margin: 0;
+.coll-etape:nth-child(2) {
+  --x: 25%;
+  --dir: 162deg;
 }
 
-.coll-cas__star dt {
-  margin: 0.9rem 0 0.3rem;
+.coll-etape:nth-child(3) {
+  --ouv: 10deg;
+}
+
+.coll-etape:nth-child(4) {
+  --x: 75%;
+  --dir: 198deg;
+}
+
+.coll-etape:nth-child(5) {
+  --x: 100%;
+  --dir: 215deg;
+}
+
+/* Le rang, ouvert par le losange plein du site. */
+.coll-etape__numero {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0 0 0.6rem;
   font-family: var(--mono);
-  font-size: 0.5625rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
   color: var(--beam);
 }
 
-.coll-cas__star dd {
+.coll-etape__numero::before {
+  content: '';
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: var(--beam);
+  transform: rotate(45deg);
+}
+
+.coll-etape__nom {
+  margin: 0 0 0.75rem;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.3;
+  text-wrap: balance;
+  color: #ffffff;
+}
+
+.coll-etape__texte {
   margin: 0;
   font-size: 0.9375rem;
   line-height: 1.6;
   color: var(--dusk);
 }
 
-.coll-cas__mention {
-  margin: 1rem 0 0;
-  font-size: 0.8125rem;
-  font-style: italic;
-  color: var(--dusk);
-}
-
 /* ============================================================
-   S7 · LES QUESTIONS
-   Les dépliants de l'accueil (home.css) ; la réponse sur les
-   procédures porte son tableau des seuils.
+   S6 · LES QUESTIONS
+   Les dépliants de l'accueil (home.css), tels quels.
    ============================================================ */
-
-.seuils {
-  max-width: 62ch;
-  margin: 0 0 1.25rem;
-}
-
-.seuils th[scope='row'] {
-  width: 36%;
-  font-family: var(--mono);
-  font-size: 0.75rem;
-  font-weight: 500;
-}
-
-.faq__a.seuils__apres {
-  padding-top: 0;
-  font-size: 0.8125rem;
-}
 
 /* ============================================================
    MOUVEMENT RÉDUIT
@@ -1155,16 +838,19 @@
 
 @media (prefers-reduced-motion: reduce) {
   .coll-hero__texte > *,
-  .coll-hero__scene,
-  .coll-preuves,
-  .bordereau__tampon {
+  .coll-jour__fil::after,
+  .coll-jour__repere,
+  .coll-jour__repere::before {
     animation: none;
   }
 
-  .coll-lien__fleche,
-  .piece,
-  .intervention,
-  .intervention__appel {
+  /* Sans animation, les essais sont cochés d'emblée. */
+  .coll-jour__repere--essai::before,
+  .coll-jour__repere:last-child::before {
+    background-color: var(--beam);
+  }
+
+  .coll-lien__fleche {
     transition: none;
   }
 }
@@ -1173,53 +859,28 @@
    TABLETTE
    ============================================================ */
 
+@media (max-width: 1100px) {
+  .coll-etapes {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 1023px) {
-  .exigence,
-  .coll-verifier {
+  .coll-hero {
+    min-height: 0;
+  }
+
+  .securite {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .exigence__tete,
-  .coll-verifier .coll-tete {
+  .securite .coll-tete {
     position: static;
   }
 
-  .piece {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  }
-
-  .piece__tete {
-    grid-column: 1 / -1;
-  }
-
-  .interventions {
+  .coll-types,
+  .coll-etapes {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .etape-coll {
-    grid-template-columns: 3.5rem minmax(0, 1fr);
-  }
-
-  .etape-coll__piece {
-    grid-column: 2;
-  }
-
-  .methode-coll__notes {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  /* Le bordereau passe sous la photo, en chevauchant son bas. */
-  .bordereau {
-    position: relative;
-    right: auto;
-    bottom: auto;
-    width: auto;
-    max-width: 30rem;
-    margin: -3rem 1rem 0 auto;
-  }
-
-  .coll-hero__photo img {
-    aspect-ratio: 16 / 9;
   }
 }
 
@@ -1228,76 +889,30 @@
    ============================================================ */
 
 @media (max-width: 760px) {
-  .piece,
-  .interventions,
-  .interlocuteurs,
-  .coll-cas {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .piece {
-    padding-inline: 0;
-  }
-
-  .coll-hero__photo img {
-    aspect-ratio: 4 / 3;
-  }
-
-  .bordereau {
-    margin: -2.5rem 0.75rem 0;
-  }
-
-  .coll-preuves {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .coll-hero__autorite::before,
-  .coll-hero__autorite::after {
+  /* Sur téléphone, la frise se retire : le hero s'en tient au texte. */
+  .coll-jour {
     display: none;
   }
 
-  /* Le tableau des délais se lit ligne par ligne, chaque cellule sous son
-     intitulé. */
-  .delais thead {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
+  .coll-types,
+  .coll-dossiers,
+  .coll-etapes {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---- La barre posée sur le hero ----
+   Sur ordinateur, la barre de navigation est posée sur le hero, comme
+   sur l'accueil (navbar.css) : le hero passe dessous et gagne la
+   hauteur de la barre, son contenu est repoussé d'autant. */
+@media (min-width: 1025px) {
+  .coll-hero {
+    min-height: 100dvh;
+    padding-top: calc(var(--nav-h) + clamp(3rem, 9vh, 6rem));
   }
 
-  .delais tr {
-    display: grid;
-    gap: 0.6rem;
-    padding: 1.1rem 0;
-    border-bottom: 1px solid var(--night-veil);
-  }
-
-  .delais th,
-  .delais td {
-    padding: 0;
-    border-bottom: 0;
-  }
-
-  .delais th[scope='row'],
-  .delais .delais__reference {
-    width: auto;
-  }
-
-  .delais td::before {
-    content: attr(data-label);
-    display: block;
-    margin-bottom: 0.2rem;
-    font-family: var(--mono);
-    font-size: 0.5625rem;
-    font-weight: 500;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--beam);
-  }
-
-  .seuils th[scope='row'] {
-    width: 40%;
+  /* Les faisceaux : un écran entier, comme le hero de l'accueil. */
+  .coll-hero__faisceaux {
+    height: 100dvh;
   }
 }

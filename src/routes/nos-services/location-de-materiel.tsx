@@ -5,6 +5,7 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { PERSONNES } from '../../components/contact/content'
 import { PHONE_DISPLAY, PHONE_TEL } from '../../components/home/content'
 import { Arrow } from '../../components/home/icons'
+import { Lien } from '../../components/Lien'
 
 /*
  * Chemin depuis la racine du projet, et non relatif : sur une route imbriquée,
@@ -128,18 +129,20 @@ function Hero() {
       */}
       <img
         className="loc-hero__fond"
-        src="/images/services/prestation-technique-1200.jpg"
-        srcSet="/images/services/prestation-technique-800.jpg 800w, /images/services/prestation-technique-1200.jpg 1200w"
+        src="/images/services/console-fond-1024.jpg"
+        srcSet="/images/services/console-fond-800.jpg 800w, /images/services/console-fond-1024.jpg 1024w"
         sizes="100vw"
-        width={1200}
-        height={1500}
+        width={1024}
+        height={1024}
         alt=""
         decoding="async"
       />
 
-      {/* Le voile, et les deux projecteurs au sol. Décor. */}
+      {/* Le voile, et les trois faisceaux de l'accueil, tombés du haut.
+          Décor. */}
       <div className="loc-hero__salle" aria-hidden="true">
         <span className="loc-hero__faisceaux">
+          <i />
           <i />
           <i />
         </span>
@@ -252,7 +255,10 @@ function Materiel() {
 
         <div className="corps-grille">
           {CORPS.map((corps) => (
-            <article className="corps" key={corps.nom} aria-labelledby={`corps-${corps.nom}`}>
+            <article className="corps dc01" key={corps.nom} aria-labelledby={`corps-${corps.nom}`}>
+              <span className="dc01__repere" aria-hidden="true" />
+              <span className="dc01__survol" aria-hidden="true" />
+              <span className="dc01__zone" aria-hidden="true" />
               <div className="corps__tete">
                 <h3 className="corps__nom" id={`corps-${corps.nom}`}>
                   {corps.nom}
@@ -401,10 +407,10 @@ function Technicien() {
             La location se fait sans technicien. Si vous voulez quelqu’un pour
             installer et faire fonctionner la technique, c’est un autre service.
           </p>
-          <a className="loc-lien" href="/nos-services/prestation-technique">
+          <Lien className="loc-lien" href="/nos-services/prestation-technique">
             Voir la prestation technique
             <Arrow className="loc-lien__fleche" />
-          </a>
+          </Lien>
         </div>
       </div>
     </section>
@@ -868,9 +874,9 @@ function Disponibilite() {
             <p className="champ__aide champ__aide--case" id="dispo-consentement-aide">
               Vos informations ne sont ni revendues ni utilisées pour de la
               prospection.{' '}
-              <a className="dispo__lien" href="/confidentialite">
+              <Lien className="dispo__lien" href="/confidentialite">
                 Politique de confidentialité
-              </a>
+              </Lien>
             </p>
             <div
               className="champ__erreur-zone"

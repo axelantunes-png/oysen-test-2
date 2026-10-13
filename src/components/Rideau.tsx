@@ -1,3 +1,6 @@
+import { useRouter } from '@tanstack/react-router'
+import { useEffect } from 'react'
+
 /*
  * Le rideau d'intro : le logo révélé par trois projecteurs, puis levé sur
  * la page. Minutage et positions des projecteurs dans app.css.
@@ -321,4 +324,25 @@ export const RIDEAU_SCRIPT = `(function () {
 /** Le rideau se joue-t-il sur ce chargement ? À lire côté navigateur. */
 export function rideauJoue() {
   return document.documentElement.dataset.rideau !== 'non'
+}
+
+/**
+ * Changer de page ne recharge plus le document : RIDEAU_SCRIPT ne repasse
+ * pas, et les heros attendraient encore la levée d'un rideau qui ne se joue
+ * plus (--apres-rideau). Dès le premier changement de page, avant que la
+ * suivante ne s'affiche, on pose donc `data-rideau="non"` comme le script
+ * l'aurait fait : plus de rideau, plus rien à attendre.
+ */
+export function useRideauApresNavigation() {
+  const router = useRouter()
+
+  useEffect(
+    () =>
+      router.subscribe('onBeforeNavigate', (evenement) => {
+        if (evenement.pathChanged) {
+          document.documentElement.dataset.rideau = 'non'
+        }
+      }),
+    [router],
+  )
 }

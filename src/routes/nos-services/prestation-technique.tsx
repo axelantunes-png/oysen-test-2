@@ -2,6 +2,7 @@ import type { CSSProperties } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 
 import { Arrow } from '../../components/home/icons'
+import { Lien } from '../../components/Lien'
 
 /*
  * Chemin depuis la racine du projet, et non relatif : sur une route imbriquée,
@@ -92,12 +93,12 @@ function Tete({
 }
 
 /* Le lien lavande et sa flèche. */
-function Lien({ href, children }: { href: string; children: string }) {
+function LienFleche({ href, children }: { href: string; children: string }) {
   return (
-    <a className="tech-lien" href={href}>
+    <Lien className="tech-lien" href={href}>
       {children}
       <Arrow className="tech-lien__fleche" />
-    </a>
+    </Lien>
   )
 }
 
@@ -145,11 +146,11 @@ function Hero() {
       */}
       <img
         className="tech-hero__fond"
-        src="/images/services/prestation-technique-1200.jpg"
-        srcSet="/images/services/prestation-technique-800.jpg 800w, /images/services/prestation-technique-1200.jpg 1200w"
+        src="/images/services/console-fond-1024.jpg"
+        srcSet="/images/services/console-fond-800.jpg 800w, /images/services/console-fond-1024.jpg 1024w"
         sizes="100vw"
-        width={1200}
-        height={1500}
+        width={1024}
+        height={1024}
         alt=""
         decoding="async"
       />
@@ -191,9 +192,9 @@ function Hero() {
           événement.
         </p>
         <div className="tech-hero__actions">
-          <a className="btn btn--solid" href={CONTACT}>
+          <Lien className="btn btn--solid" href={CONTACT}>
             Connaître les disponibilités
-          </a>
+          </Lien>
         </div>
         <p className="tech-hero__domaines">
           {DOMAINES_HERO.map((domaine) => (
@@ -270,7 +271,7 @@ function Formules() {
               <tr>
                 <td colSpan={2} />
                 <td className="comparaison__lien">
-                  <Lien href="/nos-services/location-de-materiel">Voir la location de matériel</Lien>
+                  <LienFleche href="/nos-services/location-de-materiel">Voir la location de matériel</LienFleche>
                 </td>
               </tr>
             </tfoot>
@@ -280,7 +281,7 @@ function Formules() {
         <div className="comparaison__suite">
           <p className="comparaison__sortie">
             Vous souhaitez un accompagnement complet&nbsp;?{' '}
-            <a href="/nos-services">Découvrez nos services</a>.
+            <Lien href="/nos-services">Découvrez nos services</Lien>.
           </p>
         </div>
       </div>
@@ -337,7 +338,10 @@ function Domaines() {
 
         <ul className="domaines">
           {DOMAINES.map((domaine) => (
-            <li className="domaine" key={domaine.nom}>
+            <li className="domaine dc01" key={domaine.nom}>
+              <span className="dc01__repere" aria-hidden="true" />
+              <span className="dc01__survol" aria-hidden="true" />
+              <span className="dc01__zone" aria-hidden="true" />
               <Picto trace={domaine.trace} className="domaine__picto" />
               <h3 className="domaine__nom">{domaine.nom}</h3>
               <p className="domaine__apport">{domaine.apport}</p>
@@ -399,9 +403,9 @@ function PourQui() {
               Dites-nous votre besoin : nous vous répondons avec une proposition
               adaptée.
             </p>
-            <a className="btn btn--solid agences__bouton" href={CONTACT_AGENCE}>
+            <Lien className="btn btn--solid agences__bouton" href={CONTACT_AGENCE}>
               Écrire en tant qu’agence
-            </a>
+            </Lien>
           </article>
 
           <ul className="publics-tech__autres">
@@ -484,7 +488,7 @@ function Parc() {
             aura ses partenaires) : vérifier son adresse, puis retirer le
             commentaire. Même lien que sur « Événements d'entreprise ».
 
-          <Lien href="/nos-partenaires">Voir nos partenaires</Lien>
+          <LienFleche href="/nos-partenaires">Voir nos partenaires</LienFleche>
           */}
         </div>
       </div>
@@ -562,9 +566,9 @@ function Appel() {
           Nous revenons vers vous avec une proposition adaptée.
         </p>
         <div className="appel__actions">
-          <a className="btn btn--solid" href={CONTACT}>
+          <Lien className="btn btn--solid" href={CONTACT}>
             Connaître les disponibilités
-          </a>
+          </Lien>
         </div>
       </div>
     </section>
