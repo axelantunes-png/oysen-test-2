@@ -2390,6 +2390,9 @@ textarea.cms-champ__input {
   /* La grille de l'ordinateur, et non les blocs empilés du site sur téléphone. */
   .popup--edition .popup__grille {
     display: grid;
+    /* Sans l'écart des blocs empilés du site sur téléphone (popup.css) : il
+       s'ajoutait entre chaque colonne et chaque ligne, et écartait les blocs. */
+    gap: 0;
   }
 
   .popup--edition .popup__bloc--centre {
