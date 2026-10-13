@@ -214,6 +214,91 @@
   }
 }
 
+/* ---- Le thème mariage ----
+   Les couleurs de la page Mariage et événement privé (mariage.css) : le
+   papier, l'encre, le gris mauve, les filets sable et le violet du logo
+   en encre. Les variables du site sont repeintes pour l'encart seul ; le
+   texte reste sur --dawn, --dusk et --beam (ici l'encre, le gris mauve et
+   le violet). L'encart prend le cadre de faire-part des formules de la
+   page : un filet extérieur, un filet intérieur plus pâle et un losange
+   plein sur chaque coin (.popup__coins, posé par PopupCarte). */
+.popup--mariage {
+  --papier: #f6f3ef;
+  --carte: #fbf9f6;
+  --encre: #1c1420;
+  --gris-mauve: #6d6076;
+  --filet: #e2dbd4;
+  --violet: #5a1e76;
+
+  --night: var(--papier);
+  --night-raised: var(--carte);
+  --dawn: var(--encre);
+  --dusk: var(--gris-mauve);
+  --beam: var(--violet);
+  --night-veil: color-mix(in srgb, var(--violet) 18%, transparent);
+  --btn-ghost-border: var(--filet);
+
+  color-scheme: light;
+  background-image: none;
+  border-color: color-mix(in srgb, var(--violet) 42%, transparent);
+  box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.55);
+}
+
+.popup--mariage::before {
+  content: '';
+  position: absolute;
+  inset: 0.45rem;
+  z-index: 1;
+  border: 1px solid color-mix(in srgb, var(--violet) 20%, transparent);
+  pointer-events: none;
+}
+
+.popup__coins i {
+  position: absolute;
+  z-index: 2;
+  width: 0.55rem;
+  height: 0.55rem;
+  background-color: var(--violet);
+  transform: translate(-50%, -50%) rotate(45deg);
+  pointer-events: none;
+}
+
+.popup__coins i:nth-child(1) {
+  top: 0;
+  left: 0;
+}
+
+.popup__coins i:nth-child(2) {
+  top: 0;
+  left: 100%;
+}
+
+.popup__coins i:nth-child(3) {
+  top: 100%;
+  left: 0;
+}
+
+.popup__coins i:nth-child(4) {
+  top: 100%;
+  left: 100%;
+}
+
+.popup--mariage .popup__titre {
+  color: var(--dawn);
+}
+
+.popup--mariage .popup__fermer:focus-visible,
+.popup--mariage .popup__lien:focus-visible {
+  color: var(--dawn);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .popup--mariage .popup__fermer:hover,
+  .popup--mariage .popup__lien:hover {
+    color: var(--dawn);
+  }
+}
+
 /* Le même rendu de téléphone, forcé dans l'aperçu du CMS (bouton
    Ordinateur / Téléphone), quel que soit l'écran. */
 .popup--telephone {

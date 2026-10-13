@@ -1990,6 +1990,60 @@ textarea.cms-champ__input {
   border-radius: 1rem;
 }
 
+/* Le thème du popup, sous les réglages du bloc. */
+.theme-bouton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  width: 100%;
+  min-height: 2.75rem;
+  margin-top: 0.75rem;
+  padding: 0 1rem;
+  box-sizing: border-box;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--dawn);
+  background-color: var(--night-raised);
+  border: 1px solid color-mix(in srgb, var(--beam) 18%, transparent);
+  border-radius: 0.8rem;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .theme-bouton:hover {
+    color: #ffffff;
+    border-color: color-mix(in srgb, var(--beam) 50%, transparent);
+  }
+}
+
+.theme-bouton:focus-visible {
+  outline: 2px solid var(--beam);
+  outline-offset: 2px;
+}
+
+/* La pastille : la couleur du thème vers lequel on passe. */
+.theme-bouton__pastille {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+}
+
+.theme-bouton__pastille--mariage {
+  background-color: #f6f3ef;
+  border: 2px solid #5a1e76;
+}
+
+.theme-bouton__pastille--sombre {
+  background-color: var(--night);
+  border: 2px solid var(--beam);
+}
+
 .inspecteur--vide {
   gap: 0.5rem;
 }

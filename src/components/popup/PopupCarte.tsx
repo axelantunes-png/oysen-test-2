@@ -40,9 +40,18 @@ export function PopupCarte({ format, contenu, titreId, onFermer, onSuivre, aperc
 
   return (
     <div
-      className={`popup popup--${format}${telephone ? ' popup--telephone' : ''}`}
+      className={`popup popup--${format}${grille.theme ? ` popup--${grille.theme}` : ''}${telephone ? ' popup--telephone' : ''}`}
       style={{ maxWidth: `${cadre.largeur}rem` }}
     >
+      {/* Thème mariage : les losanges des coins du cadre de faire-part. */}
+      {grille.theme === 'mariage' ? (
+        <span className="popup__coins" aria-hidden="true">
+          <i />
+          <i />
+          <i />
+          <i />
+        </span>
+      ) : null}
       {onFermer ? (
         <button className="popup__fermer" type="button" onClick={onFermer} aria-label="Fermer">
           <span aria-hidden="true">×</span>

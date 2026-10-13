@@ -79,7 +79,13 @@ export type BlocPlace = Bloc & { place: Placement }
  */
 export type Cadre = { largeur: number; lignes: number }
 
-export type ContenuPopup = { version: 3; blocs: BlocPlace[]; cadre?: Cadre }
+/**
+ * Le thème du popup : sombre (celui du site, par défaut, sans clé) ou
+ * mariage (les couleurs claires de la page Mariage et événement privé).
+ */
+export type Theme = 'mariage'
+
+export type ContenuPopup = { version: 3; blocs: BlocPlace[]; cadre?: Cadre; theme?: Theme }
 
 /** La largeur du cadre pour chaque taille prédéfinie, en rem. */
 export const LARGEURS_FORMAT: Record<Format, number> = { petit: 24, moyen: 34, grand: 50 }

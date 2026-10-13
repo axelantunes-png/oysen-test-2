@@ -306,7 +306,8 @@ export function EditeurPopup({ id }: { id: string }) {
   }
 
   function appliquerModele(modele: (typeof MODELES)[number]) {
-    changer({ contenu: modele.contenu(), format: modele.format })
+    /* Le thème choisi reste : un modèle ne change que les blocs et le cadre. */
+    changer({ contenu: { ...modele.contenu(), theme: popup?.contenu.theme }, format: modele.format })
     setModeleDemande(null)
     setSelection(null)
   }
@@ -816,6 +817,29 @@ export function EditeurPopup({ id }: { id: string }) {
             onSelection={setSelection}
             onAvance={setAvance}
           />
+
+          {/* Le thème du popup : les couleurs de la page Mariage, ou le sombre du site. */}
+          <button
+            className="theme-bouton"
+            type="button"
+            aria-pressed={popup.contenu.theme === 'mariage'}
+            onClick={() =>
+              changer({
+                contenu: {
+                  ...popup.contenu,
+                  theme: popup.contenu.theme === 'mariage' ? undefined : 'mariage',
+                },
+              })
+            }
+          >
+            <span
+              className={`theme-bouton__pastille theme-bouton__pastille--${
+                popup.contenu.theme === 'mariage' ? 'sombre' : 'mariage'
+              }`}
+              aria-hidden="true"
+            />
+            {popup.contenu.theme === 'mariage' ? 'Revenir sur le thème sombre' : 'Passer en thème mariage'}
+          </button>
         </aside>
       </div>
 
@@ -920,7 +944,7 @@ export function EditeurPopup({ id }: { id: string }) {
               libelle: 'Retirer tous les blocs',
               style: 'plein',
               onClick: () => {
-                changer({ contenu: { version: 3, blocs: [], cadre } })
+                changer({ contenu: { version: 3, blocs: [], cadre, theme: popup.contenu.theme } })
                 setSelection(null)
                 setViderDemande(false)
               },

@@ -556,7 +556,7 @@ export function GrilleEdition({
   return (
     <div
       ref={boite}
-      className={`popup popup--${format} popup--edition`}
+      className={`popup popup--${format}${contenu.theme ? ` popup--${contenu.theme}` : ''} popup--edition`}
       style={
         {
           maxWidth: `${cadre.largeur}rem`,
@@ -573,6 +573,15 @@ export function GrilleEdition({
         } as CSSProperties
       }
     >
+      {/* Thème mariage : les losanges des coins du cadre de faire-part. */}
+      {contenu.theme === 'mariage' ? (
+        <span className="popup__coins" aria-hidden="true">
+          <i />
+          <i />
+          <i />
+          <i />
+        </span>
+      ) : null}
       {/* Les poignées du cadre : ses deux côtés et son bas. */}
       {POIGNEES_CADRE.map((poignee) => (
         <span

@@ -236,6 +236,14 @@ l'enregistrement, ou pour choisir une autre date de fin.
     horizontal (gauche, centre, droite) et vertical (haut, centre, bas) ; « … » :
     marges intérieures des quatre côtés (0 à 3 rem), « Passer devant » / « Passer
     derrière » pour les blocs superposés ;
+  - **Thème** (bouton sous les réglages du bloc, ordinateur et téléphone) : « Passer en
+    thème mariage » repeint le popup aux couleurs de la page Mariage (papier, encre,
+    gris mauve, filets sable, violet en encre, cadre de faire-part des formules de la page : filet extérieur,
+    filet intérieur plus pâle, losange sur chaque coin (`.popup__coins`) ; classe
+    `.popup--mariage` dans popup.css) ; le bouton devient « Revenir sur le thème
+    sombre ». Enregistré dans `contenu.theme` (`'mariage'`, absent = sombre), appliqué
+    sur le site comme dans l'aperçu ; gardé par Tout vider et par l'application d'un
+    modèle. Pas de script SQL (la règle de forme ne regarde que `blocs`) ;
   - **Ordinateur / Téléphone** (en tête de l'aperçu, sur tous les écrans, à côté de
     Tout vider) : le choix de l'aperçu, quel que soit l'écran du moment. Ordinateur :
     la grille de travail (réduite sur téléphone). Téléphone : le popup tel qu'un
