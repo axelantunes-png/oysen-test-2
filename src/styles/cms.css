@@ -917,6 +917,64 @@
   margin-left: auto;
 }
 
+/* Le choix de l'aperçu : Ordinateur ou Téléphone. */
+.vue-switch {
+  display: inline-flex;
+  padding: 0.2rem;
+  background-color: var(--night);
+  border: 1px solid color-mix(in srgb, var(--beam) 18%, transparent);
+  border-radius: 0.6rem;
+}
+
+.vue-switch__bouton {
+  min-height: 1.75rem;
+  padding: 0 0.7rem;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--dusk);
+  background: none;
+  border: 0;
+  border-radius: 0.45rem;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.vue-switch__bouton--actif {
+  color: #ffffff;
+  background-color: color-mix(in srgb, var(--beam) 22%, var(--night-raised));
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .vue-switch__bouton:not(.vue-switch__bouton--actif):hover {
+    color: var(--dawn);
+  }
+}
+
+.vue-switch__bouton:focus-visible {
+  outline: 2px solid var(--beam);
+  outline-offset: 1px;
+}
+
+/*
+ * L'écran d'un téléphone (390 px de large) : le popup y prend la place
+ * qu'il a sur le site, entre les marges de sa fenêtre (popup.css, .popups).
+ */
+.ecran-telephone {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 24.375rem;
+  max-width: 100%;
+  min-height: 36rem;
+  padding: 2rem 1rem;
+  box-sizing: border-box;
+  background-color: rgba(7, 3, 11, 0.72);
+  border: 1px solid color-mix(in srgb, var(--beam) 22%, transparent);
+  border-radius: 1.75rem;
+}
+
 /* Retirer tous les blocs, en gardant la taille de l'encart. */
 .editeur__vider {
   min-height: 2.2rem;
@@ -2474,6 +2532,77 @@ textarea.cms-champ__input {
   .cms-page select,
   .cms-page textarea {
     font-size: 1rem;
+  }
+
+  /* Les réglages du bloc en pliants : un seul ouvert, l'aperçu reste en vue. */
+  .inspecteur {
+    gap: 0;
+    padding: 0.85rem 1rem 0.35rem;
+  }
+
+  .inspecteur__tete {
+    padding-bottom: 0.6rem;
+  }
+
+  .inspecteur--vide {
+    gap: 0.4rem;
+    padding-bottom: 0.85rem;
+  }
+
+  .poste {
+    gap: 0;
+    padding-top: 0;
+  }
+
+  .poste__tete {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    width: 100%;
+    min-height: 2.9rem;
+    padding: 0;
+    font: inherit;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    text-align: left;
+    color: var(--dawn);
+    background: none;
+    border: 0;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  .poste--ouvert .poste__tete {
+    color: #ffffff;
+  }
+
+  .poste__tete:focus-visible {
+    outline: 2px solid var(--beam);
+    outline-offset: -2px;
+  }
+
+  /* Le chevron : vers le bas fermé, vers le haut ouvert. */
+  .poste__chevron {
+    flex: none;
+    width: 0.5rem;
+    height: 0.5rem;
+    margin-top: -0.25rem;
+    border-right: 2px solid var(--beam);
+    border-bottom: 2px solid var(--beam);
+    transform: rotate(45deg);
+    transition: transform 0.2s ease;
+  }
+
+  .poste--ouvert .poste__chevron {
+    margin-top: 0.25rem;
+    transform: rotate(-135deg);
+  }
+
+  .poste__corps {
+    display: grid;
+    gap: 0.75rem;
+    padding-bottom: 1rem;
   }
 
   /* La taille du bloc choisi, aux boutons. */

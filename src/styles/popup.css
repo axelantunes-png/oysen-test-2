@@ -214,6 +214,26 @@
   }
 }
 
+/* Le même rendu de téléphone, forcé dans l'aperçu du CMS (bouton
+   Ordinateur / Téléphone), quel que soit l'écran. */
+.popup--telephone {
+  padding: 1.5rem;
+}
+
+.popup--telephone .popup__grille {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.popup--telephone .popup__bloc--centre {
+  width: auto;
+}
+
+.popup--telephone .popup__bloc--image .popup__contenu {
+  min-height: 12rem;
+}
+
 /* ---- Les blocs ---- */
 
 .popup__surtitre,

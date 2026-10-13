@@ -1,5 +1,5 @@
 import { useId, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react'
-import type { CSSProperties, KeyboardEvent, PointerEvent } from 'react'
+import type { CSSProperties, KeyboardEvent, PointerEvent, ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 
 import { BlocRendu, classesDuBloc, styleDuBloc } from '../popup/PopupCarte'
@@ -728,6 +728,8 @@ export function Inspecteur({
 }) {
   const bloc = contenu.blocs.find((b) => b.id === selection)
   const telephone = useTelephone()
+  /* Sur téléphone : le poste de réglage ouvert (un seul à la fois, aucun au départ). */
+  const [posteOuvert, setPosteOuvert] = useState<string | null>(null)
 
   if (!bloc) {
     return (
@@ -741,22 +743,68 @@ export function Inspecteur({
   }
 
   const { place } = bloc
+  /* Un poste de réglage : un pliant sur téléphone, une section ouverte sur ordinateur. */
+  const poste = (cle: string, titre: string) => ({
+    telephone,
+    titre,
+    ouvert: posteOuvert === cle,
+    onBasculer: () => setPosteOuvert(posteOuvert === cle ? null : cle),
+  })
+
+  const marges = (
+    <div className="inspecteur__marges">
+      {COTES.map((cote) => (
+        <ChoixMarge
+          key={cote.cle}
+          libelle={cote.nom}
+          valeur={place.marges[cote.cle]}
+          onChange={(valeur) =>
+            onChange(changerPlace(contenu, bloc.id, { marges: { ...place.marges, [cote.cle]: valeur } }))
+          }
+        />
+      ))}
+    </div>
+  )
+
+  const superposition = (
+    <>
+      <div className="inspecteur__boutons">
+        <button
+          type="button"
+          className="inspecteur__bouton"
+          onClick={() => onChange(changerDePlan(contenu, bloc.id, 'devant'))}
+        >
+          Passer devant
+        </button>
+        <button
+          type="button"
+          className="inspecteur__bouton"
+          onClick={() => onChange(changerDePlan(contenu, bloc.id, 'derriere'))}
+        >
+          Passer derrière
+        </button>
+      </div>
+      <p className="cms-aide">Pour un bloc posé sur un autre, une photo sous un texte par exemple.</p>
+    </>
+  )
 
   return (
     <div className="inspecteur">
       <div className="inspecteur__tete">
         <p className="inspecteur__titre">{nomDuType(bloc.type)}</p>
-        <button
-          type="button"
-          className={`inspecteur__outil${avance ? ' inspecteur__outil--actif' : ''}`}
-          aria-expanded={avance}
-          aria-controls="reglages-avances"
-          title="Réglages avancés"
-          onClick={() => onAvance(!avance)}
-        >
-          <span aria-hidden="true">…</span>
-          <span className="sr-only">Réglages avancés</span>
-        </button>
+        {!telephone ? (
+          <button
+            type="button"
+            className={`inspecteur__outil${avance ? ' inspecteur__outil--actif' : ''}`}
+            aria-expanded={avance}
+            aria-controls="reglages-avances"
+            title="Réglages avancés"
+            onClick={() => onAvance(!avance)}
+          >
+            <span aria-hidden="true">…</span>
+            <span className="sr-only">Réglages avancés</span>
+          </button>
+        ) : null}
         <button
           type="button"
           className="inspecteur__outil"
@@ -771,15 +819,15 @@ export function Inspecteur({
         </button>
       </div>
 
-      <section className="inspecteur__section" aria-label="Contenu du bloc">
+      <Poste {...poste('contenu', 'Contenu du bloc')}>
         <ChampsDuBloc
           bloc={bloc}
           onChange={(modifie) => onChange(remplacerBloc(contenu, { ...modifie, place } as BlocPlace))}
         />
-      </section>
+      </Poste>
 
-      <section className="inspecteur__section" aria-label="Position">
-        <p className="inspecteur__sous-titre">Position</p>
+      <Poste {...poste('position', 'Position')}>
+        {!telephone ? <p className="inspecteur__sous-titre">Position</p> : null}
         <div className="inspecteur__boutons">
           <button
             type="button"
@@ -812,7 +860,16 @@ export function Inspecteur({
             </button>
           ))}
         </div>
-        {telephone ? (
+        {telephone ? null : (
+          <p className="cms-aide">
+            Ou au clavier, sur le bloc choisi : les flèches décalent d’un cran, Maj + flèche de
+            quatre.
+          </p>
+        )}
+      </Poste>
+
+      {telephone ? (
+        <Poste {...poste('taille', 'Taille')}>
           <div className="taille-bloc">
             {TAILLES_BLOC.map((t) => (
               <div className="taille-bloc__ligne" key={t.cle}>
@@ -833,16 +890,11 @@ export function Inspecteur({
               </div>
             ))}
           </div>
-        ) : (
-          <p className="cms-aide">
-            Ou au clavier, sur le bloc choisi : les flèches décalent d’un cran, Maj + flèche de
-            quatre.
-          </p>
-        )}
-      </section>
+        </Poste>
+      ) : null}
 
-      <section className="inspecteur__section" aria-label="Centrage">
-        <p className="inspecteur__sous-titre">Centrage dans son cadre</p>
+      <Poste {...poste('centrage', 'Centrage dans son cadre')}>
+        {!telephone ? <p className="inspecteur__sous-titre">Centrage dans son cadre</p> : null}
         <Segments
           libelle="Horizontal"
           options={ALIGNEMENTS_H}
@@ -855,46 +907,63 @@ export function Inspecteur({
           valeur={place.alignV}
           onChange={(alignV) => onChange(changerPlace(contenu, bloc.id, { alignV }))}
         />
-      </section>
+      </Poste>
 
-      {avance ? (
+      {telephone ? (
+        <>
+          <Poste {...poste('marges', 'Marges intérieures')}>{marges}</Poste>
+          <Poste {...poste('superposition', 'Superposition')}>{superposition}</Poste>
+        </>
+      ) : avance ? (
         <section className="inspecteur__section" id="reglages-avances" aria-label="Réglages avancés">
           <p className="inspecteur__sous-titre">Marges intérieures</p>
-          <div className="inspecteur__marges">
-            {COTES.map((cote) => (
-              <ChoixMarge
-                key={cote.cle}
-                libelle={cote.nom}
-                valeur={place.marges[cote.cle]}
-                onChange={(valeur) =>
-                  onChange(
-                    changerPlace(contenu, bloc.id, { marges: { ...place.marges, [cote.cle]: valeur } }),
-                  )
-                }
-              />
-            ))}
-          </div>
+          {marges}
           <p className="inspecteur__sous-titre">Superposition</p>
-          <div className="inspecteur__boutons">
-            <button
-              type="button"
-              className="inspecteur__bouton"
-              onClick={() => onChange(changerDePlan(contenu, bloc.id, 'devant'))}
-            >
-              Passer devant
-            </button>
-            <button
-              type="button"
-              className="inspecteur__bouton"
-              onClick={() => onChange(changerDePlan(contenu, bloc.id, 'derriere'))}
-            >
-              Passer derrière
-            </button>
-          </div>
-          <p className="cms-aide">Pour un bloc posé sur un autre, une photo sous un texte par exemple.</p>
+          {superposition}
         </section>
       ) : null}
     </div>
+  )
+}
+
+/**
+ * Un poste des réglages du bloc. Sur ordinateur, une section toujours
+ * ouverte ; sur téléphone, un pliant, un seul ouvert à la fois, pour que
+ * les réglages tiennent sous l'aperçu.
+ */
+function Poste({
+  telephone,
+  titre,
+  ouvert,
+  onBasculer,
+  children,
+}: {
+  telephone: boolean
+  titre: string
+  ouvert: boolean
+  onBasculer: () => void
+  children: ReactNode
+}) {
+  const id = useId()
+  if (!telephone) {
+    return (
+      <section className="inspecteur__section" aria-label={titre}>
+        {children}
+      </section>
+    )
+  }
+  return (
+    <section className={`inspecteur__section poste${ouvert ? ' poste--ouvert' : ''}`} aria-label={titre}>
+      <button className="poste__tete" type="button" aria-expanded={ouvert} aria-controls={id} onClick={onBasculer}>
+        {titre}
+        <span className="poste__chevron" aria-hidden="true" />
+      </button>
+      {ouvert ? (
+        <div className="poste__corps" id={id}>
+          {children}
+        </div>
+      ) : null}
+    </section>
   )
 }
 

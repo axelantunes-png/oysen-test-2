@@ -1,10 +1,12 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useLocation, useNavigate } from '@tanstack/react-router'
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import type { KeyboardEvent, ReactNode } from 'react'
 
 import { Lien } from '../Lien'
 import { PopupCarte } from '../popup/PopupCarte'
+import { Fenetre } from '../popup/Popups'
 import { GrilleEdition, Inspecteur, PaletteBlocs, useTelephone } from './Constructeur'
 import { Dialogue } from './Dialogue'
 import { IconeInfo } from './Icones'
@@ -114,10 +116,14 @@ export function EditeurPopup({ id }: { id: string }) {
   /* Sur téléphone : la barre d'actions en bas de l'écran, et la feuille pour ajouter un bloc. */
   const telephone = useTelephone()
   const [feuille, setFeuille] = useState(false)
+  /* Sur téléphone : le popup ouvert comme sur le site, par « Aperçu » de la barre du bas. */
+  const [apercuSite, setApercuSite] = useState(false)
   /* Sur téléphone : l'aide du nom, masquée, s'ouvre dans une fenêtre par l'icône info. */
   const [aideNom, setAideNom] = useState(false)
   /* Sur ordinateur : l'aperçu tel que le verra le visiteur, sans la grille ni les outils. */
   const [rendu, setRendu] = useState(false)
+  /* L'aperçu tel qu'on le verra sur ordinateur ou sur téléphone, quel que soit l'écran du moment. */
+  const [vue, setVue] = useState<'ordinateur' | 'telephone'>('ordinateur')
   const zoneApercu = useRef<HTMLElement>(null)
   const zoneInspecteur = useRef<HTMLElement>(null)
   useEffect(() => {
@@ -731,7 +737,25 @@ export function EditeurPopup({ id }: { id: string }) {
               <p className="cms-aide">Glissez les blocs pour les placer, cliquez sur un bloc pour le régler.</p>
             ) : null}
             <div className="editeur__apercu-outils">
-              {!telephone ? (
+              <div className="vue-switch" role="group" aria-label="Voir l’aperçu sur">
+                {(
+                  [
+                    { valeur: 'ordinateur', nom: 'Ordinateur' },
+                    { valeur: 'telephone', nom: 'Téléphone' },
+                  ] as const
+                ).map((v) => (
+                  <button
+                    key={v.valeur}
+                    type="button"
+                    className={`vue-switch__bouton${vue === v.valeur ? ' vue-switch__bouton--actif' : ''}`}
+                    aria-pressed={vue === v.valeur}
+                    onClick={() => setVue(v.valeur)}
+                  >
+                    {v.nom}
+                  </button>
+                ))}
+              </div>
+              {!telephone && vue === 'ordinateur' ? (
                 <button
                   className="editeur__vider"
                   type="button"
@@ -744,15 +768,26 @@ export function EditeurPopup({ id }: { id: string }) {
                   {rendu ? 'Revenir à la grille' : 'Rendu sans la grille'}
                 </button>
               ) : null}
-              {popup.contenu.blocs.length && !(rendu && !telephone) ? (
+              {popup.contenu.blocs.length && !(rendu && !telephone) && vue === 'ordinateur' ? (
                 <button className="editeur__vider" type="button" onClick={() => setViderDemande(true)}>
                   Tout vider
                 </button>
               ) : null}
             </div>
           </div>
-          <div className="apercu apercu--edition">
-            {rendu && !telephone ? (
+          <div
+            className="apercu apercu--edition"
+            onClick={(e) => {
+              /* Sur téléphone : toucher l'aperçu hors d'un bloc (le fond gris, le bord noir du popup) libère le bloc choisi. */
+              if (telephone && !(e.target as Element).closest('[data-bloc], .cadre-poignee, button, a')) setSelection(null)
+            }}
+          >
+            {vue === 'telephone' ? (
+              /* Un écran de téléphone : le popup tel que le voit un visiteur sur mobile. */
+              <div className="ecran-telephone">
+                <PopupCarte format={popup.format} contenu={popup.contenu} apercu telephone />
+              </div>
+            ) : rendu && !telephone ? (
               <PopupCarte format={popup.format} contenu={popup.contenu} apercu />
             ) : (
             <GrilleEdition
@@ -805,13 +840,8 @@ export function EditeurPopup({ id }: { id: string }) {
           <button
             className="barre-mobile__bouton"
             type="button"
-            onClick={() => {
-              setOnglet('contenu')
-              window.setTimeout(
-                () => zoneApercu.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }),
-                0,
-              )
-            }}
+            aria-haspopup="dialog"
+            onClick={() => setApercuSite(true)}
           >
             Aperçu
           </button>
@@ -825,6 +855,18 @@ export function EditeurPopup({ id }: { id: string }) {
           </button>
         </nav>
       ) : null}
+
+      {telephone && apercuSite
+        ? createPortal(
+            <Fenetre
+              popups={[{ id: 'apercu', format: popup.format, contenu: popup.contenu }]}
+              onFermer={() => setApercuSite(false)}
+              onToutFermer={() => setApercuSite(false)}
+              apercu
+            />,
+            document.body,
+          )
+        : null}
 
       {telephone && feuille ? (
         <div className="feuille" role="dialog" aria-modal="true" aria-labelledby="feuille-titre">

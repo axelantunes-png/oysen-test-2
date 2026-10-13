@@ -16,6 +16,8 @@ type Props = {
   onSuivre?: () => void
   /** Dans le CMS : les liens ne mènent nulle part. */
   apercu?: boolean
+  /** Dans le CMS : le rendu d'un téléphone (blocs empilés), quel que soit l'écran. */
+  telephone?: boolean
 }
 
 /**
@@ -27,7 +29,7 @@ type Props = {
  * Les blocs suivent l'ordre de lecture : sur téléphone, ils s'empilent
  * dans cet ordre, chacun sur toute la largeur.
  */
-export function PopupCarte({ format, contenu, titreId, onFermer, onSuivre, apercu }: Props) {
+export function PopupCarte({ format, contenu, titreId, onFermer, onSuivre, apercu, telephone }: Props) {
   /* Un popup de l'ancien constructeur est converti ici, sur le site comme dans le CMS. */
   const grille = normaliserContenu(contenu)
   const blocs = ordreDeLecture(grille.blocs)
@@ -37,7 +39,10 @@ export function PopupCarte({ format, contenu, titreId, onFermer, onSuivre, aperc
   const premierTitre = blocs.find((b) => b.type === 'titre')?.id
 
   return (
-    <div className={`popup popup--${format}`} style={{ maxWidth: `${cadre.largeur}rem` }}>
+    <div
+      className={`popup popup--${format}${telephone ? ' popup--telephone' : ''}`}
+      style={{ maxWidth: `${cadre.largeur}rem` }}
+    >
       {onFermer ? (
         <button className="popup__fermer" type="button" onClick={onFermer} aria-label="Fermer">
           <span aria-hidden="true">×</span>

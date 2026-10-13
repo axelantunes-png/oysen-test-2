@@ -134,14 +134,21 @@ export function Popups() {
   return <Fenetre popups={ouverts} onFermer={fermer} onToutFermer={toutFermer} />
 }
 
-function Fenetre({
+/**
+ * La fenêtre des popups ouverts : le voile, les encarts empilés au centre.
+ * Le CMS s'en sert aussi (« Aperçu » sur téléphone) pour montrer un popup
+ * exactement comme il s'ouvrira, les liens alors inertes (apercu).
+ */
+export function Fenetre({
   popups,
   onFermer,
   onToutFermer,
+  apercu,
 }: {
-  popups: PopupSite[]
+  popups: Pick<Popup, 'id' | 'format' | 'contenu'>[]
   onFermer: (id: string) => void
   onToutFermer: () => void
+  apercu?: boolean
 }) {
   const base = useId()
   const fenetre = useRef<HTMLDivElement>(null)
@@ -187,6 +194,7 @@ function Fenetre({
             titreId={`${base}-${popup.id}`}
             onFermer={() => onFermer(popup.id)}
             onSuivre={onToutFermer}
+            apercu={apercu}
           />
         </div>
       ))}

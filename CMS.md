@@ -236,6 +236,13 @@ l'enregistrement, ou pour choisir une autre date de fin.
     horizontal (gauche, centre, droite) et vertical (haut, centre, bas) ; « … » :
     marges intérieures des quatre côtés (0 à 3 rem), « Passer devant » / « Passer
     derrière » pour les blocs superposés ;
+  - **Ordinateur / Téléphone** (en tête de l'aperçu, sur tous les écrans, à côté de
+    Tout vider) : le choix de l'aperçu, quel que soit l'écran du moment. Ordinateur :
+    la grille de travail (réduite sur téléphone). Téléphone : le popup tel qu'un
+    visiteur le voit sur mobile (`PopupCarte` avec `telephone`, classe
+    `.popup--telephone` qui force l'empilement des blocs), dans un écran de 390 px
+    (`.ecran-telephone`) ; pas de modification à la main dans cette vue (les réglages
+    du bloc choisi restent actifs), Tout vider et Rendu sans la grille y sont masqués ;
   - **Rendu sans la grille** (en tête de l'aperçu, sur ordinateur, à côté de Tout
     vider) : l'aperçu montre le popup tel que le verra le visiteur (`PopupCarte`),
     sans grille, poignées ni outils ; le bouton devient
@@ -256,12 +263,20 @@ l'enregistrement, ou pour choisir une autre date de fin.
     de toucher élargie ;
   - au doigt, toucher un bloc le choisit seulement (la page défile sur les autres
     blocs) ; le bloc choisi se glisse et s'étire ;
+  - toucher l'aperçu hors d'un bloc (fond gris, bord noir du popup, grille vide)
+    libère le bloc choisi ;
   - palette : un bloc s'ajoute en le touchant (pas de glisser), en bas du popup ;
-  - réglages du bloc : boutons − / + pour sa largeur et sa hauteur (2 carreaux par
-    appui), à la place du rappel des raccourcis clavier ;
+  - réglages du bloc en **pliants** (composant `Poste`), un seul ouvert à la fois,
+    tous fermés au départ, pour garder l'aperçu en vue : Contenu du bloc, Position,
+    Taille (boutons − / + pour la largeur et la hauteur, 2 carreaux par appui),
+    Centrage dans son cadre, Marges intérieures, Superposition (le bouton « … » est
+    masqué, ces deux derniers postes le remplacent) ;
   - barre d'actions fixée en bas : « + Bloc » (feuille qui monte du bas avec la
     palette, refermée après l'ajout, l'aperçu revient), « Régler » (descend aux
-    réglages du bloc choisi), « Aperçu », « Enregistrer » ;
+    réglages du bloc choisi), « Aperçu » (ouvre le popup dans son état actuel exactement
+    comme sur le site : même fenêtre `Fenetre` de Popups.tsx, voile, place et rendu
+    téléphone ; liens inertes, la croix, Échap ou un toucher à côté le referment),
+    « Enregistrer » ;
   - champs à 16 px : le téléphone ne zoome plus quand on les touche ;
   - une seule colonne, dans cet ordre : Général, les onglets Contenu / Diffusion
     (Contenu ouvert d'abord), puis l'onglet ouvert. Contenu : Mise en page, aperçu,
@@ -273,7 +288,7 @@ l'enregistrement, ou pour choisir une autre date de fin.
     l'aide du nom est masquée, une icône info à côté de « Nom du popup » l'ouvre dans une
     fenêtre (Dialogue `sansAnnuler`, bouton « Compris ») ; marges du haut et du bas du panneau réduites ;
   - « Enregistrer » du haut de page et le texte d'aide de l'aperçu sont masqués ;
-    « Aperçu », « Régler » et l'ajout d'un bloc rouvrent l'onglet Contenu.
+    « Régler » et l'ajout d'un bloc rouvrent l'onglet Contenu.
 - **Supprimer ce popup** : en bas de l'éditeur, même avertissement que la liste.
 
 Le client choisit le contenu, jamais les couleurs ni les polices : le popup reste dans
