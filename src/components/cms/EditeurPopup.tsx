@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useLocation, useNavigate } from '@tanstack/react-router'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import type { KeyboardEvent, ReactNode } from 'react'
 
@@ -1000,17 +1000,44 @@ function Panneau({
   action?: ReactNode
   children: ReactNode
 }) {
+  /* Chaque panneau se replie par son titre (ouvert au départ), sur ordinateur comme sur téléphone. */
+  const [ouvert, setOuvert] = useState(true)
+  const corpsId = useId()
+  const replie = !ouvert
+
+  const titreRendu = (
+    <h2 className="panneau__titre">
+      <button
+        className="panneau__bascule"
+        type="button"
+        aria-expanded={ouvert}
+        aria-controls={corpsId}
+        onClick={() => setOuvert(!ouvert)}
+      >
+        {titre}
+        <span className="panneau__chevron" aria-hidden="true" />
+      </button>
+    </h2>
+  )
+
   return (
-    <section className={`panneau${arrondi ? ' panneau--arrondi' : ''}`} id={id} aria-label={titre}>
+    <section
+      className={`panneau${arrondi ? ' panneau--arrondi' : ''}${replie ? ' panneau--replie' : ''}`}
+      id={id}
+      aria-label={titre}
+    >
       {action ? (
         <div className="panneau__tete">
-          <h2 className="panneau__titre">{titre}</h2>
+          {titreRendu}
           <div className="panneau__action">{action}</div>
         </div>
       ) : (
-        <h2 className="panneau__titre">{titre}</h2>
+        titreRendu
       )}
-      <div className="panneau__corps">{children}</div>
+      {/* Replié, le contenu reste en place (masqué) : un champ visé par #diffusion existe toujours. */}
+      <div className="panneau__corps" id={corpsId} hidden={replie}>
+        {children}
+      </div>
     </section>
   )
 }

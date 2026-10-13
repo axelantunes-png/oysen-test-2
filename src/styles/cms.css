@@ -1184,6 +1184,95 @@
   display: none;
 }
 
+/* Le titre d'un panneau qui se replie (ordinateur), et son chevron. */
+.panneau__bascule {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0;
+  font: inherit;
+  text-align: left;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.panneau__bascule:focus-visible {
+  outline: 2px solid var(--beam);
+  outline-offset: 4px;
+}
+
+.panneau__chevron,
+.poste__chevron {
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-top: -0.25rem;
+  border-right: 2px solid var(--beam);
+  border-bottom: 2px solid var(--beam);
+  transform: rotate(-135deg);
+  transition: transform 0.2s ease;
+}
+
+/* Ouvert : chevron vers le haut ; replié : vers le bas. */
+.panneau--replie .panneau__chevron,
+.poste:not(.poste--ouvert) .poste__chevron {
+  margin-top: -0.25rem;
+  transform: rotate(45deg);
+}
+
+.panneau:not(.panneau--replie) .panneau__chevron,
+.poste--ouvert .poste__chevron {
+  margin-top: 0.25rem;
+}
+
+.panneau--replie .panneau__titre {
+  margin-bottom: 0;
+}
+
+.panneau__corps[hidden] {
+  display: none;
+}
+
+/* Les postes de réglage du bloc, en pliants. */
+.poste__tete {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: left;
+  color: var(--dusk);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .poste__tete:hover {
+    color: var(--dawn);
+  }
+}
+
+.poste__tete:focus-visible {
+  outline: 2px solid var(--beam);
+  outline-offset: 2px;
+}
+
+.poste__corps {
+  display: grid;
+  gap: 0.75rem;
+}
+
 .panneau__corps {
   display: grid;
   gap: 1.1rem;
@@ -2395,7 +2484,14 @@ textarea.cms-champ__input {
   }
 
   .panneau__tete .panneau__titre {
+    flex: 1;
+    min-width: 0;
     margin: 0;
+  }
+
+  .panneau__bascule {
+    min-height: 2.25rem;
+    touch-action: manipulation;
   }
 
   .panneau__action {
@@ -2414,6 +2510,11 @@ textarea.cms-champ__input {
 
   #panneau-general .panneau__tete {
     margin-bottom: 0.6rem;
+  }
+
+  .panneau--replie .panneau__tete,
+  #panneau-general.panneau--replie .panneau__tete {
+    margin-bottom: 0;
   }
 
   /* Le nom : son aide s'ouvre par l'icône info, à côté du libellé. */
@@ -2641,21 +2742,12 @@ textarea.cms-champ__input {
   }
 
   .poste__tete {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem;
-    width: 100%;
     min-height: 2.9rem;
-    padding: 0;
-    font: inherit;
     font-size: 0.9375rem;
     font-weight: 600;
-    text-align: left;
+    letter-spacing: 0;
+    text-transform: none;
     color: var(--dawn);
-    background: none;
-    border: 0;
-    cursor: pointer;
     touch-action: manipulation;
   }
 
@@ -2666,23 +2758,6 @@ textarea.cms-champ__input {
   .poste__tete:focus-visible {
     outline: 2px solid var(--beam);
     outline-offset: -2px;
-  }
-
-  /* Le chevron : vers le bas fermé, vers le haut ouvert. */
-  .poste__chevron {
-    flex: none;
-    width: 0.5rem;
-    height: 0.5rem;
-    margin-top: -0.25rem;
-    border-right: 2px solid var(--beam);
-    border-bottom: 2px solid var(--beam);
-    transform: rotate(45deg);
-    transition: transform 0.2s ease;
-  }
-
-  .poste--ouvert .poste__chevron {
-    margin-top: 0.25rem;
-    transform: rotate(-135deg);
   }
 
   .poste__corps {

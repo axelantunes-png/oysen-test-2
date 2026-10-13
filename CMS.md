@@ -168,6 +168,13 @@ seconde après chaque changement (et en quittant l'éditeur), sans clic, jamais 
 et même sans nom. « Enregistrer » termine la création : le nom est alors exigé.
 « Continuer » reprend un brouillon, qui continue de s'enregistrer seul.
 
+**Déroulants (ordinateur et téléphone)** : chaque panneau (Général, Mise en page, Blocs, Diffusion)
+se replie par son titre et son chevron, ouvert au départ (replié, son contenu reste en
+place, masqué). Les postes des réglages du bloc (Contenu du bloc, Position, Centrage)
+sont des pliants aussi, chacun indépendant, ouverts au départ sur ordinateur ; sur
+téléphone, un seul ouvert à la fois, aucun au départ. Sur téléphone, l'interrupteur
+Actif / Inactif de Général reste à droite du titre, hors du bouton qui replie.
+
 Le panneau **Général** (arrondi) se tient en haut, au-dessus des onglets. Les autres
 réglages sont répartis en deux onglets numérotés : **1 Contenu** (« Ce que
 voient vos visiteurs » : mise en page, palette des blocs) et **2 Diffusion**

@@ -942,7 +942,6 @@ export function Inspecteur({
       </Poste>
 
       <Poste {...poste('position', 'Position')}>
-        {!telephone ? <p className="inspecteur__sous-titre">Position</p> : null}
         <div className="inspecteur__boutons">
           <button
             type="button"
@@ -1009,7 +1008,6 @@ export function Inspecteur({
       ) : null}
 
       <Poste {...poste('centrage', 'Centrage dans son cadre')}>
-        {!telephone ? <p className="inspecteur__sous-titre">Centrage dans son cadre</p> : null}
         <Segments
           libelle="Horizontal"
           options={ALIGNEMENTS_H}
@@ -1042,9 +1040,9 @@ export function Inspecteur({
 }
 
 /**
- * Un poste des réglages du bloc. Sur ordinateur, une section toujours
- * ouverte ; sur téléphone, un pliant, un seul ouvert à la fois, pour que
- * les réglages tiennent sous l'aperçu.
+ * Un poste des réglages du bloc, en pliant. Sur téléphone, un seul ouvert à
+ * la fois (aucun au départ), pour que les réglages tiennent sous l'aperçu ;
+ * sur ordinateur, chacun se replie à part (tous ouverts au départ).
  */
 function Poste({
   telephone,
@@ -1060,20 +1058,21 @@ function Poste({
   children: ReactNode
 }) {
   const id = useId()
-  if (!telephone) {
-    return (
-      <section className="inspecteur__section" aria-label={titre}>
-        {children}
-      </section>
-    )
-  }
+  const [ouvertSeul, setOuvertSeul] = useState(true)
+  const estOuvert = telephone ? ouvert : ouvertSeul
   return (
-    <section className={`inspecteur__section poste${ouvert ? ' poste--ouvert' : ''}`} aria-label={titre}>
-      <button className="poste__tete" type="button" aria-expanded={ouvert} aria-controls={id} onClick={onBasculer}>
+    <section className={`inspecteur__section poste${estOuvert ? ' poste--ouvert' : ''}`} aria-label={titre}>
+      <button
+        className="poste__tete"
+        type="button"
+        aria-expanded={estOuvert}
+        aria-controls={id}
+        onClick={telephone ? onBasculer : () => setOuvertSeul(!ouvertSeul)}
+      >
         {titre}
         <span className="poste__chevron" aria-hidden="true" />
       </button>
-      {ouvert ? (
+      {estOuvert ? (
         <div className="poste__corps" id={id}>
           {children}
         </div>
