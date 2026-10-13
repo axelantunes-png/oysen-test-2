@@ -235,7 +235,10 @@ l'enregistrement, ou pour choisir une autre date de fin.
     « Pleine largeur », flèches pour décaler d'un cran ; son centrage dans son cadre,
     horizontal (gauche, centre, droite) et vertical (haut, centre, bas) ; « … » :
     marges intérieures des quatre côtés (0 à 3 rem), « Passer devant » / « Passer
-    derrière » pour les blocs superposés ;
+    derrière » pour les blocs superposés. Le plan 0 est le plus bas, juste devant le
+    fond du popup : « Passer derrière » met le bloc au plan 0 et remonte les autres ;
+    aucun bloc ne passe sous le fond (grille en `isolation: isolate`, `zIndex` = plan + 1,
+    un ancien plan négatif est ramené à 0) ;
   - **Thème** (bouton sous les réglages du bloc, ordinateur et téléphone) : « Passer en
     thème mariage » repeint le popup aux couleurs de la page Mariage (papier, encre,
     gris mauve, filets sable, violet en encre, cadre de faire-part des formules de la page : filet extérieur,
@@ -250,11 +253,12 @@ l'enregistrement, ou pour choisir une autre date de fin.
     visiteur le voit sur mobile (`PopupCarte` avec `telephone`, classe
     `.popup--telephone` qui force l'empilement des blocs), dans un écran de 390 px
     (`.ecran-telephone`) ; pas de modification à la main dans cette vue (les réglages
-    du bloc choisi restent actifs), Tout vider et Rendu sans la grille y sont masqués ;
-  - **Rendu sans la grille** (en tête de l'aperçu, sur ordinateur, à côté de Tout
-    vider) : l'aperçu montre le popup tel que le verra le visiteur (`PopupCarte`),
-    sans grille, poignées ni outils ; le bouton devient
-    « Revenir à la grille » (Tout vider est masqué pendant ce temps) ;
+    du bloc choisi restent actifs) ; Tout vider et Aperçu réel restent en place ;
+  - **Aperçu réel** (en tête de l'aperçu, sur ordinateur, quelle que soit la vue
+    Ordinateur / Téléphone) : ouvre le popup dans son état actuel exactement comme sur
+    le site, sur l'écran utilisé (même fenêtre `Fenetre` de Popups.tsx, voile, place,
+    liens inertes ; la croix, Échap ou un clic à côté le referment). Le pendant de
+    « Aperçu » de la barre du bas sur téléphone ;
   - **Tout vider** (en tête de l'aperçu, avec confirmation) : retire tous les blocs,
     garde le cadre tel quel ; les images retirées sont effacées du stockage au
     prochain enregistrement ;
@@ -271,6 +275,10 @@ l'enregistrement, ou pour choisir une autre date de fin.
     Compacte, Standard, Large, ou sur ordinateur ;
   - poignées et outils du bloc gardent une taille utilisable au doigt, avec une zone
     de toucher élargie ;
+  - **déplacer ou redimensionner** : un bloc choisi se déplace, sans poignées ; le
+    bouton « R » de sa barre d'outils affiche ses poignées et bloque son déplacement
+    (la page défile alors sur lui) ; le retoucher, ou choisir un autre bloc, revient
+    au déplacement ;
   - au doigt, toucher un bloc le choisit seulement (la page défile sur les autres
     blocs) ; le bloc choisi se glisse et s'étire ;
   - toucher l'aperçu hors d'un bloc (fond gris, bord noir du popup, grille vide)

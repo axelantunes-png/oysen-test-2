@@ -2520,6 +2520,17 @@ textarea.cms-champ__input {
     display: none;
   }
 
+  /* Le bouton « R » : les poignées actives, le déplacement bloqué. */
+  .grille-edition__outil--r {
+    font-size: 0.85rem;
+    font-weight: 800;
+  }
+
+  /* En mode R, le bloc ne se glisse plus : la page défile et zoome dessus. */
+  .popup--edition .grille-edition__bloc--choisi:has(.grille-edition__poignee) {
+    touch-action: pan-x pan-y pinch-zoom;
+  }
+
   /* Les poignées et les outils, à leur taille réelle malgré la réduction. */
   .popup--edition .grille-edition__poignee,
   .popup--edition .cadre-poignee {

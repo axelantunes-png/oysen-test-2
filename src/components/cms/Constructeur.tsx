@@ -306,6 +306,14 @@ export function GrilleEdition({
   const [geste, setGeste] = useState<Geste | null>(null)
   /* Les blocs dont le contenu dépasse du bas du cadre. */
   const [debordent, setDebordent] = useState('')
+  /*
+   * Sur téléphone : le bloc dont les poignées sont actives (bouton « R »).
+   * Par défaut, un bloc choisi se déplace et ne se redimensionne pas ; en
+   * mode R, il garde sa place et ses poignées apparaissent. Choisir un autre
+   * bloc revient au déplacement.
+   */
+  const [redimensionne, setRedimensionne] = useState<string | null>(null)
+  const poigneesActives = (id: string) => !telephone || redimensionne === id
   /* Le contenu à jour, pour les gestes commencés avant un rendu. */
   const actuel = useRef(contenu)
   actuel.current = contenu
@@ -416,6 +424,8 @@ export function GrilleEdition({
      * doigts ne choisit rien.
      */
     if (telephone && e.pointerType === 'touch' && bloc.id !== selection) return
+    /* En mode R, le bloc ne se déplace pas : seules ses poignées agissent. */
+    if (telephone && redimensionne === bloc.id) return
     if (pincement()) return
     e.preventDefault()
     onSelection(bloc.id)
@@ -653,6 +663,21 @@ export function GrilleEdition({
               {choisi && !enGeste ? (
                 <span className="grille-edition__outils" onPointerDown={(e) => e.stopPropagation()}>
                   <span className="grille-edition__type">{nomDuType(bloc.type)}</span>
+                  {telephone ? (
+                    <button
+                      type="button"
+                      className="grille-edition__outil grille-edition__outil--r"
+                      aria-label="Redimensionner le bloc (bloque le déplacement)"
+                      aria-pressed={redimensionne === bloc.id}
+                      title="Redimensionner"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setRedimensionne(redimensionne === bloc.id ? null : bloc.id)
+                      }}
+                    >
+                      R
+                    </button>
+                  ) : null}
                   <button
                     type="button"
                     className="grille-edition__outil"
@@ -696,7 +721,7 @@ export function GrilleEdition({
                 </span>
               ) : null}
 
-              {choisi && enGeste?.type !== 'deplacer'
+              {choisi && enGeste?.type !== 'deplacer' && poigneesActives(bloc.id)
                 ? POIGNEES.map((poignee) => (
                     <span
                       key={poignee}

@@ -91,7 +91,8 @@ export function styleDuBloc({ place }: BlocPlace): CSSProperties {
     '--ligne': place.ligne,
     '--hauteur': place.hauteur,
     padding: `${haut}rem ${droite}rem ${bas}rem ${gauche}rem`,
-    zIndex: place.plan || undefined,
+    /* Plan 0 au plus bas, juste devant le fond du popup (un ancien plan négatif y remonte). */
+    zIndex: Math.max(0, place.plan) + 1,
   } as CSSProperties
 }
 

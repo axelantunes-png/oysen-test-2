@@ -133,11 +133,24 @@ export function pleineLargeur(contenu: ContenuPopup, id: string): ContenuPopup {
   return avecPlace(contenu, id, { colonne: 1, largeur: COLONNES, centre: false })
 }
 
-/** Passe le bloc devant, ou derrière, les blocs qu'il recouvre. */
+/**
+ * Passe le bloc devant, ou derrière, les blocs qu'il recouvre. Le plan 0
+ * est le plus bas, juste devant le fond du popup : aucun bloc ne passe
+ * dessous. Passer derrière met le bloc au plan 0 et remonte les autres
+ * d'autant qu'il faut.
+ */
 export function changerDePlan(contenu: ContenuPopup, id: string, sens: 'devant' | 'derriere'): ContenuPopup {
   if (sens === 'devant') return avecPlace(contenu, id, { plan: planDuDessus(contenu) })
-  const dessous = contenu.blocs.reduce((min, b) => Math.min(min, b.place.plan), 0) - 1
-  return avecPlace(contenu, id, { plan: dessous })
+  const autres = contenu.blocs.filter((b) => b.id !== id)
+  const plusBas = autres.reduce((min, b) => Math.min(min, b.place.plan), Infinity)
+  const decalage = autres.length ? 1 - plusBas : 0
+  return {
+    ...contenu,
+    blocs: contenu.blocs.map((b) => ({
+      ...b,
+      place: { ...b.place, plan: b.id === id ? 0 : b.place.plan + decalage },
+    })),
+  }
 }
 
 /** Combien de lignes le bloc peut prendre au plus, du haut du bloc au bas du cadre. */

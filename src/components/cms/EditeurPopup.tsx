@@ -116,12 +116,10 @@ export function EditeurPopup({ id }: { id: string }) {
   /* Sur téléphone : la barre d'actions en bas de l'écran, et la feuille pour ajouter un bloc. */
   const telephone = useTelephone()
   const [feuille, setFeuille] = useState(false)
-  /* Sur téléphone : le popup ouvert comme sur le site, par « Aperçu » de la barre du bas. */
+  /* Le popup ouvert comme sur le site, sur l'écran du moment : « Aperçu réel » (ordinateur) ou « Aperçu » de la barre du bas (téléphone). */
   const [apercuSite, setApercuSite] = useState(false)
   /* Sur téléphone : l'aide du nom, masquée, s'ouvre dans une fenêtre par l'icône info. */
   const [aideNom, setAideNom] = useState(false)
-  /* Sur ordinateur : l'aperçu tel que le verra le visiteur, sans la grille ni les outils. */
-  const [rendu, setRendu] = useState(false)
   /* L'aperçu tel qu'on le verra sur ordinateur ou sur téléphone, quel que soit l'écran du moment. */
   const [vue, setVue] = useState<'ordinateur' | 'telephone'>('ordinateur')
   const zoneApercu = useRef<HTMLElement>(null)
@@ -756,20 +754,17 @@ export function EditeurPopup({ id }: { id: string }) {
                   </button>
                 ))}
               </div>
-              {!telephone && vue === 'ordinateur' ? (
+              {!telephone ? (
                 <button
                   className="editeur__vider"
                   type="button"
-                  aria-pressed={rendu}
-                  onClick={() => {
-                    setRendu(!rendu)
-                    setSelection(null)
-                  }}
+                  aria-haspopup="dialog"
+                  onClick={() => setApercuSite(true)}
                 >
-                  {rendu ? 'Revenir à la grille' : 'Rendu sans la grille'}
+                  Aperçu réel
                 </button>
               ) : null}
-              {popup.contenu.blocs.length && !(rendu && !telephone) && vue === 'ordinateur' ? (
+              {popup.contenu.blocs.length ? (
                 <button className="editeur__vider" type="button" onClick={() => setViderDemande(true)}>
                   Tout vider
                 </button>
@@ -789,8 +784,6 @@ export function EditeurPopup({ id }: { id: string }) {
               <div className="ecran-telephone">
                 <PopupCarte format={popup.format} contenu={popup.contenu} apercu telephone />
               </div>
-            ) : rendu && !telephone ? (
-              <PopupCarte format={popup.format} contenu={popup.contenu} apercu />
             ) : (
             <GrilleEdition
               format={popup.format}
@@ -881,7 +874,7 @@ export function EditeurPopup({ id }: { id: string }) {
         </nav>
       ) : null}
 
-      {telephone && apercuSite
+      {apercuSite
         ? createPortal(
             <Fenetre
               popups={[{ id: 'apercu', format: popup.format, contenu: popup.contenu }]}
