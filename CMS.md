@@ -273,6 +273,8 @@ l'enregistrement, ou pour choisir une autre date de fin.
     (échelle `--echelle`) ; les mesures des gestes suivent la réduction ;
   - pas de poignées du cadre (gauche, droite, bas) : la taille du popup se règle par
     Compacte, Standard, Large, ou sur ordinateur ;
+  - la barre d'outils du bloc choisi reste dans l'aperçu (bande noire comprise) : si
+    elle en sort à gauche ou à droite, elle se décale vers l'intérieur ;
   - poignées et outils du bloc gardent une taille utilisable au doigt, avec une zone
     de toucher élargie ;
   - **déplacer ou redimensionner** : un bloc choisi se déplace, sans poignées ; le

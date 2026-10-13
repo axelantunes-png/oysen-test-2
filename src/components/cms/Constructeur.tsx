@@ -419,6 +419,12 @@ export function GrilleEdition({
   function saisir(e: PointerEvent, bloc: BlocPlace) {
     if (e.button !== 0 || !grille.current) return
     /*
+     * Au doigt, sur téléphone : pas de prise du focus (le navigateur ferait
+     * défiler la page pour montrer le bloc, d'où un saut à chaque toucher).
+     * Le défilement et le zoom, réglés par touch-action, ne changent pas.
+     */
+    if (telephone && e.pointerType === 'touch') e.preventDefault()
+    /*
      * Sur téléphone, toucher un bloc pas encore choisi le choisit seulement,
      * au lâcher (le clic) : la page défile toujours, et un pincement à deux
      * doigts ne choisit rien.
@@ -563,6 +569,28 @@ export function GrilleEdition({
     }
   }
 
+  /*
+   * Sur téléphone : la barre d'outils du bloc choisi reste dans l'aperçu
+   * (bande noire comprise). Si elle en sort à gauche (bloc collé à gauche),
+   * elle se décale vers la droite ; à droite, vers la gauche.
+   */
+  const outils = useRef<HTMLSpanElement>(null)
+  useLayoutEffect(() => {
+    const barre = outils.current
+    if (!barre) return
+    barre.style.translate = ''
+    if (!telephone) return
+    const zone = barre.closest('.apercu')?.getBoundingClientRect()
+    if (!zone) return
+    const marge = 4
+    const place = barre.getBoundingClientRect()
+    let decalage = 0
+    if (place.left < zone.left + marge) decalage = zone.left + marge - place.left
+    else if (place.right > zone.right - marge) decalage = zone.right - marge - place.right
+    /* Le décalage à l'écran, ramené à l'échelle de l'aperçu. */
+    if (decalage) barre.style.translate = `${decalage / echelle}px 0`
+  })
+
   return (
     <div
       ref={boite}
@@ -661,7 +689,7 @@ export function GrilleEdition({
               </div>
 
               {choisi && !enGeste ? (
-                <span className="grille-edition__outils" onPointerDown={(e) => e.stopPropagation()}>
+                <span className="grille-edition__outils" ref={outils} onPointerDown={(e) => e.stopPropagation()}>
                   <span className="grille-edition__type">{nomDuType(bloc.type)}</span>
                   {telephone ? (
                     <button

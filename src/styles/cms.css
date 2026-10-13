@@ -2451,6 +2451,16 @@ textarea.cms-champ__input {
     display: none;
   }
 
+  /* L'état de l'enregistrement garde sa ligne : son texte qui change ne fait pas sauter la page. */
+  .cms-page__actions .cms-etat {
+    display: block;
+    min-height: 1.3rem;
+    line-height: 1.3rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   /* « Enregistrer » est dans la barre d'actions du bas. */
   .editeur__enregistrer {
     display: none;
