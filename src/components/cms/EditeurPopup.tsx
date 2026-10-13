@@ -7,7 +7,7 @@ import type { KeyboardEvent, ReactNode } from 'react'
 import { Lien } from '../Lien'
 import { PopupCarte } from '../popup/PopupCarte'
 import { Fenetre } from '../popup/Popups'
-import { GrilleEdition, Inspecteur, PaletteBlocs, useTelephone } from './Constructeur'
+import { GrilleEdition, Inspecteur, PaletteBlocs, pincement, useTelephone } from './Constructeur'
 import { Dialogue } from './Dialogue'
 import { IconeInfo } from './Icones'
 import { Interrupteur } from './Interrupteur'
@@ -779,6 +779,7 @@ export function EditeurPopup({ id }: { id: string }) {
             className="apercu apercu--edition"
             onClick={(e) => {
               /* Sur téléphone : toucher l'aperçu hors d'un bloc (le fond gris, le bord noir du popup) libère le bloc choisi. */
+              if (pincement()) return
               if (telephone && !(e.target as Element).closest('[data-bloc], .cadre-poignee, button, a')) setSelection(null)
             }}
           >

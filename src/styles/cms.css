@@ -2488,14 +2488,20 @@ textarea.cms-champ__input {
     transform-origin: bottom left;
   }
 
-  /* Au doigt : seul le bloc choisi se glisse ; sur les autres, la page défile. */
+  /*
+   * Au doigt : seul le bloc choisi se glisse ; sur les autres, la page
+   * défile. Partout, deux doigts zooment la page (pinch-zoom), même sur le
+   * bloc choisi et ses poignées.
+   */
   .popup--edition .grille-edition__bloc {
-    touch-action: pan-x pan-y;
+    touch-action: pan-x pan-y pinch-zoom;
     -webkit-touch-callout: none;
   }
 
-  .popup--edition .grille-edition__bloc--choisi {
-    touch-action: none;
+  .popup--edition .grille-edition__bloc--choisi,
+  .popup--edition .grille-edition__poignee,
+  .popup--edition .cadre-poignee {
+    touch-action: pinch-zoom;
   }
 
   /* Les palettes défilent au doigt ; un bloc s'ajoute en le touchant. */

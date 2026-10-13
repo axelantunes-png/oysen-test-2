@@ -265,6 +265,10 @@ l'enregistrement, ou pour choisir une autre date de fin.
     blocs) ; le bloc choisi se glisse et s'étire ;
   - toucher l'aperçu hors d'un bloc (fond gris, bord noir du popup, grille vide)
     libère le bloc choisi ;
+  - **deux doigts** zooment (ou dézooment) la page, partout, même sur le bloc choisi
+    et ses poignées (`touch-action: pinch-zoom`) : un pincement ne choisit ni ne
+    libère aucun bloc (`pincement()` dans Constructeur.tsx, suivi des doigts posés),
+    et annule un geste en cours ; un bloc pas encore choisi l'est au lâcher du doigt ;
   - palette : un bloc s'ajoute en le touchant (pas de glisser), en bas du popup ;
   - réglages du bloc en **pliants** (composant `Poste`), un seul ouvert à la fois,
     tous fermés au départ, pour garder l'aperçu en vue : Contenu du bloc, Position,

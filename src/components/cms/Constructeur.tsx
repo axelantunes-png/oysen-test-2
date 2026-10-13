@@ -89,24 +89,71 @@ function mesurer(grille: HTMLElement, lignes: number) {
   return { cadre, colonne: cadre.width / COLONNES, ligne: cadre.height / lignes }
 }
 
-/** Suit le pointeur jusqu'au lâcher, sur toute la page. */
+/* ---- Le pincement à deux doigts ----
+ * Deux doigts sur l'écran : le visiteur zoome (ou dézoome) la page, il ne
+ * choisit ni ne lâche un bloc. Les doigts posés sont suivis ici, sur toute
+ * la page ; un geste en cours s'annule dès qu'un deuxième doigt se pose, et
+ * le toucher qui suit la fin d'un pincement ne compte pas. */
+
+const doigts = new Set<number>()
+let finDuPincement = 0
+
+if (typeof window !== 'undefined') {
+  window.addEventListener(
+    'pointerdown',
+    (e) => {
+      if (e.pointerType !== 'touch') return
+      doigts.add(e.pointerId)
+      if (doigts.size > 1) finDuPincement = Date.now()
+    },
+    true,
+  )
+  const lever = (e: globalThis.PointerEvent) => {
+    if (e.pointerType !== 'touch' || !doigts.has(e.pointerId)) return
+    if (doigts.size > 1) finDuPincement = Date.now()
+    doigts.delete(e.pointerId)
+  }
+  window.addEventListener('pointerup', lever, true)
+  window.addEventListener('pointercancel', lever, true)
+}
+
+/** Vrai pendant un pincement à deux doigts, et un court instant après. */
+export function pincement() {
+  return doigts.size > 1 || Date.now() - finDuPincement < 500
+}
+
+/**
+ * Suit le pointeur jusqu'au lâcher, sur toute la page. Seul le doigt (ou la
+ * souris) qui a commencé le geste compte ; un deuxième doigt l'annule.
+ */
 function suivrePointeur(
   bouger: (e: globalThis.PointerEvent) => void,
   finir: (lache: boolean) => void,
   classe: string,
+  pointeur?: number,
 ) {
   const classes = classe.split(' ')
   document.documentElement.classList.add(...classes)
-  const lacher = () => fin(true)
-  const annuler = () => fin(false)
+  const sien = (e: globalThis.PointerEvent) => pointeur === undefined || e.pointerId === pointeur
+  const suivre = (e: globalThis.PointerEvent) => {
+    if (!sien(e)) return
+    if (pincement()) fin(false)
+    else bouger(e)
+  }
+  const lacher = (e: globalThis.PointerEvent) => {
+    if (sien(e)) fin(!pincement())
+  }
+  const annuler = (e: globalThis.PointerEvent) => {
+    if (sien(e)) fin(false)
+  }
   function fin(lache: boolean) {
     document.documentElement.classList.remove(...classes)
-    window.removeEventListener('pointermove', bouger)
+    window.removeEventListener('pointermove', suivre)
     window.removeEventListener('pointerup', lacher)
     window.removeEventListener('pointercancel', annuler)
     finir(lache)
   }
-  window.addEventListener('pointermove', bouger)
+  window.addEventListener('pointermove', suivre)
   window.addEventListener('pointerup', lacher)
   window.addEventListener('pointercancel', annuler)
 }
@@ -184,6 +231,7 @@ export function PaletteBlocs({
         if (lache && dernier) glisser.deposer?.(type, dernier.x, dernier.y)
       },
       'glisser-en-cours',
+      e.pointerId,
     )
   }
 
@@ -362,11 +410,13 @@ export function GrilleEdition({
   /* Saisir un bloc : il suit le pointeur librement, et se cale sur la grille au lâcher. */
   function saisir(e: PointerEvent, bloc: BlocPlace) {
     if (e.button !== 0 || !grille.current) return
-    /* Sur téléphone, toucher un bloc pas encore choisi le choisit seulement : la page défile toujours. */
-    if (telephone && e.pointerType === 'touch' && bloc.id !== selection) {
-      onSelection(bloc.id)
-      return
-    }
+    /*
+     * Sur téléphone, toucher un bloc pas encore choisi le choisit seulement,
+     * au lâcher (le clic) : la page défile toujours, et un pincement à deux
+     * doigts ne choisit rien.
+     */
+    if (telephone && e.pointerType === 'touch' && bloc.id !== selection) return
+    if (pincement()) return
     e.preventDefault()
     onSelection(bloc.id)
     const m = mesurer(grille.current, lignes)
@@ -398,6 +448,7 @@ export function GrilleEdition({
         if (lache) onChange(placerBloc(actuel.current, bloc.id, zone))
       },
       'glisser-en-cours',
+      e.pointerId,
     )
   }
 
@@ -441,6 +492,7 @@ export function GrilleEdition({
         if (lache) onChange(placerBloc(actuel.current, bloc.id, zone))
       },
       `etirer-en-cours etirer-${poignee}`,
+      e.pointerId,
     )
   }
 
@@ -474,6 +526,7 @@ export function GrilleEdition({
         if (lache) onCadre(suivant)
       },
       `etirer-en-cours etirer-${poignee}`,
+      e.pointerId,
     )
   }
 
@@ -541,7 +594,7 @@ export function GrilleEdition({
         className={`popup__grille grille-edition${glisse || geste ? ' grille-edition--geste' : ''}`}
         style={{ gridTemplateRows: `repeat(${lignes}, var(--pas-ligne))`, height: `calc(${lignes} * var(--pas-ligne))` }}
         onClick={(e) => {
-          if (glisser.vientDeFinir) return
+          if (glisser.vientDeFinir || pincement()) return
           if (e.target === e.currentTarget) onSelection(null)
         }}
       >
@@ -576,7 +629,7 @@ export function GrilleEdition({
               aria-label={`Bloc ${nomDuType(bloc.type)}`}
               onPointerDown={(e) => saisir(e, bloc)}
               onClick={() => {
-                if (!glisser.vientDeFinir) onSelection(bloc.id)
+                if (!glisser.vientDeFinir && !pincement()) onSelection(bloc.id)
               }}
               onKeyDown={(e) => clavier(e, bloc)}
             >
