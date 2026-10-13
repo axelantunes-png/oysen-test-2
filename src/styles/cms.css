@@ -2442,6 +2442,30 @@ textarea.cms-champ__input {
     touch-action: manipulation;
   }
 
+  /*
+   * Les champs de date : sur iPhone, Safari leur donne une largeur propre
+   * qui ignore celle du bloc et déborde à droite. Ramenés à la largeur du
+   * bloc, la date calée à gauche comme dans les autres champs.
+   */
+  .cms-champ__input[type='date'] {
+    display: block;
+    min-width: 0;
+    max-width: 100%;
+    min-height: 2.9rem;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .cms-champ__input[type='date']::-webkit-date-and-time-value {
+    text-align: left;
+  }
+
+  .cms-grille-2 > *,
+  .panneau,
+  .panneau__corps > * {
+    min-width: 0;
+  }
+
   /* 16 px au moins : le téléphone ne zoome plus sur un champ touché. */
   .cms-champ__input,
   .cms-page select,
