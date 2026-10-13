@@ -262,7 +262,18 @@ l'enregistrement, ou pour choisir une autre date de fin.
   - barre d'actions fixée en bas : « + Bloc » (feuille qui monte du bas avec la
     palette, refermée après l'ajout, l'aperçu revient), « Régler » (descend aux
     réglages du bloc choisi), « Aperçu », « Enregistrer » ;
-  - champs à 16 px : le téléphone ne zoome plus quand on les touche.
+  - champs à 16 px : le téléphone ne zoome plus quand on les touche ;
+  - une seule colonne, dans cet ordre : Général, les onglets Contenu / Diffusion
+    (Contenu ouvert d'abord), puis l'onglet ouvert. Contenu : Mise en page, aperçu,
+    réglages du bloc ; le panneau Blocs est masqué (la palette est dans « + Bloc »).
+    Diffusion : ses réglages seuls, aperçu et réglages du bloc masqués (classe
+    `editeur--diffusion`). « Supprimer ce popup » reste tout en bas ;
+  - Général : l'interrupteur Actif / Inactif passe à droite du titre « Général »
+    (prop `action` de `Panneau`), le champ Statut est masqué ;
+    l'aide du nom est masquée, une icône info à côté de « Nom du popup » l'ouvre dans une
+    fenêtre (Dialogue `sansAnnuler`, bouton « Compris ») ; marges du haut et du bas du panneau réduites ;
+  - « Enregistrer » du haut de page et le texte d'aide de l'aperçu sont masqués ;
+    « Aperçu », « Régler » et l'ajout d'un bloc rouvrent l'onglet Contenu.
 - **Supprimer ce popup** : en bas de l'éditeur, même avertissement que la liste.
 
 Le client choisit le contenu, jamais les couleurs ni les polices : le popup reste dans

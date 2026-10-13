@@ -17,11 +17,14 @@ export function Dialogue({
   children,
   actions,
   onAnnuler,
+  sansAnnuler,
 }: {
   titre: string
   children: ReactNode
   actions: ActionDialogue[]
   onAnnuler: () => void
+  /** Une simple information : pas de bouton « Annuler » (Échap et le clic à côté ferment toujours). */
+  sansAnnuler?: boolean
 }) {
   const titreId = useId()
   const boite = useRef<HTMLDivElement>(null)
@@ -67,9 +70,11 @@ export function Dialogue({
               {action.libelle}
             </button>
           ))}
-          <button type="button" className="dialogue__annuler" onClick={onAnnuler}>
-            Annuler
-          </button>
+          {!sansAnnuler ? (
+            <button type="button" className="dialogue__annuler" onClick={onAnnuler}>
+              Annuler
+            </button>
+          ) : null}
         </div>
       </div>
     </div>

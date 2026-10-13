@@ -1117,6 +1117,15 @@
   color: #ffffff;
 }
 
+/* La commande à droite du titre : sur téléphone seulement (voir plus bas). */
+.panneau__tete {
+  display: contents;
+}
+
+.panneau__action {
+  display: none;
+}
+
 .panneau__corps {
   display: grid;
   gap: 1.1rem;
@@ -1140,6 +1149,15 @@
   font-size: 0.8125rem;
   font-weight: 600;
   color: var(--dawn);
+}
+
+/* Le libellé et son icône info : sur téléphone seulement (voir plus bas). */
+.cms-champ__tete {
+  display: contents;
+}
+
+.cms-info {
+  display: none;
 }
 
 .cms-champ__input {
@@ -2253,6 +2271,104 @@ textarea.cms-champ__input {
   /* De la place sous la page pour la barre d'actions. */
   .cms-page--large {
     padding-bottom: 5.5rem;
+  }
+
+  /* Général : l'interrupteur Actif / Inactif à droite du titre, à la place du champ Statut. */
+  .panneau__tete {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .panneau__tete .panneau__titre {
+    margin: 0;
+  }
+
+  .panneau__action {
+    display: block;
+  }
+
+  .editeur__statut {
+    display: none;
+  }
+
+  /* Général, un peu moins haut. */
+  #panneau-general {
+    padding-top: 0.75rem;
+    padding-bottom: 0.85rem;
+  }
+
+  #panneau-general .panneau__tete {
+    margin-bottom: 0.6rem;
+  }
+
+  /* Le nom : son aide s'ouvre par l'icône info, à côté du libellé. */
+  .cms-champ__tete {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .cms-info {
+    display: grid;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    margin: -0.4rem 0;
+    padding: 0;
+    color: var(--dusk);
+    background: none;
+    border: 0;
+    border-radius: 50%;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  .cms-info:focus-visible {
+    outline: 2px solid var(--beam);
+  }
+
+  .cms-info .icone {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .editeur__aide-nom {
+    display: none;
+  }
+
+  /* « Enregistrer » est dans la barre d'actions du bas. */
+  .editeur__enregistrer {
+    display: none;
+  }
+
+  /*
+   * Une seule colonne : Général, les onglets, puis l'onglet ouvert.
+   * Contenu : mise en page, aperçu, réglages du bloc (la palette est dans
+   * la barre du bas, « + Bloc »). Diffusion : ses réglages seuls.
+   */
+  .editeur {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.25rem;
+  }
+
+  .editeur__reglages {
+    display: contents;
+  }
+
+  #volet-diffusion,
+  .editeur__danger {
+    order: 1;
+  }
+
+  #panneau-blocs,
+  .editeur--diffusion .editeur__apercu,
+  .editeur--diffusion .editeur__inspecteur {
+    display: none;
   }
 
   .apercu--edition {

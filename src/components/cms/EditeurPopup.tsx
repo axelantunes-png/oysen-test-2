@@ -7,6 +7,7 @@ import { Lien } from '../Lien'
 import { PopupCarte } from '../popup/PopupCarte'
 import { GrilleEdition, Inspecteur, PaletteBlocs, useTelephone } from './Constructeur'
 import { Dialogue } from './Dialogue'
+import { IconeInfo } from './Icones'
 import { Interrupteur } from './Interrupteur'
 import { nettoyerImages, supprimerPopup } from './suppression'
 import { useActivation } from './useActivation'
@@ -113,6 +114,8 @@ export function EditeurPopup({ id }: { id: string }) {
   /* Sur téléphone : la barre d'actions en bas de l'écran, et la feuille pour ajouter un bloc. */
   const telephone = useTelephone()
   const [feuille, setFeuille] = useState(false)
+  /* Sur téléphone : l'aide du nom, masquée, s'ouvre dans une fenêtre par l'icône info. */
+  const [aideNom, setAideNom] = useState(false)
   /* Sur ordinateur : l'aperçu tel que le verra le visiteur, sans la grille ni les outils. */
   const [rendu, setRendu] = useState(false)
   const zoneApercu = useRef<HTMLElement>(null)
@@ -342,7 +345,7 @@ export function EditeurPopup({ id }: { id: string }) {
                   : ''}
           </span>
           <button
-            className="btn btn--solid"
+            className="btn btn--solid editeur__enregistrer"
             type="button"
             onClick={() => void enregistrer()}
             disabled={enregistrement === 'en-cours'}
@@ -369,14 +372,35 @@ export function EditeurPopup({ id }: { id: string }) {
         </div>
       ) : null}
 
-      <div className="editeur">
+      <div className={`editeur editeur--${onglet}`}>
         <div className="editeur__reglages">
           {/* ---- Général ---- */}
-          <Panneau titre="Général" arrondi>
+          <Panneau
+            titre="Général"
+            id="panneau-general"
+            arrondi
+            action={
+              <Interrupteur
+                actif={etat.actif}
+                onChange={(valeur) => (valeur ? activer(popup) : changer({ actif: false }))}
+              />
+            }
+          >
             <div className="cms-champ">
-              <label className="cms-champ__label" htmlFor="popup-nom">
-                Nom du popup
-              </label>
+              <div className="cms-champ__tete">
+                <label className="cms-champ__label" htmlFor="popup-nom">
+                  Nom du popup
+                </label>
+                <button
+                  className="cms-info"
+                  type="button"
+                  aria-label="À quoi sert le nom"
+                  aria-haspopup="dialog"
+                  onClick={() => setAideNom(true)}
+                >
+                  <IconeInfo />
+                </button>
+              </div>
               <input
                 className="cms-champ__input"
                 id="popup-nom"
@@ -385,10 +409,12 @@ export function EditeurPopup({ id }: { id: string }) {
                 placeholder="Ex. : Offre mariage printemps"
                 onChange={(e) => changer({ nom: e.target.value })}
               />
-              <p className="cms-aide">Pour vous retrouver dans la liste : il n’apparaît pas sur le site.</p>
+              <p className="cms-aide editeur__aide-nom">
+                Pour vous retrouver dans la liste : il n’apparaît pas sur le site.
+              </p>
             </div>
 
-            <div className="cms-champ">
+            <div className="cms-champ editeur__statut">
               <span className="cms-champ__label">Statut</span>
               <div className="cms-choix-ligne">
                 <Interrupteur
@@ -507,7 +533,7 @@ export function EditeurPopup({ id }: { id: string }) {
             </Panneau>
 
             {/* ---- Les blocs, à glisser sur l'aperçu ---- */}
-            <Panneau titre="Blocs" arrondi>
+            <Panneau titre="Blocs" id="panneau-blocs" arrondi>
               <PaletteBlocs
                 contenu={popup.contenu}
                 onChange={(contenu) => changer({ contenu })}
@@ -701,11 +727,9 @@ export function EditeurPopup({ id }: { id: string }) {
         <section className="editeur__apercu" aria-label="Aperçu" ref={zoneApercu}>
           <div className="editeur__apercu-tete">
             <p className="editeur__apercu-titre">Aperçu</p>
-            <p className="cms-aide">
-              {telephone
-                ? 'Le popup tel qu’il s’affiche sur ordinateur, réduit à la taille de l’écran. Touchez un bloc pour le choisir, puis glissez-le ou tirez ses poignées.'
-                : 'Glissez les blocs pour les placer, cliquez sur un bloc pour le régler.'}
-            </p>
+            {!telephone ? (
+              <p className="cms-aide">Glissez les blocs pour les placer, cliquez sur un bloc pour le régler.</p>
+            ) : null}
             <div className="editeur__apercu-outils">
               {!telephone ? (
                 <button
@@ -768,14 +792,26 @@ export function EditeurPopup({ id }: { id: string }) {
             className="barre-mobile__bouton"
             type="button"
             disabled={!selection}
-            onClick={() => zoneInspecteur.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+            onClick={() => {
+              setOnglet('contenu')
+              window.setTimeout(
+                () => zoneInspecteur.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }),
+                0,
+              )
+            }}
           >
             Régler
           </button>
           <button
             className="barre-mobile__bouton"
             type="button"
-            onClick={() => zoneApercu.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+            onClick={() => {
+              setOnglet('contenu')
+              window.setTimeout(
+                () => zoneApercu.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }),
+                0,
+              )
+            }}
           >
             Aperçu
           </button>
@@ -808,6 +844,7 @@ export function EditeurPopup({ id }: { id: string }) {
               onSelection={(id) => {
                 setSelection(id)
                 setFeuille(false)
+                setOnglet('contenu')
                 window.setTimeout(
                   () => zoneApercu.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }),
                   0,
@@ -819,6 +856,17 @@ export function EditeurPopup({ id }: { id: string }) {
       ) : null}
 
       {dialogue}
+
+      {aideNom ? (
+        <Dialogue
+          titre="Nom du popup"
+          onAnnuler={() => setAideNom(false)}
+          sansAnnuler
+          actions={[{ libelle: 'Compris', style: 'plein', onClick: () => setAideNom(false) }]}
+        >
+          <p>Pour vous retrouver dans la liste : il n’apparaît pas sur le site.</p>
+        </Dialogue>
+      ) : null}
 
       {viderDemande ? (
         <Dialogue
@@ -882,16 +930,26 @@ function Panneau({
   titre,
   id,
   arrondi,
+  action,
   children,
 }: {
   titre: string
   id?: string
   arrondi?: boolean
+  /** Sur téléphone seulement : une commande à droite du titre (cms.css). */
+  action?: ReactNode
   children: ReactNode
 }) {
   return (
     <section className={`panneau${arrondi ? ' panneau--arrondi' : ''}`} id={id} aria-label={titre}>
-      <h2 className="panneau__titre">{titre}</h2>
+      {action ? (
+        <div className="panneau__tete">
+          <h2 className="panneau__titre">{titre}</h2>
+          <div className="panneau__action">{action}</div>
+        </div>
+      ) : (
+        <h2 className="panneau__titre">{titre}</h2>
+      )}
       <div className="panneau__corps">{children}</div>
     </section>
   )
