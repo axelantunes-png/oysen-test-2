@@ -6,8 +6,21 @@ import { useEffect } from 'react'
  * la page. Minutage et positions des projecteurs dans app.css.
  */
 
-/** Le logo définitif : blanc sur fond transparent, 3000 × 2000. */
-const LOGO = '/images/logo-oysen.png'
+/**
+ * Le logo définitif : blanc sur fond transparent. Le rideau prend une copie
+ * en WebP de 1650 × 1100 (logo-oysen.png fait 3000 × 2000) : affiché à 815px
+ * au plus, il reste net jusqu'à deux pixels d'écran par pixel, et pèse 64 Ko
+ * au lieu de 244. Toutes les mesures plus bas restent celles du PNG.
+ */
+const LOGO = '/images/logo-oysen-rideau-1650.webp'
+
+/**
+ * L'encre du logo et son halo, figés : ce que donnait le filtre ink-boost
+ * (encre isolée, flou de 4.5, puis l'encre nette par-dessus), enregistré une
+ * fois pour toutes. Le filtre était recalculé à chaque image de l'animation,
+ * alors que son résultat ne bouge jamais. À refaire si le logo change.
+ */
+const ENCRE = '/images/logo-oysen-rideau-encre-1650.webp'
 
 /**
  * La scène est 3x plus large que le cadre du logo : les faisceaux peuvent
@@ -171,31 +184,6 @@ export function IntroCurtain() {
             <stop offset="0.62" stopColor="#fff" stopOpacity="0" />
           </linearGradient>
 
-          {/*
-            Écrase le violet vers le noir et pousse le blanc vers le blanc :
-            le masque « ink » qui en découle isole donc uniquement l'encre
-            claire du logo. Le violet #5a1e76 tombe à 0, le blanc reste à 1.
-          */}
-          <filter id="ink-boost" colorInterpolationFilters="sRGB">
-            <feColorMatrix type="saturate" values="0" />
-            <feComponentTransfer result="ink">
-              <feFuncR type="linear" slope="3.2" intercept="-0.62" />
-              <feFuncG type="linear" slope="3.2" intercept="-0.62" />
-              <feFuncB type="linear" slope="3.2" intercept="-0.62" />
-            </feComponentTransfer>
-            {/*
-              Un halo flou vient s'ajouter à l'encre nette. Le blanc du
-              lettrage est déjà quasi saturé : un fondu additif ne s'y voit
-              presque pas. En laissant la brillance déborder de quelques
-              pixels sur le violet, elle gagne le relief qui lui manquait.
-            */}
-            <feGaussianBlur in="ink" stdDeviation="4.5" result="halo" />
-            <feMerge>
-              <feMergeNode in="halo" />
-              <feMergeNode in="ink" />
-            </feMerge>
-          </filter>
-
           {/* Le faisceau visible : halo large + corps + coeur brillant. */}
           <g id="beam">
             <polygon
@@ -248,15 +236,25 @@ export function IntroCurtain() {
             <Pivots shape="#beam-mask" />
           </mask>
 
-          {/* Masque de luminance : ne laisse passer que l'encre claire. */}
+          {/*
+            Masque de luminance : ne laisse passer que l'encre claire, et
+            un halo flou autour. Le blanc du lettrage est déjà quasi saturé :
+            un fondu additif ne s'y voit presque pas. En laissant la
+            brillance déborder de quelques pixels sur le violet, elle gagne
+            le relief qui lui manquait. Encre et halo sont figés dans ENCRE.
+          */}
           <mask
             id="ink"
             maskUnits="userSpaceOnUse"
             style={{ maskType: 'luminance' }}
           >
-            <g filter="url(#ink-boost)">
-              <use href="#wordmark" />
-            </g>
+            <image
+              href={ENCRE}
+              x={LOGO_X}
+              y={LOGO_Y}
+              width={LOGO_W}
+              height={LOGO_H}
+            />
           </mask>
         </defs>
 
