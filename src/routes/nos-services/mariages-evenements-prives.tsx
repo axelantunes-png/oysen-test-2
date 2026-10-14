@@ -245,8 +245,9 @@ function Bab() {
           <article className="bab__apres">
             <p className="bab__label bab__label--oysen">Avec Oysen</p>
             <p className="bab__reve">
-              Votre seule mission le jour&nbsp;J&nbsp;:
-              <br />
+              <span className="bab__reve-mission">
+                Votre seule mission le jour&nbsp;J&nbsp;:
+              </span>
               <span className="bab__reve-accent">savourer chaque instant.</span>
             </p>
             <ul className="bab__points">

@@ -502,6 +502,11 @@
   color: var(--encre);
 }
 
+/* La première ligne, seule sur sa ligne (elle remplace un <br>). */
+.bab__reve-mission {
+  display: block;
+}
+
 /* La seconde ligne, en violet : même police, même taille. */
 .bab__reve-accent {
   color: var(--violet);
@@ -1621,6 +1626,13 @@
 
   .bab__apres {
     min-height: 22rem;
+  }
+
+  /* « Votre seule mission le jour J : » tient sur une ligne : elle peut
+     déborder sur la marge droite de la carte, jusqu'à 3px du bord. Plus
+     étroit encore, elle passe sur deux lignes. */
+  .bab__reve-mission {
+    margin-right: calc(0.1875rem - clamp(2rem, 3vw, 2.75rem));
   }
 
   .taches {
