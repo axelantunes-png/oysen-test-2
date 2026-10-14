@@ -39,12 +39,16 @@
 .contact-hero__titre {
   margin: 0;
   font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
-  font-weight: 300;
-  font-size: clamp(2rem, 4.2vw, 3.25rem);
-  line-height: 1.1;
+  /* En gras et en blanc pur, aux tailles du hero de l'accueil, comme les
+     autres pages (avant : 300, clamp(2rem, 4.2vw, 3.25rem), interligne
+     1.1, --dawn ; gardé par le thème mariage, en fin de feuille). */
+  font-weight: 700;
+  font-size: clamp(1.779rem, 4.213vw, 3.277rem);
+  line-height: 1.153;
   letter-spacing: -0.02em;
   text-wrap: balance;
-  color: var(--dawn);
+  color: #ffffff;
+  text-shadow: 0 0 34px color-mix(in srgb, var(--beam) 25%, transparent);
 }
 
 .contact-hero__lede {
@@ -1118,70 +1122,24 @@ legend.champ__label {
   color: var(--dusk);
 }
 
+/* L'annonce des deux liens, en petite étiquette. */
+.merci__entre-temps {
+  margin: clamp(2rem, 5vh, 2.75rem) 0 0;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dusk);
+}
+
 .merci__liens {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0.75rem 2.25rem;
-  margin: clamp(2rem, 5vh, 2.75rem) 0 0;
+  gap: 0.75rem;
+  margin: 1.1rem 0 0;
   padding: 0;
   list-style: none;
-}
-
-.merci__lien {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  font-size: 0.9375rem;
-  font-weight: 500;
-  color: var(--dawn);
-  text-decoration: none;
-  border-bottom: 1px solid color-mix(in srgb, var(--beam) 40%, transparent);
-  padding-bottom: 0.3rem;
-  transition:
-    color 0.2s ease,
-    border-color 0.2s ease;
-}
-
-.merci__fleche {
-  width: 1.1rem;
-  height: 1.1rem;
-  color: var(--beam);
-  transition: transform 0.2s ease;
-}
-
-.merci__lien:focus-visible {
-  color: var(--beam);
-  border-color: var(--beam);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .merci__lien:hover {
-    color: var(--beam);
-    border-color: var(--beam);
-  }
-}
-
-.merci__lien:focus-visible .merci__fleche {
-  transform: translateX(0.2rem);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .merci__lien:hover .merci__fleche {
-    transform: translateX(0.2rem);
-  }
-}
-
-.merci__lien:focus-visible {
-  outline: 2px solid var(--beam);
-  outline-offset: 4px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .merci__lien,
-  .merci__fleche {
-    transition: none;
-  }
 }
 
 /* ---- La barre posée sur le hero ----
@@ -1197,5 +1155,79 @@ legend.champ__label {
   .merci {
     min-height: 100dvh;
     padding-top: calc(var(--nav-h) + clamp(3rem, 8vh, 5rem));
+  }
+}
+
+/* ---- Le thème mariage ----
+   Venu de la page mariage, la page contact et sa page de remerciement
+   prennent ses couleurs (.theme-mariage, theme-mariage.css). Presque
+   tout suit par les variables ; restent ici les valeurs écrites pour
+   la nuit. */
+
+.theme-mariage {
+  /* Le rouge rosé ne se lirait pas sur le papier : un rouge profond. */
+  --erreur: #a8322d;
+}
+
+/* Le titre garde le dessin d'origine : léger, à l'encre, sans halo. */
+.theme-mariage .contact-hero__titre {
+  font-weight: 300;
+  font-size: clamp(2rem, 4.2vw, 3.25rem);
+  line-height: 1.1;
+  color: var(--dawn);
+  text-shadow: none;
+}
+
+/* La lueur du haut, en violet très léger sur le papier. */
+.theme-mariage .contact-hero {
+  background-image: radial-gradient(
+    60% 100% at 50% 0%,
+    color-mix(in srgb, var(--violet) 10%, transparent),
+    transparent 70%
+  );
+}
+
+.theme-mariage.merci {
+  background-image: radial-gradient(
+    50% 60% at 50% 38%,
+    color-mix(in srgb, var(--violet) 9%, transparent),
+    transparent 72%
+  );
+}
+
+/* Le chevron du déroulant, au violet de la page. */
+.theme-mariage :where(.formulaire) .champ__select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9.5l6 6 6-6' fill='none' stroke='%235a1e76' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+/* Un choix retenu : plein violet, texte et losange blancs. */
+.theme-mariage .choix__input:checked + .choix__texte {
+  border-color: var(--violet);
+  background-color: var(--violet);
+  color: #fff;
+}
+
+.theme-mariage .choix__input:checked + .choix__texte::before {
+  border-color: #fff;
+  background-color: #fff;
+}
+
+/* Les lueurs deviennent des halos discrets. */
+.theme-mariage .progression__etape.is-active::before {
+  box-shadow: 0 0 0.5rem color-mix(in srgb, var(--violet) 30%, transparent);
+}
+
+.theme-mariage .merci__losange {
+  box-shadow: 0 0 1.25rem color-mix(in srgb, var(--violet) 35%, transparent);
+}
+
+/* Le dépôt survolé : un voile violet léger sur le papier. */
+.theme-mariage .depot__zone.is-survol {
+  background-color: color-mix(in srgb, var(--violet) 6%, var(--papier));
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .theme-mariage .depot__zone:hover {
+    background-color: color-mix(in srgb, var(--violet) 6%, var(--papier));
   }
 }

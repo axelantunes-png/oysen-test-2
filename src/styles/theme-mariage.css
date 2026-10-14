@@ -1,0 +1,133 @@
+/* ============================================================
+   LE THÈME MARIAGE
+   ------------------------------------------------------------
+   La palette claire de la page mariage (papier, encre, gris
+   mauve, filets sable, violet), sortie de mariage.css pour
+   servir aussi ailleurs. Elle s'applique à tout élément
+   .theme-mariage :
+
+     la page mariage, toujours (<main className="page-mariage
+     theme-mariage">) ;
+     la page contact et sa page de remerciement, seulement
+     quand on arrive depuis la page mariage (?theme=mariage
+     dans l'adresse, lu par la route).
+
+   Les composants du site lisent des variables : les redéfinir
+   suffit à les repeindre. La barre de navigation, son menu
+   plein écran et le pied de page, hors de <main>, suivent dès
+   qu'une page porte le thème.
+
+   Feuille servie sur tout le site (__root.tsx) : quelques Ko,
+   et la page contact arrive claire, sans flash.
+   ============================================================ */
+
+.theme-mariage,
+html:has(.theme-mariage) :is(.nav, .nav__drawer, .footer) {
+  /* La palette de la première version. */
+  --papier: #f6f3ef;
+  --papier-fonce: #efe9e2;
+  --carte: #fbf9f6;
+  --encre: #1c1420;
+  --gris-mauve: #6d6076;
+  --filet: #e2dbd4;
+  --violet: #5a1e76;
+  --violet-fonce: #46165d;
+
+  /* Les variables du site, repeintes pour la page. */
+  --night: var(--papier);
+  --night-raised: var(--carte);
+  --dawn: var(--encre);
+  --dusk: var(--gris-mauve);
+  --beam: var(--violet);
+  --trait: var(--filet);
+  --trait-doux: color-mix(in srgb, var(--filet) 80%, transparent);
+  --night-veil: color-mix(in srgb, var(--violet) 18%, transparent);
+  --btn-ghost-border: var(--filet);
+
+  color-scheme: light;
+}
+
+.theme-mariage {
+  color: var(--encre);
+  background-color: var(--papier);
+}
+
+/* ---- La barre et le pied de page ----
+   Ils lisent déjà les variables du site, repeintes plus haut. Restent
+   ici les quelques valeurs écrites en dur pour la nuit : le logo blanc
+   passe au violet, les ombres noires deviennent des ombres d'encre très
+   légères. */
+
+/* Le logo en violet : l'image blanche est poussée hors de son cadre, et
+   sa silhouette sert de masque à un fond violet. */
+html:has(.theme-mariage) :is(.nav__logo, .footer__logo) {
+  object-position: -999rem 0;
+  background-color: var(--violet);
+  -webkit-mask: var(--logo) center / 100% 100% no-repeat;
+  mask: var(--logo) center / 100% 100% no-repeat;
+}
+
+html:has(.theme-mariage) .nav__logo {
+  --logo: url('/images/logo-oysen-barre-440.webp');
+}
+
+html:has(.theme-mariage) .footer__logo {
+  --logo: url('/images/logo-oysen-pied-560.webp');
+}
+
+/* Derrière la barre, tout en haut (rebond du défilement, zone de la
+   barre d'état) : le papier, et non la nuit du site. */
+html:has(.theme-mariage) {
+  color-scheme: light;
+}
+
+html:has(.theme-mariage) body {
+  background-color: #f6f3ef;
+}
+
+/* Le déroulant : une ombre douce, au lieu du noir profond. */
+html:has(.theme-mariage) .nav__panel {
+  box-shadow: 0 1.5rem 3rem -1.75rem
+    color-mix(in srgb, var(--encre) 30%, transparent);
+}
+
+/* Le menu plein écran : le papier, à peine teinté de violet en haut. */
+html:has(.theme-mariage) .nav__drawer {
+  background-image: radial-gradient(
+    125% 55% at 50% 0%,
+    color-mix(in srgb, var(--violet) 9%, transparent),
+    transparent 66%
+  );
+}
+
+/* Le pied de page, un ton sous le papier : la page se referme. */
+html:has(.theme-mariage) .footer {
+  background-color: var(--papier-fonce);
+}
+
+html:has(.theme-mariage) .footer::before {
+  opacity: 0.5;
+}
+
+/* Les boutons des réseaux, en relief sur le papier : lumière blanche en
+   haut à gauche, ombre d'encre légère en bas à droite. */
+html:has(.theme-mariage) .footer__reseau {
+  background-color: var(--papier-fonce);
+  box-shadow:
+    -0.25rem -0.25rem 0.6rem rgba(255, 255, 255, 0.85),
+    0.3rem 0.3rem 0.75rem color-mix(in srgb, var(--encre) 16%, transparent);
+}
+
+html:has(.theme-mariage) a.footer__reseau:focus-visible {
+  box-shadow:
+    inset -0.2rem -0.2rem 0.5rem rgba(255, 255, 255, 0.85),
+    inset 0.25rem 0.25rem 0.6rem color-mix(in srgb, var(--encre) 16%, transparent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html:has(.theme-mariage) a.footer__reseau:hover {
+    box-shadow:
+      inset -0.2rem -0.2rem 0.5rem rgba(255, 255, 255, 0.85),
+      inset 0.25rem 0.25rem 0.6rem color-mix(in srgb, var(--encre) 16%, transparent);
+  }
+}

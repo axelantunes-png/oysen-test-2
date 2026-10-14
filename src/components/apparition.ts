@@ -72,11 +72,13 @@ const CASCADE = [
   '.probleme__lede',
   '.balises > li',
   '.probleme__bascule',
-  /* S4, les trois mouvements, les faits, la signature, puis la photo. */
+  /* S4, les trois mouvements, les faits, la signature, la photo, puis le
+     verbatim. */
   '.guide__mouvement',
   '.guide__fait',
   '.guide__signature',
   '.guide__photo',
+  '.guide__verbatim',
   /* S6, les étapes de la méthode. */
   '.methode > li',
   /* S7, les témoignages. */
@@ -134,7 +136,7 @@ const CASCADE = [
   /*
    * « Mariage et événement privé » : le texte sous chaque tête, les deux
    * volets de l'avant-après et la phrase qui les relie, les formules, les
-   * étapes du rétroplanning, les tuiles de la galerie, les couples, les
+   * cartes et les étapes du déroulé, les tuiles de la galerie, les couples, les
    * budgets et ce qui les fait varier, les questions, l'invitation.
    */
   '.mariage-tete__texte',
@@ -144,8 +146,8 @@ const CASCADE = [
   '.bab__suite',
   '.formules > li',
   '.formules__prive',
-  '.voies',
-  '.planning__etape',
+  '.deroule__choix',
+  '.deroule__etapes',
   '.galerie__tuile',
   '.couples > li',
   '.budgets > li',

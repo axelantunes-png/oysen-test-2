@@ -1,0 +1,313 @@
+/* ---- S4 · Le déroulé, en rétroplanning ----
+   En tête, trois lignes, une par formule. Chacune part d'un losange,
+   au prorata des huit étapes : la complète tout à gauche, la partielle
+   à la 3, le jour J à la 5. Dessous, les huit étapes.
+
+   Sur grand écran, la frise prend toute la largeur de l'écran moins
+   3.5rem de chaque côté (50px à l'échelle de 90 %) et les étapes s'y
+   rangent en huit colonnes. Elles partagent leurs rangées (subgrid) :
+   numéros, périodes, titres, « Nous » et « Vous » s'alignent d'une
+   colonne à l'autre, et se lisent aussi en travers. Sous chaque numéro,
+   un trait : bout à bout, ils graduent la frise, et chaque ligne de
+   formule part exactement au-dessus du sien.
+
+   Plus étroit, les lignes gardent leurs départs au-dessus d'une échelle
+   de 01 à 08, et les étapes s'empilent, le numéro dans la marge.
+   Aucun texte n'est masqué, à aucune largeur. */
+
+.planning {
+  margin-top: clamp(2.75rem, 6vh, 4rem);
+}
+
+/* -- Les trois lignes -- */
+
+.voies {
+  display: grid;
+  row-gap: 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.voie {
+  position: relative;
+  /* Le départ, au prorata des huit étapes. */
+  margin-left: calc((var(--depuis) - 1) / 8 * 100%);
+  padding: 0 0 0.75rem 0.1rem;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--gris-mauve);
+}
+
+/* La ligne, qui s'efface en arrivant au bout. */
+.voie::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-image: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--violet) 70%, var(--papier)) calc(100% - 4rem),
+    transparent
+  );
+}
+
+/* Le losange du départ. */
+.voie::after {
+  content: '';
+  position: absolute;
+  bottom: 0.5px;
+  left: 0;
+  width: 0.55rem;
+  height: 0.55rem;
+  background-color: var(--violet);
+  transform: translate(-50%, 50%) rotate(45deg);
+}
+
+.voie__nom {
+  margin-right: 0.6rem;
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+
+/* L'échelle sous les lignes : huit numéros, un par huitième. */
+.voies__echelle {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  margin: 0.9rem 0 0;
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--gris-mauve);
+}
+
+.voies__echelle span {
+  transform: translateX(-0.35em);
+}
+
+/* -- Les étapes, empilées -- */
+
+.planning__etapes {
+  margin: clamp(2.5rem, 6vh, 3.5rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.planning__etape {
+  display: grid;
+  grid-template-columns: 3.25rem minmax(0, 1fr);
+  grid-template-areas:
+    'numero quand'
+    'numero titre'
+    'numero nous'
+    'numero vous';
+  column-gap: 1rem;
+  padding: 1.5rem 0 1.75rem;
+  border-top: 1px solid var(--filet);
+}
+
+.planning__etape--jour-j {
+  border-top-color: var(--violet);
+}
+
+/* Le numéro, en chiffres légers : c'est lui que les formules citent. */
+.planning__numero {
+  grid-area: numero;
+  margin: 0;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 2.25rem;
+  font-weight: 200;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: color-mix(in srgb, var(--violet) 60%, var(--papier));
+}
+
+.planning__etape--jour-j .planning__numero {
+  font-weight: 300;
+  color: var(--violet);
+}
+
+.planning__quand {
+  grid-area: quand;
+  margin: 0;
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--gris-mauve);
+}
+
+.planning__etape--jour-j .planning__quand {
+  color: var(--violet);
+}
+
+.planning__titre {
+  grid-area: titre;
+  margin: 0.35rem 0 0.9rem;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+  line-height: 1.3;
+  text-wrap: balance;
+  color: var(--encre);
+}
+
+.planning__nous {
+  grid-area: nous;
+  margin: 0 0 0.9rem;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  text-wrap: pretty;
+  color: var(--encre);
+}
+
+/* La part des mariés, à l'italique de faire-part. */
+.planning__vous {
+  grid-area: vous;
+  margin: 0;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 1.2rem;
+  line-height: 1.35;
+  text-wrap: pretty;
+  color: var(--violet);
+}
+
+.planning__etape--jour-j .planning__vous {
+  font-size: 1.35rem;
+}
+
+.planning__qui {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-family: 'Azeret Mono', ui-monospace, monospace;
+  font-style: normal;
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gris-mauve);
+}
+
+/* -- Tablette : « Nous » et « Vous » côte à côte -- */
+
+@media (min-width: 761px) {
+  .planning__etape {
+    grid-template-columns: 4.5rem minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+      'numero quand quand'
+      'numero titre titre'
+      'numero nous vous';
+    column-gap: 2rem;
+  }
+
+  .planning__numero {
+    font-size: 2.75rem;
+  }
+
+  .planning__nous {
+    margin-bottom: 0;
+  }
+}
+
+/* -- Grand écran : la frise en huit colonnes -- */
+
+@media (min-width: 1280px) {
+  /* La section sert de mesure : 100cqw est la largeur de son contenu,
+     sans la barre de défilement que 100vw compterait ; avec ses deux
+     marges --pad, c'est la largeur de l'écran. */
+  .section--mariage-deroule {
+    container-type: inline-size;
+  }
+
+  .planning {
+    --ecran: calc(100cqw + 2 * var(--pad));
+
+    display: grid;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    column-gap: clamp(1.75rem, 2cqw, 3rem);
+    width: calc(var(--ecran) - 7rem);
+    margin-left: calc(50% - var(--ecran) / 2 + 3.5rem);
+  }
+
+  /* Les lignes, calées sur les colonnes des étapes. */
+  .voies {
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    row-gap: 1.1rem;
+  }
+
+  .voie {
+    grid-column: var(--depuis) / -1;
+    margin-left: 0;
+    white-space: nowrap;
+  }
+
+  .voies__echelle {
+    display: none;
+  }
+
+  .planning__etapes {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    grid-template-rows: repeat(5, auto);
+    margin-top: clamp(2.25rem, 5vh, 3rem);
+  }
+
+  .planning__etape {
+    grid-column: var(--col);
+    grid-row: 1 / 6;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: subgrid;
+    grid-template-areas: none;
+    padding: 0;
+    border-top: 0;
+  }
+
+  .planning__numero,
+  .planning__quand,
+  .planning__titre,
+  .planning__nous,
+  .planning__vous {
+    grid-area: auto;
+  }
+
+  /* Le trait de graduation, sous le numéro. */
+  .planning__numero {
+    margin-bottom: 1rem;
+    padding-bottom: 0.85rem;
+    font-size: clamp(2.5rem, 3.2cqw, 3.5rem);
+    border-bottom: 1px solid var(--filet);
+  }
+
+  .planning__etape--jour-j .planning__numero {
+    border-bottom-color: var(--violet);
+    box-shadow: 0 1px 0 var(--violet);
+  }
+
+  .planning__titre {
+    font-size: 1rem;
+  }
+
+  .planning__nous {
+    margin-bottom: 0.9rem;
+    font-size: 0.875rem;
+  }
+
+  .planning__vous {
+    font-size: 1.1rem;
+  }
+
+  .planning__etape--jour-j .planning__vous {
+    font-size: 1.25rem;
+  }
+}

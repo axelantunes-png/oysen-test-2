@@ -10,6 +10,8 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as MentionsLegalesRouteImport } from './routes/mentions-legales'
+import { Route as PolitiqueDeConfidentialiteRouteImport } from './routes/politique-de-confidentialite'
 import { Route as AdminPriveIndexRouteImport } from './routes/admin-prive/index'
 import { Route as AdminPriveCmsRouteRouteImport } from './routes/admin-prive/cms/route'
 import { Route as AdminPriveNouveauMotDePasseRouteImport } from './routes/admin-prive/nouveau-mot-de-passe'
@@ -37,6 +39,17 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MentionsLegalesRoute = MentionsLegalesRouteImport.update({
+  id: '/mentions-legales',
+  path: '/mentions-legales',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PolitiqueDeConfidentialiteRoute =
+  PolitiqueDeConfidentialiteRouteImport.update({
+    id: '/politique-de-confidentialite',
+    path: '/politique-de-confidentialite',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AdminPriveIndexRoute = AdminPriveIndexRouteImport.update({
   id: '/admin-prive/',
   path: '/admin-prive/',
@@ -155,6 +168,8 @@ const AdminPriveCmsPromotionIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/mentions-legales': typeof MentionsLegalesRoute
+  '/politique-de-confidentialite': typeof PolitiqueDeConfidentialiteRoute
   '/admin-prive/cms': typeof AdminPriveCmsRouteRouteWithChildren
   '/admin-prive/nouveau-mot-de-passe': typeof AdminPriveNouveauMotDePasseRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -179,6 +194,8 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/mentions-legales': typeof MentionsLegalesRoute
+  '/politique-de-confidentialite': typeof PolitiqueDeConfidentialiteRoute
   '/admin-prive/nouveau-mot-de-passe': typeof AdminPriveNouveauMotDePasseRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/contact/merci': typeof ContactMerciRoute
@@ -203,6 +220,8 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/mentions-legales': typeof MentionsLegalesRoute
+  '/politique-de-confidentialite': typeof PolitiqueDeConfidentialiteRoute
   '/admin-prive/cms': typeof AdminPriveCmsRouteRouteWithChildren
   '/admin-prive/nouveau-mot-de-passe': typeof AdminPriveNouveauMotDePasseRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -229,6 +248,8 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/mentions-legales'
+    | '/politique-de-confidentialite'
     | '/admin-prive/cms'
     | '/admin-prive/nouveau-mot-de-passe'
     | '/blog/$slug'
@@ -253,6 +274,8 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/mentions-legales'
+    | '/politique-de-confidentialite'
     | '/admin-prive/nouveau-mot-de-passe'
     | '/blog/$slug'
     | '/contact/merci'
@@ -276,6 +299,8 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/mentions-legales'
+    | '/politique-de-confidentialite'
     | '/admin-prive/cms'
     | '/admin-prive/nouveau-mot-de-passe'
     | '/blog/$slug'
@@ -301,6 +326,8 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  MentionsLegalesRoute: typeof MentionsLegalesRoute
+  PolitiqueDeConfidentialiteRoute: typeof PolitiqueDeConfidentialiteRoute
   AdminPriveCmsRouteRoute: typeof AdminPriveCmsRouteRouteWithChildren
   AdminPriveNouveauMotDePasseRoute: typeof AdminPriveNouveauMotDePasseRoute
   BlogSlugRoute: typeof BlogSlugRoute
@@ -328,6 +355,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mentions-legales': {
+      id: '/mentions-legales'
+      path: '/mentions-legales'
+      fullPath: '/mentions-legales'
+      preLoaderRoute: typeof MentionsLegalesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/politique-de-confidentialite': {
+      id: '/politique-de-confidentialite'
+      path: '/politique-de-confidentialite'
+      fullPath: '/politique-de-confidentialite'
+      preLoaderRoute: typeof PolitiqueDeConfidentialiteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin-prive/': {
@@ -497,6 +538,8 @@ const AdminPriveCmsRouteRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  MentionsLegalesRoute: MentionsLegalesRoute,
+  PolitiqueDeConfidentialiteRoute: PolitiqueDeConfidentialiteRoute,
   AdminPriveCmsRouteRoute: AdminPriveCmsRouteRouteWithChildren,
   AdminPriveNouveauMotDePasseRoute: AdminPriveNouveauMotDePasseRoute,
   BlogSlugRoute: BlogSlugRoute,

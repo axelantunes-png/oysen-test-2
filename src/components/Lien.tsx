@@ -20,6 +20,8 @@ type Props = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> & {
  * les sites externes restent de simples <a>.
  */
 export function Lien({ href, ...props }: Props) {
-  /* Le typage exige `to`, mais c'est `href` qui fixe la destination. */
-  return <Link {...props} to="." href={href} activeProps={SANS_ETAT} />
+  /* Le typage exige `to`, mais c'est `href` qui fixe la destination.
+     Link garde l'adresse de son premier rendu : la clé le recrée quand
+     elle change (Contact, avec ou sans le thème mariage). */
+  return <Link key={href} {...props} to="." href={href} activeProps={SANS_ETAT} />
 }

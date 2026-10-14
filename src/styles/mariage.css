@@ -24,34 +24,14 @@
    Les composants partagés du site (boutons, surtitres, titres
    de section, FAQ, apparition) lisent des variables : la page
    les redéfinit pour elle seule, ils prennent ses couleurs
-   sans une ligne de plus.
+   sans une ligne de plus. Cette palette, et ce qu'elle fait de
+   la barre et du pied de page, vit dans theme-mariage.css :
+   la page contact la reprend quand on vient d'ici.
    ============================================================ */
 
 .page-mariage {
-  /* La palette de la première version. */
-  --papier: #f6f3ef;
-  --papier-fonce: #efe9e2;
-  --carte: #fbf9f6;
-  --encre: #1c1420;
-  --gris-mauve: #6d6076;
-  --filet: #e2dbd4;
-  --violet: #5a1e76;
-  --violet-fonce: #46165d;
-
-  /* Les variables du site, repeintes pour la page. */
-  --night: var(--papier);
-  --night-raised: var(--carte);
-  --dawn: var(--encre);
-  --dusk: var(--gris-mauve);
-  --beam: var(--violet);
-  --trait: var(--filet);
-  --trait-doux: color-mix(in srgb, var(--filet) 80%, transparent);
-  --night-veil: color-mix(in srgb, var(--violet) 18%, transparent);
-  --btn-ghost-border: var(--filet);
-
   color: var(--encre);
   background-color: var(--papier);
-  color-scheme: light;
 }
 
 .page-mariage em {
@@ -227,8 +207,12 @@
   color: var(--encre);
 }
 
+/* « vous ressemble » : la même Cormorant droite que le reste du titre,
+   seulement en violet. L'italique Cormorant, d'un dessin très différent,
+   se lisait comme une autre police (choix du 2026-10-14). */
 .mariage-hero__titre em {
   font-family: inherit;
+  font-style: normal;
   font-weight: inherit;
   font-size: 1em;
   letter-spacing: inherit;
@@ -385,6 +369,11 @@
   background-color: var(--papier-fonce);
 }
 
+/* « Avec Oysen » : un cran plus grand que l'étiquette d'en face. */
+.bab__label--oysen {
+  font-size: 0.8125rem;
+}
+
 .bab__avant .bab__label {
   color: var(--gris-mauve);
 }
@@ -412,9 +401,27 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  /* La liste s'efface vers le bas : elle continue, on ne la voit plus. */
-  -webkit-mask-image: linear-gradient(to bottom, #000 50%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 50%, transparent 100%);
+}
+
+/*
+ * Avant, la liste s'effaçait vers le bas sous un masque : on y voyait un
+ * contenu à faire défiler. Désormais, seules les deux dernières tâches
+ * pâlissent, puis une ligne dit que la liste continue.
+ */
+.tache:nth-last-child(-n + 2) {
+  opacity: 0.55;
+}
+
+.taches__suite {
+  margin: 1.4rem 0 0;
+  padding-top: 1.1rem;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 1.25rem;
+  line-height: 1.35;
+  color: var(--gris-mauve);
+  border-top: 1px dashed color-mix(in srgb, var(--gris-mauve) 45%, transparent);
 }
 
 .tache {
@@ -495,6 +502,11 @@
   color: var(--encre);
 }
 
+/* La seconde ligne, en violet : même police, même taille. */
+.bab__reve-accent {
+  color: var(--violet);
+}
+
 .bab__points {
   display: grid;
   gap: 0.55rem;
@@ -523,12 +535,14 @@
 }
 
 /* La phrase qui fait le pont. */
+/* Étalée en largeur, un corps un peu plus petit : deux lignes plutôt
+   que quatre (avant : 36ch, clamp(1.3rem, 2vw, 1.7rem)). */
 .bab__passerelle {
-  max-width: 36ch;
+  max-width: 54ch;
   margin: clamp(3rem, 7vh, 4.5rem) auto 0;
   font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
   font-weight: 300;
-  font-size: clamp(1.3rem, 2vw, 1.7rem);
+  font-size: clamp(1.2rem, 1.7vw, 1.5rem);
   line-height: 1.45;
   text-align: center;
   text-wrap: balance;
@@ -625,7 +639,8 @@
 }
 
 .formule__prestations {
-  margin: 0.5rem 0 0;
+  /* En bas, l'écart avec « Voir le déroulé ». */
+  margin: 0.5rem 0 1.25rem;
   padding: 0;
   list-style: none;
   border-top: 1px solid var(--filet);
@@ -690,9 +705,37 @@
   background-color: transparent;
 }
 
-.formule__lien {
+/* « Voir le déroulé » : en pied de carte, quelle que soit sa hauteur,
+   centré. Le bouton secondaire de la page : liseré et texte violets, un
+   voile de violet au survol. */
+.page-mariage .formule__deroule {
+  align-self: center;
   margin-top: auto;
-  padding-top: 1rem;
+  color: var(--violet);
+  border-color: color-mix(in srgb, var(--violet) 55%, transparent);
+  background-color: transparent;
+}
+
+.page-mariage .formule__deroule:focus-visible {
+  color: var(--violet-fonce);
+  border-color: var(--violet);
+  background-color: color-mix(in srgb, var(--violet) 7%, transparent);
+  box-shadow: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .page-mariage .formule__deroule:hover {
+    color: var(--violet-fonce);
+    border-color: var(--violet);
+    background-color: color-mix(in srgb, var(--violet) 7%, transparent);
+    box-shadow: none;
+  }
+}
+
+/* L'appel commun aux trois formules, sous les cartes. */
+.formules__appel {
+  margin: clamp(3rem, 7vh, 4.25rem) 0 0;
+  text-align: center;
 }
 
 .formules__prive {
@@ -706,128 +749,152 @@
   color: var(--gris-mauve);
 }
 
-/* ---- S4 · Le déroulé, en rétroplanning ----
-   En tête, trois lignes, une par formule. Chacune part d'un losange,
-   au prorata des huit étapes : la complète tout à gauche, la partielle
-   à la 3, le jour J à la 5. Dessous, les huit étapes.
+/* ---- S4 · Le déroulé, formule par formule ----
+   En tête, trois cartes, une par formule. La carte choisie prend le
+   filet violet, un voile de violet et le losange plein de la page.
+   Dessous, les huit étapes en lignes : le numéro, la période et le
+   titre, puis « Nous » et « Vous » côte à côte. Les étapes couvertes
+   par la formule sont sur carte, un trait violet à gauche ; les autres
+   restent sur papier, en retrait. Sur téléphone, seules les étapes
+   couvertes s'affichent. */
 
-   Sur grand écran, la frise prend toute la largeur de l'écran moins
-   3.5rem de chaque côté (50px à l'échelle de 90 %) et les étapes s'y
-   rangent en huit colonnes. Elles partagent leurs rangées (subgrid) :
-   numéros, périodes, titres, « Nous » et « Vous » s'alignent d'une
-   colonne à l'autre, et se lisent aussi en travers. Sous chaque numéro,
-   un trait : bout à bout, ils graduent la frise, et chaque ligne de
-   formule part exactement au-dessus du sien.
+/* La cible de « Voir le déroulé » : la barre de navigation reste collée
+   en haut, la section s'arrête dessous. Le saut glisse, sauf à qui
+   demande moins d'animations. */
+.section--mariage-deroule {
+  scroll-margin-top: var(--nav-h, 0px);
+}
 
-   Plus étroit, les lignes gardent leurs départs au-dessus d'une échelle
-   de 01 à 08, et les étapes s'empilent, le numéro dans la marge.
-   Aucun texte n'est masqué, à aucune largeur. */
+@media (prefers-reduced-motion: no-preference) {
+  html:has(.page-mariage) {
+    scroll-behavior: smooth;
+  }
+}
 
-.planning {
+.deroule {
   margin-top: clamp(2.75rem, 6vh, 4rem);
 }
 
-/* -- Les trois lignes -- */
+/* -- Les trois cartes -- */
 
-.voies {
+.deroule__choix {
   display: grid;
-  row-gap: 1.25rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(0.75rem, 1.5vw, 1.25rem);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.voie {
+.deroule__choix > li {
+  display: flex;
+}
+
+.deroule__carte {
   position: relative;
-  /* Le départ, au prorata des huit étapes. */
-  margin-left: calc((var(--depuis) - 1) / 8 * 100%);
-  padding: 0 0 0.75rem 0.1rem;
-  font-size: 0.8125rem;
-  line-height: 1.45;
-  color: var(--gris-mauve);
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 1.25rem 2.75rem 1.35rem 1.4rem;
+  font: inherit;
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+  background-color: var(--carte);
+  border: 1px solid var(--filet);
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.25s ease;
 }
 
-/* La ligne, qui s'efface en arrivant au bout. */
-.voie::before {
+/* Le losange, évidé tant que la carte n'est pas choisie. */
+.deroule__carte::after {
   content: '';
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background-image: linear-gradient(
-    to right,
-    color-mix(in srgb, var(--violet) 70%, var(--papier)) calc(100% - 4rem),
-    transparent
-  );
+  top: 1.45rem;
+  right: 1.35rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--violet) 45%, transparent);
+  transform: rotate(45deg);
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
 }
 
-/* Le losange du départ. */
-.voie::after {
-  content: '';
-  position: absolute;
-  bottom: 0.5px;
-  left: 0;
-  width: 0.55rem;
-  height: 0.55rem;
+.deroule__carte[aria-pressed='true'] {
+  background-color: color-mix(in srgb, var(--violet) 6%, var(--carte));
+  border-color: var(--violet);
+  box-shadow: 0 1.5rem 3rem -2.25rem
+    color-mix(in srgb, var(--violet) 55%, transparent);
+}
+
+.deroule__carte[aria-pressed='true']::after {
   background-color: var(--violet);
-  transform: translate(-50%, 50%) rotate(45deg);
+  border-color: var(--violet);
 }
 
-.voie__nom {
-  margin-right: 0.6rem;
-  font-family: 'Azeret Mono', ui-monospace, monospace;
-  font-size: 0.625rem;
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+@media (hover: hover) and (pointer: fine) {
+  .deroule__carte:hover {
+    border-color: color-mix(in srgb, var(--violet) 55%, var(--filet));
+  }
+}
+
+.deroule__carte:focus-visible {
+  outline: 2px solid var(--violet);
+  outline-offset: 3px;
+}
+
+.deroule__formule {
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.2rem;
+  font-weight: 300;
+  line-height: 1.2;
+  color: var(--encre);
+}
+
+.deroule__carte[aria-pressed='true'] .deroule__formule {
   color: var(--violet);
 }
 
-/* L'échelle sous les lignes : huit numéros, un par huitième. */
-.voies__echelle {
-  display: grid;
-  grid-template-columns: repeat(8, minmax(0, 1fr));
-  margin: 0.9rem 0 0;
-  font-family: 'Azeret Mono', ui-monospace, monospace;
-  font-size: 0.5625rem;
-  font-weight: 500;
-  letter-spacing: 0.06em;
+.deroule__couvre {
+  font-size: 0.875rem;
+  line-height: 1.5;
   color: var(--gris-mauve);
 }
 
-.voies__echelle span {
-  transform: translateX(-0.35em);
-}
+/* -- Les huit étapes -- */
 
-/* -- Les étapes, empilées -- */
-
-.planning__etapes {
-  margin: clamp(2.5rem, 6vh, 3.5rem) 0 0;
+.deroule__etapes {
+  margin: clamp(2rem, 4.5vh, 2.75rem) 0 0;
   padding: 0;
   list-style: none;
-}
-
-.planning__etape {
-  display: grid;
-  grid-template-columns: 3.25rem minmax(0, 1fr);
-  grid-template-areas:
-    'numero quand'
-    'numero titre'
-    'numero nous'
-    'numero vous';
-  column-gap: 1rem;
-  padding: 1.5rem 0 1.75rem;
   border-top: 1px solid var(--filet);
 }
 
-.planning__etape--jour-j {
-  border-top-color: var(--violet);
+.deroule__etape {
+  display: grid;
+  grid-template-columns: 3.5rem minmax(0, 13rem) minmax(0, 1fr) minmax(0, 1fr);
+  column-gap: clamp(1.25rem, 2.5vw, 2.5rem);
+  align-items: start;
+  padding: 1.5rem clamp(1.25rem, 2.5vw, 2rem);
+  background-color: var(--papier-fonce);
+  border-bottom: 1px solid var(--filet);
+  box-shadow: inset 2px 0 0 var(--filet);
+  transition:
+    background-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.deroule__etape--couverte {
+  background-color: var(--carte);
+  box-shadow: inset 2px 0 0 var(--violet);
 }
 
 /* Le numéro, en chiffres légers : c'est lui que les formules citent. */
-.planning__numero {
-  grid-area: numero;
+.deroule__numero {
   margin: 0;
   font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
   font-size: 2.25rem;
@@ -835,17 +902,16 @@
   line-height: 1;
   letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
-  color: color-mix(in srgb, var(--violet) 60%, var(--papier));
+  color: color-mix(in srgb, var(--gris-mauve) 55%, var(--papier));
+  transition: color 0.3s ease;
 }
 
-.planning__etape--jour-j .planning__numero {
-  font-weight: 300;
+.deroule__etape--couverte .deroule__numero {
   color: var(--violet);
 }
 
-.planning__quand {
-  grid-area: quand;
-  margin: 0;
+.deroule__quand {
+  margin: 0.2rem 0 0;
   font-family: 'Azeret Mono', ui-monospace, monospace;
   font-size: 0.6875rem;
   font-weight: 500;
@@ -853,13 +919,8 @@
   color: var(--gris-mauve);
 }
 
-.planning__etape--jour-j .planning__quand {
-  color: var(--violet);
-}
-
-.planning__titre {
-  grid-area: titre;
-  margin: 0.35rem 0 0.9rem;
+.deroule__titre {
+  margin: 0.4rem 0 0;
   font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
   font-size: 1.1rem;
   font-weight: 500;
@@ -868,34 +929,30 @@
   color: var(--encre);
 }
 
-.planning__nous {
-  grid-area: nous;
-  margin: 0 0 0.9rem;
+.deroule__nous {
+  margin: 0;
   font-size: 0.9375rem;
   line-height: 1.55;
   text-wrap: pretty;
   color: var(--encre);
 }
 
-/* La part des mariés, à l'italique de faire-part. */
-.planning__vous {
-  grid-area: vous;
+/* La part des mariés, à l'italique de faire-part, après un filet. */
+.deroule__vous {
   margin: 0;
+  padding-left: clamp(1.25rem, 2.5vw, 2.5rem);
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-style: italic;
   font-size: 1.2rem;
   line-height: 1.35;
   text-wrap: pretty;
   color: var(--violet);
+  border-left: 1px solid var(--filet);
 }
 
-.planning__etape--jour-j .planning__vous {
-  font-size: 1.35rem;
-}
-
-.planning__qui {
+.deroule__qui {
   display: block;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.35rem;
   font-family: 'Azeret Mono', ui-monospace, monospace;
   font-style: normal;
   font-size: 0.5625rem;
@@ -905,118 +962,97 @@
   color: var(--gris-mauve);
 }
 
-/* -- Tablette : « Nous » et « Vous » côte à côte -- */
+.deroule__nous .deroule__qui {
+  color: var(--violet);
+}
 
-@media (min-width: 761px) {
-  .planning__etape {
-    grid-template-columns: 4.5rem minmax(0, 1fr) minmax(0, 1fr);
+/* Les étapes hors formule : en retrait, lisibles quand même. */
+.deroule__etape:not(.deroule__etape--couverte) :is(.deroule__titre, .deroule__nous) {
+  color: color-mix(in srgb, var(--encre) 70%, var(--papier-fonce));
+}
+
+.deroule__etape:not(.deroule__etape--couverte) .deroule__vous {
+  color: color-mix(in srgb, var(--violet) 70%, var(--papier-fonce));
+}
+
+/* -- Tablette : « Nous » et « Vous » passent sous le titre -- */
+
+@media (max-width: 1023px) {
+  .deroule__etape {
+    grid-template-columns: 3.5rem minmax(0, 1fr) minmax(0, 1fr);
     grid-template-areas:
-      'numero quand quand'
-      'numero titre titre'
+      'numero tete tete'
       'numero nous vous';
-    column-gap: 2rem;
+    row-gap: 1rem;
   }
 
-  .planning__numero {
-    font-size: 2.75rem;
+  .deroule__numero {
+    grid-area: numero;
   }
 
-  .planning__nous {
-    margin-bottom: 0;
+  .deroule__tete {
+    grid-area: tete;
+  }
+
+  .deroule__nous {
+    grid-area: nous;
+  }
+
+  .deroule__vous {
+    grid-area: vous;
   }
 }
 
-/* -- Grand écran : la frise en huit colonnes -- */
+/* -- Téléphone : les cartes s'empilent, seules les étapes de la
+   formule choisie restent -- */
 
-@media (min-width: 1280px) {
-  /* La section sert de mesure : 100cqw est la largeur de son contenu,
-     sans la barre de défilement que 100vw compterait ; avec ses deux
-     marges --pad, c'est la largeur de l'écran. */
-  .section--mariage-deroule {
-    container-type: inline-size;
+@media (max-width: 760px) {
+  .deroule__choix {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.6rem;
   }
 
-  .planning {
-    --ecran: calc(100cqw + 2 * var(--pad));
-
-    display: grid;
-    grid-template-columns: repeat(8, minmax(0, 1fr));
-    column-gap: clamp(1.75rem, 2cqw, 3rem);
-    width: calc(var(--ecran) - 7rem);
-    margin-left: calc(50% - var(--ecran) / 2 + 3.5rem);
+  .deroule__carte {
+    padding: 1rem 2.5rem 1.05rem 1.15rem;
   }
 
-  /* Les lignes, calées sur les colonnes des étapes. */
-  .voies {
-    grid-column: 1 / -1;
-    grid-template-columns: subgrid;
-    row-gap: 1.1rem;
+  .deroule__carte::after {
+    top: 1.2rem;
+    right: 1.15rem;
   }
 
-  .voie {
-    grid-column: var(--depuis) / -1;
-    margin-left: 0;
-    white-space: nowrap;
-  }
-
-  .voies__echelle {
+  .deroule__etape:not(.deroule__etape--couverte) {
     display: none;
   }
 
-  .planning__etapes {
-    display: grid;
-    grid-column: 1 / -1;
-    grid-template-columns: subgrid;
-    grid-template-rows: repeat(5, auto);
-    margin-top: clamp(2.25rem, 5vh, 3rem);
+  .deroule__etape {
+    grid-template-columns: 2.75rem minmax(0, 1fr);
+    grid-template-areas:
+      'numero tete'
+      'numero nous'
+      'numero vous';
+    column-gap: 0.9rem;
+    row-gap: 0.9rem;
+    padding: 1.35rem 1rem 1.5rem;
   }
 
-  .planning__etape {
-    grid-column: var(--col);
-    grid-row: 1 / 6;
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: subgrid;
-    grid-template-areas: none;
-    padding: 0;
-    border-top: 0;
+  .deroule__numero {
+    font-size: 1.85rem;
   }
 
-  .planning__numero,
-  .planning__quand,
-  .planning__titre,
-  .planning__nous,
-  .planning__vous {
-    grid-area: auto;
+  .deroule__vous {
+    padding: 0.9rem 0 0;
+    border-left: 0;
+    border-top: 1px solid var(--filet);
   }
+}
 
-  /* Le trait de graduation, sous le numéro. */
-  .planning__numero {
-    margin-bottom: 1rem;
-    padding-bottom: 0.85rem;
-    font-size: clamp(2.5rem, 3.2cqw, 3.5rem);
-    border-bottom: 1px solid var(--filet);
-  }
-
-  .planning__etape--jour-j .planning__numero {
-    border-bottom-color: var(--violet);
-    box-shadow: 0 1px 0 var(--violet);
-  }
-
-  .planning__titre {
-    font-size: 1rem;
-  }
-
-  .planning__nous {
-    margin-bottom: 0.9rem;
-    font-size: 0.875rem;
-  }
-
-  .planning__vous {
-    font-size: 1.1rem;
-  }
-
-  .planning__etape--jour-j .planning__vous {
-    font-size: 1.25rem;
+@media (prefers-reduced-motion: reduce) {
+  .deroule__carte,
+  .deroule__carte::after,
+  .deroule__etape,
+  .deroule__numero {
+    transition: none;
   }
 }
 
@@ -1324,6 +1360,20 @@
   margin: 0;
 }
 
+/* Un mot de réponse qui mène à une autre page : violet, souligné. */
+.faq__lien {
+  color: var(--violet);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  transition: color 0.2s ease;
+}
+
+.faq__lien:hover,
+.faq__lien:focus-visible {
+  color: var(--violet-fonce);
+}
+
 /* ---- S9 · L'invitation ---- */
 
 .section.section--mariage-invitation {
@@ -1404,12 +1454,12 @@
   color: var(--violet);
 }
 
+/* Le bouton, puis le lien doux juste en dessous, tous deux centrés. */
 .invitation__actions {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 1rem 2rem;
+  gap: 1rem;
 }
 
 .invitation__note {
@@ -1469,6 +1519,23 @@
     text-align: center;
   }
 
+  /* Les offres, plus courtes : les prestations non comprises (barrées
+     sur ordinateur) disparaissent, et la carte se resserre. */
+  .prestation--non {
+    display: none;
+  }
+
+  .formule,
+  .formule--vedette {
+    gap: 0.65rem;
+    padding: 1.75rem 1.35rem;
+  }
+
+  /* La plus populaire ferme la liste, juste avant l'appel. */
+  .formule--vedette {
+    order: 1;
+  }
+
   .mariage-hero__titre,
   .mariage-hero__lede,
   .mariage-hero__promesse {
@@ -1487,6 +1554,52 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
+  }
+
+  /* La tête de la FAQ, centrée au-dessus des questions. */
+  .questions-mariage__tete {
+    justify-items: center;
+    text-align: center;
+  }
+
+  .questions-mariage__tete .mariage-tete__texte {
+    margin-inline: auto;
+  }
+
+  /* « Une autre question ? » et « Nous écrire » passent sous les
+     questions : la tête s'efface, ses éléments rejoignent la grille. */
+  .questions-mariage {
+    row-gap: 0;
+    text-align: center;
+  }
+
+  .questions-mariage__tete {
+    display: contents;
+  }
+
+  .questions-mariage .faq {
+    margin-top: 2.5rem;
+    text-align: start;
+  }
+
+  .questions-mariage__tete .mariage-tete__texte {
+    order: 1;
+    margin: 2.25rem auto 1rem;
+  }
+
+  .questions-mariage__tete .lien-doux {
+    order: 2;
+    justify-self: center;
+  }
+
+  /* Sur deux lignes, le losange reste face à la première. */
+  .mariage-preuves li {
+    align-items: flex-start;
+    line-height: 1.5;
+  }
+
+  .mariage-preuves li::before {
+    margin-top: calc((1.5em - 0.4rem) / 2);
   }
 
   .bab {
@@ -1521,6 +1634,38 @@
 
   .variables {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Le budget, tout centré : prix, colonnes et puces. */
+  .budget,
+  .variables {
+    text-align: center;
+  }
+
+  .budget__base {
+    margin-inline: auto;
+  }
+
+  /* Chaque offre dans sa carte, légère : fond de carte, fin liseré,
+     et le filet du haut gardé (violet pour l'organisation complète). */
+  .budgets {
+    gap: 1rem;
+  }
+
+  .budget {
+    padding: 1.5rem 1.35rem 1.6rem;
+    border: 1px solid var(--filet);
+    border-top: 2px solid var(--filet);
+    background-color: var(--carte);
+  }
+
+  .budget--vedette {
+    border-color: color-mix(in srgb, var(--violet) 35%, var(--filet));
+    border-top-color: var(--violet);
+  }
+
+  .variable {
+    justify-content: center;
   }
 }
 

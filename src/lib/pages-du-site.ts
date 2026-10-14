@@ -19,6 +19,8 @@ export const PAGES_DU_SITE: PageDuSite[] = [
   { chemin: '/nos-souvenirs', nom: 'Nos souvenirs' },
   { chemin: '/blog', nom: 'Blog' },
   { chemin: '/contact', nom: 'Contact' },
+  { chemin: '/mentions-legales', nom: 'Mentions légales' },
+  { chemin: '/politique-de-confidentialite', nom: 'Politique de confidentialité' },
 ]
 
 /** L'adresse, sans barre finale : « /contact/ » vaut « /contact ». */

@@ -7,6 +7,7 @@ import {
 import type { ReactNode } from 'react'
 
 import { useApparition } from '../components/apparition'
+import { Cookies } from '../components/Cookies'
 import { Footer } from '../components/Footer'
 import { Navbar } from '../components/Navbar'
 import { Popups } from '../components/popup/Popups'
@@ -17,10 +18,12 @@ import {
 } from '../components/Rideau'
 
 import appCss from '../styles/app.css?url'
+import cookiesCss from '../styles/cookies.css?url'
 import footerCss from '../styles/footer.css?url'
 import homeCss from '../styles/home.css?url'
 import navbarCss from '../styles/navbar.css?url'
 import popupCss from '../styles/popup.css?url'
+import themeMariageCss from '../styles/theme-mariage.css?url'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -39,6 +42,11 @@ export const Route = createRootRoute({
       { rel: 'stylesheet', href: footerCss },
       /* Les popups du CMS : sur toutes les pages, et dans l'aperçu du CMS. */
       { rel: 'stylesheet', href: popupCss },
+      /* Le bandeau « Gestion des cookies », sur toutes les pages. */
+      { rel: 'stylesheet', href: cookiesCss },
+      /* La palette claire de la page mariage, reprise par la page contact
+         quand on en vient (theme-mariage.css). */
+      { rel: 'stylesheet', href: themeMariageCss },
       { rel: 'icon', href: '/logo-oysen-provisoire.jpeg' },
       // Montserrat, hébergée avec le site (déclarée dans app.css) : la
       // police de toutes les pages, préchargée pour arriver avec le HTML.
@@ -93,6 +101,8 @@ function RootDocument({ children }: { children: ReactNode }) {
         {admin ? null : <IntroCurtain />}
         {/* Les popups promotionnels, gérés dans le CMS. */}
         {admin ? null : <Popups />}
+        {/* Le consentement aux cookies, et Google Analytics qui en dépend. */}
+        {admin ? null : <Cookies />}
         <Scripts />
       </body>
     </html>

@@ -334,6 +334,38 @@ a.footer__reseau:focus-visible {
   font-size: 0.8125rem;
 }
 
+/* PROVISOIRE : le lien vers l'administration, sous les réseaux. */
+.footer__admin {
+  margin-top: 1rem;
+  font-size: 0.8125rem;
+}
+
+/* La signature du site : le nom de l'agence web, dans la couleur de la
+   lumière (lavande ici, violet sur la page mariage). */
+.footer__credit {
+  margin: 0;
+}
+
+.footer__markom {
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--beam);
+  text-decoration: none;
+  text-underline-offset: 0.25em;
+}
+
+.footer__markom:focus-visible {
+  text-decoration: underline;
+  outline: 2px solid var(--beam);
+  outline-offset: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .footer__markom:hover {
+    text-decoration: underline;
+  }
+}
+
 /* ---- Largeurs intermédiaires et mobile ---- */
 
 @media (max-width: 1024px) {
@@ -430,6 +462,12 @@ a.footer__reseau:focus-visible {
 
   .footer__legal {
     justify-content: center;
+  }
+
+  /* La signature du site ferme le pied de page, tout en bas. */
+  .footer__credit {
+    order: 1;
+    flex-basis: 100%;
   }
 }
 

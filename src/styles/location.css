@@ -1212,6 +1212,21 @@ legend.champ__label {
    sur l'accueil (navbar.css) : le hero passe dessous et gagne la
    hauteur de la barre, son contenu est repoussé d'autant. Rien ne
    bouge à l'écran. */
+/* ---- Le hero sur tablette et téléphone ----
+   La hauteur est figée en svh : en dvh, elle grandissait à chaque repli de
+   la barre d'adresse pendant le défilement, et la photo (object-fit:
+   cover) se recadrait, comme un zoom. En mode application, sans barre,
+   svh vaut l'écran entier. */
+@media (max-width: 1024px) {
+  .loc-hero {
+    min-height: calc(100svh - var(--nav-h, 0px));
+  }
+
+  .loc-hero__faisceaux {
+    height: calc(100svh - var(--nav-h, 0px));
+  }
+}
+
 @media (min-width: 1025px) {
   .loc-hero {
     min-height: 100dvh;

@@ -1,8 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import { DELAI_REPONSE_H } from '../../components/contact/content'
-import { Arrow } from '../../components/home/icons'
 import { Lien } from '../../components/Lien'
+import { classeTheme, couleurTheme, lireTheme } from '../../lib/theme'
 
 /* Même raison que sur la page Contact : chemin depuis la racine. */
 import contactCss from '/src/styles/contact.css?url'
@@ -13,9 +13,11 @@ import contactCss from '/src/styles/contact.css?url'
  * conversion. Elle n'a rien à indexer.
  */
 export const Route = createFileRoute('/contact/merci')({
-  head: () => ({
+  validateSearch: lireTheme,
+  head: ({ match }) => ({
     meta: [
-      { title: 'Demande reçue, Oysen' },
+      { name: 'theme-color', content: couleurTheme(match.search.theme) },
+      { title: 'Merci pour votre demande, Oysen' },
       { name: 'robots', content: 'noindex' },
     ],
     links: [{ rel: 'stylesheet', href: contactCss }],
@@ -24,31 +26,32 @@ export const Route = createFileRoute('/contact/merci')({
 })
 
 function Merci() {
+  const { theme } = Route.useSearch()
+
   return (
-    <main className="merci">
+    <main className={`merci ${classeTheme(theme)}`.trim()}>
       <div className="merci__inner">
         {/* Le losange d'Oysen, allumé : la demande est arrivée à la régie. */}
         <span className="merci__losange" aria-hidden="true" />
 
-        <h1 className="merci__titre">Demande reçue.</h1>
+        <h1 className="merci__titre">Merci pour votre demande.</h1>
 
         <p className="merci__texte">
-          Vous recevez un récapitulatif par e-mail.
-          <br />
-          Nous revenons vers vous sous {DELAI_REPONSE_H}&nbsp;h ouvrées.
+          Elle est bien arrivée. Nous vous rappelons sous{' '}
+          {DELAI_REPONSE_H}&nbsp;h ouvrées pour parler de votre projet.
         </p>
+
+        <p className="merci__entre-temps">En attendant notre appel, vous pouvez&nbsp;:</p>
 
         <ul className="merci__liens">
           <li>
-            <Lien className="merci__lien" href="/nos-souvenirs">
-              Voir nos événements
-              <Arrow className="merci__fleche" />
+            <Lien className="btn btn--solid" href="/nos-souvenirs">
+              Voir nos souvenirs
             </Lien>
           </li>
           <li>
-            <Lien className="merci__lien" href="/qui-sommes-nous/l-agence">
+            <Lien className="btn btn--ghost" href="/qui-sommes-nous/l-agence">
               Découvrir Oysen
-              <Arrow className="merci__fleche" />
             </Lien>
           </li>
         </ul>

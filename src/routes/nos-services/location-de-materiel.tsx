@@ -874,7 +874,7 @@ function Disponibilite() {
             <p className="champ__aide champ__aide--case" id="dispo-consentement-aide">
               Vos informations ne sont ni revendues ni utilisées pour de la
               prospection.{' '}
-              <Lien className="dispo__lien" href="/confidentialite">
+              <Lien className="dispo__lien" href="/politique-de-confidentialite">
                 Politique de confidentialité
               </Lien>
             </p>

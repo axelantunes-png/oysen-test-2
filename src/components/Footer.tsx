@@ -2,6 +2,8 @@ import { useState } from 'react'
 
 import { NAV } from './Navbar'
 import { Lien } from './Lien'
+import { ouvrirGestionCookies } from '../lib/consentement'
+import { useLienContact } from '../lib/theme'
 import {
   DEPARTEMENTS,
   PHONE_DISPLAY,
@@ -25,9 +27,7 @@ const AGENCE = [
 
 const LEGAL = [
   { label: 'Mentions légales', href: '/mentions-legales' },
-  { label: 'Politique de confidentialité', href: '/confidentialite' },
-  /* PROVISOIRE : à retirer, l'administration ne doit s'ouvrir que par son adresse. */
-  { label: 'Admin', href: '/admin-prive' },
+  { label: 'Politique de confidentialité', href: '/politique-de-confidentialite' },
 ]
 
 const INSTAGRAM = 'https://www.instagram.com/oysen.events/'
@@ -121,6 +121,8 @@ export function Footer() {
    * les mains vides.
    */
   const [phoneShown, setPhoneShown] = useState(false)
+  /* Depuis la page mariage, la page contact s'ouvre dans ses couleurs. */
+  const lienContact = useLienContact()
 
   return (
     <footer className="footer">
@@ -178,7 +180,7 @@ export function Footer() {
           <h2 className="footer__title">Contact</h2>
           <ul className="footer__list">
             <li>
-              <Lien className="footer__link" href="/contact">
+              <Lien className="footer__link" href={lienContact}>
                 Nous écrire
               </Lien>
             </li>
@@ -236,6 +238,12 @@ export function Footer() {
                 </a>
               )}
             </div>
+
+            {/* PROVISOIRE : à retirer, l'administration ne doit s'ouvrir que
+                par son adresse. */}
+            <Lien className="footer__link footer__admin" href="/admin-prive">
+              Admin
+            </Lien>
           </div>
         </div>
 
@@ -256,6 +264,18 @@ export function Footer() {
           © {new Date().getFullYear()} Oysen. Tous droits réservés.
         </p>
 
+        <p className="footer__credit">
+          Site réalisé par{' '}
+          <a
+            className="footer__markom"
+            href="https://www.markom.fr"
+            target="_blank"
+            rel="noopener"
+          >
+            MARKOM
+          </a>
+        </p>
+
         <ul className="footer__legal">
           {LEGAL.map((item) => (
             <li key={item.href}>
@@ -264,6 +284,16 @@ export function Footer() {
               </Lien>
             </li>
           ))}
+          <li>
+            {/* Rouvre le bandeau « Gestion des cookies ». */}
+            <button
+              type="button"
+              className="footer__link"
+              onClick={ouvrirGestionCookies}
+            >
+              Gérer mes cookies
+            </button>
+          </li>
         </ul>
       </div>
     </footer>

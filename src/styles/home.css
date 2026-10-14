@@ -406,7 +406,7 @@
 }
 
 .tri__slot::after {
-  right: 0;
+  right: 0.35em;
   bottom: 0;
   border-width: 0 1px 1px 0;
 }
@@ -923,15 +923,19 @@
 
 /* L'emplacement de la photo, en portrait, et l'équerre violette
    décalée sur son coin haut gauche. */
+/* La colonne de droite : la photo, puis le verbatim. Plus bas que le
+   titre et calée à droite de sa colonne. */
+.guide__visuel {
+  justify-self: end;
+  width: 88%;
+  margin-top: clamp(5rem, 12vh, 8rem);
+}
+
 .guide__photo {
   position: relative;
   display: grid;
   place-items: center;
-  /* Plus bas que le titre et calée à droite de sa colonne. */
-  justify-self: end;
-  width: 88%;
   aspect-ratio: 4 / 5;
-  margin-top: clamp(5rem, 12vh, 8rem);
   background-color: #1b1622;
   border: 1px solid var(--trait-doux);
 }
@@ -970,6 +974,47 @@
   filter: saturate(0.6) brightness(0.88) contrast(1.05);
 }
 
+/* Le verbatim, sous la photo : la voix d'Oysen. Ses deux grands
+   guillemets lavande reprennent les coins des équerres de la photo :
+   l'ouvrant en haut à gauche, une ligne au-dessus du texte, le fermant
+   en bas à droite, une ligne en dessous. Le texte, décalé des deux
+   côtés, tient entre eux. */
+.guide__verbatim {
+  --guillemet: 2.75rem;
+  position: relative;
+  margin: clamp(2.25rem, 4.5vh, 2.75rem) 0 0;
+  padding: calc(var(--guillemet) * 0.75) calc(var(--guillemet) * 0.7)
+    calc(var(--guillemet) * 0.6);
+}
+
+.guide__verbatim p {
+  margin: 0;
+  font-size: clamp(1.05rem, 1.2vw, 1.2rem);
+  line-height: 1.65;
+  text-wrap: pretty;
+  color: var(--dawn);
+}
+
+.guide__guillemet {
+  position: absolute;
+  font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  font-size: var(--guillemet);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--beam);
+  pointer-events: none;
+}
+
+.guide__guillemet--ouvrant {
+  top: -0.2em;
+  left: 0;
+}
+
+.guide__guillemet--fermant {
+  right: 0;
+  bottom: 0;
+}
+
 /* Tablette et mobile : le texte puis la photo, l'un sous l'autre. */
 @media (max-width: 900px) {
   .guide__grille {
@@ -981,7 +1026,7 @@
     max-width: none;
   }
 
-  .guide__photo {
+  .guide__visuel {
     justify-self: start;
     width: 100%;
     max-width: 30rem;
@@ -999,9 +1044,17 @@
     text-align: center;
   }
 
-  .guide__photo {
+  .guide__visuel {
     justify-self: center;
     margin-left: 0;
+  }
+
+  .guide__verbatim p {
+    text-align: center;
+  }
+
+  .guide__verbatim {
+    --guillemet: 2.4rem;
   }
 }
 

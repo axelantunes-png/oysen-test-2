@@ -311,7 +311,12 @@ export function Formulaire() {
     setErreurServeur(false)
     try {
       await envoyerDemande(construireDemande(donnees))
-      await navigate({ to: '/contact/merci' })
+      /* Venu de la page mariage, on reste dans ses couleurs (lib/theme.ts). */
+      const theme = new URLSearchParams(window.location.search).get('theme')
+      await navigate({
+        to: '/contact/merci',
+        search: theme === 'mariage' ? { theme: 'mariage' } : {},
+      })
     } catch {
       setErreurServeur(true)
       setEnvoi(false)
@@ -624,7 +629,7 @@ export function Formulaire() {
             <p className="champ__aide champ__aide--case" id="cf-consentement-aide">
               Vos informations ne sont ni revendues ni utilisées pour de la
               prospection.{' '}
-              <Lien className="formulaire__lien" href="/confidentialite">
+              <Lien className="formulaire__lien" href="/politique-de-confidentialite">
                 Politique de confidentialité
               </Lien>
             </p>

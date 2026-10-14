@@ -8,6 +8,7 @@ import {
   PHONE_TEL,
   ZONE,
 } from '../../components/home/content'
+import { classeTheme, couleurTheme, lireTheme } from '../../lib/theme'
 
 /*
  * Chemin depuis la racine du projet, et non relatif : sur une route imbriquée,
@@ -17,8 +18,10 @@ import {
 import contactCss from '/src/styles/contact.css?url'
 
 export const Route = createFileRoute('/contact/')({
-  head: () => ({
+  validateSearch: lireTheme,
+  head: ({ match }) => ({
     meta: [
+      { name: 'theme-color', content: couleurTheme(match.search.theme) },
       { title: 'Contact, Oysen' },
       {
         name: 'description',
@@ -40,8 +43,10 @@ export const Route = createFileRoute('/contact/')({
  * jamais de formulaire.
  */
 function Contact() {
+  const { theme } = Route.useSearch()
+
   return (
-    <main>
+    <main className={classeTheme(theme) || undefined}>
       <section className="contact-hero" aria-labelledby="contact-title">
         <div className="contact-hero__inner">
           <p className="section__eyebrow">Contact</p>

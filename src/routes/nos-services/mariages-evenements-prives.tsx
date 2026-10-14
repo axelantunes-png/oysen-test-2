@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react'
+import { useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 
 import { DELAI_REPONSE_H } from '../../components/home/content'
@@ -21,7 +21,8 @@ import mariageCss from '/src/styles/mariage.css?url'
 
 /* Le formulaire de contact, ouvert sur les questions « Mariage et
    événement privé » (voir Formulaire.tsx). */
-const CONTACT_MARIAGE = '/contact?profil=particulier&besoin=organisation'
+/* theme=mariage : la page contact s'ouvre dans les couleurs de la page. */
+const CONTACT_MARIAGE = '/contact?profil=particulier&besoin=organisation&theme=mariage'
 
 const TITRE = 'Organisation de mariage à Toulouse et en Occitanie | Oysen'
 const DESCRIPTION =
@@ -32,6 +33,8 @@ export const Route = createFileRoute('/nos-services/mariages-evenements-prives')
     meta: [
       { title: TITRE },
       { name: 'description', content: DESCRIPTION },
+      // La barre du navigateur, sur téléphone : le papier de la page.
+      { name: 'theme-color', content: '#f6f3ef' },
     ],
     links: [
       { rel: 'stylesheet', href: mariageCss },
@@ -58,12 +61,16 @@ export const Route = createFileRoute('/nos-services/mariages-evenements-prives')
  * complète et l'invitation finale, et nulle part ailleurs.
  */
 function Mariage() {
+  /* La formule suivie par le déroulé (S4) : choisie là, ou depuis une
+     carte d'offre (S3, « Voir le déroulé »). */
+  const [depuis, setDepuis] = useState(1)
+
   return (
-    <main className="page-mariage">
+    <main className="page-mariage theme-mariage">
       <Hero />
       <Bab />
-      <Formules />
-      <Deroule />
+      <Formules onVoirDeroule={setDepuis} />
+      <Deroule depuis={depuis} onChoisir={setDepuis} />
       <Galerie />
       <Temoignages />
       <Budget />
@@ -115,7 +122,7 @@ function Tete({
 
 const PREUVES = [
   'Toulouse, Haute-Garonne et Occitanie',
-  'Un seul interlocuteur, du premier rendez-vous au démontage',
+  'Votre wedding planner, du premier rendez-vous au démontage',
   '10+ ans d’expérience',
 ]
 
@@ -186,7 +193,7 @@ function Hero() {
 
 /* ---- S2 · Avant, après, et le pont ----
    À gauche la charge mentale : les tâches qui arrivent chez vous, une liste
-   qui ne finit pas et s'efface vers le bas. À droite le jour J avec Oysen :
+   qui ne finit pas, et le dit. À droite le jour J avec Oysen :
    une phrase, de l'air, la lumière de la salle. Entre les deux, le losange
    d'Oysen. Dessous, la phrase qui fait le pont. */
 
@@ -209,7 +216,7 @@ function Bab() {
       <div className="section__inner">
         <Tete
           surtitre="La charge mentale"
-          titre="La journée que vous imaginez, et tout ce que personne ne voit"
+          titre="La journée que vous imaginez, et le travail que ça implique"
           id="bab-title"
         />
 
@@ -228,14 +235,19 @@ function Bab() {
                 </li>
               ))}
             </ul>
+            {/* La liste ne finit pas : on le dit, plutôt que de la laisser
+                s'effacer (on cherchait à la faire défiler). */}
+            <p className="taches__suite">Et la liste s’allonge, chaque semaine…</p>
           </article>
 
           <span className="bab__pont" aria-hidden="true" />
 
           <article className="bab__apres">
-            <p className="bab__label">Après, avec Oysen</p>
+            <p className="bab__label bab__label--oysen">Avec Oysen</p>
             <p className="bab__reve">
-              Le jour J, vous arrivez comme vos invités.
+              Votre seule mission le jour&nbsp;J&nbsp;:
+              <br />
+              <span className="bab__reve-accent">savourer chaque instant.</span>
             </p>
             <ul className="bab__points">
               <li>Le lieu est prêt.</li>
@@ -286,30 +298,31 @@ const FORMULES: {
   accroche: string
   pour: string
   etats: Etat[]
-  bouton: string
+  /* L'étape du déroulé (S4) où la formule commence. */
+  depuis: number
 }[] = [
   {
     nom: 'Coordination du jour J',
     accroche: 'Vous avez tout préparé. Vivez-le.',
     pour: 'Tout est organisé, et vous ne voulez pas passer votre mariage à le gérer.',
     etats: ['oui', 'oui', 'option', 'non', 'non', 'non'],
-    bouton: 'Parler d’une coordination du jour J',
+    depuis: 5,
   },
   {
     nom: 'Organisation complète',
     vedette: true,
-    mention: 'La plus complète',
+    mention: 'La plus populaire',
     accroche: 'Vous décidez, nous faisons le reste.',
     pour: 'Vous avez une date, des envies, et pas le temps de tout mener de front.',
     etats: ['oui', 'oui', 'oui', 'oui', 'oui', 'oui'],
-    bouton: 'Parler d’une organisation complète',
+    depuis: 1,
   },
   {
     nom: 'Organisation partielle',
     accroche: 'Vous avez commencé, nous prenons le relais.',
     pour: 'Le lieu ou quelques prestataires sont réservés, et vous voulez être déchargés de la suite.',
-    etats: ['oui', 'oui', 'avalider', 'oui', 'non', 'non'],
-    bouton: 'Parler d’une organisation partielle',
+    etats: ['oui', 'oui', 'option', 'oui', 'non', 'non'],
+    depuis: 3,
   },
 ]
 
@@ -317,10 +330,10 @@ const FORMULES: {
    comprise, à l'écran et pour les lecteurs d'écran. */
 const PASTILLES: Partial<Record<Etat, string>> = {
   option: 'En option',
-  avalider: '[À valider]',
+  avalider: 'À valider',
 }
 
-function Formules() {
+function Formules({ onVoirDeroule }: { onVoirDeroule: (depuis: number) => void }) {
   return (
     <section
       className="section section--mariage section--mariage-formules"
@@ -330,7 +343,7 @@ function Formules() {
       <div className="section__inner">
         <Tete
           surtitre="Accompagnement"
-          titre="Trois niveaux d’accompagnement, selon ce que vous souhaitez garder en main"
+          titre="Trois niveaux d’accompagnement"
           id="formules-title"
           texte="Trois façons de vous accompagner, un même point d’arrivée : un jour J que vous vivez sans avoir à le gérer."
         />
@@ -369,13 +382,24 @@ function Formules() {
                 })}
               </ul>
 
-              <Lien className="lien-doux formule__lien" href={CONTACT_MARIAGE}>
-                {formule.bouton}
-                <Arrow className="lien-doux__fleche" />
-              </Lien>
+              {/* Descend au déroulé, la formule déjà choisie. L'ancre reste :
+                  sans JavaScript, le lien y saute quand même. */}
+              <a
+                className="btn btn--ghost formule__deroule"
+                href="#deroule"
+                onClick={() => onVoirDeroule(formule.depuis)}
+              >
+                Voir le déroulé
+              </a>
             </li>
           ))}
         </ul>
+
+        <p className="formules__appel">
+          <Lien className="btn btn--solid" href={CONTACT_MARIAGE}>
+            Organisons votre mariage
+          </Lien>
+        </p>
 
         <p className="formules__prive">
           Un anniversaire marquant, une fête de famille&nbsp;? Les mêmes
@@ -389,11 +413,11 @@ function Formules() {
 /* ---- S4 · Comment ça se passe ----
    Un vrai déroulé : huit étapes numérotées, parce que les formules s'y
    réfèrent (la partielle commence souvent à la 3, le jour J à la 5).
-   Mis en page comme un rétroplanning d'organisateur : en tête, trois
-   lignes, une par formule, qui partent au prorata de la frise (la
-   complète tout à gauche, la partielle à la 3, le jour J à la 5) ;
-   dessous, les huit étapes en colonnes, rang par rang. Tout le texte
-   reste affiché. (Versions précédentes : archives/mariage-s4-deroule-*.) */
+   En tête, trois cartes, une par formule : on en choisit une, et les
+   étapes qu'elle couvre s'allument. Sur ordinateur et tablette, les
+   autres restent affichées, en retrait ; sur téléphone, seules les
+   étapes de la formule choisie s'affichent. (Versions précédentes :
+   archives/mariage-s4-deroule-*.) */
 
 const ETAPES = [
   {
@@ -417,7 +441,7 @@ const ETAPES = [
   {
     quand: '4 à 6 mois avant',
     titre: 'L’ambiance',
-    nous: 'Concevoir la lumière et le son, de la cérémonie à la soirée. Suivre la décoration.',
+    nous: 'Concevoir la lumière et le son, de la cérémonie au vin d’honneur, des discours à la soirée dansante. Suivre la décoration.',
     vous: 'Validez les choix, sans entrer dans la technique.',
   },
   {
@@ -436,32 +460,37 @@ const ETAPES = [
     quand: 'Le jour J',
     titre: 'La coordination',
     nous: 'Tenir les horaires de la cérémonie à la dernière danse. Prendre chaque imprévu.',
-    vous: 'Soyez les invités de votre propre mariage.',
-    grandJour: true,
+    vous: 'Savourez chaque instant !',
   },
   {
     quand: 'Le soir ou le lendemain',
     titre: 'Le démontage et le bilan',
     nous: 'Démonter, récupérer notre matériel, revenir vers vous.',
-    vous: 'Dites-nous ce que vous en avez retenu.',
+    vous: 'Parlez-nous de vos souvenirs !',
   },
 ]
 
-/* Les trois formules, chacune une ligne en tête du rétroplanning : elle
-   part de l'étape où la formule commence et court jusqu'à la dernière. */
+/* Les trois formules : chacune couvre les étapes à partir de `depuis`. */
 const VOIES = [
   { formule: 'Complète', depuis: 1, texte: 'les huit étapes' },
   { formule: 'Partielle', depuis: 3, texte: 'là où vous en êtes, souvent dès l’étape 3' },
-  { formule: 'Jour J', depuis: 5, texte: 'les étapes 5 à 8, [trois mois] avant la date' },
+  { formule: 'Jour J', depuis: 5, texte: 'les étapes 5 à 8, trois mois avant la date' },
 ]
 
 const numero = (rang: number) => String(rang).padStart(2, '0')
 
-function Deroule() {
+function Deroule({
+  depuis,
+  onChoisir,
+}: {
+  depuis: number
+  onChoisir: (depuis: number) => void
+}) {
   return (
     <section
       className="section section--mariage section--mariage-deroule"
       aria-labelledby="deroule-title"
+      id="deroule"
     >
       <div className="section__inner">
         <Tete
@@ -471,48 +500,48 @@ function Deroule() {
           texte="Pour une organisation complète, idéalement 12 à 18 mois avant. Plus tard, le calendrier se resserre, la méthode reste la même."
         />
 
-        <div className="planning">
-          <ul className="voies">
+        <div className="deroule">
+          <ul className="deroule__choix" aria-label="Choisir une formule">
             {VOIES.map((voie) => (
-              <li
-                className="voie"
-                key={voie.formule}
-                style={{ '--depuis': voie.depuis } as CSSProperties}
-              >
-                <span className="voie__nom">{voie.formule}</span>
-                <span className="voie__texte">{voie.texte}</span>
+              <li key={voie.formule}>
+                <button
+                  type="button"
+                  className="deroule__carte"
+                  aria-pressed={depuis === voie.depuis}
+                  aria-controls="deroule-etapes"
+                  onClick={() => onChoisir(voie.depuis)}
+                >
+                  <span className="deroule__formule">{voie.formule}</span>
+                  <span className="deroule__couvre">{voie.texte}</span>
+                </button>
               </li>
             ))}
           </ul>
 
-          {/* Sous les lignes, quand les étapes s'empilent : l'échelle de
-              01 à 08 qui donne leurs départs. */}
-          <p className="voies__echelle" aria-hidden="true">
-            {ETAPES.map((etape, index) => (
-              <span key={etape.titre}>{numero(index + 1)}</span>
-            ))}
-          </p>
-
-          <ol className="planning__etapes">
-            {ETAPES.map((etape, index) => (
-              <li
-                className={`planning__etape${etape.grandJour ? ' planning__etape--jour-j' : ''}`}
-                key={etape.titre}
-                style={{ '--col': index + 1 } as CSSProperties}
-              >
-                <p className="planning__numero">{numero(index + 1)}</p>
-                <p className="planning__quand">{etape.quand}</p>
-                <h3 className="planning__titre">{etape.titre}</h3>
-                <p className="planning__nous">
-                  <span className="planning__qui">Nous</span>
-                  {etape.nous}
-                </p>
-                <p className="planning__vous">
-                  <span className="planning__qui">Vous</span>
-                  {etape.vous}
-                </p>
-              </li>
-            ))}
+          <ol className="deroule__etapes" id="deroule-etapes">
+            {ETAPES.map((etape, index) => {
+              const couverte = index + 1 >= depuis
+              return (
+                <li
+                  className={`deroule__etape${couverte ? ' deroule__etape--couverte' : ''}`}
+                  key={etape.titre}
+                >
+                  <p className="deroule__numero">{numero(index + 1)}</p>
+                  <div className="deroule__tete">
+                    <p className="deroule__quand">{etape.quand}</p>
+                    <h3 className="deroule__titre">{etape.titre}</h3>
+                  </div>
+                  <p className="deroule__nous">
+                    <span className="deroule__qui">Nous</span>
+                    {etape.nous}
+                  </p>
+                  <p className="deroule__vous">
+                    <span className="deroule__qui">Vous</span>
+                    {etape.vous}
+                  </p>
+                </li>
+              )
+            })}
           </ol>
         </div>
       </div>
@@ -530,7 +559,7 @@ const GALERIE: { forme: string; legende?: string; photo?: boolean }[] = [
   {
     forme: 'grande',
     photo: true,
-    legende: '[Moment] · [type de lieu, commune] · [ce qui a été installé ou résolu]',
+    legende: 'Moment · type de lieu, commune · ce qui a été installé ou résolu',
   },
   { forme: 'haute' },
   { forme: 'carree' },
@@ -601,16 +630,16 @@ function Galerie() {
 const TEMOIGNAGES = [
   {
     texte:
-      '[Ce qui les faisait hésiter] … [ce qui les a décidés] … [le moment qui les a marqués le jour J]',
-    couple: '[Prénom] et [Prénom]',
-    detail: 'Mariés en [mois année] · [lieu] · [formule]',
+      'Ce qui les faisait hésiter … ce qui les a décidés … le moment qui les a marqués le jour J',
+    couple: 'Prénom et Prénom',
+    detail: 'Mariés en mois année · lieu · formule',
     valide: false,
   },
   {
     texte:
-      '[Ce qui les faisait hésiter] … [ce qui les a décidés] … [le moment qui les a marqués le jour J]',
-    couple: '[Prénom] et [Prénom]',
-    detail: 'Mariés en [mois année] · [lieu] · [formule]',
+      'Ce qui les faisait hésiter … ce qui les a décidés … le moment qui les a marqués le jour J',
+    couple: 'Prénom et Prénom',
+    detail: 'Mariés en mois année · lieu · formule',
     valide: false,
   },
 ]
@@ -654,18 +683,18 @@ function Temoignages() {
 const BUDGETS = [
   {
     nom: 'Organisation complète',
-    montant: '[Z] €',
+    montant: '5 500 €',
     couvre: 'Du premier échange au démontage, son et lumière compris',
   },
   {
     nom: 'Organisation partielle',
-    montant: '[Y] €',
+    montant: '3 200 €',
     couvre: 'Votre projet repris là où il en est, jusqu’au démontage',
   },
   {
     nom: 'Coordination du jour J',
-    montant: '[X] €',
-    couvre: 'Les [trois] derniers mois de préparation et notre présence le jour J',
+    montant: '2 200 €',
+    couvre: 'Les trois derniers mois de préparation et notre présence le jour J',
   },
 ]
 
@@ -678,7 +707,7 @@ const VARIABLES = [
 
 const DEVIS = [
   'Nos honoraires et notre matériel, ligne par ligne',
-  'Vos prestataires chiffrés à part [à valider : facturés par chacun ou par Oysen]',
+  'Vos prestataires chiffrés à part à valider : facturés par chacun ou par Oysen',
   'Aucun poste « divers » : chaque ligne se comprend',
 ]
 
@@ -747,19 +776,25 @@ function Budget() {
 }
 
 /* ---- S8 · Les questions ----
-   La tête à gauche, les cinq questions à droite, en dépliants : les
+   La tête à gauche, les six questions à droite, en dépliants : les
    mêmes que la FAQ de l'accueil (classes .faq, home.css), repeintes par
    les couleurs de la page. Les réponses nourrissent aussi les données
-   structurées (FAQPage). */
+   structurées (FAQPage), en texte seul : `lien` fait seulement du mot
+   qu'il désigne un lien, à l'écran. */
 
-const QUESTIONS = [
+const QUESTIONS: { q: string; a: string; lien?: { mot: string; href: string } }[] = [
   {
     q: 'Combien de temps à l’avance faut-il contacter Oysen ?',
-    a: 'Pour une organisation complète, idéalement 12 à 18 mois avant la date. Pour une coordination du jour J, [trois mois] suffisent. Les mariages se concentrent de mai à septembre : si votre date tombe dans cette période, écrivez-nous dès qu’elle est fixée.',
+    a: 'Pour une organisation complète, idéalement 12 à 18 mois avant la date. Pour une coordination du jour J, trois mois suffisent. Les mariages se concentrent de mai à septembre : si votre date tombe dans cette période, écrivez-nous dès qu’elle est fixée.',
   },
   {
     q: 'Pouvez-vous travailler avec des prestataires que nous avons déjà réservés ?',
-    a: 'Oui. Nous les contactons, intégrons leurs horaires au déroulé et les accueillons le jour J. C’est le principe de l’organisation partielle et de la coordination du jour J. Si un wedding planner vous accompagne déjà, nous travaillons à ses côtés sur la technique et le jour J.',
+    a: 'Oui. Nous les contactons, intégrons leurs horaires au déroulé et les accueillons le jour J. C’est le principe de l’organisation partielle et de la coordination du jour J. Vous avez déjà une wedding planner ? Nous pouvons n’intervenir que sur la technique.',
+    lien: { mot: 'technique', href: '/nos-services/prestation-technique' },
+  },
+  {
+    q: 'Agence ou wedding planner indépendante : quelle différence ?',
+    a: 'Une wedding planner indépendante, ou organisatrice de mariage, trouve et coordonne vos prestataires. Oysen fait la même chose, en agence événementielle, et installe aussi le son et la lumière avec son propre matériel. Selon la taille du mariage, des techniciens de notre réseau nous épaulent. Pour vous, c’est un prestataire de moins à trouver, et un seul contact pour tout.',
   },
   {
     q: 'Nous n’avons pas encore de lieu : pouvez-vous nous aider à le trouver ?',
@@ -767,13 +802,28 @@ const QUESTIONS = [
   },
   {
     q: 'Qui sera présent le jour de notre mariage ?',
-    a: 'Votre interlocuteur Oysen, celui qui a préparé votre mariage avec vous, de l’installation à [la fin de la soirée]. Selon le nombre d’invités, des techniciens de notre réseau l’épaulent. Vos prestataires ont un seul contact, et ce contact n’est pas vous.',
+    a: 'Votre interlocuteur Oysen, celui qui a préparé votre mariage avec vous, de l’installation à la fin de la soirée. Selon le nombre d’invités, des techniciens de notre réseau l’épaulent. Vos prestataires ont un seul contact.',
   },
   {
     q: 'Et si quelque chose ne se passe pas comme prévu le jour J ?',
     a: 'Nous le préparons avant qu’il n’arrive : un lieu repéré avec une solution de repli, le son et la lumière testés avant les invités, du matériel de secours pour l’essentiel. En cas de retard ou d’imprévu, les prestataires nous appellent, nous.',
   },
 ]
+
+/* La réponse, avec son mot-lien s'il en a un (sa dernière occurrence). */
+function Reponse({ texte, lien }: { texte: string; lien?: { mot: string; href: string } }) {
+  const position = lien ? texte.lastIndexOf(lien.mot) : -1
+  if (!lien || position < 0) return <>{texte}</>
+  return (
+    <>
+      {texte.slice(0, position)}
+      <Lien className="faq__lien" href={lien.href}>
+        {lien.mot}
+      </Lien>
+      {texte.slice(position + lien.mot.length)}
+    </>
+  )
+}
 
 function Questions() {
   return (
@@ -803,7 +853,9 @@ function Questions() {
                 <span className="faq__q-texte">{item.q}</span>
                 <span className="faq__signe" aria-hidden="true" />
               </summary>
-              <p className="faq__a">{item.a}</p>
+              <p className="faq__a">
+                <Reponse texte={item.a} lien={item.lien} />
+              </p>
             </details>
           ))}
         </div>
@@ -852,7 +904,7 @@ function Invitation() {
 
           <div className="invitation__actions">
             <Lien className="btn btn--solid" href={CONTACT_MARIAGE}>
-              Parlons de votre mariage
+              Organisons votre mariage
             </Lien>
             <Lien className="lien-doux" href="/qui-sommes-nous/le-fondateur">
               Découvrir qui prépare votre mariage

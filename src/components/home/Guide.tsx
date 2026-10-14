@@ -7,7 +7,7 @@ import { MOUVEMENTS, type Mouvement } from './content'
  * Deux colonnes : à gauche le nom, le rôle, puis les trois mouvements dans
  * l'ordre où les choses se sont produites (le constat, la décision, la
  * méthode), les faits et la phrase qui ferme la section. À droite, la
- * photo.
+ * photo, et sous elle un verbatim entre guillemets.
  *
  * Chaque mouvement a sa propre mise en forme : le constat en deux lignes
  * simples, la décision et ses trois métiers dans une bande entre deux
@@ -105,18 +105,37 @@ export function Guide() {
           sur tablette et mobile. Sous la ligne de flottaison : chargée à
           l'approche.
         */}
-        <div className="guide__photo">
-          <img
-            className="guide__img"
-            src="/images/guide-oysen-720.webp"
-            srcSet="/images/guide-oysen-480.webp 480w, /images/guide-oysen-720.webp 720w, /images/guide-oysen-944.webp 944w"
-            sizes="(max-width: 900px) min(calc(100vw - 3rem), 30rem), min(36vw, 32rem)"
-            width={944}
-            height={1180}
-            alt="Le fondateur d'Oysen, de dos, aux commandes de la console son pendant une soirée"
-            loading="lazy"
-            decoding="async"
-          />
+        <div className="guide__visuel">
+          <div className="guide__photo">
+            <img
+              className="guide__img"
+              src="/images/guide-oysen-720.webp"
+              srcSet="/images/guide-oysen-480.webp 480w, /images/guide-oysen-720.webp 720w, /images/guide-oysen-944.webp 944w"
+              sizes="(max-width: 900px) min(calc(100vw - 3rem), 30rem), min(36vw, 32rem)"
+              width={944}
+              height={1180}
+              alt="Le fondateur d'Oysen, de dos, aux commandes de la console son pendant une soirée"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
+          {/* Le verbatim, sous la photo : ce qui fait avancer Oysen. Ses
+              guillemets reprennent les deux coins des équerres de la photo,
+              l'ouvrant en haut à gauche, le fermant en bas à droite. */}
+          <blockquote className="guide__verbatim">
+            <span className="guide__guillemet guide__guillemet--ouvrant" aria-hidden="true">
+              «
+            </span>
+            <p>
+              Oysen attache une importance particulière à vos retours. Ce qui
+              nous motive, c’est de vous aider à créer des souvenirs
+              inoubliables.
+            </p>
+            <span className="guide__guillemet guide__guillemet--fermant" aria-hidden="true">
+              »
+            </span>
+          </blockquote>
         </div>
       </div>
     </section>

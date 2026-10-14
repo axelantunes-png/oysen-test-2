@@ -2,6 +2,7 @@ import { useEffect, useId, useRef, useState } from 'react'
 import { useRouterState } from '@tanstack/react-router'
 
 import { Lien } from './Lien'
+import { useLienContact } from '../lib/theme'
 
 type SubItem = { label: string; href: string }
 type NavItem = { label: string; href: string; children?: SubItem[] }
@@ -117,6 +118,9 @@ export function Navbar() {
   const chemin = normaliser(
     useRouterState({ select: (state) => state.location.pathname }),
   )
+  /* Depuis la page mariage, Contact s'ouvre dans ses couleurs (lib/theme.ts). */
+  const lienContact = useLienContact()
+  const adresse = (href: string) => (href === '/contact' ? lienContact : href)
 
   /*
    * Un menu ouvert verrouille la barre en place : l'escamoter emporterait
@@ -263,7 +267,7 @@ export function Navbar() {
                     <li className="nav__item" key={item.label}>
                       <Lien
                         className={`nav__link${estActif(item, chemin) ? ' nav__link--actif' : ''}`}
-                        href={item.href}
+                        href={adresse(item.href)}
                         aria-current={mene(item.href, chemin) ? 'page' : undefined}
                       >
                         {item.label}
@@ -361,7 +365,7 @@ export function Navbar() {
                   <li className="nav__mobile-item" key={item.label}>
                     <Lien
                       className={`nav__mobile-link${estActif(item, chemin) ? ' nav__mobile-link--actif' : ''}`}
-                      href={item.href}
+                      href={adresse(item.href)}
                       aria-current={mene(item.href, chemin) ? 'page' : undefined}
                       onClick={() => setDrawerOpen(false)}
                     >
