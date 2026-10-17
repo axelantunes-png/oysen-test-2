@@ -13,6 +13,7 @@ import { Plan } from '../../components/agence/Plan'
 import { Trajet } from '../../components/agence/Trajet'
 import { Arrow } from '../../components/home/icons'
 import { Lien } from '../../components/Lien'
+import { canonical } from '../../lib/canonical'
 
 /*
  * Chemin depuis la racine du projet, et non relatif : sur une route imbriquée,
@@ -33,6 +34,7 @@ export const Route = createFileRoute('/qui-sommes-nous/l-agence')({
     ],
     /* La feuille n'est chargée que sur cette page, pas sur tout le site. */
     links: [
+      canonical('/qui-sommes-nous/l-agence'),
       { rel: 'stylesheet', href: agenceCss },
     ],
   }),
@@ -556,15 +558,24 @@ function Fondateur() {
         </div>
 
         {/*
-          EN ATTENTE du portrait : un cadre de visée tient la place. Pour
-          poser la photo, remplacer le cadre par
-          <img className="fondateur__photo" src="…" alt="Mathis Amato" …/>,
-          traitée pour la salle sombre (voir .fondateur__photo).
+          La photo complète, fond compris, recadrée en 4/5 comme son cadre,
+          en trois largeurs : 400 pour le téléphone, 640 pour la tablette
+          et l'ordinateur, 1053 pour les écrans denses. Traitée pour la
+          salle sombre (voir .fondateur__photo). Sous la ligne de
+          flottaison : chargée à l'approche.
         */}
         <figure className="fondateur__portrait">
-          <div className="fondateur__cadre" aria-hidden="true">
-            <span className="fondateur__visee">Portrait à fournir</span>
-          </div>
+          <img
+            className="fondateur__photo"
+            src="/images/fondateur/fondateur-mathis-640.webp"
+            srcSet="/images/fondateur/fondateur-mathis-400.webp 400w, /images/fondateur/fondateur-mathis-640.webp 640w, /images/fondateur/fondateur-mathis-1053.webp 1053w"
+            sizes="(max-width: 760px) 18rem, 24rem"
+            width={1053}
+            height={1316}
+            alt="Mathis Amato, fondateur d’Oysen"
+            loading="lazy"
+            decoding="async"
+          />
         </figure>
 
         <div className="fondateur__texte">

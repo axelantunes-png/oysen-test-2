@@ -6,6 +6,7 @@ import { PERSONNES } from '../../components/contact/content'
 import { PHONE_DISPLAY, PHONE_TEL } from '../../components/home/content'
 import { Arrow } from '../../components/home/icons'
 import { Lien } from '../../components/Lien'
+import { canonical } from '../../lib/canonical'
 
 /*
  * Chemin depuis la racine du projet, et non relatif : sur une route imbriquée,
@@ -24,7 +25,10 @@ export const Route = createFileRoute('/nos-services/location-de-materiel')({
       { title: TITRE },
       { name: 'description', content: DESCRIPTION },
     ],
-    links: [{ rel: 'stylesheet', href: locationCss }],
+    links: [
+      canonical('/nos-services/location-de-materiel'),
+      { rel: 'stylesheet', href: locationCss },
+    ],
     scripts: [
       {
         type: 'application/ld+json',
@@ -210,6 +214,8 @@ const CORPS: {
       'Lyres asservies',
       'Découpes',
       'Machines à brouillard',
+      'Machines à étincelles froides',
+      'Machines à fumée lourde',
       'Consoles lumière',
     ],
   },
@@ -218,7 +224,7 @@ const CORPS: {
     /* Un portique : la poutre triangulée, les pieds, le lest. */
     trace: 'M4 21V4.5h16V21M4 8h16M4 4.5l4 3.5 4-3.5 4 3.5 4-3.5M2.5 21h3M18.5 21h3',
     capacite: 'Jusqu’à 1 500 personnes',
-    equipements: ['Scènes', 'Praticables', 'Ponts alu', 'Pieds de levage', 'Totems'],
+    equipements: ['Praticables', 'Structures alu', 'Pieds de levage', 'Totems'],
   },
   {
     nom: 'Vidéo',

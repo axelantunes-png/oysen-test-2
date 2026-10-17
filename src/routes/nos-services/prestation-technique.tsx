@@ -3,6 +3,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Arrow } from '../../components/home/icons'
 import { Lien } from '../../components/Lien'
+import { canonical } from '../../lib/canonical'
 
 /*
  * Chemin depuis la racine du projet, et non relatif : sur une route imbriquée,
@@ -32,7 +33,10 @@ export const Route = createFileRoute('/nos-services/prestation-technique')({
       { title: TITRE },
       { name: 'description', content: DESCRIPTION },
     ],
-    links: [{ rel: 'stylesheet', href: techniqueCss }],
+    links: [
+      canonical('/nos-services/prestation-technique'),
+      { rel: 'stylesheet', href: techniqueCss },
+    ],
     scripts: [
       {
         type: 'application/ld+json',
@@ -510,11 +514,11 @@ const QUESTIONS = [
   },
   {
     q: 'Quels sont vos délais de réservation ?',
-    a: 'Dès que vous avez une date. Nous regardons d’abord si nous sommes libres, puis nous chiffrons. [À confirmer : délai de réservation]',
+    a: 'Dès que vous avez une date. Nous regardons d’abord si nous sommes libres, puis nous chiffrons.',
   },
   {
     q: 'Livrez-vous et installez-vous ?',
-    a: 'Oui. Nous apportons le matériel, nous l’installons et nous le reprenons. [À confirmer : zone couverte et frais de déplacement]',
+    a: 'Oui. Nous apportons le matériel, nous l’installons et nous le reprenons.',
   },
 ]
 

@@ -3,6 +3,7 @@ import type { CSSProperties, ReactNode } from 'react'
 
 import { Arrow } from '../../components/home/icons'
 import { Lien } from '../../components/Lien'
+import { canonical } from '../../lib/canonical'
 
 /*
  * Chemin depuis la racine du projet, et non relatif : sur une route imbriquée,
@@ -22,6 +23,7 @@ export const Route = createFileRoute('/qui-sommes-nous/le-fondateur')({
       },
     ],
     links: [
+      canonical('/qui-sommes-nous/le-fondateur'),
       { rel: 'stylesheet', href: fondateurCss },
     ],
   }),
@@ -29,16 +31,14 @@ export const Route = createFileRoute('/qui-sommes-nous/le-fondateur')({
 })
 
 /*
- * Le portrait détouré, sur fond transparent (WebP avec transparence),
- * coupé à mi-cuisses. Tant qu'il vaut null, une silhouette tient sa place.
- *
- * EXEMPLE, À REMPLACER par le vrai portrait du fondateur : exporter le
- * nouveau fichier aux mêmes noms (600 et 900 px de large) dans
- * public/images/fondateur/, rien d'autre à changer.
+ * Le portrait détouré de Mathis, sur fond transparent (WebP avec
+ * transparence), coupé sous la taille. Trois largeurs : 480 pour le
+ * téléphone, 720 pour la tablette, 1053 pour l'ordinateur et les écrans
+ * denses. Tant qu'il vaut null, une silhouette tient sa place.
  */
-const PORTRAIT: string | null = '/images/fondateur/fondateur-portrait-900.webp'
+const PORTRAIT: string | null = '/images/fondateur/fondateur-mathis-detoure-720.webp'
 const PORTRAIT_SRCSET =
-  '/images/fondateur/fondateur-portrait-600.webp 600w, /images/fondateur/fondateur-portrait-900.webp 900w'
+  '/images/fondateur/fondateur-mathis-detoure-480.webp 480w, /images/fondateur/fondateur-mathis-detoure-720.webp 720w, /images/fondateur/fondateur-mathis-detoure-1053.webp 1053w'
 
 /**
  * La page « Le fondateur ».
@@ -62,7 +62,9 @@ function Fondateur() {
       <Parcours />
       <Savoirs />
       <Marquant />
-      <Articles />
+      {/* Le blog : masqué tant qu'il n'y a pas de vrais articles. Pour le
+          rétablir, décommenter.
+      <Articles /> */}
       <Appel />
     </main>
   )
@@ -118,8 +120,8 @@ function Ouverture() {
               src={PORTRAIT}
               srcSet={PORTRAIT_SRCSET}
               sizes="(max-width: 760px) 72vw, 34rem"
-              width={900}
-              height={1350}
+              width={1053}
+              height={1493}
               alt="Portrait de Mathis Amato"
               decoding="async"
             />
@@ -207,7 +209,7 @@ function Tete({
    sur toute la largeur. */
 
 const REPERES = [
-  { label: 'Aujourd’hui', valeur: 'Ingénieur travaux', detail: 'dans le bâtiment' },
+  { label: 'Aujourd’hui', valeur: 'Ingénieur travaux', detail: 'génie civil' },
   { label: 'Formation', valeur: 'Génie civil', detail: 'UPSSITECH, Toulouse' },
   { label: 'Depuis 2026', valeur: 'Fondateur d’Oysen', detail: 'agence événementielle' },
 ]

@@ -100,7 +100,8 @@ export function Guide() {
         </div>
 
         {/*
-          Recadrée en 4/5, en trois largeurs. sizes suit la grille : la
+          Le portrait de Mathis, la même photo que sur « L'agence » :
+          recadrée en 4/5, en trois largeurs. sizes suit la grille : la
           moitié de la colonne de texte à 88 % sur ordinateur, 30rem au plus
           sur tablette et mobile. Sous la ligne de flottaison : chargée à
           l'approche.
@@ -109,12 +110,12 @@ export function Guide() {
           <div className="guide__photo">
             <img
               className="guide__img"
-              src="/images/guide-oysen-720.webp"
-              srcSet="/images/guide-oysen-480.webp 480w, /images/guide-oysen-720.webp 720w, /images/guide-oysen-944.webp 944w"
+              src="/images/fondateur/fondateur-mathis-640.webp"
+              srcSet="/images/fondateur/fondateur-mathis-400.webp 400w, /images/fondateur/fondateur-mathis-640.webp 640w, /images/fondateur/fondateur-mathis-1053.webp 1053w"
               sizes="(max-width: 900px) min(calc(100vw - 3rem), 30rem), min(36vw, 32rem)"
-              width={944}
-              height={1180}
-              alt="Le fondateur d'Oysen, de dos, aux commandes de la console son pendant une soirée"
+              width={1053}
+              height={1316}
+              alt="Mathis Amato, fondateur d’Oysen"
               loading="lazy"
               decoding="async"
             />

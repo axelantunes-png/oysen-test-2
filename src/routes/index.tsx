@@ -5,7 +5,8 @@ import { Appel } from '../components/home/Appel'
 import { Faq } from '../components/home/Faq'
 import { Guide } from '../components/home/Guide'
 import { Methode } from '../components/home/Methode'
-import { Preuves } from '../components/home/Preuves'
+// S7 masquée en attendant de vrais témoignages, voir plus bas.
+// import { Preuves } from '../components/home/Preuves'
 import { Probleme } from '../components/home/Probleme'
 import { Reassurance } from '../components/home/Reassurance'
 import { Realisations } from '../components/home/Realisations'
@@ -18,8 +19,12 @@ import {
 } from '../components/home/content'
 import { rideauJoue } from '../components/Rideau'
 import { Lien } from '../components/Lien'
+import { canonical } from '../lib/canonical'
 
 export const Route = createFileRoute('/')({
+  head: () => ({
+    links: [canonical('/')],
+  }),
   component: Home,
 })
 
@@ -253,7 +258,9 @@ function Home() {
         <Guide />
         <Reassurance />
         <Methode />
-        <Preuves />
+        {/* S7, les témoignages : masquée tant qu'il n'y a pas de vrais
+            témoignages. Pour la rétablir, décommenter ici et l'import.
+        <Preuves /> */}
         <Realisations />
         <Faq />
         <Appel />

@@ -2,6 +2,7 @@ import { createFileRoute, notFound } from '@tanstack/react-router'
 
 import { FicheAttente, HubHero } from '../../components/hub/Hub'
 import { SOUVENIRS } from '../../components/souvenirs/content'
+import { canonical } from '../../lib/canonical'
 
 /*
  * Chemin depuis la racine du projet, et non relatif : sur une route imbriquée,
@@ -16,14 +17,17 @@ export const Route = createFileRoute('/nos-souvenirs/$slug')({
     if (!souvenir) throw notFound()
     return souvenir
   },
-  head: ({ loaderData }) => ({
+  head: ({ loaderData, params }) => ({
     meta: loaderData
       ? [
           { title: `${loaderData.titre} | Oysen` },
           { name: 'description', content: loaderData.resume },
         ]
       : [],
-    links: [{ rel: 'stylesheet', href: hubCss }],
+    links: [
+      ...(loaderData ? [canonical(`/nos-souvenirs/${params.slug}`)] : []),
+      { rel: 'stylesheet', href: hubCss },
+    ],
   }),
   component: Fiche,
 })

@@ -4,6 +4,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { DELAI_REPONSE_H, RC_PRO } from '../../components/home/content'
 import { Arrow } from '../../components/home/icons'
 import { Lien } from '../../components/Lien'
+import { canonical } from '../../lib/canonical'
 
 /*
  * Chemin depuis la racine du projet, et non relatif : sur une route imbriquée,
@@ -29,6 +30,7 @@ export const Route = createFileRoute('/nos-services/collectivites-institutionnel
       { name: 'description', content: DESCRIPTION },
     ],
     links: [
+      canonical('/nos-services/collectivites-institutionnels'),
       { rel: 'stylesheet', href: collectiviteCss },
     ],
     scripts: [

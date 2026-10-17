@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import { EMAIL } from '../components/contact/content'
+import { canonical } from '../lib/canonical'
 
 /* Même raison que sur la page Contact : chemin depuis la racine. */
 import legalCss from '/src/styles/legal.css?url'
@@ -15,7 +16,10 @@ export const Route = createFileRoute('/politique-de-confidentialite')({
           'Ce qu’Oysen fait de vos données : demandes de devis, cookies, durées de conservation et vos droits, expliqués simplement.',
       },
     ],
-    links: [{ rel: 'stylesheet', href: legalCss }],
+    links: [
+      canonical('/politique-de-confidentialite'),
+      { rel: 'stylesheet', href: legalCss },
+    ],
   }),
   component: PolitiqueDeConfidentialite,
 })

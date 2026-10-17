@@ -32,6 +32,8 @@ const LEGAL = [
 
 const INSTAGRAM = 'https://www.instagram.com/oysen.events/'
 
+const TIKTOK = 'https://www.tiktok.com/@oysen_event'
+
 /**
  * À RENSEIGNER : l'adresse de la page Facebook. Tant qu'elle est vide, le
  * logo est posé mais inerte, et il sort de l'arbre d'accessibilité : une
@@ -96,6 +98,39 @@ function FacebookIcon() {
       />
       <path
         d="M14.9 7.7h-1a2 2 0 0 0-2 2v7.6M9.7 11.9h4.6"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+/** Le glyphe TikTok, la note dans le même cadre et au même trait. */
+function TiktokIcon() {
+  return (
+    <svg
+      className="footer__reseau-icon"
+      viewBox="0 0 24 24"
+      width="20"
+      height="20"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <rect
+        x="3.25"
+        y="3.25"
+        width="17.5"
+        height="17.5"
+        rx="5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M12.7 7v7.6a2.3 2.3 0 1 1-2.3-2.3M12.7 7a3 3 0 0 0 3 3"
         fill="none"
         stroke="currentColor"
         strokeWidth="1.5"
@@ -218,6 +253,16 @@ export function Footer() {
                 aria-label="Oysen sur Instagram, nouvel onglet"
               >
                 <InstagramIcon />
+              </a>
+
+              <a
+                className="footer__reseau"
+                href={TIKTOK}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Oysen sur TikTok, nouvel onglet"
+              >
+                <TiktokIcon />
               </a>
 
               {FACEBOOK ? (

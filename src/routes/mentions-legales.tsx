@@ -3,6 +3,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { EMAIL } from '../components/contact/content'
 import { PHONE_DISPLAY, PHONE_TEL } from '../components/home/content'
 import { Lien } from '../components/Lien'
+import { canonical } from '../lib/canonical'
 
 /* Même raison que sur la page Contact : chemin depuis la racine. */
 import legalCss from '/src/styles/legal.css?url'
@@ -17,7 +18,10 @@ export const Route = createFileRoute('/mentions-legales')({
           'Éditeur, hébergeur et coordonnées du site oysen.fr, édité par OYSEN SAS à Toulouse.',
       },
     ],
-    links: [{ rel: 'stylesheet', href: legalCss }],
+    links: [
+      canonical('/mentions-legales'),
+      { rel: 'stylesheet', href: legalCss },
+    ],
   }),
   component: MentionsLegales,
 })

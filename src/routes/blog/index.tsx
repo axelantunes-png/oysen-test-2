@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { ARTICLES } from '../../components/blog/content'
 import { CarteHub, HubHero } from '../../components/hub/Hub'
+import { canonical } from '../../lib/canonical'
 
 /*
  * Chemin depuis la racine du projet, et non relatif : sur une route imbriquée,
@@ -20,7 +21,10 @@ export const Route = createFileRoute('/blog/')({
       { title: TITRE },
       { name: 'description', content: DESCRIPTION },
     ],
-    links: [{ rel: 'stylesheet', href: hubCss }],
+    links: [
+      canonical('/blog'),
+      { rel: 'stylesheet', href: hubCss },
+    ],
   }),
   component: Blog,
 })

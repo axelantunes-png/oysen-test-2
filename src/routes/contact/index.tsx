@@ -9,6 +9,7 @@ import {
   ZONE,
 } from '../../components/home/content'
 import { classeTheme, couleurTheme, lireTheme } from '../../lib/theme'
+import { canonical } from '../../lib/canonical'
 
 /*
  * Chemin depuis la racine du projet, et non relatif : sur une route imbriquée,
@@ -28,7 +29,10 @@ export const Route = createFileRoute('/contact/')({
         content: `Décrivez votre événement en quelques minutes : Oysen vous répond sous ${DELAI_REPONSE_H} h ouvrées, avec un premier ordre de grandeur budgétaire.`,
       },
     ],
-    links: [{ rel: 'stylesheet', href: contactCss }],
+    links: [
+      canonical('/contact'),
+      { rel: 'stylesheet', href: contactCss },
+    ],
   }),
   component: Contact,
 })

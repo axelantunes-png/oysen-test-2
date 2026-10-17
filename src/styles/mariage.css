@@ -1242,6 +1242,23 @@
   border-top-color: var(--violet);
 }
 
+/* Sur ordinateur, l'organisation complète passe au centre, dans l'ordre
+   des formules au-dessus : le jour J, la complète, la partielle. Sur
+   tablette et téléphone, une seule colonne, l'ordre du code reste. */
+@media (min-width: 1024px) {
+  .budget:nth-child(1) {
+    order: 2;
+  }
+
+  .budget:nth-child(2) {
+    order: 3;
+  }
+
+  .budget:nth-child(3) {
+    order: 1;
+  }
+}
+
 .budget__nom {
   margin: 0;
   font-family: 'Azeret Mono', ui-monospace, monospace;

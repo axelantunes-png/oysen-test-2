@@ -837,10 +837,14 @@
   color: #ffffff;
 }
 
-/* Les trois métiers dans une bande, séparés par des filets verticaux. */
+/* Les trois métiers dans une bande, séparés par des filets verticaux. La
+   bande se cale sur sa largeur de texte : les filets horizontaux
+   s'arrêtent à droite sur la fin de « Technique ». */
 .guide__metiers {
   display: flex;
   flex-wrap: wrap;
+  width: fit-content;
+  max-width: 100%;
   margin: clamp(1.1rem, 2vh, 1.4rem) 0 0;
   padding: clamp(0.85rem, 1.6vh, 1.05rem) 0;
   list-style: none;
@@ -857,6 +861,11 @@
 
 .guide__metiers li:first-child {
   padding-left: 0;
+}
+
+/* Les filets dépassent à peine la fin de « Technique ». */
+.guide__metiers li:last-child {
+  padding-right: 0.1875rem;
 }
 
 .guide__metiers li + li {

@@ -296,9 +296,9 @@ export const METHODE: readonly Etape[] = [
 /**
  * S7. Les trois témoignages filmés, en format portrait.
  *
- * ⚠️ PROVISOIRE : les trois vidéos de `public/videos/temoignages/` sont des
- * exemples fournis pour caler la mise en page. Elles devront être
- * remplacées par les vraies avant la mise en ligne.
+ * ⚠️ MASQUÉE : les vidéos d'exemple ont été retirées et la section est en
+ * commentaire dans `routes/index.tsx`, en attendant de vrais témoignages.
+ * Les vidéos iront dans `public/videos/temoignages/`.
  *
  * `video` est le nom du fichier, sans extension. Sans lui, la carte affiche
  * son emplacement réservé.
@@ -306,9 +306,9 @@ export const METHODE: readonly Etape[] = [
 export type Temoignage = { nom: string; evenement: string; video?: string }
 
 export const TEMOIGNAGES: readonly Temoignage[] = [
-  { nom: 'Axel Antunes', evenement: 'Mariage', video: 't1' },
-  { nom: 'Marine', evenement: 'Anniversaire', video: 't2' },
-  { nom: 'Mr Pastèque', evenement: 'Cérémonie d’ouverture', video: 't3' },
+  { nom: '[Nom]', evenement: '[Événement]' },
+  { nom: '[Nom]', evenement: '[Événement]' },
+  { nom: '[Nom]', evenement: '[Événement]' },
 ]
 
 /**
@@ -363,11 +363,11 @@ export const FAQ = [
   },
   {
     q: 'Combien de temps à l’avance faut-il réserver une agence événementielle ?',
-    a: '12 à 18 mois pour un mariage, quelques semaines à plusieurs mois pour un séminaire d’entreprise ou une manifestation publique, quelques jours pour une location de matériel. Un délai court n’est pas rédhibitoire : dites-le dès le premier message, Oysen vous dira ce qui reste faisable.',
+    a: '12 à 24 mois pour un mariage, quelques semaines à plusieurs mois pour un séminaire d’entreprise ou une manifestation publique, quelques jours pour une location de matériel. Un délai court n’est pas rédhibitoire : dites-le dès le premier message, Oysen vous dira ce qui reste faisable.',
   },
   {
     q: 'Quelle agence événementielle choisir à Toulouse ?',
-    a: 'Trois critères comptent : qui possède le matériel technique, qui coordonne réellement les prestataires, et qui est présent le jour J. Oysen est une entreprise générale de l’événementiel basée à Toulouse : conception, coordination et technique sont assurées par le même interlocuteur, avec son propre parc son, lumière et structure.',
+    a: 'Quatre critères comptent : qui possède le matériel technique, qui coordonne réellement les prestataires, qui est présent le jour J, et qui sait trouver le lieu adapté à votre événement. Oysen est une entreprise générale de l’événementiel basée à Toulouse : conception, coordination et technique sont assurées par le même interlocuteur, avec son propre parc son, lumière et structure.',
   },
   {
     q: 'Faut-il passer par une agence ou contacter les prestataires soi-même ?',

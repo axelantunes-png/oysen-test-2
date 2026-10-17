@@ -4,6 +4,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { DELAI_REPONSE_H } from '../../components/home/content'
 import { Arrow } from '../../components/home/icons'
 import { Lien } from '../../components/Lien'
+import { canonical } from '../../lib/canonical'
 
 /*
  * Chemin depuis la racine du projet, et non relatif : sur une route imbriquée,
@@ -37,6 +38,7 @@ export const Route = createFileRoute('/nos-services/mariages-evenements-prives')
       { name: 'theme-color', content: '#f6f3ef' },
     ],
     links: [
+      canonical('/nos-services/mariages-evenements-prives'),
       { rel: 'stylesheet', href: mariageCss },
     ],
     scripts: [
@@ -252,7 +254,7 @@ function Bab() {
             </p>
             <ul className="bab__points">
               <li>Le lieu est prêt.</li>
-              <li>Le son et la lumière sont testés avant le premier invité.</li>
+              <li>Tout le matériel est testé avant le premier invité.</li>
               <li>Chaque prestataire connaît son horaire.</li>
               <li>Si quelque chose accroche, c’est nous que l’on prévient.</li>
             </ul>
@@ -422,25 +424,25 @@ function Formules({ onVoirDeroule }: { onVoirDeroule: (depuis: number) => void }
 
 const ETAPES = [
   {
-    quand: '12 à 18 mois avant',
+    quand: '12 à 24 mois avant',
     titre: 'Le premier échange',
     nous: 'Écouter votre date, vos invités, votre budget. Vous remettre une proposition poste par poste.',
     vous: 'Nous racontez le mariage qui vous ressemble.',
   },
   {
-    quand: '10 à 12 mois avant',
+    quand: '12 à 18 mois avant',
     titre: 'Le lieu',
     nous: 'Présélectionner et visiter les lieux : accès, électricité, acoustique, repli en cas de pluie.',
     vous: 'Visitez les deux ou trois qui le méritent, et choisissez.',
   },
   {
-    quand: '8 à 10 mois avant',
+    quand: '12 à 15 mois avant',
     titre: 'Les prestataires',
     nous: 'Sélectionner traiteur, photographe, fleuriste ou DJ. Comparer leurs devis ligne par ligne.',
     vous: 'Rencontrez ceux que vous souhaitez, et tranchez.',
   },
   {
-    quand: '4 à 6 mois avant',
+    quand: '6 à 12 mois avant',
     titre: 'L’ambiance',
     nous: 'Concevoir la lumière et le son, de la cérémonie au vin d’honneur, des discours à la soirée dansante. Suivre la décoration.',
     vous: 'Validez les choix, sans entrer dans la technique.',
@@ -498,7 +500,7 @@ function Deroule({
           surtitre="Comment ça se passe"
           titre="Comment se déroule l’organisation de votre mariage, mois par mois ?"
           id="deroule-title"
-          texte="Pour une organisation complète, idéalement 12 à 18 mois avant. Plus tard, le calendrier se resserre, la méthode reste la même."
+          texte="Pour une organisation complète, idéalement 12 à 24 mois avant. Plus tard, le calendrier se resserre, la méthode reste la même."
         />
 
         <div className="deroule">
@@ -685,12 +687,12 @@ const BUDGETS = [
   {
     nom: 'Organisation complète',
     montant: '5 500 €',
-    couvre: 'Du premier échange au démontage, son et lumière compris',
+    couvre: 'Du premier échange au rangement, son et lumière compris',
   },
   {
     nom: 'Organisation partielle',
     montant: '3 200 €',
-    couvre: 'Votre projet repris là où il en est, jusqu’au démontage',
+    couvre: 'Votre projet repris là où il en est, jusqu’au rangement',
   },
   {
     nom: 'Coordination du jour J',
@@ -786,7 +788,7 @@ function Budget() {
 const QUESTIONS: { q: string; a: string; lien?: { mot: string; href: string } }[] = [
   {
     q: 'Combien de temps à l’avance faut-il contacter Oysen ?',
-    a: 'Pour une organisation complète, idéalement 12 à 18 mois avant la date. Pour une coordination du jour J, trois mois suffisent. Les mariages se concentrent de mai à septembre : si votre date tombe dans cette période, écrivez-nous dès qu’elle est fixée.',
+    a: 'Pour une organisation complète, idéalement 12 à 24 mois avant la date. Pour une coordination du jour J, trois mois suffisent. Les mariages se concentrent de mai à septembre : si votre date tombe dans cette période, écrivez-nous dès qu’elle est fixée.',
   },
   {
     q: 'Pouvez-vous travailler avec des prestataires que nous avons déjà réservés ?',
@@ -795,7 +797,7 @@ const QUESTIONS: { q: string; a: string; lien?: { mot: string; href: string } }[
   },
   {
     q: 'Agence ou wedding planner indépendante : quelle différence ?',
-    a: 'Une wedding planner indépendante, ou organisatrice de mariage, trouve et coordonne vos prestataires. Oysen fait la même chose, en agence événementielle, et installe aussi le son et la lumière avec son propre matériel. Selon la taille du mariage, des techniciens de notre réseau nous épaulent. Pour vous, c’est un prestataire de moins à trouver, et un seul contact pour tout.',
+    a: 'Une wedding planner indépendante, ou organisatrice de mariage, trouve et coordonne vos prestataires. Oysen fait la même chose, en agence événementielle, et installe aussi le son et la lumière avec son propre matériel et ses propres DJ. Selon la taille du mariage, des techniciens de notre réseau nous épaulent. Pour vous, c’est un prestataire de moins à trouver, et un seul contact pour tout.',
   },
   {
     q: 'Nous n’avons pas encore de lieu : pouvez-vous nous aider à le trouver ?',

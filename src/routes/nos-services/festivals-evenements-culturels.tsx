@@ -4,6 +4,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { DELAI_REPONSE_H } from '../../components/home/content'
 import { Arrow } from '../../components/home/icons'
 import { Lien } from '../../components/Lien'
+import { canonical } from '../../lib/canonical'
 
 /*
  * Chemin depuis la racine du projet, et non relatif : sur une route imbriquée,
@@ -35,6 +36,7 @@ export const Route = createFileRoute('/nos-services/festivals-evenements-culture
       { name: 'description', content: DESCRIPTION },
     ],
     links: [
+      canonical('/nos-services/festivals-evenements-culturels'),
       { rel: 'stylesheet', href: festivalCss },
     ],
     scripts: [

@@ -2,8 +2,11 @@
  * Le plan d'implantation type de « L'agence », dans sa propre section.
  *
  * Une salle de réception vue de dessus : la scène, la piste devant elle,
- * trois tables rondes de chaque côté, le bar, et la régie dans le renfoncement
- * du mur du bas. Chaque poste porte son repère, et les quatre premiers sont
+ * trois tables rondes de chaque côté, le bar, l'entrée en haut à gauche, et
+ * la régie dans le renfoncement du mur du bas. Chaque poste porte son repère
+ * à l'endroit où il travaille : la scène et l'écran sur la scène, le
+ * traiteur sur le bar, la sécurité juste après l'entrée, la décoration entre
+ * les tables. Les quatre premiers sont
  * reliés à la régie : c'est la thèse de la page, tous les métiers aboutissent
  * à un seul interlocuteur.
  *
@@ -30,9 +33,11 @@ const CHAISES = [
 const REPERES = [
   { numero: '01', x: 449, y: 185, vers: { x: 580, y: 722 } },
   { numero: '02', x: 896, y: 186, vers: { x: 762, y: 722 } },
-  { numero: '03', x: 393, y: 674, vers: { x: 582, y: 731 } },
-  { numero: '04', x: 948, y: 674, vers: { x: 762, y: 731 } },
-  { numero: '05', x: 674, y: 817 },
+  { numero: '03', x: 555, y: 166, vers: { x: 582, y: 731 } },
+  { numero: '04', x: 790, y: 166, vers: { x: 762, y: 731 } },
+  { numero: '05', x: 335, y: 790 },
+  { numero: '06', x: 240, y: 182 },
+  { numero: '07', x: 994, y: 396 },
 ] as const
 
 export function Plan() {
@@ -46,12 +51,19 @@ export function Plan() {
       <title id="plan-titre">Plan d’implantation type</title>
       <desc id="plan-desc">
         Une salle de réception vue de dessus : la scène, la piste, six tables
-        rondes, le bar et la régie. Le son, la lumière, la scène et l’écran
-        LED sont reliés à la régie, votre seul interlocuteur.
+        rondes, le bar, l’entrée et la régie. Le son, la lumière, la scène et
+        l’écran LED sont reliés à la régie, votre seul interlocuteur. Le
+        traiteur est au bar, la sécurité à l’entrée, la décoration entre les
+        tables.
       </desc>
 
-      {/* Les murs, et le renfoncement de la régie dans le mur du bas. */}
-      <path className="plan__mur" d="M499 834H141V83H1204V834H845" />
+      {/* Les murs, le renfoncement de la régie dans le mur du bas, et
+          l'entrée en haut à gauche, une porte à deux battants. */}
+      <path className="plan__mur" d="M499 834H141V83H190M290 83H1204V834H845" />
+      <path
+        className="plan__trait"
+        d="M190 83V133A50 50 0 0 0 240 83M290 83V133A50 50 0 0 1 240 83"
+      />
       <path className="plan__trait" d="M499 834V757H845V834" />
 
       {/* La piste, dégagée devant la scène. */}
@@ -122,8 +134,8 @@ export function Plan() {
         <text x="672" y="168">SCÈNE</text>
         <text x="672" y="448">PISTE</text>
         <text x="672" y="750">RÉGIE</text>
-        <text x="273" y="780">BAR</text>
-      </g>
+        <text x="240" y="780">BAR</text>
+        <text x="350" y="110">ENTRÉE</text>      </g>
 
       {REPERES.map((repere) => (
         <g key={repere.numero} className="plan__repere" fontSize="20">

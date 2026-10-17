@@ -58,7 +58,17 @@ export const LEGENDE: readonly Poste[] = [
   { repere: '04', nom: 'Écran LED', source: 'parc Oysen' },
   {
     repere: '05',
-    nom: 'Traiteur, photo, décor',
+    nom: 'Traiteur, bar',
+    source: `réseau de ${NB_PARTENAIRES} prestataires`,
+  },
+  {
+    repere: '06',
+    nom: 'Sécurité',
+    source: `réseau de ${NB_PARTENAIRES} prestataires`,
+  },
+  {
+    repere: '07',
+    nom: 'Décoration',
     source: `réseau de ${NB_PARTENAIRES} prestataires`,
   },
 ]

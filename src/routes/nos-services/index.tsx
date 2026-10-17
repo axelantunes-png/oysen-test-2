@@ -4,6 +4,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { TRI, ZONE } from '../../components/home/content'
 import { Tri } from '../../components/home/Tri'
 import { Lien } from '../../components/Lien'
+import { canonical } from '../../lib/canonical'
 
 /*
  * Chemin depuis la racine du projet, et non relatif : sur une route imbriquée,
@@ -21,7 +22,10 @@ export const Route = createFileRoute('/nos-services/')({
         content: `Événements d’entreprise, mariages, collectivités, prestation technique, festivals : les services d’Oysen, agence événementielle à ${ZONE}.`,
       },
     ],
-    links: [{ rel: 'stylesheet', href: servicesCss }],
+    links: [
+      canonical('/nos-services'),
+      { rel: 'stylesheet', href: servicesCss },
+    ],
   }),
   component: Services,
 })
